@@ -7,7 +7,7 @@ a web micro-framework.
 ## Team
 
 - Kelly Vo
-- MEMBER2
+- Mallory Bridge
 - MEMBER3
 - MEMBER4
 
