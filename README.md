@@ -8,7 +8,7 @@ a web micro-framework.
 
 - Kelly Vo
 - Mallory Bridge
-- MEMBER3
+- Jacquelyn Leung
 - MEMBER4
 
 
