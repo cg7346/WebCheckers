@@ -10,6 +10,7 @@ a web micro-framework.
 - Mallory Bridge
 - Jacquelyn Leung
 - Celeste Gambardella
+- Anthony Ferraioli
 
 
 ## Prerequisites
