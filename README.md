@@ -9,7 +9,7 @@ a web micro-framework.
 - Kelly Vo
 - Mallory Bridge
 - Jacquelyn Leung
-- MEMBER4
+- Celeste Gambardella
 
 
 ## Prerequisites
