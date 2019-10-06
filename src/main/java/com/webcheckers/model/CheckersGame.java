@@ -127,7 +127,7 @@ public class CheckersGame {
     public boolean isRedPlayer(Player player){
         return player.equals(redPlayer);
     }
-    
+
     /**
      * Helper method that gets the inverse of the board
      *
