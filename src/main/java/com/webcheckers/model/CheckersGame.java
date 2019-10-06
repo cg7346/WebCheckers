@@ -98,6 +98,23 @@ public class CheckersGame {
     }
 
     /**
+     * Returns the symbol in a row and column
+     * on a board
+     * 
+     * R - Red Player
+     * W - White Player
+     * X - White
+     * O - Black
+     *
+     * @param col column of space
+     * @param row row of space
+     * @return char symbol that represents space
+     */
+    public char getSpace(int col, int row){
+        return board[col][row].getSymbol();
+    }
+
+    /**
      * Helper method that gets the inverse of the board
      *
      * Flips the white and red colors so that a player
@@ -145,9 +162,13 @@ public class CheckersGame {
         return builder.toString();
     }
 
+    //Just some in class testing
     public static void main(String[] args){
         CheckersGame testGame = new CheckersGame(0);
         System.out.println(testGame.toString());
+
+        Space[][] Invesrseboard = testGame.inverseBoard();
+        System.out.println(Invesrseboard.toString());
     }
 
 
