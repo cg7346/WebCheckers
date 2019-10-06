@@ -97,7 +97,29 @@ public class CheckersGame {
         turn = 0;
     }
 
-    
+    /**
+     * Helper method that gets the inverse of the board
+     *
+     * Flips the white and red colors so that a player
+     * can see their pieces near them
+     *
+     * So instead of white at top it's red
+     * @return
+     */
+    public Space[][] inverseBoard(){
+        Space[][] inverseBoard = new Space[COLS][ROWS];
+        for (int col=0; col < COLS; col++) {
+            for (int row = 0; row < ROWS; row++) {
+                if (board[col][row] == Space.RED_PLAYER) {
+                    inverseBoard[col][row] = Space.WHITE_PLAYER;
+                } else if (board[col][row] == Space.WHITE_PLAYER) {
+                    inverseBoard[col][row] = Space.RED_PLAYER;
+                }
+            }
+        }
+        return inverseBoard;
+    }
+
     /**
      * Returns a {@link String} representation of the board, suitable for
      * printing. Used mostly for testing
