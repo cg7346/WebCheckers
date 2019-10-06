@@ -1,12 +1,20 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
-import spark.Route;
-import spark.TemplateEngine;
+import com.webcheckers.util.Message;
+import spark.*;
 
+import javax.swing.text.TabableView;
 import java.util.Objects;
 
+/**
+ * The {@code POST /signin} route handler
+ *
+ * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella</a>
+ */
 public class PostSignInRoute implements Route {
+
     //
     // Constants
     //
@@ -21,17 +29,17 @@ public class PostSignInRoute implements Route {
     //
 
     /**
-     * Make an error message when the username is invalid.
+     * Make an info message when the username is invalid.
      */
-    static String makeInvalidUsrMessage() {
-        return INVALID_USR;
+    static Message makeInvalidUsrMessage() {
+        return Message.info(INVALID_USR);
     }
 
     /**
      * Make an error message when the username is taken.
      */
-    static String makeTakenUsrMessage() {
-        return TAKEN_USR;
+    static Message makeTakenUsrMessage() {
+        return Message.error(TAKEN_USR);
     }
 
     //
