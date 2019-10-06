@@ -18,10 +18,11 @@ public class GetSignInRoute implements Route {
     static final Logger LOG = Logger.getLogger(com.webcheckers.ui.GetSignInRoute.class.getName());
 
     // Values used in the view-model map for rendering the signin view.
+    static final String NEWUSR_ATTR = "isNewUser";
     static final Message SIGNIN_MSG = Message.info("Player Sign In");
     static final String MESSAGE = "message";
     static final String TITLE = "title";
-    static final Message TITLE_MSG = Message.info("Sign In");
+    static final String TITLE_MSG = "Sign In";
 
     //
     // Attributes

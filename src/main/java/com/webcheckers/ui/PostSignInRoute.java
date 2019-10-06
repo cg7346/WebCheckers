@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static spark.Spark.halt;
+
 /**
  * The {@code POST /signin} route handler
  *
@@ -20,6 +22,8 @@ public class PostSignInRoute implements Route {
     // Constants
     //
 
+    // Values used in the view-model map for rendering the game view after a guess.
+    static final String USERNAME = "myUsername";
     static final String INVALID_USR = "Username should contain at least one alphanumeric " +
             "characters or contain one or more characters that are not alphanumeric or spaces.";
     static final String TAKEN_USR = "Username already has been taken. Please enter a new Username.";
@@ -95,11 +99,29 @@ public class PostSignInRoute implements Route {
         final Session session = request.session();
         final PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
 
+        // retrieve request parameter
+        final String userStr = request.queryParams(USERNAME);
+
+//        // temp userName
+//        String userName = "";
+
+        try {
+
+        }
+
         /* A null playerServices indicates a timed out session or an illegal request on this URL.
          * In either case, we will redirect back to home.
          */
         if (playerLobby != null) {
-            vm.put(GetSignInRoute)
+            vm.put(GetSignInRoute.NEWUSR_ATTR, playerLobby.isNewPlayer());
+
+
+            return templateEngine.render(null);
+        }
+        else {
+            response.redirect(WebServer.SIGNIN_URL);
+            halt();
+            return null;
         }
     }
 }
