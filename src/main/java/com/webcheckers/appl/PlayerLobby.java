@@ -1,7 +1,6 @@
 package com.webcheckers.appl;
 
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.PostSignInRoute;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +30,6 @@ public class PlayerLobby {
      *    when the {@code player} is already taken
      */
     public PlayerLobby(final Player player) {
-        // validate arguments
-        if (!isValidPlayer(player)) {
-            PostSignInRoute.makeInvalidUsrMessage();
-        }
-        // TODO: check that repeated usernames don't work
-        if (!isNewPlayer()) {
-            PostSignInRoute.makeTakenUsrMessage();
-        }
         this.player = player;
         this.users.add(player.getName());
     }
@@ -49,9 +40,8 @@ public class PlayerLobby {
      * @return
      *      a boolean of whether or not the player's name is vaild
      */
-    public boolean isValidPlayer(Player player){
-        String name = player.getName();
-        return name.matches("[A-Za-z0-9]+|[^a-zA-Z\\d:]+");
+    public boolean isValidPlayer(String username){
+        return username.matches("[A-Za-z0-9]+|[^a-zA-Z\\d:]+");
     }
 
     /**
@@ -60,9 +50,9 @@ public class PlayerLobby {
      * @return
      *      a boolean of whether or not the player is new
      */
-    public boolean isNewPlayer() {
+    public boolean isNewPlayer(String username) {
         boolean newPlayer;
-        if (this.users.contains(player.getName())) {
+        if (this.users.contains(username)) {
             newPlayer = false;
         } else {
             newPlayer = true;
