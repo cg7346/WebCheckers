@@ -56,7 +56,7 @@ public class PostSignInRoute implements Route {
     // Attributes
     //
 
-    private final PlayerLobby playerLobby;
+//    private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
 
     //
@@ -66,21 +66,20 @@ public class PostSignInRoute implements Route {
     /**
      * The constructor for the {@code POST /signin} route handler.
      *
-     * @param playerLobby
      *    {@Link Player} a player
      * @param templateEngine
      *    template engine to use for rendering HTML page
      *
-     * @throws NullPointerException
+     * @throws NoSuchElementException
      *    when the {@code Player} or {@code templateEngine} parameter is null
      */
-    public PostSignInRoute(PlayerLobby playerLobby, TemplateEngine templateEngine) {
+     PostSignInRoute(TemplateEngine templateEngine) {
         // validation
-        Objects.requireNonNull(playerLobby, "Player must not be null");
+//        Objects.requireNonNull(playerLobby, "Player must not be null");
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
 
         // instantiating attributes
-        this.playerLobby = playerLobby;
+//        this.playerLobby = playerLobby;
         this.templateEngine = templateEngine;
     }
 
@@ -94,9 +93,10 @@ public class PostSignInRoute implements Route {
      * @return
      */
     @Override
-    public String handle(Request request, Response response) {
+    public Object handle(Request request, Response response) {
         // start building a View-Model
         final Map<String, Object> vm = new HashMap<>();
+        System.out.println("test");
         vm.put(GetSignInRoute.TITLE, GetSignInRoute.TITLE_MSG);
         vm.put(GetSignInRoute.MESSAGE, GetSignInRoute.SIGNIN_MSG);
 
@@ -111,24 +111,24 @@ public class PostSignInRoute implements Route {
          * In either case, we will redirect back to home.
          */
         if (playerLobby != null) {
+            System.out.println("hi");
             //vm.put(GetSignInRoute.NEWUSR_ATTR, playerLobby.isNewPlayer(userStr));
 
             // make the guess and create the appropriate ModelAndView for rendering
             ModelAndView mv;
             if (!playerLobby.isValidPlayer(userStr)) {
                 mv = error(vm, makeInvalidUsrMessage().toString());
-            }
-            else if (!playerLobby.isNewPlayer(userStr)) {
+            } else if (!playerLobby.isNewPlayer(userStr)) {
                 mv = error(vm, makeTakenUsrMessage().toString());
             } else {
                 // Invalid username received
                 throw new NoSuchElementException("Invalid username received.");
-
             }
             return templateEngine.render(mv);
         }
         else {
-            response.redirect(WebServer.SIGNIN_URL);
+            System.out.println("bye");
+            response.redirect(WebServer.HOME_URL);
             halt();
             return null;
         }
