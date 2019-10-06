@@ -1,17 +1,16 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
 
-import javax.swing.text.TabableView;
 import java.util.Objects;
 
 /**
  * The {@code POST /signin} route handler
  *
  * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella</a>
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</a>
  */
 public class PostSignInRoute implements Route {
 
@@ -46,7 +45,7 @@ public class PostSignInRoute implements Route {
     // Attributes
     //
 
-    private final Player player;
+    private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
 
     //
@@ -56,7 +55,7 @@ public class PostSignInRoute implements Route {
     /**
      * The constructor for the {@code POST /signin} route handler.
      *
-     * @param player
+     * @param playerLobby
      *    {@Link Player} a player
      * @param templateEngine
      *    template engine to use for rendering HTML page
@@ -64,12 +63,12 @@ public class PostSignInRoute implements Route {
      * @throws NullPointerException
      *    when the {@code Player} or {@code templateEngine} parameter is null
      */
-    PostSignInRoute(Player player, TemplateEngine templateEngine) {
+    PostSignInRoute(PlayerLobby playerLobby, TemplateEngine templateEngine) {
         // validation
-        Objects.requireNonNull(player, "Player must not be null");
+        Objects.requireNonNull(playerLobby, "Player must not be null");
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         //
-        this.player = player;
+        this.playerLobby = playerLobby;
         this.templateEngine = templateEngine;
     }
 
