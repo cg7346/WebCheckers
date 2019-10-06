@@ -1,5 +1,10 @@
 package com.webcheckers.ui;
 
+/**
+ * creates a row
+ * @author Jacquelyn Leung
+ */
+
 public class Row {
     private int index;
 
