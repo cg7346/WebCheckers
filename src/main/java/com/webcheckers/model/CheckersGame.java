@@ -33,7 +33,7 @@ public class CheckersGame {
         EMPTY_BLACK('O'),
         EMPTY_WHITE('X');
 
-        //Add stuff for king
+        //Add stuff for king later
 
         private char symbol;
 
@@ -100,7 +100,7 @@ public class CheckersGame {
     /**
      * Returns the symbol in a row and column
      * on a board
-     * 
+     *
      * R - Red Player
      * W - White Player
      * X - White
@@ -112,6 +112,16 @@ public class CheckersGame {
      */
     public char getSpace(int col, int row){
         return board[col][row].getSymbol();
+    }
+
+    /**
+     * Helper method to check if the player is the
+     * red player, if not then it's the white player
+     * @param player the player in the game to check
+     * @return true for red player, false for white
+     */
+    public boolean isRedPlayer(Player player){
+        return player.equals(redPlayer);
     }
 
     /**
