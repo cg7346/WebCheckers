@@ -127,7 +127,7 @@ public class CheckersGame {
     public boolean isRedPlayer(Player player){
         return player.equals(redPlayer);
     }
-
+    
     /**
      * Helper method that gets the inverse of the board
      *
@@ -149,6 +149,14 @@ public class CheckersGame {
             }
         }
         return inverseBoard;
+    }
+
+    /**
+     * Returns the original not flipped board
+     * @return the original board
+     */
+    public Space[][] getBoard() {
+        return board;
     }
 
     /**
