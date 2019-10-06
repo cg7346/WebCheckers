@@ -6,6 +6,7 @@ import spark.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static spark.Spark.halt;
@@ -24,6 +25,10 @@ public class PostSignInRoute implements Route {
 
     // Values used in the view-model map for rendering the game view after a guess.
     static final String USERNAME = "myUsername";
+    static final String MESSAGE_ATTR = "message";
+    static final String MESSAGE_TYPE_ATTR = "messageType";
+
+    static final String ERROR_TYPE = "error";
     static final String INVALID_USR = "Username should contain at least one alphanumeric " +
             "characters or contain one or more characters that are not alphanumeric or spaces.";
     static final String TAKEN_USR = "Username already has been taken. Please enter a new Username.";
@@ -36,15 +41,15 @@ public class PostSignInRoute implements Route {
     /**
      * Make an info message when the username is invalid.
      */
-    public static Message makeInvalidUsrMessage() {
-        return Message.info(INVALID_USR);
+    public static String makeInvalidUsrMessage() {
+        return Message.info(INVALID_USR).toString();
     }
 
     /**
      * Make an error message when the username is taken.
      */
-    public static Message makeTakenUsrMessage() {
-        return Message.error(TAKEN_USR);
+    public static String makeTakenUsrMessage() {
+        return Message.error(TAKEN_USR).toString();
     }
 
     //
@@ -102,26 +107,40 @@ public class PostSignInRoute implements Route {
         // retrieve request parameter
         final String userStr = request.queryParams(USERNAME);
 
-//        // temp userName
-//        String userName = "";
-
-        try {
-
-        }
-
         /* A null playerServices indicates a timed out session or an illegal request on this URL.
          * In either case, we will redirect back to home.
          */
         if (playerLobby != null) {
-            vm.put(GetSignInRoute.NEWUSR_ATTR, playerLobby.isNewPlayer());
+            vm.put(GetSignInRoute.NEWUSR_ATTR, playerLobby.isNewPlayer(userStr));
 
+            // make the guess and create the appropriate ModelAndView for rendering
+            ModelAndView mv;
+            if (!playerLobby.isValidPlayer(userStr)) {
+                mv = error(vm, makeInvalidUsrMessage());
+            }
+            else if (!playerLobby.isNewPlayer(userStr)) {
+                mv = error(vm, makeTakenUsrMessage());
+            } else {
+                // Invalid username received
+                throw new NoSuchElementException("Invalid username received.");
 
-            return templateEngine.render(null);
+            }
+            return templateEngine.render(mv);
         }
         else {
             response.redirect(WebServer.SIGNIN_URL);
             halt();
             return null;
         }
+    }
+
+    //
+    // Private methods
+    //
+
+    private ModelAndView error(final Map<String, Object> vm, final String message) {
+        vm.put(MESSAGE_ATTR, message);
+        vm.put(MESSAGE_TYPE_ATTR, ERROR_TYPE);
+        return new ModelAndView(vm, VIEW_NAME);
     }
 }
