@@ -5,7 +5,6 @@ import com.webcheckers.ui.PostSignInRoute;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * The object to coordinate all the Players.
@@ -25,28 +24,30 @@ public class PlayerLobby {
      *
      * @param player
      *          a player.
-     * @param users
-     *          a list of all players.
      *
      *
      * @throws IllegalArgumentException
      *    when the {@code player} is already taken
      */
-    public PlayerLobby(final Player player, final List<String> users,
-                  final boolean newPlayer) {
+    public PlayerLobby(final Player player) {
         // validate arguments
-        if (users.contains(player.getName())) {
+        // TODO: check that repeated usernames don't work
+        if (this.users.contains(player.getName())) {
             this.newPlayer = false;
-            throw PostSignInRoute.makeTakenUsrMessage();
+            PostSignInRoute.makeTakenUsrMessage();
+        } else {
+            this.newPlayer = true;
         }
-        //
         this.player = player;
-        this.newPlayer = true;
-        users.add(player.getName());
+        this.users.add(player.getName());
     }
 
     public boolean isNewPlayer() {
         return this.newPlayer;
+    }
+
+    public List<String> getPlayers(){
+        return this.users;
     }
 
     /**

@@ -18,6 +18,9 @@ public class GetSignInRoute implements Route {
     private static final Logger LOG = Logger.getLogger(com.webcheckers.ui.GetSignInRoute.class.getName());
 
     private static final Message SIGNIN_MSG = Message.info("Player Sign In");
+    private static final String TITLE = "title";
+    private static final Message TITLE_MSG = Message.info("Sign In");
+    private static final String MESSAGE = "message";
 
     private final TemplateEngine templateEngine;
 
@@ -49,10 +52,10 @@ public class GetSignInRoute implements Route {
         LOG.finer("GetSignInRoute is invoked.");
         //
         Map<String, Object> vm = new HashMap<>();
-        vm.put("title", "Sign In");
+        vm.put(TITLE, TITLE_MSG);
 
         // display a user message in the Home page
-        vm.put("message", SIGNIN_MSG);
+        vm.put(MESSAGE, SIGNIN_MSG);
 
         // render the View
         return templateEngine.render(new ModelAndView(vm , "signin.ftl"));

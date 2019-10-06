@@ -30,14 +30,14 @@ public class PostSignInRoute implements Route {
     /**
      * Make an info message when the username is invalid.
      */
-    static Message makeInvalidUsrMessage() {
+    public static Message makeInvalidUsrMessage() {
         return Message.info(INVALID_USR);
     }
 
     /**
      * Make an error message when the username is taken.
      */
-    static Message makeTakenUsrMessage() {
+    public static Message makeTakenUsrMessage() {
         return Message.error(TAKEN_USR);
     }
 
@@ -63,7 +63,7 @@ public class PostSignInRoute implements Route {
      * @throws NullPointerException
      *    when the {@code Player} or {@code templateEngine} parameter is null
      */
-    PostSignInRoute(PlayerLobby playerLobby, TemplateEngine templateEngine) {
+    public PostSignInRoute(PlayerLobby playerLobby, TemplateEngine templateEngine) {
         // validation
         Objects.requireNonNull(playerLobby, "Player must not be null");
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
