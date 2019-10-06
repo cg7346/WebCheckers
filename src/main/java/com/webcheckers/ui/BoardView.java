@@ -6,6 +6,11 @@ import com.webcheckers.model.Player;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+
+/**
+ * The board view for the UI
+ * @author Jacquelyn Leung and Anthony Ferraioli
+ */
 public class BoardView {
     private enum color {RED, WHITE}
     private enum viewModel { PLAY, SPECTATOR, REPLAY }
