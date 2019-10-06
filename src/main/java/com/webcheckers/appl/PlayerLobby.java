@@ -19,8 +19,6 @@ public class PlayerLobby {
     private Player player;
     // The list of users playing the webcheckers game
     private final List<String> users = new ArrayList<>();
-    // Whether or not the player is new
-    private final boolean newPlayer;
 
     /**
      * Create a PlayerLobby.
@@ -38,11 +36,8 @@ public class PlayerLobby {
             PostSignInRoute.makeInvalidUsrMessage();
         }
         // TODO: check that repeated usernames don't work
-        if (this.users.contains(player.getName())) {
-            this.newPlayer = false;
+        if (!isNewPlayer()) {
             PostSignInRoute.makeTakenUsrMessage();
-        } else {
-            this.newPlayer = true;
         }
         this.player = player;
         this.users.add(player.getName());
@@ -66,7 +61,13 @@ public class PlayerLobby {
      *      a boolean of whether or not the player is new
      */
     public boolean isNewPlayer() {
-        return this.newPlayer;
+        boolean newPlayer;
+        if (this.users.contains(player.getName())) {
+            newPlayer = false;
+        } else {
+            newPlayer = true;
+        }
+        return newPlayer;
     }
 
     /**
