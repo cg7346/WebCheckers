@@ -41,15 +41,15 @@ public class PostSignInRoute implements Route {
     /**
      * Make an info message when the username is invalid.
      */
-    public static String makeInvalidUsrMessage() {
-        return Message.info(INVALID_USR).toString();
+    public static Message makeInvalidUsrMessage() {
+        return Message.info(INVALID_USR);
     }
 
     /**
      * Make an error message when the username is taken.
      */
-    public static String makeTakenUsrMessage() {
-        return Message.error(TAKEN_USR).toString();
+    public static Message makeTakenUsrMessage() {
+        return Message.error(TAKEN_USR);
     }
 
     //
@@ -111,15 +111,15 @@ public class PostSignInRoute implements Route {
          * In either case, we will redirect back to home.
          */
         if (playerLobby != null) {
-            vm.put(GetSignInRoute.NEWUSR_ATTR, playerLobby.isNewPlayer(userStr));
+            //vm.put(GetSignInRoute.NEWUSR_ATTR, playerLobby.isNewPlayer(userStr));
 
             // make the guess and create the appropriate ModelAndView for rendering
             ModelAndView mv;
             if (!playerLobby.isValidPlayer(userStr)) {
-                mv = error(vm, makeInvalidUsrMessage());
+                mv = error(vm, makeInvalidUsrMessage().toString());
             }
             else if (!playerLobby.isNewPlayer(userStr)) {
-                mv = error(vm, makeTakenUsrMessage());
+                mv = error(vm, makeTakenUsrMessage().toString());
             } else {
                 // Invalid username received
                 throw new NoSuchElementException("Invalid username received.");
