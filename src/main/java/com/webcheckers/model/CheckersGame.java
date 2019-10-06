@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import java.util.ArrayList;
+
 /**
  * Class to represent a Checkers game
  * Holds the logic for an average game of checkers
@@ -64,8 +66,10 @@ public class CheckersGame {
      *
      * @param gameID int, unique identifier for the game
      */
-    public CheckersGame(int gameID){
+    public CheckersGame(Player redPlayer, Player whitePlayer, int gameID){
         this.gameID = gameID;
+        this.redPlayer = redPlayer;
+        this.whitePlayer = whitePlayer;
 
          board = new Space[COLS][ROWS];
         for (int col=0; col < COLS; col++){
@@ -174,7 +178,8 @@ public class CheckersGame {
 
     //Just some in class testing
     public static void main(String[] args){
-        CheckersGame testGame = new CheckersGame(0);
+        CheckersGame testGame = new CheckersGame(new Player("1", new ArrayList<>(), false),
+                new Player("2", new ArrayList<>(), false), 0);
         System.out.println(testGame.toString());
 
         Space[][] Invesrseboard = testGame.inverseBoard();
