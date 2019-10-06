@@ -15,8 +15,11 @@ import java.util.List;
  */
 public class PlayerLobby {
 
+    // The player of the webcheckers game
     private Player player;
+    // The list of users playing the webcheckers game
     private final List<String> users = new ArrayList<>();
+    // Whether or not the player is new
     private final boolean newPlayer;
 
     /**
@@ -42,13 +45,32 @@ public class PlayerLobby {
         this.users.add(player.getName());
     }
 
+    /**
+     * Determines whether or not the player is new
+     *
+     * @return
+     *      a boolean of whether or not the player is new
+     */
     public boolean isNewPlayer() {
         return this.newPlayer;
     }
 
+    /**
+     * Gets the list of players playing webcheckers
+     *
+     * @return
+     *      a list of players playing webcheckers
+     */
     public List<String> getPlayers(){
         return this.users;
     }
+
+    /**
+     * Cleanup the @Linkplain{PlayerLobby} object when the session expires.
+     * The only cleanup will be to remove the game.
+     * TODO: game = null;
+     */
+    public void endSession() {}
 
     /**
      * {@inheritDoc}
