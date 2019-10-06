@@ -1,6 +1,5 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.util.Message;
 import spark.*;
 
@@ -18,14 +17,15 @@ public class GetSignInRoute implements Route {
 
     static final Logger LOG = Logger.getLogger(com.webcheckers.ui.GetSignInRoute.class.getName());
 
-    static final String NEW_PLAYER_ATTR = "isNewPlayer";
+    // Values used in the view-model map for rendering the signin view.
     static final Message SIGNIN_MSG = Message.info("Player Sign In");
+    static final String MESSAGE = "message";
     static final String TITLE = "title";
     static final Message TITLE_MSG = Message.info("Sign In");
-    static final String MESSAGE = "message";
 
-    // Key in the session attribute map for the player who started the session
-    static final String PLAYERLOBBY_KEY = "playerServices";
+    //
+    // Attributes
+    //
 
     private final TemplateEngine templateEngine;
 

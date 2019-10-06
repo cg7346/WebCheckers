@@ -69,7 +69,8 @@ public class PostSignInRoute implements Route {
         // validation
         Objects.requireNonNull(playerLobby, "Player must not be null");
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
-        //
+
+        // instantiating attributes
         this.playerLobby = playerLobby;
         this.templateEngine = templateEngine;
     }
@@ -92,7 +93,13 @@ public class PostSignInRoute implements Route {
 
         // retrieve the game object
         final Session session = request.session();
-        final PlayerLobby playerLobby = session.attribute(GetSignInRoute.PLAYERLOBBY_KEY);
+        final PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
 
+        /* A null playerServices indicates a timed out session or an illegal request on this URL.
+         * In either case, we will redirect back to home.
+         */
+        if (playerLobby != null) {
+            vm.put(GetSignInRoute)
+        }
     }
 }

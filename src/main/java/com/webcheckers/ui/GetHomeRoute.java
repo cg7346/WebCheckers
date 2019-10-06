@@ -17,11 +17,26 @@ import com.webcheckers.util.Message;
  * The UI Controller to GET the Home page.
  *
  * @author <a href='mailto:bdbvse@rit.edu'>Bryan Basham</a>
+ * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella</>
  */
 public class GetHomeRoute implements Route {
-  private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
-  private static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
+  // Values used in the view-model map for rendering the home view.
+  static final String WELCOME_ATTR = "title";
+  static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
+
+  // Key in the session attribute map for the player who started the session
+  static final String PLAYERLOBBY_KEY = "playerServices";
+  static final String TIMEOUT_SESSION_KEY = "timeoutWatchdog";
+
+  // The length of the session timeout in seconds
+  static final int SESSION_TIMEOUT_PERIOD = 120;
+
+  static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
+
+  //
+  // Attributes
+  //
 
   private final TemplateEngine templateEngine;
 
