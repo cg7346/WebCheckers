@@ -11,22 +11,22 @@ package com.webcheckers.ui;
 public class Space {
     private int cellIdx;
     private Piece piece;
-    private boolean isDark;
+    private boolean isBlack;
 
     /**
      * Creates a space on the board without a piece
      *
      * @param cellIdx the index of the space in the row (0-7)
-     * @param isDark boolean if piece is dark tile or not
+     * @param isBlack boolean if piece is dark tile or not
      */
-    public Space(int cellIdx, boolean isDark)
+    public Space(int cellIdx, boolean isBlack)
     {
         if(cellIdx < 0 || cellIdx > 7) {
             throw new IndexOutOfBoundsException();
         }
         this.cellIdx = cellIdx;
         this.piece = null;
-        this.isDark = isDark;
+        this.isBlack = isBlack;
     }
 
     /**
@@ -46,7 +46,7 @@ public class Space {
      */
     public boolean isValid()
     {
-        return !hasPiece() && isDark;
+        return !hasPiece() && isBlack;
     }
 
     /**
@@ -67,7 +67,7 @@ public class Space {
     public void addPiece(Piece piece)
     {
         if(!isValid()) {
-            // TO BE ADDED LATER: add functionality if invalid move here
+            //TODO add functionality if invalid move here
         }
         this.piece = piece;
     }
