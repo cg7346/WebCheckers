@@ -42,6 +42,7 @@ public class GetGameRoute implements Route {
     public String handle(Request request, Response response)
     {
         Map<String, Object> vm = new HashMap<>();
+        vm.put("title", "GameTitle");
         vm.put("currentUser", currentUser);
         //vm.put("viewMode", viewMode);
         //vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
