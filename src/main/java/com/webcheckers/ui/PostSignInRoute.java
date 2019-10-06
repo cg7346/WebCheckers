@@ -56,7 +56,6 @@ public class PostSignInRoute implements Route {
     // Attributes
     //
 
-//    private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
 
     //
@@ -74,11 +73,9 @@ public class PostSignInRoute implements Route {
      */
      PostSignInRoute(TemplateEngine templateEngine) {
         // validation
-//        Objects.requireNonNull(playerLobby, "Player must not be null");
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
 
         // instantiating attributes
-//        this.playerLobby = playerLobby;
         this.templateEngine = templateEngine;
     }
 
