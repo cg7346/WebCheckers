@@ -67,9 +67,65 @@ public class CheckersGame {
     public CheckersGame(int gameID){
         this.gameID = gameID;
 
+         board = new Space[COLS][ROWS];
+        for (int col=0; col < COLS; col++){
+            for (int row=0; row < ROWS; row ++){
+                //if both row and column are even or odd then it is white space
+                if ((col%2 == 0 && row%2 ==0) ||
+                        (col%2 != 0 && row%2 != 0)){
+                    board[col][row] = Space.EMPTY_WHITE;
+                }
+                //calling top of board row 0
+                else {
+                    //putting white player at top of board
+                    if (row <= 2){
+                        board[col][row] = Space.WHITE_PLAYER;
+                    }
+                    //putting red player at bottom of board
+                    else if (row >= 5) {
+                        board[col][row] = Space.RED_PLAYER;
+                    }
+                    //middle spaces empty black
+                    else{
+                        board[col][row] = Space.EMPTY_BLACK;
+                    }
+                }
 
+            }
+        }
+        //red player
+        turn = 0;
+    }
 
+    
+    /**
+     * Returns a {@link String} representation of the board, suitable for
+     * printing. Used mostly for testing
+     *
+     * @return A {@link String} representation of the board.
+     */
+    @Override
+    public String toString() {
+        System.out.println("toString");
+        StringBuilder builder = new StringBuilder();
 
+        for(int r=0; r<ROWS; r++) {
+            //System.out.println("row" + r);
+            for(int c=0; c<COLS; c++) {
+                //System.out.println("col" + c);
+                builder.append('[');
+                //System.out.println(board[c][r]);
+                builder.append(board[c][r].getSymbol());
+                builder.append(']');
+            }
+            builder.append('\n');
+        }
+        return builder.toString();
+    }
+
+    public static void main(String[] args){
+        CheckersGame testGame = new CheckersGame(0);
+        System.out.println(testGame.toString());
     }
 
 
