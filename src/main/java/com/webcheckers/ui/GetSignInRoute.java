@@ -23,6 +23,7 @@ public class GetSignInRoute implements Route {
     static final String MESSAGE = "message";
     static final String TITLE = "title";
     static final String TITLE_MSG = "Sign In";
+    static final String VIEW_NAME = "signin.ftl";
 
     //
     // Attributes
@@ -69,7 +70,7 @@ public class GetSignInRoute implements Route {
         vm.put(MESSAGE, SIGNIN_MSG);
 
         // render the View
-        return templateEngine.render(new ModelAndView(vm , "signin.ftl"));
+        return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
     }
 }
 

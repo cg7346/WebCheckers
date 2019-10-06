@@ -66,7 +66,6 @@ public class PostSignInRoute implements Route {
     /**
      * The constructor for the {@code POST /signin} route handler.
      *
-     *    {@Link Player} a player
      * @param templateEngine
      *    template engine to use for rendering HTML page
      *

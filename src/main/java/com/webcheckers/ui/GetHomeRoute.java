@@ -25,8 +25,11 @@ public class GetHomeRoute implements Route {
   static final String WELCOME_ATTR = "title";
   static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
 
+  // View name
+  static final String VIEW_NAME = "home.ftl";
+
   // Key in the session attribute map for the player who started the session
-  static final String PLAYERLOBBY_KEY = "playerServices";
+  static final String PLAYERLOBBY_KEY = "playerLobby";
   static final String TIMEOUT_SESSION_KEY = "timeoutWatchdog";
 
   // The length of the session timeout in seconds
@@ -74,6 +77,6 @@ public class GetHomeRoute implements Route {
     vm.put("message", WELCOME_MSG);
 
     // render the View
-    return templateEngine.render(new ModelAndView(vm , "home.ftl"));
+    return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
   }
 }
