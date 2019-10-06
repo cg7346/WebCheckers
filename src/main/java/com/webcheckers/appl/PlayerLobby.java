@@ -34,6 +34,9 @@ public class PlayerLobby {
      */
     public PlayerLobby(final Player player) {
         // validate arguments
+        if (!isValidPlayer(player)) {
+            PostSignInRoute.makeInvalidUsrMessage();
+        }
         // TODO: check that repeated usernames don't work
         if (this.users.contains(player.getName())) {
             this.newPlayer = false;
@@ -43,6 +46,17 @@ public class PlayerLobby {
         }
         this.player = player;
         this.users.add(player.getName());
+    }
+
+    /**
+     * Determines whether or not the player's name is valid
+     *
+     * @return
+     *      a boolean of whether or not the player's name is vaild
+     */
+    public boolean isValidPlayer(Player player){
+        String name = player.getName();
+        return name.matches("[A-Za-z0-9]+|[^a-zA-Z\\d:]+");
     }
 
     /**
@@ -64,6 +78,22 @@ public class PlayerLobby {
     public List<String> getPlayers(){
         return this.users;
     }
+
+    //TODO: cuurentGame()
+    /**
+     * Get the current game that the player is playing. Create one if a game has not been started.
+     *
+     * @return GuessGame
+     *    the current game being played
+     */
+    /**
+     public synchronized GuessGame currentGame() {
+        if(game == null) {
+            game = gameCenter.getGame();
+        }
+        return game;
+    }
+     */
 
     /**
      * Cleanup the @Linkplain{PlayerLobby} object when the session expires.

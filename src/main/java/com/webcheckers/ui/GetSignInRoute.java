@@ -1,5 +1,6 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.util.Message;
 import spark.*;
 
@@ -17,6 +18,7 @@ public class GetSignInRoute implements Route {
 
     static final Logger LOG = Logger.getLogger(com.webcheckers.ui.GetSignInRoute.class.getName());
 
+    static final String NEW_PLAYER_ATTR = "isNewPlayer";
     static final Message SIGNIN_MSG = Message.info("Player Sign In");
     static final String TITLE = "title";
     static final Message TITLE_MSG = Message.info("Sign In");
@@ -53,8 +55,13 @@ public class GetSignInRoute implements Route {
     @Override
     public Object handle(Request request, Response response) {
         LOG.finer("GetSignInRoute is invoked.");
+
+        //TODO: game = playerLobby.currentGame()
+
         //
         Map<String, Object> vm = new HashMap<>();
+        //vm.put(NEW_PLAYER_ATTR, playerLobby.isNewPlayer());
+
         vm.put(TITLE, TITLE_MSG);
 
         // display a user message in the Home page
