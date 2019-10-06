@@ -15,12 +15,15 @@ import java.util.logging.Logger;
  */
 public class GetSignInRoute implements Route {
 
-    private static final Logger LOG = Logger.getLogger(com.webcheckers.ui.GetSignInRoute.class.getName());
+    static final Logger LOG = Logger.getLogger(com.webcheckers.ui.GetSignInRoute.class.getName());
 
-    private static final Message SIGNIN_MSG = Message.info("Player Sign In");
-    private static final String TITLE = "title";
-    private static final Message TITLE_MSG = Message.info("Sign In");
-    private static final String MESSAGE = "message";
+    static final Message SIGNIN_MSG = Message.info("Player Sign In");
+    static final String TITLE = "title";
+    static final Message TITLE_MSG = Message.info("Sign In");
+    static final String MESSAGE = "message";
+
+    // Key in the session attribute map for the player who started the session
+    static final String PLAYERLOBBY_KEY = "playerServices";
 
     private final TemplateEngine templateEngine;
 

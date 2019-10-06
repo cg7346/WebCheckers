@@ -4,6 +4,8 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.util.Message;
 import spark.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -72,5 +74,25 @@ public class PostSignInRoute implements Route {
         this.templateEngine = templateEngine;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws java.util.NoSuchElementException
+     *      when an invalid result is returned making a guess
+     * @param request
+     * @param response
+     * @return
+     */
+    @Override
+    public String handle(Request request, Response response) {
+        // start building a View-Model
+        final Map<String, Object> vm = new HashMap<>();
+        vm.put(GetSignInRoute.TITLE, GetSignInRoute.TITLE_MSG);
+        vm.put(GetSignInRoute.MESSAGE, GetSignInRoute.SIGNIN_MSG);
 
+        // retrieve the game object
+        final Session session = request.session();
+        final PlayerLobby playerLobby = session.attribute(GetSignInRoute.PLAYERLOBBY_KEY);
+
+    }
 }
