@@ -15,12 +15,12 @@
     <!-- Provide a navigation bar -->
     <#include "nav-bar.ftl" />
 
-    <form class="body">
+    <div class="body">
 
         <!-- Provide a message to the user, if supplied. -->
         <#include "message.ftl" />
 
-        <form action="./" method="POST">
+        <form action="./signin" method="POST">
 
             <label for="myUsername"><b>Username</b></label>
             <input type="text" placeholder="Enter Username" name="myUserName" required>
