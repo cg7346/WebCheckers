@@ -13,8 +13,6 @@ public class BoardView {
     private color activeColor;
 
 
-
-
     public BoardView(Player player, CheckersGame checkersGame){
         this.rows = new ArrayList<>();
 
@@ -31,7 +29,9 @@ public class BoardView {
             spaceList = new ArrayList<>();
             for(int j = 0; j < checkersGame.COLS; j++){
                 Space s;
-                switch (board[i][j]){
+                //System.out.println("Im here!");
+                System.out.print(board[j][i] + " ");
+                switch (board[j][i]){
                     case EMPTY_BLACK:
                         s = new Space(j, true);
                         break;
@@ -47,8 +47,10 @@ public class BoardView {
                         s = new Space(j, false);
                         break;
                 }
+
                 spaceList.add(s);
             }
+            System.out.println();
             rows.add(new Row(i, spaceList));
         }
     }
@@ -59,5 +61,14 @@ public class BoardView {
      */
     public synchronized Iterator<Row> iterator() {
         return rows.iterator();
+    }
+
+    public static void main(String[] args){
+        Player testRed = new Player("TestRed", new ArrayList<>(), false );
+        Player testWhite = new Player("TestRed", new ArrayList<>(), false );
+        CheckersGame testGame = new CheckersGame(testRed, testWhite, 0);
+        System.out.println(testGame.toString());
+        System.out.println("MAKING BOARDVIEW....");
+        new BoardView(testRed, testGame);
     }
 }
