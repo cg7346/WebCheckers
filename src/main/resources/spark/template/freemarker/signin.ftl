@@ -15,17 +15,13 @@
     <!-- Provide a navigation bar -->
     <#include "nav-bar.ftl" />
 
-    <div class="body">
+    <form class="body">
 
         <!-- Provide a message to the user, if supplied. -->
         <#include "message.ftl" />
 
-        <!-- TODO: future content on the Home:
-                to start games,
-                spectating active games,
-                or replay archived games
-        -->
-        <div class="container">
+        <form action="./" method="POST">
+
             <label for="myUsername"><b>Username</b></label>
             <input type="text" placeholder="Enter Username" name="myUserName" required>
 
@@ -33,7 +29,8 @@
             <input type="password" placeholder="Enter Password" name="psw" required>
 
             <button type="submit">Login</button>
-        </div>
+
+        </form>
 
     </div>
 
