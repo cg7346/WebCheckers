@@ -36,6 +36,7 @@ public class PostSignInRoute implements Route {
     private static final String TAKEN_USR = "Username already has been taken. " +
             "Please enter a new Username.";
     private static final String VIEW_NAME = "signin.ftl";
+    private static final String CURRENT_USER = "currentUser";
 
     //
     // Static Methods
@@ -105,6 +106,7 @@ public class PostSignInRoute implements Route {
         // retrieve request parameter
         final String userStr = request.queryParams(USERNAME);
 
+        System.out.println(playerLobby.getPlayers());
         /* A null playerServices indicates a timed out session or an illegal request on this URL.
          * In either case, we will redirect back to home.
          */
@@ -122,6 +124,8 @@ public class PostSignInRoute implements Route {
             return templateEngine.render(mv);
         }
         else {
+            System.out.println(vm.get(CURRENT_USER));
+            vm.put(CURRENT_USER, "true");
             response.redirect(WebServer.HOME_URL);
             halt();
             return null;
