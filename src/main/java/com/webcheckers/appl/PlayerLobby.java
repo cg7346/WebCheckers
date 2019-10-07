@@ -31,8 +31,15 @@ public class PlayerLobby {
      */
     public PlayerLobby(final Player player) {
         this.player = player;
-        this.users.add(player.getName());
     }
+
+    /**
+     * Adds player to the list of players
+     */
+    public void addPlayer(String player) {
+        this.users.add(player);
+    }
+
 
     /**
      * Determines whether or not the player's name is valid
