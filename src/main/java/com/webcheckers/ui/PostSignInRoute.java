@@ -23,16 +23,19 @@ public class PostSignInRoute implements Route {
     // Constants
     //
 
-    // Values used in the view-model map for rendering the game view after a guess.
-    static final String USERNAME = "myUsername";
-    static final String MESSAGE_ATTR = "message";
-    static final String MESSAGE_TYPE_ATTR = "messageType";
+    // Values used in the view-model map for rendering the game view after a
+    // guess.
+    private static final String USERNAME = "myUsername";
+    private static final String MESSAGE_ATTR = "message";
+    private static final String MESSAGE_TYPE_ATTR = "messageType";
 
-    static final String ERROR_TYPE = "error";
-    static final String INVALID_USR = "Username should contain at least one alphanumeric " +
-            "characters or contain one or more characters that are not alphanumeric or spaces.";
-    static final String TAKEN_USR = "Username already has been taken. Please enter a new Username.";
-    static final String VIEW_NAME = "signin.ftl";
+    private static final String ERROR_TYPE = "error";
+    private static final String INVALID_USR = "Username should contain at " +
+            "least one alphanumeric characters or contain one or more " +
+            "characters that are not alphanumeric or spaces.";
+    private static final String TAKEN_USR = "Username already has been taken. " +
+            "Please enter a new Username.";
+    private static final String VIEW_NAME = "signin.ftl";
 
     //
     // Static Methods
@@ -83,13 +86,14 @@ public class PostSignInRoute implements Route {
      * {@inheritDoc}
      *
      * @throws java.util.NoSuchElementException
-     *      when an invalid result is returned making a guess
+     *      when an invalid username is returned
      * @param request
      * @param response
      * @return
      */
     @Override
     public Object handle(Request request, Response response) {
+        System.out.print(".............................");
         // start building a View-Model
         final Map<String, Object> vm = new HashMap<>();
         System.out.println("test");
@@ -108,7 +112,6 @@ public class PostSignInRoute implements Route {
          */
         if (playerLobby != null) {
             System.out.println("hi");
-            //vm.put(GetSignInRoute.NEWUSR_ATTR, playerLobby.isNewPlayer(userStr));
 
             // make the guess and create the appropriate ModelAndView for rendering
             ModelAndView mv;
