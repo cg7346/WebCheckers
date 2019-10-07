@@ -1,6 +1,7 @@
 package com.webcheckers.ui;
 
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
 
@@ -105,17 +106,18 @@ public class PostSignInRoute implements Route {
 
         // retrieve request parameter
         final String userStr = request.queryParams(USERNAME);
+        Player player = new Player(userStr);
 
-        System.out.println(playerLobby.getPlayers());
+        System.out.println(userStr);
         /* A null playerServices indicates a timed out session or an illegal request on this URL.
          * In either case, we will redirect back to home.
          */
         if (playerLobby != null) {
             // make the guess and create the appropriate ModelAndView for rendering
             ModelAndView mv;
-            if (!playerLobby.isValidPlayer(userStr)) {
+            if (!playerLobby.isValidPlayer(player)) {
                 mv = error(vm, makeInvalidUsrMessage().toString());
-            } else if (!playerLobby.isNewPlayer(userStr)) {
+            } else if (!playerLobby.isNewPlayer(player)) {
                 mv = error(vm, makeTakenUsrMessage().toString());
             } else {
                 // Invalid username received
@@ -124,8 +126,7 @@ public class PostSignInRoute implements Route {
             return templateEngine.render(mv);
         }
         else {
-            System.out.println(vm.get(CURRENT_USER));
-            vm.put(CURRENT_USER, "true");
+            playerLobby.addPlayer(player);
             response.redirect(WebServer.HOME_URL);
             halt();
             return null;

@@ -17,7 +17,7 @@ public class PlayerLobby {
     // The player of the webcheckers game
     private Player player;
     // The list of users playing the webcheckers game
-    private final List<String> users = new ArrayList<>();
+    private final List<Player> users = new ArrayList<>();
 
     /**
      * Create a PlayerLobby.
@@ -36,8 +36,12 @@ public class PlayerLobby {
     /**
      * Adds player to the list of players
      */
-    public void addPlayer(String player) {
-        this.users.add(player);
+    public void addPlayer(Player player) {
+        try {
+            this.users.add(player);
+        } catch (Error e) {
+            System.out.println("Cannot add player.");
+        }
     }
 
 
@@ -47,8 +51,8 @@ public class PlayerLobby {
      * @return
      *      a boolean of whether or not the player's name is vaild
      */
-    public boolean isValidPlayer(String username){
-        return username.matches("[A-Za-z0-9]+|[^a-zA-Z\\d:]+");
+    public boolean isValidPlayer(Player player){
+        return player.getName().matches("[A-Za-z0-9]+|[^a-zA-Z\\d:]+");
     }
 
     /**
@@ -57,9 +61,9 @@ public class PlayerLobby {
      * @return
      *      a boolean of whether or not the player is new
      */
-    public boolean isNewPlayer(String username) {
+    public boolean isNewPlayer(Player player) {
         boolean newPlayer;
-        if (this.users.contains(username)) {
+        if (this.users.contains(player)) {
             newPlayer = false;
         } else {
             newPlayer = true;
@@ -73,7 +77,7 @@ public class PlayerLobby {
      * @return
      *      a list of players playing webcheckers
      */
-    public List<String> getPlayers(){
+    public List<Player> getPlayers(){
         return this.users;
     }
 
