@@ -93,10 +93,8 @@ public class PostSignInRoute implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
-        System.out.print(".............................");
         // start building a View-Model
         final Map<String, Object> vm = new HashMap<>();
-        System.out.println("test");
         vm.put(GetSignInRoute.TITLE, GetSignInRoute.TITLE_MSG);
         vm.put(GetSignInRoute.MESSAGE, GetSignInRoute.SIGNIN_MSG);
 
@@ -111,8 +109,6 @@ public class PostSignInRoute implements Route {
          * In either case, we will redirect back to home.
          */
         if (playerLobby != null) {
-            System.out.println("hi");
-
             // make the guess and create the appropriate ModelAndView for rendering
             ModelAndView mv;
             if (!playerLobby.isValidPlayer(userStr)) {
@@ -126,7 +122,6 @@ public class PostSignInRoute implements Route {
             return templateEngine.render(mv);
         }
         else {
-            System.out.println("bye");
             response.redirect(WebServer.HOME_URL);
             halt();
             return null;
