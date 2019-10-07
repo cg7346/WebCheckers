@@ -141,10 +141,19 @@ public class CheckersGame {
         Space[][] inverseBoard = new Space[COLS][ROWS];
         for (int col=0; col < COLS; col++) {
             for (int row = 0; row < ROWS; row++) {
+
+                //flip red to white
                 if (board[col][row] == Space.RED_PLAYER) {
                     inverseBoard[col][row] = Space.WHITE_PLAYER;
+
+                //flip white to red
                 } else if (board[col][row] == Space.WHITE_PLAYER) {
                     inverseBoard[col][row] = Space.RED_PLAYER;
+                }
+
+                //keep everything else
+                else{
+                    inverseBoard[col][row] = board[col][row];
                 }
             }
         }
@@ -167,22 +176,20 @@ public class CheckersGame {
      */
     @Override
     public String toString() {
-        System.out.println("toString");
         StringBuilder builder = new StringBuilder();
 
         for(int r=0; r<ROWS; r++) {
-            //System.out.println("row" + r);
             for(int c=0; c<COLS; c++) {
-                //System.out.println("col" + c);
-                builder.append('[');
-                //System.out.println(board[c][r]);
+                builder.append('|');
                 builder.append(board[c][r].getSymbol());
-                builder.append(']');
+                builder.append('|');
             }
             builder.append('\n');
         }
         return builder.toString();
     }
+
+
 
     //Just some in class testing
     public static void main(String[] args){
@@ -190,8 +197,7 @@ public class CheckersGame {
                 new Player("2", new ArrayList<>(), false), 0);
         System.out.println(testGame.toString());
 
-        Space[][] Invesrseboard = testGame.inverseBoard();
-        System.out.println(Invesrseboard.toString());
+
     }
 
 

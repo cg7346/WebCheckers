@@ -1,8 +1,11 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.util.Message;
 import spark.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -10,13 +13,17 @@ import java.util.Objects;
 public class GetGameRoute implements Route {
 
     static final String VIEW_NAME = "game.ftl";
-    static Player redPlayer;
-    static Player whitePlayer;
-    static Player currentUser;
-    static BoardView board;
-    static final String MESSAGE = "A game has been started";
+
+    //TODO CHANGE ALL THIS HARD CODED STUFF
+    static Player redPlayer = new Player("Red", new ArrayList<>(), true);
+    static Player whitePlayer = new Player("White", new ArrayList<>(), true);
+    static Player currentUser = redPlayer;
+    static BoardView board = new BoardView(currentUser, new CheckersGame(redPlayer, whitePlayer, 0));
+    static final Message MESSAGE = Message.info("A game has been started");
     //TODO static (SOMETHING) viewMode;
+    static enum viewMode {PLAY, SPECTATOR,REPLAY}
     //TODO static (SOMETHING) activeColor;
+    static enum activeColor {RED, WHITE}
     //static (SOMETHING) modeOptionsAsJSON; (Does not need to be done for Sprint 1)
 
     private final TemplateEngine templateEngine;
@@ -30,9 +37,9 @@ public class GetGameRoute implements Route {
     public GetGameRoute(final TemplateEngine templateEngine)
     {
         // validation
-        Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         //
-        this.templateEngine = templateEngine;
+        //this.templateEngine = templateEngine;
     }
 
     /**
@@ -41,14 +48,15 @@ public class GetGameRoute implements Route {
     @Override
     public String handle(Request request, Response response)
     {
+
         Map<String, Object> vm = new HashMap<>();
         vm.put("title", "GameTitle");
         vm.put("currentUser", currentUser);
-        //vm.put("viewMode", viewMode);
+        vm.put("viewMode", viewMode.PLAY);
         //vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
         vm.put("redPlayer", redPlayer);
         vm.put("whitePlayer", whitePlayer);
-        //vm.put("activeColor", activeColor);
+        vm.put("activeColor", activeColor.RED);
         vm.put("board", board);
         vm.put("message", MESSAGE);
 

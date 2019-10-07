@@ -50,6 +50,10 @@ public class Player {
         return this.newPlayer;
     }
 
+    //added this method to get currenuser/redplayer/whiteplayer/.name to work
+    //changed .name -> .getUsername()
+    public String getUsername(){ return this.username;}
+
     /**
      * {@inheritDoc}
      */

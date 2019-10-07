@@ -39,8 +39,8 @@ public class BoardView {
             spaceList = new ArrayList<>();
             for(int j = 0; j < checkersGame.COLS; j++){
                 Space s;
-                //System.out.println("Im here!");
-                System.out.print(board[j][i] + " ");
+                //for testing purposes take out
+                //System.out.print( "|" + board[j][i].getSymbol() + "|");
                 switch (board[j][i]){
                     case EMPTY_BLACK:
                         s = new Space(j, true);
@@ -65,7 +65,8 @@ public class BoardView {
                 }
                 spaceList.add(s);
             }
-            System.out.println();
+            //for testing purposes take out
+            //System.out.println();
             rows.add(new Row(i, spaceList));
         }
     }
@@ -79,11 +80,15 @@ public class BoardView {
     }
 
     public static void main(String[] args){
+        //little bit of testing
         Player testRed = new Player("TestRed", new ArrayList<>(), false );
         Player testWhite = new Player("TestRed", new ArrayList<>(), false );
         CheckersGame testGame = new CheckersGame(testRed, testWhite, 0);
-        System.out.println(testGame.toString());
-        System.out.println("MAKING BOARDVIEW....");
+        //System.out.println(testGame.toString());
+        System.out.println("MAKING RED PLAYER....");
         new BoardView(testRed, testGame);
+
+        System.out.println("MAKING WHITE PLAYER");
+        new BoardView(testWhite, testGame);
     }
 }
