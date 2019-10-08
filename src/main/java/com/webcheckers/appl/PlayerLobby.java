@@ -52,8 +52,13 @@ public class PlayerLobby {
      *      a boolean of whether or not the player's name is vaild
      */
     public boolean isValidPlayer(Player player){
-        return player.getName().matches("[A-Za-z0-9]+|[^a-zA-Z\\d:]+");
+        if (player != null) {
+            return player.getName().matches("[A-Za-z0-9]+|[^a-zA-Z\\d:]+");
+        } else {
+            return false;
+        }
     }
+
 
     /**
      * Determines whether or not the player is new
