@@ -75,6 +75,16 @@ public class GetHomeRoute implements Route {
     // display a user message in the Home page
     vm.put("message", WELCOME_MSG);
 
+    final Session httpSession = request.session();
+    if (httpSession.attribute(PLAYERLOBBY_KEY) == null) {
+      final PlayerLobby playerLobby = new PlayerLobby(null);
+      httpSession.attribute(PLAYERLOBBY_KEY, playerLobby);
+    } else {
+      response.redirect(WebServer.HOME_URL);
+      halt();
+      return null;
+    }
+
     // render the View
     return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
   }

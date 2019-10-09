@@ -126,6 +126,7 @@ public class PostSignInRoute implements Route {
                 return templateEngine.render(mv);
             } else {
                 playerLobby.addPlayer(player);
+                System.out.println(playerLobby.getPlayers());
                 return null;
             }
         }
