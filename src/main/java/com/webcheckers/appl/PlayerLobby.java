@@ -106,15 +106,10 @@ public class PlayerLobby {
      * The only cleanup will be to remove the game.
      * TODO: game = null;
      */
-    public void endSession() {}
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized String toString() {
-        return "{Player " + player.getName() + "}";
+    public void endSession() {
     }
 }
+
+
 
 
