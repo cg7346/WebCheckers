@@ -79,10 +79,6 @@ public class GetHomeRoute implements Route {
     if (httpSession.attribute(PLAYERLOBBY_KEY) == null) {
       final PlayerLobby playerLobby = new PlayerLobby(null);
       httpSession.attribute(PLAYERLOBBY_KEY, playerLobby);
-    } else {
-      response.redirect(WebServer.HOME_URL);
-      halt();
-      return null;
     }
 
     // render the View
