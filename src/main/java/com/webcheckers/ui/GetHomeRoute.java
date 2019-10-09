@@ -22,10 +22,12 @@ public class GetHomeRoute implements Route {
 
     // Values used in the view-model map for rendering the home view.
     static final String WELCOME_ATTR = "title";
+    static final String WELCOME_ATTR_MSG = "Welcome!";
     static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
-    static final String NEW_PLAYER_ATTR = "newPlayer";
+    static final String CURRENT_USER = "currentUser.name";
+    static final String MESSAGE = "message";
 
-    // View name
+  // View name
     static final String VIEW_NAME = "home.ftl";
 
     // Key in the session attribute map for the player who started the session
@@ -70,10 +72,10 @@ public class GetHomeRoute implements Route {
     LOG.finer("GetHomeRoute is invoked.");
     //
     Map<String, Object> vm = new HashMap<>();
-    vm.put("title", "Welcome!");
+    vm.put(WELCOME_ATTR, WELCOME_ATTR_MSG);
 
     // display a user message in the Home page
-    vm.put("message", WELCOME_MSG);
+    vm.put(MESSAGE, WELCOME_MSG);
 
     final Session httpSession = request.session();
     if (httpSession.attribute(PLAYERLOBBY_KEY) == null) {

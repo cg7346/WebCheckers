@@ -17,8 +17,7 @@ public class PlayerLobby {
     private Player player;
     // The list of players playing the webcheckers game
     private final List<Player> players = new ArrayList<>();
-    // The list of users playing the webcheckers game
-    private final List<String> usernames = new ArrayList<>();
+
 
     /**
      * Create a PlayerLobby.
@@ -46,19 +45,6 @@ public class PlayerLobby {
     }
 
     /**
-     * Adds a players username to a list of users
-     *
-     * @param username is the current username entered
-     */
-    public void addUsername(Player username) {
-        try {
-            this.usernames.add(username.getName());
-        } catch (Error e) {
-            System.out.println("Cannot add username");
-        }
-    }
-
-    /**
      * Determines whether or not the player's name is valid
      *
      * @return
@@ -72,7 +58,6 @@ public class PlayerLobby {
         }
     }
 
-
     /**
      * Determines whether or not the player is new
      *
@@ -80,13 +65,12 @@ public class PlayerLobby {
      *      a boolean of whether or not the player is new
      */
     public boolean isNewPlayer(Player player) {
-        boolean newPlayer;
-        if (this.players.contains(player)) {
-            newPlayer = false;
-        } else {
-            newPlayer = true;
+        for (Player p : players) {
+            if (p.getName().equals(player.getName())) {
+                return false;
+            }
         }
-        return newPlayer;
+        return true;
     }
 
 
@@ -106,23 +90,12 @@ public class PlayerLobby {
      * @return string list of username's
      */
     public List<String> getUsernames() {
-        return this.usernames;}
-
-    //TODO: cuurentGame()
-    /**
-     * Get the current game that the player is playing. Create one if a game has not been started.
-     *
-     * @return GuessGame
-     *    the current game being played
-     */
-    /**
-     public synchronized CheckersGame currentGame() {
-        if(game == null) {
-            game = gameCenter.getGame();
+        List<String> usernames = new ArrayList<>();
+        for (Player player : players) {
+            usernames.add(player.getName());
         }
-        return game;
+        return usernames;
     }
-     */
 
     /**
      * Cleanup the @Linkplain{PlayerLobby} object when the session expires.

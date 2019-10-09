@@ -28,16 +28,13 @@ public class PostSignInRoute implements Route {
     // guess.
     private static final String USERNAME = "myUsername";
     private static final String MESSAGE_ATTR = "message";
-    private static final String MESSAGE_TYPE_ATTR = "messageType";
 
-    private static final String ERROR_TYPE = "error";
     private static final String INVALID_USR = "Username should contain at " +
             "least one alphanumeric characters or contain one or more " +
             "characters that are not alphanumeric or spaces.";
     private static final String TAKEN_USR = "Username already has been taken. " +
             "Please enter a new Username.";
     private static final String VIEW_NAME = "signin.ftl";
-    private static final String CURRENT_USER = "currentUser";
 
     //
     // Static Methods
@@ -47,7 +44,7 @@ public class PostSignInRoute implements Route {
      * Make an info message when the username is invalid.
      */
     public static Message makeInvalidUsrMessage() {
-        return Message.info(INVALID_USR);
+        return Message.error(INVALID_USR);
     }
 
     /**
@@ -99,7 +96,7 @@ public class PostSignInRoute implements Route {
         final Map<String, Object> vm = new HashMap<>();
         vm.put(GetSignInRoute.TITLE, GetSignInRoute.TITLE_MSG);
         vm.put(GetSignInRoute.MESSAGE, GetSignInRoute.SIGNIN_MSG);
-        vm.put(GetHomeRoute.NEW_PLAYER_ATTR, Boolean.FALSE);
+       // vm.put(GetHomeRoute.CURRENT_USER, Boolean.FALSE);
 
         // retrieve the game object
         final Session session = request.session();
@@ -116,23 +113,17 @@ public class PostSignInRoute implements Route {
             // make the guess and create the appropriate ModelAndView for rendering
             ModelAndView mv;
             if (!playerLobby.isValidPlayer(player)) {
-                mv = error(vm, makeInvalidUsrMessage().toString());
-                return templateEngine.render(mv);
+                mv = error(vm, makeInvalidUsrMessage());
             } else if (!playerLobby.isNewPlayer(player)) {
-                mv = error(vm, makeTakenUsrMessage().toString());
-                return templateEngine.render(mv);
+                mv = error(vm, makeTakenUsrMessage());
             } else {
                 playerLobby.addPlayer(player);
-                playerLobby.addUsername(player);
-// debugging purposes before it was just added the Player now the usernames are now stored
-//                for (int i = 0; i < playerLobby.getUsernames().size(); i++) {
-////                    System.out.println(playerLobby.getUsernames());
-//                    System.out.println("Player " + Integer.toString(i) + " " + playerLobby.getUsernames().get(i));
-//                }
+                System.out.println(playerLobby.getUsernames());
+                mv = currentUser(vm, player.getName());
                 response.redirect(WebServer.HOME_URL);
-                halt();
-                return null;
+                //halt();
             }
+            return templateEngine.render(mv);
         }
         else {
             response.redirect(WebServer.HOME_URL);
@@ -145,19 +136,16 @@ public class PostSignInRoute implements Route {
     // Private methods
     //
 
-    private ModelAndView error(final Map<String, Object> vm, final String message) {
+    private ModelAndView error(final Map<String, Object> vm, final Message message) {
         vm.put(MESSAGE_ATTR, message);
-        vm.put(MESSAGE_TYPE_ATTR, ERROR_TYPE);
         return new ModelAndView(vm, VIEW_NAME);
     }
 
     //TODO: need to figure out how to implement this
     //TODO: currentUser needs a name method currentUser.name
-    private ModelAndView currentUser(final Map<String, Object> vm, final PlayerLobby playerLobby) {
-        vm.put(CURRENT_USER, playerLobby.getUsernames());
-
+    private ModelAndView currentUser(final Map<String, Object> vm, final String name) {
+        vm.put(GetHomeRoute.CURRENT_USER, name);
         return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
-        //        return playerLobby.isCurrentPlayer(this.player);
     }
 
     //TODO: going to need this later
