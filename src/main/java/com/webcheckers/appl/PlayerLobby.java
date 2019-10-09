@@ -15,8 +15,10 @@ public class PlayerLobby {
 
     // The player of the webcheckers game
     private Player player;
+    // The list of players playing the webcheckers game
+    private final List<Player> players = new ArrayList<>();
     // The list of users playing the webcheckers game
-    private final List<Player> users = new ArrayList<>();
+    private final List<String> usernames = new ArrayList<>();
 
     /**
      * Create a PlayerLobby.
@@ -28,7 +30,7 @@ public class PlayerLobby {
      * @throws IllegalArgumentException
      *    when the {@code player} is already taken
      */
-    public PlayerLobby(final Player player) {
+    public PlayerLobby(Player player) {
         this.player = player;
     }
 
@@ -37,12 +39,24 @@ public class PlayerLobby {
      */
     public void addPlayer(Player player) {
         try {
-            this.users.add(player);
+            this.players.add(player);
         } catch (Error e) {
             System.out.println("Cannot add player.");
         }
     }
 
+    /**
+     * Adds a players username to a list of users
+     *
+     * @param username is the current username entered
+     */
+    public void addUsername(Player username) {
+        try {
+            this.usernames.add(username.getName());
+        } catch (Error e) {
+            System.out.println("Cannot add username");
+        }
+    }
 
     /**
      * Determines whether or not the player's name is valid
@@ -67,7 +81,7 @@ public class PlayerLobby {
      */
     public boolean isNewPlayer(Player player) {
         boolean newPlayer;
-        if (this.users.contains(player)) {
+        if (this.players.contains(player)) {
             newPlayer = false;
         } else {
             newPlayer = true;
@@ -75,15 +89,24 @@ public class PlayerLobby {
         return newPlayer;
     }
 
+
     /**
      * Gets the list of players playing webcheckers
      *
      * @return
      *      a list of players playing webcheckers
      */
-    public List<Player> getPlayers(){
-        return this.users;
+    public List<Player> getPlayers() {
+        return this.players;
     }
+
+    /**
+     * Get the list of username's playing webcheckers
+     *
+     * @return string list of username's
+     */
+    public List<String> getUsernames() {
+        return this.usernames;}
 
     //TODO: cuurentGame()
     /**
@@ -93,7 +116,7 @@ public class PlayerLobby {
      *    the current game being played
      */
     /**
-     public synchronized GuessGame currentGame() {
+     public synchronized CheckersGame currentGame() {
         if(game == null) {
             game = gameCenter.getGame();
         }

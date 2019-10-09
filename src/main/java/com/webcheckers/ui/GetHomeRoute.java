@@ -20,39 +20,39 @@ import static spark.Spark.halt;
  */
 public class GetHomeRoute implements Route {
 
-  // Values used in the view-model map for rendering the home view.
-  static final String WELCOME_ATTR = "title";
-  static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
+    // Values used in the view-model map for rendering the home view.
+    static final String WELCOME_ATTR = "title";
+    static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
+    static final String NEW_PLAYER_ATTR = "newPlayer";
 
-  // View name
-  static final String VIEW_NAME = "home.ftl";
+    // View name
+    static final String VIEW_NAME = "home.ftl";
 
-  // Key in the session attribute map for the player who started the session
-  static final String PLAYERLOBBY_KEY = "playerLobby";
-  static final String TIMEOUT_SESSION_KEY = "timeoutWatchdog";
+    // Key in the session attribute map for the player who started the session
+    static final String PLAYERLOBBY_KEY = "playerLobby";
+    static final String TIMEOUT_SESSION_KEY = "timeoutWatchdog";
 
-  // The length of the session timeout in seconds
-  static final int SESSION_TIMEOUT_PERIOD = 120;
+    // The length of the session timeout in seconds
+    static final int SESSION_TIMEOUT_PERIOD = 120;
 
-  static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
+    static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
-  //
-  // Attributes
-  //
-
-  private final TemplateEngine templateEngine;
-
-  /**
-   * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
-   *
-   * @param templateEngine
-   *   the HTML template rendering engine
-   */
-  public GetHomeRoute(final TemplateEngine templateEngine) {
-    this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
     //
-    LOG.config("GetHomeRoute is initialized.");
-  }
+    // Attributes
+    //
+
+    private final TemplateEngine templateEngine;
+
+    /**
+     * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
+     *
+     * @param templateEngine the HTML template rendering engine
+     */
+    public GetHomeRoute(final TemplateEngine templateEngine) {
+        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
+        //
+        LOG.config("GetHomeRoute is initialized.");
+    }
 
   /**
    * Render the WebCheckers Home page.
@@ -80,7 +80,6 @@ public class GetHomeRoute implements Route {
       final PlayerLobby playerLobby = new PlayerLobby(null);
       httpSession.attribute(PLAYERLOBBY_KEY, playerLobby);
     }
-
     // render the View
     return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
   }

@@ -99,6 +99,7 @@ public class PostSignInRoute implements Route {
         final Map<String, Object> vm = new HashMap<>();
         vm.put(GetSignInRoute.TITLE, GetSignInRoute.TITLE_MSG);
         vm.put(GetSignInRoute.MESSAGE, GetSignInRoute.SIGNIN_MSG);
+        vm.put(GetHomeRoute.NEW_PLAYER_ATTR, Boolean.FALSE);
 
         // retrieve the game object
         final Session session = request.session();
@@ -122,7 +123,12 @@ public class PostSignInRoute implements Route {
                 return templateEngine.render(mv);
             } else {
                 playerLobby.addPlayer(player);
-                System.out.println(playerLobby.getPlayers());
+                playerLobby.addUsername(player);
+// debugging purposes before it was just added the Player now the usernames are now stored
+//                for (int i = 0; i < playerLobby.getUsernames().size(); i++) {
+////                    System.out.println(playerLobby.getUsernames());
+//                    System.out.println("Player " + Integer.toString(i) + " " + playerLobby.getUsernames().get(i));
+//                }
                 response.redirect(WebServer.HOME_URL);
                 halt();
                 return null;
@@ -144,4 +150,18 @@ public class PostSignInRoute implements Route {
         vm.put(MESSAGE_TYPE_ATTR, ERROR_TYPE);
         return new ModelAndView(vm, VIEW_NAME);
     }
+
+    //TODO: need to figure out how to implement this
+    //TODO: currentUser needs a name method currentUser.name
+    private ModelAndView currentUser(final Map<String, Object> vm, final PlayerLobby playerLobby) {
+        vm.put(CURRENT_USER, playerLobby.getUsernames());
+
+        return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
+        //        return playerLobby.isCurrentPlayer(this.player);
+    }
+
+    //TODO: going to need this later
+//    private ModelAndView signout() {
+//        return ;
+//    }
 }
