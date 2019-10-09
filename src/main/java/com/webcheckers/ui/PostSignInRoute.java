@@ -107,7 +107,8 @@ public class PostSignInRoute implements Route {
         // retrieve request parameter
         final String userStr = request.queryParams(USERNAME);
         Player player = new Player(userStr);
-        System.out.println(userStr);
+        System.out.println(player);
+        System.out.println(player.getName());
 
         /* A null playerServices indicates a timed out session or an illegal request on this URL.
          * In either case, we will redirect back to home.
@@ -115,6 +116,8 @@ public class PostSignInRoute implements Route {
         if (userStr != null) {
             // make the guess and create the appropriate ModelAndView for rendering
             ModelAndView mv;
+            System.out.println(playerLobby);
+            System.out.println( player.getName().matches("[A-Za-z0-9]+|[a-zA-Z\\d:]+"));
             if (!playerLobby.isValidPlayer(player)) {
                 mv = error(vm, makeInvalidUsrMessage().toString());
                 return templateEngine.render(mv);
