@@ -8,33 +8,33 @@
 </head>
 
 <body>
-    <div class="page">
+<div class="page">
 
-        <h1>Web Checkers | ${title}</h1>
+    <h1>Web Checkers | ${title}</h1>
 
-        <!-- Provide a navigation bar -->
-        <#include "nav-bar.ftl" />
+    <!-- Provide a navigation bar -->
+    <#include "nav-bar.ftl" />
 
-        <div class="body">
+    <div class="body">
 
-            <!-- Provide a message to the user, if supplied. -->
-            <#include "message.ftl" />
+        <!-- Provide a message to the user, if supplied. -->
+        <#include "message.ftl" />
 
-            <form action="./signin" method="POST">
+        <form action="./signin" method="POST">
 
-                <label for="myUsername"><b>Username</b></label>
-                <input type="text" placeholder="Enter Username" name="myUserName" required>
+            <label for="myUsername"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="myUsername" required>
 
-                <label for="psw"><b>Password</b></label>
-                <input type="password" placeholder="Enter Password" name="psw" required>
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
 
-                <button type="submit">Login</button>
+            <button type="submit">Login</button>
 
-            </form>
-
-        </div>
+        </form>
 
     </div>
+
+</div>
 </body>
 
 </html>

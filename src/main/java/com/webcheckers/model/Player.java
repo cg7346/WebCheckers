@@ -10,6 +10,10 @@ public class Player {
     // name is the name of the Player
     private String name;
 
+    public Player(String name) {
+        this.name = name;
+    }
+
     /**
      * Gets the Player's name
      *
