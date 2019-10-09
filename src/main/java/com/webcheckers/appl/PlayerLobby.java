@@ -52,7 +52,7 @@ public class PlayerLobby {
      */
     public boolean isValidPlayer(Player player){
         if (player != null) {
-            return player.getName().matches("[A-Za-z0-9]+|[^a-zA-Z\\d:]+");
+            return player.getName().matches("[A-Za-z0-9]+|[a-zA-Z\\d:]+");
         } else {
             return false;
         }
