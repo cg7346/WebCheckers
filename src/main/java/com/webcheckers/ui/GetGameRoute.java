@@ -1,7 +1,6 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
-import com.sun.tools.javac.comp.Check;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
@@ -45,11 +44,11 @@ public class GetGameRoute implements Route {
         // validation
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         //
-        this.game = game;
-        this.redPlayer = game.getRedPlayer();
-        this.whitePlayer = game.getWhitePlayer();
+        //this.game = game;
+        //this.redPlayer = game.getRedPlayer();
+        //this.whitePlayer = game.getWhitePlayer();
         //this.currentUser =
-        this.board = new BoardView(this.currentUser, game);
+        //this.board = new BoardView(this.currentUser, game);
 
         //this.templateEngine = templateEngine;
     }

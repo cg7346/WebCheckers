@@ -81,8 +81,8 @@ public class BoardView {
 
     public static void main(String[] args){
         //little bit of testing
-        Player testRed = new Player("TestRed", new ArrayList<>(), false );
-        Player testWhite = new Player("TestRed", new ArrayList<>(), false );
+        Player testRed = new Player("TestRed");
+        Player testWhite = new Player("TestRed");
         CheckersGame testGame = new CheckersGame(testRed, testWhite, 0);
         //System.out.println(testGame.toString());
         System.out.println("MAKING RED PLAYER....");

@@ -200,8 +200,8 @@ public class CheckersGame {
 
     //Just some in class testing
     public static void main(String[] args){
-        CheckersGame testGame = new CheckersGame(new Player("1", new ArrayList<>(), false),
-                new Player("2", new ArrayList<>(), false), 0);
+        CheckersGame testGame = new CheckersGame(new Player("1"),
+                new Player("2"), 0);
         System.out.println(testGame.toString());
 
 
