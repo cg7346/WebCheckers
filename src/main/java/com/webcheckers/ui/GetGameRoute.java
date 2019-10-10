@@ -1,6 +1,7 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
+import com.sun.tools.javac.comp.Check;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
@@ -26,6 +27,8 @@ public class GetGameRoute implements Route {
     //TODO static (SOMETHING) activeColor;
     static enum activeColor {RED, WHITE}
 
+    static CheckersGame game;
+
     private final Gson gson = new Gson();
     //static (SOMETHING) modeOptionsAsJSON; (Does not need to be done for Sprint 1)
 
@@ -37,11 +40,17 @@ public class GetGameRoute implements Route {
      * @param templateEngine
      *    The {@link TemplateEngine} used for rendering page HTML.
      */
-    public GetGameRoute(final TemplateEngine templateEngine)
+    public GetGameRoute(CheckersGame game, final TemplateEngine templateEngine)
     {
         // validation
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         //
+        this.game = game;
+        this.redPlayer = game.getRedPlayer();
+        this.whitePlayer = game.getWhitePlayer();
+        //this.currentUser =
+        this.board = new BoardView(this.currentUser, game);
+
         //this.templateEngine = templateEngine;
     }
 
