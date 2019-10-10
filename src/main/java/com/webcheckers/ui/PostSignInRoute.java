@@ -35,7 +35,12 @@ public class PostSignInRoute implements Route {
     private static final String TAKEN_USR = "Username already has been taken. " +
             "Please enter a new Username.";
     private static final String VIEW_NAME = "signin.ftl";
-
+    private static final String PLAYERS_ON = "playersOnline";
+    private static final String PLAYERS_ONLINE = "Players Online";
+    private static final String PLAYERS_LIST = "playersList";
+    private static final String PLAYERS_COUNT = "playersCount";
+    private static final String PLAYERS = "There are %d other players available to play at this time.";
+    private static final String NO_PLAYERS = "There are no other players available to play at this time";
     //
     // Static Methods
     //
@@ -119,7 +124,7 @@ public class PostSignInRoute implements Route {
             } else {
                 playerLobby.addPlayer(player);
                 System.out.println(playerLobby.getUsernames());
-                mv = currentUser(vm, player);
+                mv = GetHomeRoute.currentUser(vm, player);
             }
             return templateEngine.render(mv);
         }
@@ -139,12 +144,6 @@ public class PostSignInRoute implements Route {
         return new ModelAndView(vm, VIEW_NAME);
     }
 
-    //TODO: need to figure out how to implement this
-    //TODO: currentUser needs a name method currentUser.name
-    private ModelAndView currentUser(final Map<String, Object> vm, final Player player) {
-        vm.put(GetHomeRoute.CURRENT_USER, player);
-        return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
-    }
 
     //TODO: going to need this later
 //    private ModelAndView signout() {
