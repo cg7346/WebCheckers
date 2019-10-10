@@ -6,12 +6,10 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.Player;
 import spark.*;
 
 import com.webcheckers.util.Message;
 
-import static spark.Spark.halt;
 
 /**
  * The UI Controller to GET the Home page.
@@ -89,8 +87,4 @@ public class GetHomeRoute implements Route {
     return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
   }
 
-  public static ModelAndView currentUser(final Map<String, Object> vm, final Player player) {
-    vm.put(CURRENT_USER, player);
-    return new ModelAndView(vm, VIEW_NAME);
-  }
 }

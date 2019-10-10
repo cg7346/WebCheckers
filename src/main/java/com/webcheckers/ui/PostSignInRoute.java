@@ -124,7 +124,7 @@ public class PostSignInRoute implements Route {
             } else {
                 playerLobby.addPlayer(player);
                 System.out.println(playerLobby.getUsernames());
-                mv = GetHomeRoute.currentUser(vm, player);
+                mv = currentUser(vm, player);
             }
             return templateEngine.render(mv);
         }
@@ -144,6 +144,12 @@ public class PostSignInRoute implements Route {
         return new ModelAndView(vm, VIEW_NAME);
     }
 
+    //TODO: need to figure out how to implement this
+    //TODO: currentUser needs a name method currentUser.name
+    private ModelAndView currentUser(final Map<String, Object> vm, final Player player) {
+        vm.put(GetHomeRoute.CURRENT_USER, player);
+        return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
+    }
 
     //TODO: going to need this later
 //    private ModelAndView signout() {
