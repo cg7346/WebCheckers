@@ -24,7 +24,7 @@ public class GetHomeRoute implements Route {
     static final String WELCOME_ATTR = "title";
     static final String WELCOME_ATTR_MSG = "Welcome!";
     static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
-    static final String CURRENT_USER = "currentUser.name";
+    static final String CURRENT_USER = "currentUser";
     static final String MESSAGE = "message";
 
   // View name

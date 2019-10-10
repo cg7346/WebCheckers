@@ -109,7 +109,7 @@ public class PostSignInRoute implements Route {
         /* A null playerServices indicates a timed out session or an illegal request on this URL.
          * In either case, we will redirect back to home.
          */
-        if (userStr != null) {
+        if (playerLobby != null) {
             // make the guess and create the appropriate ModelAndView for rendering
             ModelAndView mv;
             if (!playerLobby.isValidPlayer(player)) {
@@ -119,9 +119,7 @@ public class PostSignInRoute implements Route {
             } else {
                 playerLobby.addPlayer(player);
                 System.out.println(playerLobby.getUsernames());
-                mv = currentUser(vm, player.getName());
-                response.redirect(WebServer.HOME_URL);
-                //halt();
+                mv = currentUser(vm, player);
             }
             return templateEngine.render(mv);
         }
@@ -143,8 +141,8 @@ public class PostSignInRoute implements Route {
 
     //TODO: need to figure out how to implement this
     //TODO: currentUser needs a name method currentUser.name
-    private ModelAndView currentUser(final Map<String, Object> vm, final String name) {
-        vm.put(GetHomeRoute.CURRENT_USER, name);
+    private ModelAndView currentUser(final Map<String, Object> vm, final Player player) {
+        vm.put(GetHomeRoute.CURRENT_USER, player);
         return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
     }
 
