@@ -151,6 +151,9 @@ public class WebServer {
     // Shows the Checkers game Sign In page
     get(SIGNIN_URL, new GetSignInRoute(templateEngine));
 
+    // Posts the Checkers game Sign In page
+    post(SIGNIN_URL, new PostSignInRoute(templateEngine));
+
     //Shows the Checkers game board
     get(GAME_URL, new GetGameRoute(templateEngine));
     //

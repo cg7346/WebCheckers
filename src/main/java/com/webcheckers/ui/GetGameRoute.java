@@ -17,8 +17,8 @@ public class GetGameRoute implements Route {
     static final String VIEW_NAME = "game.ftl";
 
     //TODO CHANGE ALL THIS HARD CODED STUFF
-    static Player redPlayer = new Player("Red", new ArrayList<>(), true);
-    static Player whitePlayer = new Player("White", new ArrayList<>(), true);
+    static Player redPlayer = new Player("Red");
+    static Player whitePlayer = new Player("White");
     static Player currentUser = redPlayer;
     static BoardView board = new BoardView(currentUser, new CheckersGame(redPlayer, whitePlayer, 0));
     static final Message MESSAGE = Message.info("A game has been started");
@@ -40,7 +40,7 @@ public class GetGameRoute implements Route {
      * @param templateEngine
      *    The {@link TemplateEngine} used for rendering page HTML.
      */
-    public GetGameRoute(CheckersGame game, final TemplateEngine templateEngine)
+    public GetGameRoute(final TemplateEngine templateEngine)
     {
         // validation
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
