@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-import static spark.Spark.halt;
+import static spark.Spark.*;
 
 /**
  * The {@code POST /signin} route handler
@@ -41,6 +41,7 @@ public class PostSignInRoute implements Route {
     private static final String PLAYERS_COUNT = "playersCount";
     private static final String PLAYERS = "There are %d other players available to play at this time.";
     private static final String NO_PLAYERS = "There are no other players available to play at this time";
+
     //
     // Static Methods
     //
@@ -110,6 +111,7 @@ public class PostSignInRoute implements Route {
         final String userStr = request.queryParams(USERNAME);
         Player player = new Player(userStr);
 
+
         /* A null playerServices indicates a timed out session or an illegal request on this URL.
          * In either case, we will redirect back to home.
          */
@@ -146,6 +148,8 @@ public class PostSignInRoute implements Route {
     //TODO: need to figure out how to implement this
     //TODO: currentUser needs a name method currentUser.name
     private ModelAndView currentUser(final Map<String, Object> vm, final Player player) {
+        vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
+        vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
         vm.put(GetHomeRoute.CURRENT_USER, player);
         return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
     }

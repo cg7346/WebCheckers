@@ -42,7 +42,7 @@ public class GetHomeRoute implements Route {
     // Attributes
     //
 
-    public final TemplateEngine templateEngine;
+    private final TemplateEngine templateEngine;
 
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
@@ -54,7 +54,6 @@ public class GetHomeRoute implements Route {
         //
         LOG.config("GetHomeRoute is initialized.");
     }
-
 
   /**
    * Render the WebCheckers Home page.
