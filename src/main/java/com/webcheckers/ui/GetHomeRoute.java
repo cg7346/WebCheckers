@@ -26,8 +26,14 @@ public class GetHomeRoute implements Route {
     static final String CURRENT_USER = "currentUser";
     static final String USERS_LIST = "userList";
     static final String MESSAGE = "message";
+    static final String PLAYERS_COUNT = "playerActive";
+    static final String PLAYERS = "There are %d other players available to play at this time.";
+    static final String PLAYER = "There are %d other player available to play at this time.";
+    static final String NO_PLAYERS = "There are no other players available to play at this time";
+    static final String PLAYERS_ON = "playersOnline";
+    static final String PLAYERS_ONLINE = "Players Online";
 
-  // View name
+    // View name
     static final String VIEW_NAME = "home.ftl";
 
     // Key in the session attribute map for the player who started the session
@@ -77,14 +83,39 @@ public class GetHomeRoute implements Route {
     // display a user message in the Home page
     vm.put(MESSAGE, WELCOME_MSG);
 
+      final PlayerLobby playerLobby = new PlayerLobby(null);
     final Session httpSession = request.session();
     if (httpSession.attribute(PLAYERLOBBY_KEY) == null) {
-      final PlayerLobby playerLobby = new PlayerLobby(null);
       httpSession.attribute(PLAYERLOBBY_KEY, playerLobby);
     }
+
+      if (playerLobby != null) {
+          ModelAndView mv = playerActive(vm, request);
+          return templateEngine.render(mv);
+      }
 
     // render the View
     return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
   }
 
+
+    //
+    // Private Methods
+    //
+    private ModelAndView playerActive(Map<String, Object> vm, Request request) {
+        vm.put(PLAYERS_ON, PLAYERS_ONLINE);
+        final Session session = request.session();
+        final PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
+        Integer playerCount = playerLobby.getPlayers().size();
+        if (playerCount == 0) {
+            vm.put(PLAYERS_COUNT, NO_PLAYERS);
+        } else if (playerCount == 1) {
+            String count = String.format(PLAYER, playerCount);
+            vm.put(PLAYERS_COUNT, count);
+        } else {
+            String count = String.format(PLAYERS, playerCount);
+            vm.put(PLAYERS_COUNT, count);
+        }
+        return new ModelAndView(vm, VIEW_NAME);
+    }
 }

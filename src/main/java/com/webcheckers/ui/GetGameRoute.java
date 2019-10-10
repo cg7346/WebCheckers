@@ -11,6 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * The UI controller to GET the Game page
+ *
+ * @author <a href='mailto:       @rit.edu'>    </a>
+ * @author <a href='mailto:       @rit.edu'>    </a>
+ * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
+ */
 public class GetGameRoute implements Route {
 
     static final String VIEW_NAME = "game.ftl";

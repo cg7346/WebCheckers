@@ -34,10 +34,13 @@ public class PostGameRoute implements Route {
         final Session session = request.session();
         final PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
 
-        // pull parameters
+
+        //player lobby needs to tall us who the current player is
+        //pull parameters
         //final String guessStr = request.queryParams(GUESS_PARAM);
 
         if(playerLobby != null) {
+            currentPlayer = playerLobby.getPlayer();
             //player lobby will tell us if chosen person is in a game
             //if yes
                 //rerender home with error "already in game"
