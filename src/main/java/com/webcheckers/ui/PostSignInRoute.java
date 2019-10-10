@@ -5,10 +5,7 @@ import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 import static spark.Spark.*;
 
@@ -124,8 +121,9 @@ public class PostSignInRoute implements Route {
                 mv = error(vm, makeTakenUsrMessage());
             } else {
                 playerLobby.addPlayer(player);
-//                System.out.println(playerLobby.getUsernames());
-                mv = currentUser(vm, player);
+                System.out.println(playerLobby.getUsernames());
+                mv = currentUser(playerLobby.getUsernames(), vm, player);
+//                mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
             }
             return templateEngine.render(mv);
         }
@@ -145,17 +143,24 @@ public class PostSignInRoute implements Route {
         return new ModelAndView(vm, VIEW_NAME);
     }
 
-    private ModelAndView currentUser(final Map<String, Object> vm, final Player player) {
-//        vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
-//        vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
+    //    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player,
+//                                     final PlayerLobby playerLobby) {
+    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player) {
+        vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
+        vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
+
         vm.put(GetHomeRoute.CURRENT_USER, player);
+        vm.put(GetHomeRoute.USERS_LIST, player.getName());
+//        vm.put(GetHomeRoute.USERS_LIST, playerLobby.getUsernames());
         return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
     }
 
-    private ModelAndView usersLoggedIn(final Map<String, Object> vm, final PlayerLobby playerLobby) {
-        vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
-        return null;
-    }
+//    private ModelAndView usersLoggedIn(final Map<String, Object> vm, final PlayerLobby playerLobby) {
+////        vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
+////        vm.put()
+//        //currentUsers = playerLobby.getUsernames();
+//        return currentUser(playerLobby.getUsernames(), vm, playerLobby);
+//    }
 
     //TODO: going to need this later
 //    private ModelAndView signout() {

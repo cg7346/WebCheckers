@@ -22,12 +22,8 @@ public class PlayerLobby {
     /**
      * Create a PlayerLobby.
      *
-     * @param player
-     *          a player.
-     *
-     *
-     * @throws IllegalArgumentException
-     *    when the {@code player} is already taken
+     * @param player a player.
+     * @throws IllegalArgumentException when the {@code player} is already taken
      */
     public PlayerLobby(Player player) {
         this.player = player;
@@ -47,10 +43,9 @@ public class PlayerLobby {
     /**
      * Determines whether or not the player's name is valid
      *
-     * @return
-     *      a boolean of whether or not the player's name is vaild
+     * @return a boolean of whether or not the player's name is vaild
      */
-    public boolean isValidPlayer(Player player){
+    public boolean isValidPlayer(Player player) {
         if (player != null) {
             return player.getName().matches("([\\w]([\\W]*))+");
         } else {
@@ -61,8 +56,7 @@ public class PlayerLobby {
     /**
      * Determines whether or not the player is new
      *
-     * @return
-     *      a boolean of whether or not the player is new
+     * @return a boolean of whether or not the player is new
      */
     public boolean isNewPlayer(Player player) {
         for (Player p : players) {
@@ -77,8 +71,7 @@ public class PlayerLobby {
     /**
      * Gets the list of players playing webcheckers
      *
-     * @return
-     *      a list of players playing webcheckers
+     * @return a list of players playing webcheckers
      */
     public List<Player> getPlayers() {
         return this.players;

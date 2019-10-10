@@ -20,7 +20,9 @@
     <#include "message.ftl" />
 
     <#if currentUser??>
-      <p>currentUser</p>
+        <ol>
+            <li>${userList}</li>
+        </ol>
     </#if>
     <!-- TODO: future content on the Home:
             to start games,

@@ -24,6 +24,7 @@ public class GetHomeRoute implements Route {
     static final String WELCOME_ATTR_MSG = "Welcome!";
     static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
     static final String CURRENT_USER = "currentUser";
+    static final String USERS_LIST = "userList";
     static final String MESSAGE = "message";
 
   // View name
@@ -42,7 +43,7 @@ public class GetHomeRoute implements Route {
     // Attributes
     //
 
-    private final TemplateEngine templateEngine;
+    public final TemplateEngine templateEngine;
 
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
