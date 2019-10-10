@@ -122,7 +122,7 @@ public class PostSignInRoute implements Route {
             } else {
                 playerLobby.addPlayer(player);
                 System.out.println(playerLobby.getUsernames());
-                mv = currentUser(playerLobby.getUsernames(), vm, player);
+                mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
 //                mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
             }
             return templateEngine.render(mv);
@@ -143,15 +143,20 @@ public class PostSignInRoute implements Route {
         return new ModelAndView(vm, VIEW_NAME);
     }
 
-    //    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player,
-//                                     final PlayerLobby playerLobby) {
-    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player) {
+    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player,
+                                     final PlayerLobby playerLobby) {
+//    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player) {
         vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
         vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
 
         vm.put(GetHomeRoute.CURRENT_USER, player);
-        vm.put(GetHomeRoute.USERS_LIST, player.getName());
-//        vm.put(GetHomeRoute.USERS_LIST, playerLobby.getUsernames());
+//        vm.put(GetHomeRoute.USERS_LIST, player.getName());
+        String users = "";
+        for (String user : userList) {
+            users += user + "\n";
+        }
+        System.out.println(users);
+        vm.put(GetHomeRoute.USERS_LIST, users);
         return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
     }
 
