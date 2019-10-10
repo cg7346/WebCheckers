@@ -5,10 +5,7 @@ import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class GetGameRoute implements Route {
 
@@ -24,7 +21,7 @@ public class GetGameRoute implements Route {
     static enum viewMode {PLAY, SPECTATOR,REPLAY}
     //TODO static (SOMETHING) activeColor;
     static enum activeColor {RED, WHITE}
-    //static (SOMETHING) modeOptionsAsJSON; (Does not need to be done for Sprint 1)
+    static Map<String, Object> modeOptionsAsJSON;
 
     private final TemplateEngine templateEngine;
 
@@ -53,7 +50,7 @@ public class GetGameRoute implements Route {
         vm.put("title", "GameTitle");
         vm.put("currentUser", currentUser);
         vm.put("viewMode", viewMode.PLAY);
-        //vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
+        vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
         vm.put("redPlayer", redPlayer);
         vm.put("whitePlayer", whitePlayer);
         vm.put("activeColor", activeColor.RED);
