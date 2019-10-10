@@ -89,6 +89,9 @@ public class PlayerLobby {
         return usernames;
     }
 
+    public Player getPlayer(){
+        return this.player;
+    }
     /**
      * Cleanup the @Linkplain{PlayerLobby} object when the session expires.
      * The only cleanup will be to remove the game.

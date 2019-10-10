@@ -11,18 +11,18 @@ geometry: margin=1in
 ## Team Information
 * Team name: TEAMNAME
 * Team members
-  * MEMBER1
-  * MEMBER2
-  * MEMBER3
-  * MEMBER4
+  * Jacquelyn Leung
+  * Mallory Bridge
+  * Anthony Ferraioli
+  * Celeste Gambardella
+  * Kelly Vo
 
 ## Executive Summary
 
-This is a summary of the project.
+Webcheckers is a webapp to play a game of checkers with other people. You have the option to watch games live or play games against others.
 
 ### Purpose
-> _Provide a very brief statement about the project and the most
-> important user group and user goals._
+> The purpose of the project is to work together in an agile team and create a game of webcheckers.
 
 ### Glossary and Acronyms
 > _Provide a table of terms and acronyms._
