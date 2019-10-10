@@ -101,7 +101,6 @@ public class PostSignInRoute implements Route {
         final Map<String, Object> vm = new HashMap<>();
         vm.put(GetSignInRoute.TITLE, GetSignInRoute.TITLE_MSG);
         vm.put(GetSignInRoute.MESSAGE, GetSignInRoute.SIGNIN_MSG);
-       // vm.put(GetHomeRoute.CURRENT_USER, Boolean.FALSE);
 
         // retrieve the game object
         final Session session = request.session();
