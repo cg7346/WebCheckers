@@ -1,5 +1,6 @@
 package com.webcheckers.ui;
 
+import com.google.gson.Gson;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
@@ -24,6 +25,8 @@ public class GetGameRoute implements Route {
     static enum viewMode {PLAY, SPECTATOR,REPLAY}
     //TODO static (SOMETHING) activeColor;
     static enum activeColor {RED, WHITE}
+
+    private final Gson gson = new Gson();
     //static (SOMETHING) modeOptionsAsJSON; (Does not need to be done for Sprint 1)
 
     private final TemplateEngine templateEngine;
@@ -53,6 +56,10 @@ public class GetGameRoute implements Route {
         vm.put("title", "GameTitle");
         vm.put("currentUser", currentUser);
         vm.put("viewMode", viewMode.PLAY);
+        final Map<String, Object> modeOptions = new HashMap<>(2);
+        modeOptions.put("isGameOver", false);
+        modeOptions.put("gameOverMessage", "/* get end of game message */");
+        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
         //vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
         vm.put("redPlayer", redPlayer);
         vm.put("whitePlayer", whitePlayer);
