@@ -19,13 +19,16 @@
     <!-- Provide a message to the user, if supplied. -->
     <#include "message.ftl" />
 
+    <#if currentUser??>
+      <p>currentUser</p>
+    </#if>
     <!-- TODO: future content on the Home:
             to start games,
             spectating active games,
             or replay archived games
     -->
 
-  </div>
+    </p>
 
 </div>
 </body>

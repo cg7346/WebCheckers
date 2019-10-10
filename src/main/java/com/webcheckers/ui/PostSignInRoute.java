@@ -79,7 +79,7 @@ public class PostSignInRoute implements Route {
      * @throws NoSuchElementException
      *    when the {@code Player} or {@code templateEngine} parameter is null
      */
-     PostSignInRoute(TemplateEngine templateEngine) {
+    PostSignInRoute(TemplateEngine templateEngine) {
         // validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
 
@@ -124,7 +124,7 @@ public class PostSignInRoute implements Route {
                 mv = error(vm, makeTakenUsrMessage());
             } else {
                 playerLobby.addPlayer(player);
-                System.out.println(playerLobby.getUsernames());
+//                System.out.println(playerLobby.getUsernames());
                 mv = currentUser(vm, player);
             }
             return templateEngine.render(mv);
@@ -145,13 +145,16 @@ public class PostSignInRoute implements Route {
         return new ModelAndView(vm, VIEW_NAME);
     }
 
-    //TODO: need to figure out how to implement this
-    //TODO: currentUser needs a name method currentUser.name
     private ModelAndView currentUser(final Map<String, Object> vm, final Player player) {
-        vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
-        vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
+//        vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
+//        vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
         vm.put(GetHomeRoute.CURRENT_USER, player);
         return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
+    }
+
+    private ModelAndView usersLoggedIn(final Map<String, Object> vm, final PlayerLobby playerLobby) {
+        vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
+        return null;
     }
 
     //TODO: going to need this later
