@@ -20,9 +20,15 @@
     <#include "message.ftl" />
 
     <#if currentUser??>
+        <h2>${playersOnline}</h2>
         <ol>
-            <li>${userList}</li>
+            <#list userList as user>
+                <li>${user}</li>
+            </#list>
         </ol>
+    <#else>
+        <h2>${playersOnline}</h2>
+        ${playerActive}
     </#if>
     <!-- TODO: future content on the Home:
             to start games,

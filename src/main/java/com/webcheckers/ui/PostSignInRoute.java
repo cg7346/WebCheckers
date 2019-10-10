@@ -26,18 +26,10 @@ public class PostSignInRoute implements Route {
     private static final String USERNAME = "myUsername";
     private static final String MESSAGE_ATTR = "message";
 
-    private static final String INVALID_USR = "Username should contain at " +
-            "least one alphanumeric characters or contain one or more " +
-            "characters that are not alphanumeric or spaces.";
-    private static final String TAKEN_USR = "Username already has been taken. " +
-            "Please enter a new Username.";
+    private static final String INVALID_USR = "Must contain at least one alphanumeric character.";
+    private static final String TAKEN_USR = "Username has already been taken.";
     private static final String VIEW_NAME = "signin.ftl";
-    private static final String PLAYERS_ON = "playersOnline";
-    private static final String PLAYERS_ONLINE = "Players Online";
-    private static final String PLAYERS_LIST = "playersList";
-    private static final String PLAYERS_COUNT = "playersCount";
-    private static final String PLAYERS = "There are %d other players available to play at this time.";
-    private static final String NO_PLAYERS = "There are no other players available to play at this time";
+
 
     //
     // Static Methods
@@ -121,7 +113,6 @@ public class PostSignInRoute implements Route {
                 mv = error(vm, makeTakenUsrMessage());
             } else {
                 playerLobby.addPlayer(player);
-                System.out.println(playerLobby.getUsernames());
                 mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
 //                mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
             }
@@ -150,22 +141,10 @@ public class PostSignInRoute implements Route {
         vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
 
         vm.put(GetHomeRoute.CURRENT_USER, player);
-//        vm.put(GetHomeRoute.USERS_LIST, player.getName());
-        String users = "";
-        for (String user : userList) {
-            users += user + "\n";
-        }
-        System.out.println(users);
-        vm.put(GetHomeRoute.USERS_LIST, users);
+        vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
+        vm.put(GetHomeRoute.USERS_LIST, userList);
         return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
     }
-
-//    private ModelAndView usersLoggedIn(final Map<String, Object> vm, final PlayerLobby playerLobby) {
-////        vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
-////        vm.put()
-//        //currentUsers = playerLobby.getUsernames();
-//        return currentUser(playerLobby.getUsernames(), vm, playerLobby);
-//    }
 
     //TODO: going to need this later
 //    private ModelAndView signout() {
