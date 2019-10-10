@@ -1,11 +1,16 @@
 package com.webcheckers.ui;
 
+import com.google.gson.Gson;
+import com.sun.tools.javac.comp.Check;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class GetGameRoute implements Route {
 
@@ -21,7 +26,11 @@ public class GetGameRoute implements Route {
     static enum viewMode {PLAY, SPECTATOR,REPLAY}
     //TODO static (SOMETHING) activeColor;
     static enum activeColor {RED, WHITE}
-    static Map<String, Object> modeOptionsAsJSON;
+
+    static CheckersGame game;
+
+    private final Gson gson = new Gson();
+    //static (SOMETHING) modeOptionsAsJSON; (Does not need to be done for Sprint 1)
 
     private final TemplateEngine templateEngine;
 
@@ -31,11 +40,17 @@ public class GetGameRoute implements Route {
      * @param templateEngine
      *    The {@link TemplateEngine} used for rendering page HTML.
      */
-    public GetGameRoute(final TemplateEngine templateEngine)
+    public GetGameRoute(CheckersGame game, final TemplateEngine templateEngine)
     {
         // validation
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         //
+        this.game = game;
+        this.redPlayer = game.getRedPlayer();
+        this.whitePlayer = game.getWhitePlayer();
+        //this.currentUser =
+        this.board = new BoardView(this.currentUser, game);
+
         //this.templateEngine = templateEngine;
     }
 
@@ -50,7 +65,11 @@ public class GetGameRoute implements Route {
         vm.put("title", "GameTitle");
         vm.put("currentUser", currentUser);
         vm.put("viewMode", viewMode.PLAY);
-        vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
+        final Map<String, Object> modeOptions = new HashMap<>(2);
+        modeOptions.put("isGameOver", false);
+        modeOptions.put("gameOverMessage", "/* get end of game message */");
+        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+        //vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
         vm.put("redPlayer", redPlayer);
         vm.put("whitePlayer", whitePlayer);
         vm.put("activeColor", activeColor.RED);

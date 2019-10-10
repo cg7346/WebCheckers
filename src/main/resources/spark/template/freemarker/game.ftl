@@ -11,7 +11,7 @@
     "currentUser" : "${currentUser.getUsername()}",
     "viewMode" : "${viewMode}",
     <!--Don't for get to add this back in!'-->
-    <!--"modeOptions" : ${modeOptionsAsJSON!'{}'},-->
+    "modeOptions" : ${modeOptionsAsJSON!'{}'},
     "redPlayer" : "${redPlayer.getUsername()}",
     "whitePlayer" : "${whitePlayer.getUsername()}",
     "activeColor" : "${activeColor}"

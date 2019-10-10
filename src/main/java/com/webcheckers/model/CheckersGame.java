@@ -169,6 +169,13 @@ public class CheckersGame {
     }
 
     /**
+     * These are getters
+     */
+    public Player getRedPlayer(){return redPlayer;}
+    public Player getWhitePlayer(){return whitePlayer;}
+    public int getGameID(){return gameID;}
+
+    /**
      * Returns a {@link String} representation of the board, suitable for
      * printing. Used mostly for testing
      *
