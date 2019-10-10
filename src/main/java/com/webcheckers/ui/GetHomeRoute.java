@@ -86,5 +86,4 @@ public class GetHomeRoute implements Route {
     // render the View
     return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
   }
-
 }
