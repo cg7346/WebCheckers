@@ -84,18 +84,9 @@ public class PostGameRoute implements Route {
 
     private ModelAndView error(final Map<String, Object> vm, final Message message, final PlayerLobby playerLobby) {
         vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
+        vm.put(GetHomeRoute.CURRENT_USER, playerLobby.getPlayers().get(playerLobby.getPlayers().size()-1));
         vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
         vm.put(GetHomeRoute.USERS_LIST, playerLobby.getUsernames());
-        Integer playerCount = playerLobby.getPlayers().size();
-        if (playerCount == 0) {
-            vm.put(GetHomeRoute.PLAYERS_COUNT, GetHomeRoute.NO_PLAYERS);
-        } else if (playerCount == 1) {
-            String count = String.format(GetHomeRoute.PLAYER, playerCount);
-            vm.put(GetHomeRoute.PLAYERS_COUNT, count);
-        } else {
-            String count = String.format(GetHomeRoute.PLAYERS, playerCount);
-            vm.put(GetHomeRoute.PLAYERS_COUNT, count);
-        }
         vm.put(MESSAGE_ATTR, message);
         return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
     }
