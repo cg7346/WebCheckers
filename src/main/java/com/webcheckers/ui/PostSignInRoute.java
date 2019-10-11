@@ -113,6 +113,8 @@ public class PostSignInRoute implements Route {
                 mv = error(vm, makeTakenUsrMessage());
             } else {
                 playerLobby.addPlayer(player);
+                playerLobby.setPlayer(player);
+                session.attribute("layer", player);
                 mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
 //                mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
             }

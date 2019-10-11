@@ -21,11 +21,13 @@
 
     <#if currentUser??>
         <h2>${playersOnline}</h2>
+        <form action="./game" method="POST">
         <ol>
             <#list userList as user>
-                <button type="submit">${user}</button>
+                <button name = "name" type="submit" value=${user}>${user}</button>
             </#list>
         </ol>
+        </form>
     <#else>
         <h2>${playersOnline}</h2>
         <blockquote>
