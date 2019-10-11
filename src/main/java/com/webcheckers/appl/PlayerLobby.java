@@ -53,6 +53,12 @@ public class PlayerLobby {
         }
     }
 
+    //TODO CHange name
+    public boolean isInGame(Player player){
+        //is it in a game
+        return player.getInGame();
+    }
+
     /**
      * Determines whether or not the player is new
      *
@@ -89,8 +95,22 @@ public class PlayerLobby {
         return usernames;
     }
 
+    public Player findPlayer(String name){
+        for (Player player : players){
+            System.out.println(player.getName());
+            //TODO OVERRIDE EQUALSLLFSKLD
+            if (player.getName().equals(name)){
+                return player;
+            }
+        }
+        return null;
+    }
     public Player getPlayer(){
         return this.player;
+    }
+
+    public void setPlayer(Player player){
+        this.player = player;
     }
     /**
      * Cleanup the @Linkplain{PlayerLobby} object when the session expires.
