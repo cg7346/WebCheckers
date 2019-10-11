@@ -53,6 +53,12 @@ public class PlayerLobby {
         }
     }
 
+    //TODO CHange name
+    public boolean isInGame(Player player){
+        //is it in a game
+        return player.getInGame();
+    }
+
     /**
      * Determines whether or not the player is new
      *
@@ -89,6 +95,14 @@ public class PlayerLobby {
         return usernames;
     }
 
+    public Player findPlayer(String name){
+        for (Player player : players){
+            if (player.getName().equals(name)){
+                return player;
+            }
+        }
+        return null;
+    }
     public Player getPlayer(){
         return this.player;
     }

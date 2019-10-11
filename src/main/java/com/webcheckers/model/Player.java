@@ -9,6 +9,7 @@ public class Player {
 
     // name is the name of the Player
     private String name;
+    private boolean inGame;
 
     public Player(String name) {
         this.name = name;
@@ -24,4 +25,11 @@ public class Player {
         return this.name;
     }
 
+    public boolean getInGame(){
+        return this.inGame;
+    }
+
+    public void setInGame(boolean inGame){
+        this.inGame = inGame;
+    }
 }
