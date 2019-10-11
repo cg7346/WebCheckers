@@ -23,12 +23,14 @@
         <h2>${playersOnline}</h2>
         <ol>
             <#list userList as user>
-                <li>${user}</li>
+                <button type="submit">${user}</button>
             </#list>
         </ol>
     <#else>
         <h2>${playersOnline}</h2>
-        ${playerActive}
+        <blockquote>
+            <li> ${playerActive}</li>
+        </blockquote>
     </#if>
     <!-- TODO: future content on the Home:
             to start games,

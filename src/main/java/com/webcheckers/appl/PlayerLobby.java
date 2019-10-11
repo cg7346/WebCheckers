@@ -67,7 +67,6 @@ public class PlayerLobby {
         return true;
     }
 
-
     /**
      * Gets the list of players playing webcheckers
      *
