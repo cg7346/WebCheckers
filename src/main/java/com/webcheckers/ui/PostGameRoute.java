@@ -31,6 +31,7 @@ public class PostGameRoute implements Route {
     static final Message MESSAGE = Message.info("A game has been started");
     static enum viewMode {PLAY, SPECTATOR,REPLAY}
     static enum activeColor {RED, WHITE}
+    private static final String PLAYER_IN_GAME= "Chosen player is already in a game.";
 
     //TODO
     private final Gson gson = new Gson();
@@ -40,6 +41,10 @@ public class PostGameRoute implements Route {
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         this.gameManager = gameManager;
         this.templateEngine = templateEngine;
+    }
+
+    public static Message makePlayerInGameMessage() {
+        return Message.error(PLAYER_IN_GAME);
     }
 
     @Override
@@ -60,19 +65,15 @@ public class PostGameRoute implements Route {
             //player lobby will tell us if chosen person is in a game
 
             //if opponent does not exist or opponent is in a game
-            System.out.println(chosenOpponent.getName());
-            System.out.println(playerLobby.isInGame(chosenOpponent));
             if (chosenOpponent == null || playerLobby.isInGame(chosenOpponent)) {
                 //TODO add error message that works
                 //Message error = new Message("PLAEYER ALREADY IN GAME!!", Message.Type.ERROR);
                 //session.attribute(error.getText(), MESSAGE);
-                response.redirect(WebServer.HOME_URL);
-                halt();
-                return null;
+                session.attribute("Player", currentPlayer);
+                ModelAndView mv = error(vm, makePlayerInGameMessage(), currentPlayer, playerLobby);
+                return templateEngine.render(mv);
             }
                 CheckersGame game = gameManager.makeGame(currentPlayer, chosenOpponent);
-                System.out.println("This is current user");
-                System.out.println(currentPlayer.getName());
 
                 return templateEngine.render(new ModelAndView(getGameRender(game, currentPlayer), VIEW_NAME));
         }
@@ -80,7 +81,22 @@ public class PostGameRoute implements Route {
         return templateEngine.render("Lobby does not exist. Help");
     }
 
-    private ModelAndView error(final Map<String, Object> vm, final Message message) {
+
+    private ModelAndView error(final Map<String, Object> vm, final Message message,
+                               final Player player, final PlayerLobby playerLobby) {
+        vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
+        vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
+        vm.put(GetHomeRoute.USERS_LIST, playerLobby.getUsernames());
+        Integer playerCount = playerLobby.getPlayers().size();
+        if (playerCount == 0) {
+            vm.put(GetHomeRoute.PLAYERS_COUNT, GetHomeRoute.NO_PLAYERS);
+        } else if (playerCount == 1) {
+            String count = String.format(GetHomeRoute.PLAYER, playerCount);
+            vm.put(GetHomeRoute.PLAYERS_COUNT, count);
+        } else {
+            String count = String.format(GetHomeRoute.PLAYERS, playerCount);
+            vm.put(GetHomeRoute.PLAYERS_COUNT, count);
+        }
         vm.put(MESSAGE_ATTR, message);
         return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
     }

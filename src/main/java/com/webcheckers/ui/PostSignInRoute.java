@@ -114,7 +114,7 @@ public class PostSignInRoute implements Route {
             } else {
                 playerLobby.addPlayer(player);
                 playerLobby.setPlayer(player);
-                session.attribute("layer", player);
+                session.attribute("Player", player);
                 mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
 //                mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
             }
@@ -136,7 +136,7 @@ public class PostSignInRoute implements Route {
         return new ModelAndView(vm, VIEW_NAME);
     }
 
-    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player,
+    public ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player,
                                      final PlayerLobby playerLobby) {
 //    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player) {
         vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
