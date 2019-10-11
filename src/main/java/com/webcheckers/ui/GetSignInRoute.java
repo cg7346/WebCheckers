@@ -11,13 +11,23 @@ import java.util.logging.Logger;
 /**
  * The UI Controller to GET the Sign In page.
  *
- * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vom</a>
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</a>
  */
 public class GetSignInRoute implements Route {
 
-    private static final Logger LOG = Logger.getLogger(com.webcheckers.ui.GetSignInRoute.class.getName());
+    static final Logger LOG = Logger.getLogger(com.webcheckers.ui.GetSignInRoute.class.getName());
 
-    private static final Message SIGNIN_MSG = Message.info("Player Sign In");
+    // Values used in the view-model map for rendering the signin view.
+    static final String NEWUSR_ATTR = "isNewUser";
+    static final Message SIGNIN_MSG = Message.info("Player Sign In");
+    static final String MESSAGE = "message";
+    static final String TITLE = "title";
+    static final String TITLE_MSG = "Sign In";
+    static final String VIEW_NAME = "signin.ftl";
+
+    //
+    // Attributes
+    //
 
     private final TemplateEngine templateEngine;
 
@@ -47,15 +57,20 @@ public class GetSignInRoute implements Route {
     @Override
     public Object handle(Request request, Response response) {
         LOG.finer("GetSignInRoute is invoked.");
+
+        //TODO: game = playerLobby.currentGame()
+
         //
         Map<String, Object> vm = new HashMap<>();
-        vm.put("title", "Sign In");
+        //vm.put(NEW_PLAYER_ATTR, playerLobby.isNewPlayer());
+
+        vm.put(TITLE, TITLE_MSG);
 
         // display a user message in the Home page
-        vm.put("message", SIGNIN_MSG);
+        vm.put(MESSAGE, SIGNIN_MSG);
 
         // render the View
-        return templateEngine.render(new ModelAndView(vm , "signin.ftl"));
+        return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
     }
 }
 

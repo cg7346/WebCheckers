@@ -31,9 +31,6 @@
 
         </form>
 
-        <#if currentUser??>
-            <h1>${playersOnline}</h1>
-        </#if>
 
     </div>
 
