@@ -70,7 +70,7 @@ public class PostGameRoute implements Route {
                 //Message error = new Message("PLAEYER ALREADY IN GAME!!", Message.Type.ERROR);
                 //session.attribute(error.getText(), MESSAGE);
                 session.attribute("Player", currentPlayer);
-                ModelAndView mv = error(vm, makePlayerInGameMessage(), currentPlayer, playerLobby);
+                ModelAndView mv = error(vm, makePlayerInGameMessage(), playerLobby);
                 return templateEngine.render(mv);
             }
                 CheckersGame game = gameManager.makeGame(currentPlayer, chosenOpponent);
@@ -82,8 +82,7 @@ public class PostGameRoute implements Route {
     }
 
 
-    private ModelAndView error(final Map<String, Object> vm, final Message message,
-                               final Player player, final PlayerLobby playerLobby) {
+    private ModelAndView error(final Map<String, Object> vm, final Message message, final PlayerLobby playerLobby) {
         vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
         vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
         vm.put(GetHomeRoute.USERS_LIST, playerLobby.getUsernames());
