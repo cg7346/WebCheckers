@@ -97,6 +97,8 @@ public class PlayerLobby {
 
     public Player findPlayer(String name){
         for (Player player : players){
+            System.out.println(player.getName());
+            //TODO OVERRIDE EQUALSLLFSKLD
             if (player.getName().equals(name)){
                 return player;
             }
@@ -105,6 +107,10 @@ public class PlayerLobby {
     }
     public Player getPlayer(){
         return this.player;
+    }
+
+    public void setPlayer(Player player){
+        this.player = player;
     }
     /**
      * Cleanup the @Linkplain{PlayerLobby} object when the session expires.

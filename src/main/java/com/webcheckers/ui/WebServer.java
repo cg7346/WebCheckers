@@ -158,7 +158,7 @@ public class WebServer {
     post(SIGNIN_URL, new PostSignInRoute(templateEngine));
 
     //Shows the Checkers game board
-    get(GAME_URL, new GetGameRoute(templateEngine));
+    //get(GAME_URL, new GetGameRoute(templateEngine));
 
     //post to gam to srart gam
     post(GAME_URL, new PostGameRoute(gameManager, templateEngine));
