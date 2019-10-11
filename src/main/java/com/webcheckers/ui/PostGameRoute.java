@@ -64,8 +64,8 @@ public class PostGameRoute implements Route {
             System.out.println(playerLobby.isInGame(chosenOpponent));
             if (chosenOpponent == null || playerLobby.isInGame(chosenOpponent)) {
                 //TODO add error message that works
-                Message error = new Message("PLAEYER ALREADY IN GAME!!", Message.Type.ERROR);
-                session.attribute(error.getText(), MESSAGE);
+                //Message error = new Message("PLAEYER ALREADY IN GAME!!", Message.Type.ERROR);
+                //session.attribute(error.getText(), MESSAGE);
                 response.redirect(WebServer.HOME_URL);
                 halt();
                 return null;
