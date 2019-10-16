@@ -54,6 +54,7 @@ public class PostSignInRoute implements Route {
     //
 
     private final TemplateEngine templateEngine;
+    private final PlayerLobby playerLobby;
 
     //
     // Constructor
@@ -68,12 +69,13 @@ public class PostSignInRoute implements Route {
      * @throws NoSuchElementException
      *    when the {@code Player} or {@code templateEngine} parameter is null
      */
-    PostSignInRoute(TemplateEngine templateEngine) {
+    PostSignInRoute(TemplateEngine templateEngine, PlayerLobby playerLobby) {
         // validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
 
         // instantiating attributes
         this.templateEngine = templateEngine;
+        this.playerLobby = playerLobby;
     }
 
     /**
@@ -94,8 +96,6 @@ public class PostSignInRoute implements Route {
 
         // retrieve the game object
         final Session session = request.session();
-        final PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
-
         // retrieve request parameter
         final String userStr = request.queryParams(USERNAME);
         Player player = new Player(userStr);
@@ -114,11 +114,14 @@ public class PostSignInRoute implements Route {
             } else {
                 playerLobby.addPlayer(player);
                 playerLobby.setPlayer(player);
-                session.attribute("layer", player);
+                session.attribute("Player", player);
                 mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
 //                mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
             }
-            return templateEngine.render(mv);
+            response.redirect(WebServer.HOME_URL);
+            halt();
+            return null;
+            //return templateEngine.render(mv);
         }
         else {
             response.redirect(WebServer.HOME_URL);
@@ -136,7 +139,7 @@ public class PostSignInRoute implements Route {
         return new ModelAndView(vm, VIEW_NAME);
     }
 
-    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player,
+    public ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player,
                                      final PlayerLobby playerLobby) {
 //    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player) {
         vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);

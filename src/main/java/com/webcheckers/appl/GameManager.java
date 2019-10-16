@@ -30,7 +30,7 @@ public class GameManager {
 
         synchronized (this){
             totalGames ++;
-            if (!redPlayer.getInGame() && !whitePlayer.getInGame()){
+            if (!redPlayer.isInGame() && !whitePlayer.isInGame()){
                 CheckersGame game = new CheckersGame(redPlayer, whitePlayer, totalGames);
                 redPlayer.setInGame(true);
                 whitePlayer.setInGame(true);
@@ -42,6 +42,11 @@ public class GameManager {
         }
     }
 
+    /**
+     * Gets a game that the sessionPlayer is in
+     * @param sessionPlayer the Player looking at the screen
+     * @return the game if the player has one, null if not
+     */
     public CheckersGame getGame(Player sessionPlayer){
         for (CheckersGame game : games){
             if (isPlayerInGame(game, sessionPlayer)){
@@ -52,6 +57,13 @@ public class GameManager {
     }
 
 
+    /**
+     * Just checking to see if the Player is in a particular
+     * game of checkers
+     * @param game the game to look in
+     * @param player the player to look for
+     * @return true if in, false if not
+     */
     public boolean isPlayerInGame(CheckersGame game, Player player){
         return player.equals(game.getRedPlayer()) || player.equals(game.getWhitePlayer());
     }
