@@ -30,7 +30,7 @@ public class GameManager {
 
         synchronized (this){
             totalGames ++;
-            if (!redPlayer.getInGame() && !whitePlayer.getInGame()){
+            if (!redPlayer.isInGame() && !whitePlayer.isInGame()){
                 CheckersGame game = new CheckersGame(redPlayer, whitePlayer, totalGames);
                 redPlayer.setInGame(true);
                 whitePlayer.setInGame(true);

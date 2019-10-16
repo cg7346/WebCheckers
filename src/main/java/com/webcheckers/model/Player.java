@@ -25,7 +25,7 @@ public class Player {
         return this.name;
     }
 
-    public boolean getInGame(){
+    public boolean isInGame(){
         return this.inGame;
     }
 

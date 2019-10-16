@@ -1,11 +1,14 @@
 package com.webcheckers.ui;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.Player;
 import spark.*;
 
 import com.webcheckers.util.Message;
@@ -49,15 +52,19 @@ public class GetHomeRoute implements Route {
     // Attributes
     //
 
-    public final TemplateEngine templateEngine;
+    private final TemplateEngine templateEngine;
+    private final PlayerLobby playerLobby;
+    private final GameManager gameManager;
 
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
      *
      * @param templateEngine the HTML template rendering engine
      */
-    public GetHomeRoute(final TemplateEngine templateEngine) {
+    public GetHomeRoute(final TemplateEngine templateEngine, PlayerLobby playerLobby, GameManager gameManager) {
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
+        this.gameManager = gameManager;
+        this.playerLobby = playerLobby;
         //
         LOG.config("GetHomeRoute is initialized.");
     }
@@ -83,16 +90,28 @@ public class GetHomeRoute implements Route {
     // display a user message in the Home page
     vm.put(MESSAGE, WELCOME_MSG);
 
-      final PlayerLobby playerLobby = new PlayerLobby(null);
     final Session httpSession = request.session();
-    if (httpSession.attribute(PLAYERLOBBY_KEY) == null) {
-      httpSession.attribute(PLAYERLOBBY_KEY, playerLobby);
-    }
+//    System.out.println(httpSession.attributes());
+//    if (httpSession.attribute(PLAYERLOBBY_KEY) == null) {
+//      httpSession.attribute(PLAYERLOBBY_KEY, new PlayerLobby(null));
+//      //PlayerLobby playerLobby = httpSession.attribute(PLAYERLOBBY_KEY);
+//    }
+//    PlayerLobby playerLobby = httpSession.attribute(PLAYERLOBBY_KEY);
 
       if (playerLobby != null) {
+          Player currentPlayer = httpSession.attribute("Player");
+          if (currentPlayer != null){
+              if (currentPlayer.isInGame()){
+                  response.redirect(WebServer.GAME_URL);
+              }
+              ModelAndView mv = currentUser(vm, request);
+              return templateEngine.render(mv);
+          }
           ModelAndView mv = playerActive(vm, request);
           return templateEngine.render(mv);
       }
+
+
 
     // render the View
     return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
@@ -104,8 +123,8 @@ public class GetHomeRoute implements Route {
     //
     private ModelAndView playerActive(Map<String, Object> vm, Request request) {
         vm.put(PLAYERS_ON, PLAYERS_ONLINE);
-        final Session session = request.session();
-        final PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
+        //final Session session = request.session();
+        //final PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
         Integer playerCount = playerLobby.getPlayers().size();
         if (playerCount == 0) {
             vm.put(PLAYERS_COUNT, NO_PLAYERS);
@@ -116,6 +135,21 @@ public class GetHomeRoute implements Route {
             String count = String.format(PLAYERS, playerCount);
             vm.put(PLAYERS_COUNT, count);
         }
+        return new ModelAndView(vm, VIEW_NAME);
+    }
+
+    public ModelAndView currentUser(Map<String, Object> vm, Request request) {
+//    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player) {
+        final Session session = request.session();
+        //final PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
+        List<String> userList = playerLobby.getUsernames();
+        Player player = session.attribute("Player");
+
+        //vm.put(WELCOME_ATTR, WELCOME_ATTR_MSG);
+        //vm.put(MESSAGE, WELCOME_MSG);
+        vm.put(CURRENT_USER, player);
+        vm.put(PLAYERS_ON, PLAYERS_ONLINE);
+        vm.put(USERS_LIST, userList);
         return new ModelAndView(vm, VIEW_NAME);
     }
 }

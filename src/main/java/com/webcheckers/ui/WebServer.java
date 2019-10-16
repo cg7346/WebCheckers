@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import com.google.gson.Gson;
 
 import com.webcheckers.appl.GameManager;
+import com.webcheckers.appl.PlayerLobby;
 import spark.TemplateEngine;
 
 
@@ -71,6 +72,7 @@ public class WebServer {
   private final TemplateEngine templateEngine;
   private final Gson gson;
   private final GameManager gameManager;
+  private final PlayerLobby playerLobby;
 
   //
   // Constructor
@@ -87,7 +89,8 @@ public class WebServer {
    * @throws NullPointerException
    *    If any of the parameters are {@code null}.
    */
-  public WebServer(final TemplateEngine templateEngine, final Gson gson, final GameManager gameManager) {
+  public WebServer(final TemplateEngine templateEngine, final Gson gson, final GameManager gameManager,
+                   final PlayerLobby playerLobby){
     // validation
     Objects.requireNonNull(templateEngine, "templateEngine must not be null");
     Objects.requireNonNull(gson, "gson must not be null");
@@ -95,6 +98,7 @@ public class WebServer {
     this.templateEngine = templateEngine;
     this.gson = gson;
     this.gameManager = gameManager;
+    this.playerLobby = playerLobby;
   }
 
   //
@@ -149,19 +153,19 @@ public class WebServer {
     //// code clean; using small classes.
 
     // Shows the Checkers game Home page.
-    get(HOME_URL, new GetHomeRoute(templateEngine));
+    get(HOME_URL, new GetHomeRoute(templateEngine, playerLobby, gameManager));
 
     // Shows the Checkers game Sign In page
     get(SIGNIN_URL, new GetSignInRoute(templateEngine));
 
     // Posts the Checkers game Sign In page
-    post(SIGNIN_URL, new PostSignInRoute(templateEngine));
+    post(SIGNIN_URL, new PostSignInRoute(templateEngine, playerLobby));
 
     //Shows the Checkers game board
-    //get(GAME_URL, new GetGameRoute(templateEngine));
+    get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager, gson));
 
     //post to gam to srart gam
-    post(GAME_URL, new PostGameRoute(gameManager, templateEngine));
+    post(GAME_URL, new PostGameRoute(templateEngine, playerLobby,  gameManager));
     //
     LOG.config("WebServer is initialized.");
   }

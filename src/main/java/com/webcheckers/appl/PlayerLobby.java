@@ -29,6 +29,7 @@ public class PlayerLobby {
         this.player = player;
     }
 
+    public PlayerLobby(){this.player = null;}
     /**
      * Adds player to the list of players
      */
@@ -56,7 +57,7 @@ public class PlayerLobby {
     //TODO CHange name
     public boolean isInGame(Player player){
         //is it in a game
-        return player.getInGame();
+        return player.isInGame();
     }
 
     /**
