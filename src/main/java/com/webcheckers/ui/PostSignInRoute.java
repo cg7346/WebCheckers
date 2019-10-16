@@ -96,8 +96,6 @@ public class PostSignInRoute implements Route {
 
         // retrieve the game object
         final Session session = request.session();
-        //final PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
-
         // retrieve request parameter
         final String userStr = request.queryParams(USERNAME);
         Player player = new Player(userStr);

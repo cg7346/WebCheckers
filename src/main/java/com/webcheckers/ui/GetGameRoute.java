@@ -26,17 +26,9 @@ public class GetGameRoute implements Route {
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
     private final Gson gson;
-
-    //TODO CHANGE ALL THIS HARD CODED STUFF
-    //static Player redPlayer = new Player("Red");
-    //static Player whitePlayer = new Player("White");
-    //static Player currentUser = redPlayer;
-    //static BoardView board = new BoardView(currentUser, new CheckersGame(redPlayer, whitePlayer, 0));
     static final Message MESSAGE = Message.info("A game has been started");
-    //TODO static (SOMETHING) viewMode;
-    static enum viewMode {PLAY, SPECTATOR,REPLAY}
-    //TODO static (SOMETHING) activeColor;
-    static enum activeColor {RED, WHITE}
+    enum viewMode {PLAY, SPECTATOR,REPLAY}
+    enum activeColor {RED, WHITE}
 
     static CheckersGame game;
 

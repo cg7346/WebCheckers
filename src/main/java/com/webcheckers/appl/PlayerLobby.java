@@ -30,8 +30,11 @@ public class PlayerLobby {
     }
 
     public PlayerLobby(){this.player = null;}
+
+
     /**
-     * Adds player to the list of players
+     * Adds a player to the lobby and list of players
+     * @param player the Player to add
      */
     public void addPlayer(Player player) {
         try {
@@ -44,6 +47,7 @@ public class PlayerLobby {
     /**
      * Determines whether or not the player's name is valid
      *
+     * @param player the Player's name to validate
      * @return a boolean of whether or not the player's name is vaild
      */
     public boolean isValidPlayer(Player player) {
@@ -54,7 +58,11 @@ public class PlayerLobby {
         }
     }
 
-    //TODO CHange name
+    /**
+     * Check to see if player is in a game
+     * @param player Player to look for
+     * @return True if in game, false if not
+     */
     public boolean isInGame(Player player){
         //is it in a game
         return player.isInGame();

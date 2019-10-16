@@ -21,21 +21,18 @@ import static spark.Spark.halt;
  * Authors: Jacquelyn Leung and Mallory Bridge (Pair programming)
  */
 public class PostGameRoute implements Route {
-//    static final String VIEW_NAME = "game.ftl";
+    //Message and strings for info
     static final String MESSAGE_ATTR = "message";
     static final String USER_PARAM = "name";
-//    private  Player chosenOpponent; //white player
-//    private Player currentPlayer; //red player
+    static final Message MESSAGE = Message.info("A game has been started");
+    private static final String PLAYER_IN_GAME= "Chosen player is already in a game.";
+
+    //The boss of what we doing here
     private final GameManager gameManager;
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
-    static final Message MESSAGE = Message.info("A game has been started");
-//    static enum viewMode {PLAY, SPECTATOR,REPLAY}
-//    static enum activeColor {RED, WHITE}
-    private static final String PLAYER_IN_GAME= "Chosen player is already in a game.";
-//
-//    //TODO
-//    private final Gson gson = new Gson();
+
+
 
     public PostGameRoute( TemplateEngine templateEngine, PlayerLobby playerLobby, GameManager gameManager){
         Objects.requireNonNull(gameManager, "gameManager must not be null");
@@ -46,6 +43,10 @@ public class PostGameRoute implements Route {
         this.gameManager = gameManager;
     }
 
+    /**
+     * THAT PLAYER IS IN A GAME ERROR
+     * @return Error Message
+     */
     public static Message makePlayerInGameMessage() {
         return Message.error(PLAYER_IN_GAME);
     }
@@ -54,35 +55,26 @@ public class PostGameRoute implements Route {
     public String handle(Request request, Response response) {
         final Map<String, Object> vm = new HashMap<>();
 
+        //Lets get the player and opponent
         final Session session = request.session();
-        //final PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
         Player currentPlayer = session.attribute("Player");
-
-        //player lobby needs to tall us who the current player is
-        //pull parameters
         final String opponent = request.queryParams(USER_PARAM);
 
         if(playerLobby != null) {
-            //currentPlayer = playerLobby.getPlayer();
+            //get other player from the lobby
             Player chosenOpponent = playerLobby.findPlayer(opponent);
-            //player lobby will tell us if chosen person is in a game
-
-            //if opponent does not exist or opponent is in a game
+            //check to see if they exists or are already in a game
             if (chosenOpponent == null || playerLobby.isInGame(chosenOpponent)) {
-                //TODO add error message that works
-                //Message error = new Message("PLAEYER ALREADY IN GAME!!", Message.Type.ERROR);
-                //session.attribute(error.getText(), MESSAGE);
-                session.attribute("Player", currentPlayer);
+                //session.attribute("Player", currentPlayer);
                 ModelAndView mv = error(vm, makePlayerInGameMessage(), playerLobby);
                 return templateEngine.render(mv);
             }
+                //just make a game we'll look at that later in get /game
                 CheckersGame game = gameManager.makeGame(currentPlayer, chosenOpponent);
                 response.redirect(WebServer.GAME_URL);
                 halt();
                 return null;
-                //return templateEngine.render(new ModelAndView(getGameRender(game, currentPlayer), VIEW_NAME));
         }
-        //redirect home
         return templateEngine.render("Lobby does not exist. Help");
     }
 
@@ -95,24 +87,4 @@ public class PostGameRoute implements Route {
         vm.put(MESSAGE_ATTR, message);
         return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
     }
-
-//    private Map<String, Object> getGameRender(CheckersGame game, Player sessionPlayer){
-//        Player redPlayer = game.getRedPlayer();
-//        Player whitePlayer = game.getWhitePlayer();
-//
-//        final Map<String, Object> vm = new HashMap<>();
-//        vm.put("title", VIEW_NAME);
-//        vm.put("currentUser", sessionPlayer);
-//        vm.put("viewMode", viewMode.PLAY);
-//        vm.put("redPlayer", redPlayer);
-//        vm.put("whitePlayer", whitePlayer);
-//        final Map<String, Object> modeOptions = new HashMap<>(2);
-//        modeOptions.put("isGameOver", false);
-//        modeOptions.put("gameOverMessage", "/* get end of game message */");
-//        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
-//        vm.put("activeColor", PostGameRoute.activeColor.RED);
-//        vm.put("message", MESSAGE);
-//        vm.put("board", new BoardView(sessionPlayer, game));
-//        return vm;
-//    }
 }
