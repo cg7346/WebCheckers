@@ -39,7 +39,7 @@ public class BoardView {
             spaceList = new ArrayList<>();
             for(int j = 0; j < checkersGame.COLS; j++){
                 Space s;
-                //for testing purposes take out
+                //TODO: for testing purposes take out
                 //System.out.print( "|" + board[j][i].getSymbol() + "|");
                 switch (board[j][i]){
                     case EMPTY_BLACK:
@@ -60,6 +60,7 @@ public class BoardView {
                     // If the board symbol does not match any of the cases provided
                     default:
                         s = null;
+//                        TODO: remember to take out
                         System.out.println("This case has not been addressed yet");
                         break;
                 }
@@ -84,10 +85,12 @@ public class BoardView {
         Player testRed = new Player("TestRed");
         Player testWhite = new Player("TestRed");
         CheckersGame testGame = new CheckersGame(testRed, testWhite, 0);
+        // TODO: remember to take out
         //System.out.println(testGame.toString());
         System.out.println("MAKING RED PLAYER....");
         new BoardView(testRed, testGame);
 
+        // TODO: remember to take out
         System.out.println("MAKING WHITE PLAYER");
         new BoardView(testWhite, testGame);
     }

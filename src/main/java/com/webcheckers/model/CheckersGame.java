@@ -202,7 +202,8 @@ public class CheckersGame {
     public static void main(String[] args){
         CheckersGame testGame = new CheckersGame(new Player("1"),
                 new Player("2"), 0);
-        System.out.println(testGame.toString());
+//        System.out.println(testGame.toString());
+//        TODO: remember to delete this
 
 
     }

@@ -26,7 +26,7 @@ public class PostSignInRoute implements Route {
     private static final String USERNAME = "myUsername";
     private static final String MESSAGE_ATTR = "message";
 
-    private static final String INVALID_USR = "Must contain at least one alphanumeric character.";
+    private static final String INVALID_USR = "Must start with at least one alphanumeric character.";
     private static final String TAKEN_USR = "Username has already been taken.";
     private static final String VIEW_NAME = "signin.ftl";
 
@@ -109,19 +109,21 @@ public class PostSignInRoute implements Route {
             ModelAndView mv;
             if (!playerLobby.isValidPlayer(player)) {
                 mv = error(vm, makeInvalidUsrMessage());
+                return templateEngine.render(mv);
             } else if (!playerLobby.isNewPlayer(player)) {
                 mv = error(vm, makeTakenUsrMessage());
+                return templateEngine.render(mv);
             } else {
                 playerLobby.addPlayer(player);
                 playerLobby.setPlayer(player);
                 session.attribute("Player", player);
                 mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
 //                mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
+//                TODO: check why this mv isn't being used?
             }
             response.redirect(WebServer.HOME_URL);
             halt();
             return null;
-            //return templateEngine.render(mv);
         }
         else {
             response.redirect(WebServer.HOME_URL);
