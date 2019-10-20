@@ -94,7 +94,13 @@
       <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
-    <!-- END: Unit testing libraries -->
+      <dependency>
+          <groupId>org.testng</groupId>
+          <artifactId>testng</artifactId>
+          <version>RELEASE</version>
+          <scope>test</scope>
+      </dependency>
+      <!-- END: Unit testing libraries -->
 
   </dependencies>
 
