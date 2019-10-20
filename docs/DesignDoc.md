@@ -23,7 +23,7 @@ You have the option to watch games live or play games against others.
 ### Glossary and Acronyms
 
 | Term | Definition |
-|:------|:------------|
+|:------:|:------------:|
 | VO | Value Object |
 | UI | User Interface |
 | AI | Artificial Intelligence |
@@ -35,7 +35,7 @@ You have the option to watch games live or play games against others.
 
 This section describes the features of the application.
 
->_Sign In_
+>Sign In
 >* When a player is not signed in they have the option to sign in.
 >* If a player chooses to sign in they are redirected to a sign in page
 >* The sign in page displays two text boxes one for a username and password
@@ -44,10 +44,10 @@ This section describes the features of the application.
 >* If there is an invalid username or password an error message will be displayed.
 >* When a valid username and password is entered the user will be redirected back to
 > the homepage.
->  A user will be able to see other players logged if they are logged in otherwise they
+>* A user will be able to see other players logged if they are logged in otherwise they
 > will just see the number of players available.
 >
->_Start a Game_
+>Start a Game
 >* A user will be able to select a player to start a game if they are logged in.
 >* If the player selected is in a game already then the user will see an error message.
 >* If a user selects a player not in a game then that player and user will both be redirected
@@ -74,7 +74,6 @@ This section describes the features of the application.
 >* Game Play
 >* Spectator Mode
 >* AI
-> _Provide a list of top-level Epics and/or Stories of the MVP._
 
 
 ### Roadmap of Enhancements
@@ -96,20 +95,21 @@ This section describes the application domain.
 
 > Provides a common understanding between a customer and the developers
 > of the scope and major entities that exist in the system.
-> 
-> We have created our domain model in hopes to help the customer understand
-> what we was trying to accomplish as we begin our development process. Within
-> our domain model we have included the following elements.
 >
-> *Domain Model Overview*
->    * Spectator that watches the WebCheckers game
->    * WebCheckers game that is played on a Board
->    * Squares that defines a location on the Board
->    * Piece(s) that are on a Square
->    * Piece that represents a player
->    * Player taking turns using a Piece
->    * Player playing WebCheckers
->    * Player getting end of game result
+> We have created our domain model in hopes to help the customer understand
+> what we was trying to accomplish as we begin our development process. 
+>
+> Within our domain model we have included the following elements:
+>
+>  ***Domain Model Overview***
+>   > * Spectator that watches the WebCheckers game
+>   > * WebCheckers game that is played on a Board
+>   > * Squares that defines a location on the Board
+>   > * Piece(s) that are on a Square
+>   > * Piece that represents a player
+>   > * Player taking turns using a Piece
+>   > * Player playing WebCheckers
+>   > * Player getting end of game result
 
 
 ## Architecture and Design
@@ -127,16 +127,14 @@ browser.  The client-side of the UI is composed of HTML pages with
 some minimal CSS for styling the page.  There is also some JavaScript
 that has been provided to the team by the architect.
 
-The server-side tiers include the UI Tier that is composed of UI Controllers and Views.
-Controllers are built using the Spark framework and View are built using the FreeMarker framework.  The Application and Model tiers are built using plain-old Java objects (POJOs).
+The server-side tiers include the UI Tier that is composed of UI Controllers and Views. Controllers are built using the Spark framework and View are built using the FreeMarker framework.  The Application and Model tiers are built using plain-old Java objects (POJOs).
 
 Details of the components within these tiers are supplied below.
 
 
 ### Overview of User Interface
 
-This section describes the web interface flow; this is how the user views and interacts
-with the WebCheckers application.
+This section describes the web interface flow; this is how the user views and interacts with the WebCheckers application.
 
 ![The WebCheckers Web Interface Statechart](web-interface.png)
 
@@ -144,25 +142,25 @@ with the WebCheckers application.
 > have designed a flowchart of where each page should go to after
 > a certain amount of time or when the user interacts with the web application.
 >
->_No HTTP Connection_
->* Begin a connection when the user goes to the web page.
+> _No HTTP Connection_
+> * Begin a connection when the user goes to the web page.
 >
->_Home_
->* The user will see the welcome/home page.
->* The number of players that are already signed in are displayed.
+> _Home_
+> * The user will see the welcome/home page.
+> * The number of players that are already signed in are displayed.
 >
->_Sign In_
->* They are given an option to sign in.
->* If they choose to sign in a new page will be rendered with text boxes asking for a username
+> _Sign In_
+> * They are given an option to sign in.
+> * If they choose to sign in a new page will be rendered with text boxes asking for a username
 > and password.
->* If the username or password is invalid the user will see an error message appear on the page.
+> * If the username or password is invalid the user will see an error message appear on the page.
 >
->_Home_
->* If a valid username and password the user will be redirected make to the homepage and be able to 
->see the other players logged into the game.
->* Now the user will be able to select another player which will redirect a new game page.
->
+> _Home_
+> * If a valid username and password the user will be redirected make to the homepage and be able to see the other players logged into the game.
+> * Now the user will be able to select another player which will redirect a new game page.
+> 
 >_Game_
+> 
 >* The other player selected will also be redirected to the same game.
 
 
