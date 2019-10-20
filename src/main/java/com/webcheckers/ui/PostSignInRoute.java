@@ -7,7 +7,7 @@ import spark.*;
 
 import java.util.*;
 
-import static spark.Spark.*;
+import static spark.Spark.halt;
 
 /**
  * The {@code POST /signin} route handler
@@ -85,7 +85,7 @@ public class PostSignInRoute implements Route {
      *      when an invalid username is returned
      * @param request
      * @param response
-     * @return
+     * @return templateEngine to render a view or null
      */
     @Override
     public Object handle(Request request, Response response) {

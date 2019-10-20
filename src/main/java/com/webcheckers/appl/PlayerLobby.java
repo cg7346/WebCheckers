@@ -120,6 +120,19 @@ public class PlayerLobby {
         return this.player;
     }
 
+    //TODO: implement these
+
+    /**
+     * A boolean value
+     * true if the game has come to an end
+     * whether from a win or resignation.
+     *
+     * @return true or false if game is over
+     */
+    public Boolean isGameOver() {
+        return null;
+    }
+
     public void setPlayer(Player player){
         this.player = player;
     }
