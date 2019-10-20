@@ -91,6 +91,7 @@ public class GetHomeRoute implements Route {
     vm.put(MESSAGE, WELCOME_MSG);
 
     final Session httpSession = request.session();
+      // TODO: remember to take out
 //    System.out.println(httpSession.attributes());
 //    if (httpSession.attribute(PLAYERLOBBY_KEY) == null) {
 //      httpSession.attribute(PLAYERLOBBY_KEY, new PlayerLobby(null));

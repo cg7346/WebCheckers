@@ -40,6 +40,7 @@ public class PlayerLobby {
         try {
             this.players.add(player);
         } catch (Error e) {
+//            TODO: check this error should is return an Message
             System.out.println("Cannot add player.");
         }
     }
@@ -106,7 +107,8 @@ public class PlayerLobby {
 
     public Player findPlayer(String name){
         for (Player player : players){
-            System.out.println(player.getName());
+            // TODO: remember to delete this
+//            System.out.println(player.getName());
             //TODO OVERRIDE EQUALSLLFSKLD
             if (player.getName().equals(name)){
                 return player;
