@@ -117,15 +117,10 @@ public class PostSignInRoute implements Route {
                 playerLobby.addPlayer(player);
                 playerLobby.setPlayer(player);
                 session.attribute("Player", player);
-                mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
-//                mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
-//                TODO: check why this mv isn't being used?
+                mv = currentUser(playerLobby.getUsernames(), vm, player);
+                return templateEngine.render(mv);
             }
-            response.redirect(WebServer.HOME_URL);
-            halt();
-            return null;
-        }
-        else {
+        } else {
             response.redirect(WebServer.HOME_URL);
             halt();
             return null;
@@ -141,9 +136,7 @@ public class PostSignInRoute implements Route {
         return new ModelAndView(vm, VIEW_NAME);
     }
 
-    public ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player,
-                                     final PlayerLobby playerLobby) {
-//    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player) {
+    public ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player) {
         vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
         vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
 
@@ -153,8 +146,4 @@ public class PostSignInRoute implements Route {
         return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
     }
 
-    //TODO: going to need this later
-//    private ModelAndView signout() {
-//        return ;
-//    }
 }

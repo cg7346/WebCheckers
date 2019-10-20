@@ -60,6 +60,10 @@ public class WebServer {
    */
   public static final String SIGNIN_URL = "/signin";
   /**
+   * The URL pattern to request the Sign Out page.
+   */
+  public static final String SIGNOUT_URL = "/signout";
+  /**
    * The URL patter to request the game page
    */
   public static final String GAME_URL = "/game";
@@ -160,6 +164,9 @@ public class WebServer {
 
     // Posts the Checkers game Sign In page
     post(SIGNIN_URL, new PostSignInRoute(templateEngine, playerLobby));
+
+    // Posts the Checkers game Sign Out page
+    post(SIGNOUT_URL, new PostSignOutRoute(templateEngine, playerLobby));
 
     //Shows the Checkers game board
     get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager, gson));
