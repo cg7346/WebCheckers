@@ -23,12 +23,13 @@ public class PostSignInRoute implements Route {
 
     // Values used in the view-model map for rendering the game view after a
     // guess.
-    private static final String USERNAME = "myUsername";
-    private static final String MESSAGE_ATTR = "message";
+    static final String USERNAME = "myUsername";
+    static final String PASSWORD = "psw";
+    static final String MESSAGE_ATTR = "message";
 
-    private static final String INVALID_USR = "Must start with at least one alphanumeric character.";
-    private static final String TAKEN_USR = "Username has already been taken.";
-    private static final String VIEW_NAME = "signin.ftl";
+    static final String INVALID_USR = "Must start with at least one alphanumeric character.";
+    static final String TAKEN_USR = "Username has already been taken.";
+    static final String VIEW_NAME = "signin.ftl";
 
 
     //
