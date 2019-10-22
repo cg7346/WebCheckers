@@ -10,7 +10,6 @@ import java.util.*;
 /**
  * The {@code POST /signout} route handler
  *
- * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella</a>
  * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</a>
  */
 public class PostSignOutRoute implements Route {
