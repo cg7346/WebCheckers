@@ -22,11 +22,22 @@ import java.util.Objects;
  */
 public class GetGameRoute implements Route {
 
+    static final String TITLE_ATTR = "title";
+    static final String TITLE_ATTR_MSG = "Game Title";
+    static final String CURRENT_USER_ATTR = "currentUser";
+    static final String START_ATTR = "message";
+    static final Message START_ATTR_MSG = Message.info("A game has been started");
+    static final String BOARD_ATTR = "board";
+    static final String COLOR_ATTR = "activeColor";
+    static final String RED_PLAYER_ATTR = "redPlayer";
+    static final String WHITE_PLAYER_ATTR = "whitePlayer";
+    static final String GAME_OVER_ATTR = "gameOverMessage";
+    static final Message GAME_OVER_ATTR_MSG = Message.info("The game is over"); /* Get the game over message */
     static final String VIEW_NAME = "game.ftl";
+
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
     private final Gson gson;
-    static final Message MESSAGE = Message.info("A game has been started");
     enum viewMode {PLAY, SPECTATOR,REPLAY}
     enum activeColor {RED, WHITE}
 
@@ -47,6 +58,7 @@ public class GetGameRoute implements Route {
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         this.playerLobby = playerLobby;
         this.gameManager = gameManager;
+
         this.gson = gson;
     }
 
@@ -64,20 +76,19 @@ public class GetGameRoute implements Route {
         BoardView board = new BoardView(currentUser, game);
 
         Map<String, Object> vm = new HashMap<>();
-        vm.put("title", "GameTitle");
-        vm.put("currentUser", currentUser);
+        vm.put(TITLE_ATTR, TITLE_ATTR_MSG);
+        vm.put(CURRENT_USER_ATTR, currentUser);
         vm.put("viewMode", viewMode.PLAY);
 
         final Map<String, Object> modeOptions = new HashMap<>(2);
         modeOptions.put("isGameOver", false);
-        modeOptions.put("gameOverMessage", "/* get end of game message */");
+        modeOptions.put(GAME_OVER_ATTR, GAME_OVER_ATTR_MSG);
         vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
-        //vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
-        vm.put("redPlayer", redPlayer);
-        vm.put("whitePlayer", whitePlayer);
-        vm.put("activeColor", activeColor.RED);
-        vm.put("board", board);
-        vm.put("message", MESSAGE);
+        vm.put(RED_PLAYER_ATTR, redPlayer);
+        vm.put(WHITE_PLAYER_ATTR, whitePlayer);
+        vm.put(COLOR_ATTR, activeColor.RED);
+        vm.put(BOARD_ATTR, board);
+        vm.put(START_ATTR, START_ATTR_MSG);
 
 
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));

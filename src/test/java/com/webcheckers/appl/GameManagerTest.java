@@ -38,6 +38,7 @@ public class GameManagerTest {
 
     /**
      * Test ability to get a game that the session player is in
+     *
      */
     @Test
     public void testGetGame(){
@@ -54,6 +55,7 @@ public class GameManagerTest {
 
     /**
      * Test ability to see if player is in a particular game
+     * checks to see if other player who are not in a game are tests
      */
     @Test
     public void testIsPlayerInGame(){
@@ -65,7 +67,7 @@ public class GameManagerTest {
         Boolean p1InGame = gm.isPlayerInGame(game, p1);
         Boolean p3InGame = gm.isPlayerInGame(game, p3);
         assertTrue(p1InGame, "error, please check test and code");
-        assertTrue(p3InGame, "error, please check test and code");
+        assertFalse(p3InGame, "error, please check test and code");
 
     }
 }
