@@ -80,6 +80,7 @@ public class BoardView {
         return rows.iterator();
     }
 
+    /**
     public static void main(String[] args){
         //little bit of testing
         Player testRed = new Player("TestRed");
@@ -94,4 +95,5 @@ public class BoardView {
         System.out.println("MAKING WHITE PLAYER");
         new BoardView(testWhite, testGame);
     }
+     */
 }
