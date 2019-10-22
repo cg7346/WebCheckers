@@ -19,26 +19,29 @@ public class BoardViewTest {
     private  CheckersGame checkersGame;
     private BoardView CuT;
 
+
     @BeforeEach
     void testSetup(){
         this.red = Mockito.mock(Player.class);
         this.white = Mockito.mock(Player.class);
-        this.checkersGame = new CheckersGame(this.red, this.white, 1);
+        this.checkersGame = new CheckersGame(this.red, this.white, 0);
 
         this.CuT = new BoardView(this.red, this.checkersGame);
     }
 
     @Test
-    void RedTest() {
+    void iteratorRedTest() {
         int rowNum = 7;
         Iterator<Row> rows = CuT.iterator();
+        CheckersGame.Space[][] boardSpaces = this.checkersGame.getBoard();
         while (rows.hasNext()) {
             int colNum = 7;
             Row row = rows.next();
             Iterator<Space> spaces = row.iterator();
             while (spaces.hasNext()) {
                 Space space = spaces.next();
-                Assertions.assertEquals(this.checkersGame.getBoard()[rowNum][colNum], space, "Space mismatch in iterator");
+                //TODO how to figure out how to get the space symbol
+                Assertions.assertEquals(boardSpaces[rowNum][colNum], space, "Space mismatch in iterator");
                 colNum--;
             }
             rowNum--;
@@ -46,7 +49,8 @@ public class BoardViewTest {
     }
 
     @Test
-    void whiteTest() {
+    void iteratorWhiteTest() {
+        CheckersGame.Space[][] boardSpaces = this.checkersGame.inverseBoard();
         this.CuT = new BoardView(this.white, this.checkersGame);
         int rowNum = 0;
         Iterator<Row> rows = CuT.iterator();
@@ -56,11 +60,11 @@ public class BoardViewTest {
             Iterator<Space> spaces = row.iterator();
             while (spaces.hasNext()) {
                 Space space = spaces.next();
-                Assertions.assertEquals(this.checkersGame.getBoard()[rowNum][colNum], space, "Space mismatch in iterator");
+                //TODO figure out how to compare the spaces correctly
+                Assertions.assertEquals(boardSpaces[rowNum][colNum], space, "Space mismatch in iterator");
                 colNum++;
             }
             rowNum++;
         }
     }
-
 }

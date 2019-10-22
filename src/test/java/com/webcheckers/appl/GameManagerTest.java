@@ -65,7 +65,7 @@ public class GameManagerTest {
         Boolean p1InGame = gm.isPlayerInGame(game, p1);
         Boolean p3InGame = gm.isPlayerInGame(game, p3);
         assertTrue(p1InGame, "error, please check test and code");
-        assertTrue(p3InGame, "error, please check test and code");
+        assertFalse(p3InGame, "error, please check test and code");
 
     }
 }
