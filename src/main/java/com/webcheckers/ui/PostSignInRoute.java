@@ -6,8 +6,9 @@ import com.webcheckers.util.Message;
 import spark.*;
 
 import java.util.*;
+import java.util.logging.Logger;
 
-import static spark.Spark.*;
+import static spark.Spark.halt;
 
 /**
  * The {@code POST /signin} route handler
@@ -16,19 +17,18 @@ import static spark.Spark.*;
  * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</a>
  */
 public class PostSignInRoute implements Route {
+    // Values used in the view-model map for rendering the game view after a
+    // guess.
+    static final String USERNAME = "myUsername";
 
     //
     // Constants
     //
-
-    // Values used in the view-model map for rendering the game view after a
-    // guess.
-    private static final String USERNAME = "myUsername";
-    private static final String MESSAGE_ATTR = "message";
-
-    private static final String INVALID_USR = "Must start with at least one alphanumeric character.";
-    private static final String TAKEN_USR = "Username has already been taken.";
-    private static final String VIEW_NAME = "signin.ftl";
+    static final String MESSAGE_ATTR = "message";
+    static final String INVALID_USR = "Must start with at least one alphanumeric character.";
+    static final String TAKEN_USR = "Username has already been taken.";
+    static final String VIEW_NAME = "signin.ftl";
+    private static final Logger LOG = Logger.getLogger(PostSignInRoute.class.getName());
 
 
     //
@@ -72,6 +72,7 @@ public class PostSignInRoute implements Route {
     PostSignInRoute(TemplateEngine templateEngine, PlayerLobby playerLobby) {
         // validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        Objects.requireNonNull(playerLobby, "playerLobby must not be null");
 
         // instantiating attributes
         this.templateEngine = templateEngine;
