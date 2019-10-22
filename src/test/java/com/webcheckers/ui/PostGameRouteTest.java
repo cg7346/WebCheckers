@@ -26,6 +26,7 @@ import java.util.List;
  *
  * Author: Mallory Bridge mmb2582
  */
+@Tag("UI-Tier")
 public class PostGameRouteTest {
 
     //CuT
