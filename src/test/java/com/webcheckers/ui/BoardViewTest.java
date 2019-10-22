@@ -12,6 +12,11 @@ import org.mockito.Mockito;
 
 import java.util.Iterator;
 
+/**
+ * tests the board view
+ * @author jil4009
+ */
+
 @Tag("UI-tier")
 public class BoardViewTest {
     private Player red;

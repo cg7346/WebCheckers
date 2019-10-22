@@ -38,6 +38,7 @@ public class GameManagerTest {
 
     /**
      * Test ability to get a game that the session player is in
+     *
      */
     @Test
     public void testGetGame(){
