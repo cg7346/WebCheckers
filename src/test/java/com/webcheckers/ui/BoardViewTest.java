@@ -29,6 +29,7 @@ public class BoardViewTest {
         this.CuT = new BoardView(this.red, this.checkersGame);
     }
 
+    //test to check red view
     @Test
     void iteratorRedTest() {
         int rowNum = 7;
@@ -48,6 +49,7 @@ public class BoardViewTest {
         }
     }
 
+    //test to check white test
     @Test
     void iteratorWhiteTest() {
         CheckersGame.Space[][] boardSpaces = this.checkersGame.inverseBoard();

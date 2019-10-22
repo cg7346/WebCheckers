@@ -54,6 +54,7 @@ public class GameManagerTest {
 
     /**
      * Test ability to see if player is in a particular game
+     * checks to see if other player who are not in a game are tests
      */
     @Test
     public void testIsPlayerInGame(){
