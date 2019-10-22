@@ -1,9 +1,5 @@
 package com.webcheckers.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
 /**
  * A single "Player".
  *
@@ -11,50 +7,29 @@ import java.util.logging.Logger;
  */
 public class Player {
 
-    //
-    // Attributes
-    //
+    // name is the name of the Player
+    private String name;
+    private boolean inGame;
 
-    private final String username;
-    private final List<String> users = new ArrayList<>();
-    private final boolean newPlayer;
-
-    private static final Logger LOG = Logger.getLogger(Player.class.getName());
-    /**
-     * Create a Player with a unique username.
-     *
-     * @param username
-     *          a unique username.
-     * @param users
-     *          a list of all usernames.
-     *
-     *
-     * @throws IllegalArgumentException
-     *    when the {@code username} is already taken
-     */
-    public Player(final String username, final List<String> users,
-                  final boolean newPlayer) {
-        // validate arguments
-        if (users.contains(username)) {
-            this.newPlayer = false;
-            throw new IllegalArgumentException("Username already exists");
-        }
-        //
-        LOG.fine("Player created " + username);
-        this.username = username;
-        this.newPlayer = true;
-        users.add(username);
-    }
-
-    public boolean isNewPlayer() {
-        return this.newPlayer;
+    public Player(String name) {
+        this.name = name;
     }
 
     /**
-     * {@inheritDoc}
+     * Gets the Player's name
+     *
+     * @return
+     *      the name of the Player as a String
      */
-    @Override
-    public synchronized String toString() {
-        return "{Player " + username + "}";
+    public String getName(){
+        return this.name;
+    }
+
+    public boolean isInGame(){
+        return this.inGame;
+    }
+
+    public void setInGame(boolean inGame){
+        this.inGame = inGame;
     }
 }

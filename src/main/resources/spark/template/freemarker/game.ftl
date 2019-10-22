@@ -10,6 +10,7 @@
     "gameID" : ${gameID!'null'},
     "currentUser" : "${currentUser.name}",
     "viewMode" : "${viewMode}",
+    <!--Don't for get to add this back in!'-->
     "modeOptions" : ${modeOptionsAsJSON!'{}'},
     "redPlayer" : "${redPlayer.name}",
     "whitePlayer" : "${whitePlayer.name}",
