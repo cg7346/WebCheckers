@@ -64,9 +64,9 @@ public class PostGameRoute implements Route {
             //get other player from the lobby
             Player chosenOpponent = playerLobby.findPlayer(opponent);
             //check to see if they exists or are already in a game
-            if (chosenOpponent == null || playerLobby.isInGame(chosenOpponent)) {
+            if (playerLobby.isInGame(chosenOpponent)|| chosenOpponent == null ) {
                 //session.attribute("Player", currentPlayer);
-                ModelAndView mv = error(vm, makePlayerInGameMessage(), playerLobby);
+                ModelAndView mv = error(vm, makePlayerInGameMessage(), currentPlayer);
                 return templateEngine.render(mv);
             }
                 //just make a game we'll look at that later in get /game
@@ -79,9 +79,12 @@ public class PostGameRoute implements Route {
     }
 
 
-    private ModelAndView error(final Map<String, Object> vm, final Message message, final PlayerLobby playerLobby) {
+    private ModelAndView error(final Map<String, Object> vm, final Message message, final Player currentPlayer) {
         vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
-        vm.put(GetHomeRoute.CURRENT_USER, playerLobby.getPlayers().get(playerLobby.getPlayers().size()-1));
+        //vm.put(GetHomeRoute.CURRENT_USER, playerLobby.getPlayers().get(playerLobby.getPlayers().size()-1));
+        //final Session session = request.session();
+        //Player currentPlayer = session.attribute("Player");
+        vm.put(GetHomeRoute.CURRENT_USER, currentPlayer);
         vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
         vm.put(GetHomeRoute.USERS_LIST, playerLobby.getUsernames());
         vm.put(MESSAGE_ATTR, message);

@@ -13,6 +13,8 @@ import spark.*;
 
 import com.webcheckers.util.Message;
 
+import static spark.Spark.halt;
+
 
 /**
  * The UI Controller to GET the Home page.
@@ -104,6 +106,8 @@ public class GetHomeRoute implements Route {
           if (currentPlayer != null){
               if (currentPlayer.isInGame()){
                   response.redirect(WebServer.GAME_URL);
+                  halt();
+                  return null;
               }
               ModelAndView mv = currentUser(vm, request);
               return templateEngine.render(mv);
