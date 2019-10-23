@@ -6,6 +6,7 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import spark.*;
 
@@ -14,6 +15,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@Tag("UI-tier")
 class GetGameRouteTest {
 
     //CuT
@@ -35,7 +37,7 @@ class GetGameRouteTest {
     /**
      * Setting up the mock objects for testing
      */
-    @BeforeEach
+    @Test
     public void CreateGetGameRoute(){
         request = mock(Request.class);
         session = mock(Session.class);
@@ -52,6 +54,7 @@ class GetGameRouteTest {
         CuT = new GetGameRoute(engine, lobby, gameManager, gson);
     }
 
+    /*
     @Test
     void test_Game_Started()
     {
@@ -80,4 +83,5 @@ class GetGameRouteTest {
 
         testHelper.assertViewName(GetGameRoute.VIEW_NAME);
     }
+    */
 }

@@ -25,7 +25,7 @@ public class BoardViewTest {
     private BoardView CuT;
 
 
-    @BeforeEach
+    @Test
     void testSetup(){
         this.red = Mockito.mock(Player.class);
         this.white = Mockito.mock(Player.class);
