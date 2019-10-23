@@ -105,6 +105,12 @@ public class PlayerLobby {
         return usernames;
     }
 
+    /**
+     * Finds a player given there username.
+     *
+     * @param name username
+     * @return player of the string entered or null if not found
+     */
     public Player findPlayer(String name){
         for (Player player : players){
             // TODO: remember to delete this
@@ -122,13 +128,6 @@ public class PlayerLobby {
 
     public void setPlayer(Player player){
         this.player = player;
-    }
-    /**
-     * Cleanup the @Linkplain{PlayerLobby} object when the session expires.
-     * The only cleanup will be to remove the game.
-     * TODO: game = null;
-     */
-    public void endSession() {
     }
 }
 

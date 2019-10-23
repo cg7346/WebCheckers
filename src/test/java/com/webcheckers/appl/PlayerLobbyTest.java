@@ -6,9 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import spark.Request;
-import spark.Response;
 import spark.Session;
-import spark.TemplateEngine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-//import com.example.model.GuessGame;
-//import com.example.model.GuessGame.GuessResult;
-
 /**
  * The unit test suite for the {@link PlayerLobby} component.
  *
@@ -27,6 +22,16 @@ import static org.mockito.Mockito.when;
  */
 @Tag("Application-tier")
 public class PlayerLobbyTest {
+
+    /**
+     * The component-under-test (CuT).
+     *
+     * <p>
+     * This is a stateless component so we only need one.
+     * The {@link PlayerLobby} component is thoroughly tested so
+     * we can use it safely as a "friendly" dependency.
+     */
+    private PlayerLobby CuT;
 
     // Constants
     private static final String PLAYER1 = "Bobby";
@@ -47,23 +52,8 @@ public class PlayerLobbyTest {
 
     private Request request;
     private Session session;
-    private TemplateEngine templateEngine;
-    private Response response;
 
-    /**
-     * The component-under-test (CuT).
-     *
-     * <p>
-     * This is a stateless component so we only need one.
-     * The {@link PlayerLobby} component is thoroughly tested so
-     * we can use it safely as a "friendly" dependency.
-     */
-    private PlayerLobby CuT;
-
-
-    private GameManager gameManager;
     private Player player;
-    private CheckersGame checkersGame;
 
     /**
      * Setup new mock objects for each test.
@@ -72,10 +62,7 @@ public class PlayerLobbyTest {
     public void setup() {
         request = mock(Request.class);
         session = mock(Session.class);
-        templateEngine = mock(TemplateEngine.class);
-        response = mock(Response.class);
         player = mock(Player.class);
-        checkersGame = mock(CheckersGame.class);
 
 
         // build model objects
@@ -93,28 +80,30 @@ public class PlayerLobbyTest {
         CuT = new PlayerLobby();
 
     }
-//    @BeforeEach
-//    public void testSetup() {
-//        gameCenter = mock(GameCenter.class);
-//        GuessGame fixedGame = new GuessGame(RIGHT_GUESS);
-//        when(gameCenter.getGame()).thenReturn(fixedGame);
-//
-//        // Setup CuT and create the game
-//        CuT = new PlayerServices(gameCenter);
-//        game = CuT.currentGame();
-//    }
-
 
     /**
      * Test that you can construct a new Player Lobby.
      */
     @Test
-    public void createPlayerLobby() {
+    public void create_player_lobby() {
         new PlayerLobby(player);
     }
 
+    /**
+     * Checks if you can get all the players in the game.
+     */
     @Test
-    public void testPlayerInGame() {
+    public void test_get_players() {
+        assertEquals(CuT.getPlayers().size(), 0);
+        CuT.addPlayer(new Player(PLAYER1));
+        assertEquals(CuT.getPlayers().size(), 1);
+    }
+
+    /**
+     * Tests if a player is in a game.
+     */
+    @Test
+    public void test_player_in_game() {
         GameManager gameManager1 = new GameManager();
         CheckersGame game = gameManager1.makeGame(player1, player2);
         assertNotNull(game, "an error occurred when creating a game");
@@ -122,39 +111,44 @@ public class PlayerLobbyTest {
         assertTrue(CuT.isInGame(player2));
     }
 
+    /**
+     * Tests if a player in already in the PlayerLobby or not.
+     */
     @Test
-    public void testNewPlayer() {
-//        GameManager gameManager1 = new GameManager();
-//        CheckersGame game = gameManager1.makeGame(player1, player2);
-        //create my testHelper
+    public void test_new_player() {
         assertTrue(CuT.isNewPlayer(player1));
         CuT.addPlayer(player1);
         CuT.addPlayer(player2);
         assertFalse(CuT.isNewPlayer(player2));
     }
 
+    /**
+     * Tests is a player is valid or invalid.
+     */
     @Test
-    public void testAddPlayer() {
-        assertEquals(CuT.getPlayers().size(), 0);
-        CuT.addPlayer(new Player(PLAYER1));
-        assertEquals(CuT.getPlayers().size(), 1);
-    }
-
-    @Test
-    public void testValidPlayer() {
+    public void test_valid_player() {
         assertFalse(CuT.isValidPlayer(player3));
         assertTrue(CuT.isValidPlayer(player4));
         assertFalse(CuT.isValidPlayer(player6));
     }
 
+    /**
+     * Tests if a player can be set to the player entered and
+     * gets that current player.
+     */
     @Test
-    public void testSetPlayer() {
+    public void test_set_get_player() {
+        assertNull(CuT.getPlayer());
         CuT.setPlayer(player1);
         assertEquals(CuT.getPlayer(), player1);
     }
 
+    /**
+     * Checks if when players are added to the PlayerLobby
+     * there usernames can be accessed.
+     */
     @Test
-    void testGetPlayer() {
+    public void test_get_usernames() {
         List<String> users = new ArrayList<>();
         assertEquals(CuT.getUsernames(), users);
         CuT.addPlayer(player1);
@@ -165,6 +159,17 @@ public class PlayerLobbyTest {
         users.add(PLAYER2);
         users.add(PLAYER4);
         assertEquals(CuT.getUsernames(), users);
+    }
 
+    /**
+     * Checks if a player can be found/already exists in the PlayerLobby.
+     */
+    @Test
+    public void test_find_player() {
+        assertNull(CuT.findPlayer(PLAYER1));
+        CuT.addPlayer(player1);
+        CuT.addPlayer(player2);
+        assertEquals(CuT.findPlayer(PLAYER1), player1);
+        assertEquals(CuT.findPlayer(PLAYER2), player2);
     }
 }

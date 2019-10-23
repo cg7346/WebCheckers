@@ -23,19 +23,7 @@ public class PostSignInRouteTest {
     private static final String PLAYER1 = "Bobby";
     private static final String PLAYER2 = "Bruce";
     private static final String PLAYER3 = "    ";
-    private static final String PLAYER4 = "261";
-    private static final String PLAYER5 = "Bobby";
-
-
-    private static final String PLAYER_LOBBY_EXCEPTION = "An exception occurred.";
-
-    private static final String NAME = "User";
-    private static final String PASS = "Password";
-    private static final String VALID_USR = "test";
-    private static final String INVAILD_USR_1 = " ";
-    private static final String INVALID_USR_2 = "212";
-    private static final String INVALID_USR_3 = "test";
-    private static final String VIEW_NAME = "signin.ftl";
+    private static final String PLAYER4 = "Bobby";
 
     /**
      * The component-under-test (CuT).
@@ -52,7 +40,6 @@ public class PostSignInRouteTest {
     private Player player2;
     private Player player3;
     private Player player4;
-    private Player player5;
 
     // attributes holding mock objects
     private Request request;
@@ -79,7 +66,6 @@ public class PostSignInRouteTest {
         player2 = new Player(PLAYER2);
         player3 = new Player(PLAYER3);
         player4 = new Player(PLAYER4);
-        player5 = new Player(PLAYER5);
 
         // mock behavior
         when(request.session()).thenReturn(session);
@@ -123,10 +109,9 @@ public class PostSignInRouteTest {
         when(request.queryParams("myUsername")).thenReturn(PLAYER1);
         when(playerLobby.isInGame(player1)).thenReturn(true);
 
-        when(session.attribute("Player")).thenReturn(player5);
-        when(request.queryParams("myUsername")).thenReturn((PLAYER5));
-//        when(!playerLobby.isValidPlayer(player5)).thenReturn(false);
-        when(!playerLobby.isNewPlayer(player5)).thenReturn(false);
+        when(session.attribute("Player")).thenReturn(player4);
+        when(request.queryParams("myUsername")).thenReturn((PLAYER4));
+        when(!playerLobby.isNewPlayer(player4)).thenReturn(false);
 
 
         final TemplateEngineTester testHelper = new TemplateEngineTester();
@@ -159,15 +144,10 @@ public class PostSignInRouteTest {
         when(session.attribute("Player")).thenReturn(player1);
         when(playerLobby.isInGame(player1)).thenReturn(true);
 
-//        when(session.attribute("Player")).thenReturn(player5);
-//        when(request.queryParams("name")).thenReturn((PLAYER5));
-//        when(playerLobby.isValidPlayer(player5)).thenReturn(false);
-//        when(playerLobby.isNewPlayer(player5)).thenReturn(false);
 
         when(session.attribute("Player")).thenReturn(player3);
         when(request.queryParams("myUsername")).thenReturn((PLAYER3));
         when(!playerLobby.isValidPlayer(player3)).thenReturn(false);
-//        when(!playerLobby.isNewPlayer(player3)).thenReturn(false);
 
         final TemplateEngineTester testHelper = new TemplateEngineTester();
         when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
@@ -180,11 +160,12 @@ public class PostSignInRouteTest {
         testHelper.assertViewModelExists();
         testHelper.assertViewModelIsaMap();
 
+//        testHelper.assertViewModelAttribute(playerLobby.getUsernames(), playerLobby.findPlayer(PLAYER2));
         //   * model contains all necessary View-Model data
-//        testHelper.assertViewModelAttribute(
-//                GetSignInRoute.TITLE, GetSignInRoute.TITLE_MSG);
-//        testHelper.assertViewModelAttribute(
-//                PostSignInRoute.MESSAGE_ATTR, PostSignInRoute.makeInvalidUsrMessage());
+        testHelper.assertViewModelAttribute(
+                GetSignInRoute.TITLE, GetSignInRoute.TITLE_MSG);
+        testHelper.assertViewModelAttribute(
+                PostSignInRoute.MESSAGE_ATTR, "Must start with at least one alphanumeric character.");
         testHelper.assertViewModelAttributeIsAbsent(PostSignInRoute.INVALID_USR);
         //   * test view name
         testHelper.assertViewName(PostSignInRoute.VIEW_NAME);
