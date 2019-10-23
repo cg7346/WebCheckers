@@ -93,7 +93,7 @@ public class PostSignInRouteTest {
      * Test that the "sign-in" action this handled and is redirected to the home page
      */
     @Test
-    public void signValidPlayer() {
+    public void sign_in_valid_player() {
         when(session.attribute("Player")).thenReturn(player1);
         when(request.queryParams("myUsername")).thenReturn((PLAYER1));
         when(playerLobby.isNewPlayer(player1)).thenReturn(true);
@@ -116,7 +116,7 @@ public class PostSignInRouteTest {
      * Test that the "sign-in" action this handled
      */
     @Test
-    public void signInTaken() {
+    public void sign_in_taken() {
         playerLobby.addPlayer(player1);
 
         when(session.attribute("Player")).thenReturn(player1);
@@ -153,7 +153,7 @@ public class PostSignInRouteTest {
      * Test that the "sign-in" action this handled
      */
     @Test
-    public void signInInvalid() {
+    public void sign_in_invalid() {
         playerLobby.addPlayer(player1);
 
         when(session.attribute("Player")).thenReturn(player1);
@@ -190,42 +190,3 @@ public class PostSignInRouteTest {
         testHelper.assertViewName(PostSignInRoute.VIEW_NAME);
     }
 }
-
-
-// Analyze the results:
-//   * model is a non-null Map
-//        testHelper.assertViewModelExists();
-//        testHelper.assertViewModelIsaMap();
-//        //   * model contains all necessary View-Model data
-//        testHelper.assertViewModelAttribute("title", "Welcome!");
-//        testHelper.assertViewModelAttribute(
-//                GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
-//        testHelper.assertViewModelAttribute(
-//                "playersOnline", Boolean.FALSE);
-//        testHelper.assertViewModelAttributeIsAbsent("currentUser");
-//        //   * test view name
-//        testHelper.assertViewName("home.ftl");
-
-//        if (playerLobby.isNewPlayer(player1)) {
-//            when(playerLobby.findPlayer(PLAYER1)).thenReturn(player1);
-//        }
-
-//        when(request.queryParams(eq(VALID_USR))).thenReturn(NAME);
-//        when(request.queryParams(eq(INVAILD_USR_1))).thenReturn(PASS);
-//        final TemplateEngineTester testHelper = new TemplateEngineTester();
-//        when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
-
-
-//        // Analyze the results:
-//        //   * model is a non-null Map
-//        testHelper.assertViewModelExists();
-//        testHelper.assertViewModelIsaMap();
-//        //   * model contains all necessary View-Model data
-//        testHelper.assertViewModelAttribute("title", "Sign In");
-//        testHelper.assertViewModelAttribute(
-//                GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
-//        testHelper.assertViewModelAttribute(
-//                "playersOnline", Boolean.FALSE);
-//        testHelper.assertViewModelAttributeIsAbsent("currentUser");
-//        //   * test view name
-//        testHelper.assertViewName("signin.ftl");
