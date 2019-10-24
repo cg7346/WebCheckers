@@ -7,7 +7,7 @@ import spark.*;
 
 import java.util.*;
 
-import static spark.Spark.*;
+import static spark.Spark.halt;
 
 /**
  * The {@code POST /signin} route handler
@@ -106,21 +106,19 @@ public class PostSignInRoute implements Route {
          * In either case, we will redirect back to home.
          */
         if (playerLobby != null) {
-            // make the guess and create the appropriate ModelAndView for rendering
+            // make the player and create the appropriate ModelAndView for rendering
             ModelAndView mv;
             if (!playerLobby.isValidPlayer(player)) {
                 mv = error(vm, makeInvalidUsrMessage());
-                return templateEngine.render(mv);
             } else if (!playerLobby.isNewPlayer(player)) {
                 mv = error(vm, makeTakenUsrMessage());
-                return templateEngine.render(mv);
             } else {
                 playerLobby.addPlayer(player);
-                playerLobby.setPlayer(player);
+//                playerLobby.setPlayer(player);
                 session.attribute("Player", player);
                 mv = currentUser(playerLobby.getUsernames(), vm, player);
-                return templateEngine.render(mv);
             }
+            return templateEngine.render(mv);
         } else {
             response.redirect(WebServer.HOME_URL);
             halt();

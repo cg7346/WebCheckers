@@ -63,7 +63,7 @@ public class GetSignInRoute implements Route {
 
         //
         Map<String, Object> vm = new HashMap<>();
-        //vm.put(NEW_PLAYER_ATTR, playerLobby.isNewPlayer());
+//        vm.put(NEW_PLAYER_ATTR, playerLobby.isNewPlayer());
 
         vm.put(TITLE, TITLE_MSG);
 

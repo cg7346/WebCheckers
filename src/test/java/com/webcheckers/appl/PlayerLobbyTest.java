@@ -132,16 +132,16 @@ public class PlayerLobbyTest {
         assertFalse(CuT.isValidPlayer(player6));
     }
 
-    /**
+    /*    *//**
      * Tests if a player can be set to the player entered and
      * gets that current player.
-     */
+     *//*
     @Test
     public void test_set_get_player() {
         assertNull(CuT.getPlayer());
         CuT.setPlayer(player1);
         assertEquals(CuT.getPlayer(), player1);
-    }
+    }*/
 
     /**
      * Checks if when players are added to the PlayerLobby
