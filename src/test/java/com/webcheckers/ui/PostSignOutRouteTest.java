@@ -21,7 +21,6 @@ public class PostSignOutRouteTest {
 
     // Constants
     private static final String NAME = "User";
-    private static final String PASS = "Password";
 
 
     /**

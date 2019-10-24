@@ -40,7 +40,6 @@ public class PlayerLobby {
         try {
             this.players.add(player);
         } catch (Error e) {
-//            TODO: check this error should is return an Message
             System.out.println("Cannot add player.");
         }
     }
