@@ -49,7 +49,7 @@ public class PlayerLobby {
      * Determines whether or not the player's name is valid
      *
      * @param player the Player's name to validate
-     * @return a boolean of whether or not the player's name is vaild
+     * @return a boolean of whether or not the player's name is valid
      */
     public boolean isValidPlayer(Player player) {
         if (player != null) {
@@ -115,7 +115,7 @@ public class PlayerLobby {
         for (Player player : players){
             // TODO: remember to delete this
 //            System.out.println(player.getName());
-            //TODO OVERRIDE EQUALSLLFSKLD
+            //TODO OVERRIDE EQUALS FIELD
             if (player.getName().equals(name)){
                 return player;
             }
@@ -126,8 +126,10 @@ public class PlayerLobby {
         return this.player;
     }
 
+//    /**
+//     * Cleanup the @Linkplain{PlayerLobby} object when the session expires.
+//     * The only cleanup will be to remove the player.
+//     */
+//    public void endSession() { player = null; }
+
 }
-
-
-
-
