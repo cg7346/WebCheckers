@@ -131,5 +131,31 @@ public class PlayerLobby {
 //     * The only cleanup will be to remove the player.
 //     */
 //    public void endSession() { player = null; }
+    //TODO: implement these
 
+    /**
+     * A boolean value
+     * true if the game has come to an end
+     * whether from a win or resignation.
+     *
+     * @return true or false if game is over
+     */
+    public Boolean isGameOver() {
+        return null;
+    }
+
+//    public void setPlayer(Player player){
+//        this.player = player;
+//    }
+//    /**
+//     * Cleanup the @Linkplain{PlayerLobby} object when the session expires.
+//     * The only cleanup will be to remove the game.
+//     * TODO: game = null;
+//     */
+//    public void endSession() {
+//    }
 }
+
+
+
+

@@ -86,7 +86,7 @@ public class PostSignInRoute implements Route {
      *      when an invalid username is returned
      * @param request
      * @param response
-     * @return
+     * @return templateEngine to render a view or null
      */
     @Override
     public Object handle(Request request, Response response) {
@@ -114,7 +114,6 @@ public class PostSignInRoute implements Route {
                 mv = error(vm, makeTakenUsrMessage());
             } else {
                 playerLobby.addPlayer(player);
-//                playerLobby.setPlayer(player);
                 session.attribute("Player", player);
                 mv = currentUser(playerLobby.getUsernames(), vm, player);
                 response.redirect(WebServer.HOME_URL);
