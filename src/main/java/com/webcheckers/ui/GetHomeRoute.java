@@ -154,6 +154,7 @@ public class GetHomeRoute implements Route {
         //vm.put(MESSAGE, WELCOME_MSG);
         vm.put(CURRENT_USER, player);
         vm.put(PLAYERS_ON, PLAYERS_ONLINE);
+        vm.put(PostSignInRoute.CURRENT, player.getName());
         vm.put(USERS_LIST, userList);
         return new ModelAndView(vm, VIEW_NAME);
     }

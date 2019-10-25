@@ -25,7 +25,11 @@
         <form action="./game" method="POST">
         <ol>
             <#list userList as user>
-                <button name = "name" type="submit" value=${user}>${user}</button>
+                <#if user == current>
+<#--                    <button name = "name" type="submit" disabled="true" value=${user}>${user}</button>-->
+                <#else>
+                    <button name = "name" type="submit" value=${user}>${user}</button>
+                </#if>
             </#list>
         </ol>
         </form>

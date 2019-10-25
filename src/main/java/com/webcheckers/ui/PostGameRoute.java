@@ -85,6 +85,7 @@ public class PostGameRoute implements Route {
         //final Session session = request.session();
         //Player currentPlayer = session.attribute("Player");
         vm.put(GetHomeRoute.CURRENT_USER, currentPlayer);
+        vm.put(PostSignInRoute.CURRENT, currentPlayer.getName());
         vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
         vm.put(GetHomeRoute.USERS_LIST, playerLobby.getUsernames());
         vm.put(MESSAGE_ATTR, message);

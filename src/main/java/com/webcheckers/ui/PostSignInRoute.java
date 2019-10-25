@@ -24,7 +24,7 @@ public class PostSignInRoute implements Route {
     // Values used in the view-model map for rendering the game view after a
     // guess.
     static final String USERNAME = "myUsername";
-    static final String PASSWORD = "psw";
+    static final String CURRENT = "current";
     static final String MESSAGE_ATTR = "message";
 
     static final String INVALID_USR = "Must start with at least one alphanumeric character.";
@@ -142,7 +142,9 @@ public class PostSignInRoute implements Route {
 
         vm.put(GetHomeRoute.CURRENT_USER, player);
         vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
+        String currentPlayer = player.getName();
         vm.put(GetHomeRoute.USERS_LIST, userList);
+        vm.put(CURRENT, currentPlayer);
         return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
     }
 
