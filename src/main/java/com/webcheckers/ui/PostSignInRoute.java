@@ -114,7 +114,6 @@ public class PostSignInRoute implements Route {
                 mv = error(vm, makeTakenUsrMessage());
             } else {
                 playerLobby.addPlayer(player);
-//                playerLobby.setPlayer(player);
                 session.attribute("Player", player);
                 mv = currentUser(playerLobby.getUsernames(), vm, player);
                 response.redirect(WebServer.HOME_URL);
