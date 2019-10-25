@@ -110,10 +110,8 @@ public class PostSignInRoute implements Route {
             ModelAndView mv;
             if (!playerLobby.isValidPlayer(player)) {
                 mv = error(vm, makeInvalidUsrMessage());
-//                response.redirect(WebServer.SIGNIN_URL);
             } else if (!playerLobby.isNewPlayer(player)) {
                 mv = error(vm, makeTakenUsrMessage());
-//                response.redirect(WebServer.SIGNIN_URL);
             } else {
                 playerLobby.addPlayer(player);
 //                playerLobby.setPlayer(player);
