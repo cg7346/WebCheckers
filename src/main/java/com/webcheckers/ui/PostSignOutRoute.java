@@ -77,6 +77,7 @@ public class PostSignOutRoute implements Route {
             String count = String.format(GetHomeRoute.PLAYERS, playerCount);
             vm.put(GetHomeRoute.PLAYERS_COUNT, count);
         }
+        response.redirect(WebServer.HOME_URL);
         return templateEngine.render(new ModelAndView(vm, GetHomeRoute.VIEW_NAME));
     }
 

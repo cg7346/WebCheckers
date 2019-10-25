@@ -3,7 +3,7 @@ package com.webcheckers.model;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * The unit test suite for the {@link Player} component.
@@ -32,5 +32,26 @@ public class PlayerTest {
         final Player player = new Player(NAME);
         assertEquals(NAME, player.getName());
     }
+
+    /**
+     * Test that the player is in a game constructor works without failure.
+     */
+    @Test
+    public void playerIsInGame() {
+        final Player player = new Player(NAME);
+        player.setInGame(true);
+        assertTrue(player.isInGame());
+    }
+
+    /**
+     * Test that the player is not in a game constructor works without failure.
+     */
+    @Test
+    public void playerIsNotInGame() {
+        final Player player = new Player(NAME);
+        player.setInGame(false);
+        assertFalse(player.isInGame());
+    }
+
 
 }
