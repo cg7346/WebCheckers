@@ -117,6 +117,7 @@ public class PostSignInRoute implements Route {
 //                playerLobby.setPlayer(player);
                 session.attribute("Player", player);
                 mv = currentUser(playerLobby.getUsernames(), vm, player);
+                response.redirect(WebServer.HOME_URL);
             }
             return templateEngine.render(mv);
         } else {
