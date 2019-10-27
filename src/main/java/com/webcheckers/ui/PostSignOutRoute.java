@@ -36,11 +36,9 @@ public class PostSignOutRoute implements Route {
      */
     PostSignOutRoute(TemplateEngine templateEngine, PlayerLobby playerLobby) {
         // validation
-        Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
 
-        // instantiating attributes
-        this.templateEngine = templateEngine;
-        this.playerLobby = playerLobby;
     }
 
     /**

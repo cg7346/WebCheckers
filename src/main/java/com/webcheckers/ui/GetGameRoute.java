@@ -36,9 +36,6 @@ public class GetGameRoute implements Route {
     private static final String PLAYER_IN_GAME= "Chosen player is already in a game.";
     static final String MESSAGE_ATTR = "message";
     static final String MESSAGE_ERR = "message error";
-
-    static final String USER_PARAM = "opponent";
-
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
     private final Gson gson;
@@ -56,15 +53,11 @@ public class GetGameRoute implements Route {
      *    The {@link TemplateEngine} used for rendering page HTML.
      */
     public GetGameRoute(final TemplateEngine templateEngine, PlayerLobby playerLobby,
-                        GameManager gameManager, Gson gson)
-    {
+                        GameManager gameManager, Gson gson) {
         // validation
-
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
-
-        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobbu must not be null");
-        this.gameManager = gameManager;
-
+        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+        this.gameManager = Objects.requireNonNull(gameManager, "gameManager must not be null");
         this.gson = gson;
     }
 
@@ -84,8 +77,6 @@ public class GetGameRoute implements Route {
                 if (playerLobby.isInGame(chosenOpponent)|| chosenOpponent == null ){
                     //we will send an error
                     Message er = Message.error(PLAYER_IN_GAME);
-                    //ModelAndView mv = error(vm, er, currentPlayer);
-                    //TODO session attribute
                     session.attribute(MESSAGE_ERR, er);
                     response.redirect(WebServer.HOME_URL);
                     halt();
@@ -93,9 +84,7 @@ public class GetGameRoute implements Route {
                 }
                 else{game = gameManager.makeGame(currentPlayer, chosenOpponent);}
         //you are the person click on, find your game
-        }else{
-            game = gameManager.getGame(currentPlayer);
-        }
+        }else{ game = gameManager.getGame(currentPlayer);}
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
         BoardView board = new BoardView(currentPlayer, game);
@@ -116,9 +105,6 @@ public class GetGameRoute implements Route {
 
     private ModelAndView error(final Map<String, Object> vm, final Message message, final Player currentPlayer) {
         vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
-        //vm.put(GetHomeRoute.CURRENT_USER, playerLobby.getPlayers().get(playerLobby.getPlayers().size()-1));
-        //final Session session = request.session();
-        //Player currentPlayer = session.attribute("Player");
         vm.put(GetHomeRoute.CURRENT_USER, currentPlayer);
         vm.put(PostSignInRoute.CURRENT, currentPlayer.getName());
         vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);

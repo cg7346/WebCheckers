@@ -47,10 +47,9 @@ public class PostResignGame implements Route {
      */
     public PostResignGame(TemplateEngine templateEngine, PlayerLobby playerLobby) {
         // validation
-        Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
 
-        this.templateEngine = templateEngine;
-        this.playerLobby = playerLobby;
     }
 
 

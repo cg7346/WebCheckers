@@ -39,6 +39,7 @@ public class GetSignInRoute implements Route {
      *   the HTML template rendering engine
      */
     public GetSignInRoute(final TemplateEngine templateEngine) {
+        // validation
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
         LOG.config("GetSignInRoute is initialized.");
     }

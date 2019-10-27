@@ -64,10 +64,10 @@ public class GetHomeRoute implements Route {
      * @param templateEngine the HTML template rendering engine
      */
     public GetHomeRoute(final TemplateEngine templateEngine, PlayerLobby playerLobby, GameManager gameManager) {
+        // validation
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
+        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
         this.gameManager = Objects.requireNonNull(gameManager, "gameManager is required");
-        this.playerLobby = playerLobby;
-        //
         LOG.config("GetHomeRoute is initialized.");
     }
 
