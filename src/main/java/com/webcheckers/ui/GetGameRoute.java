@@ -103,6 +103,13 @@ public class GetGameRoute implements Route {
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
 
+    /**
+     * this handles errors in the model view
+     * @param vm
+     * @param message
+     * @param currentPlayer
+     * @return
+     */
     private ModelAndView error(final Map<String, Object> vm, final Message message, final Player currentPlayer) {
         vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
         vm.put(GetHomeRoute.CURRENT_USER, currentPlayer);

@@ -123,6 +123,13 @@ public class GetHomeRoute implements Route {
     //
     // Private Methods
     //
+
+    /**
+     * active player of the model view
+     * @param vm
+     * @param request
+     * @return
+     */
     private ModelAndView playerActive(Map<String, Object> vm, Request request) {
         vm.put(PLAYERS_ON, PLAYERS_ONLINE);
         Integer playerCount = playerLobby.getPlayers().size();
@@ -138,6 +145,12 @@ public class GetHomeRoute implements Route {
         return new ModelAndView(vm, VIEW_NAME);
     }
 
+    /**
+     * current user of the model view
+     * @param vm
+     * @param request
+     * @return
+     */
     public ModelAndView currentUser(Map<String, Object> vm, Request request) {
         final Session session = request.session();
         List<String> userList = playerLobby.getUsernames();
@@ -149,6 +162,13 @@ public class GetHomeRoute implements Route {
         return new ModelAndView(vm, VIEW_NAME);
     }
 
+    /**
+     * this handles errors in the model view
+     * @param vm
+     * @param message
+     * @param currentPlayer
+     * @return
+     */
     private ModelAndView error(final Map<String, Object> vm, final Message message, final Player currentPlayer) {
         vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
         //vm.put(GetHomeRoute.CURRENT_USER, playerLobby.getPlayers().get(playerLobby.getPlayers().size()-1));
