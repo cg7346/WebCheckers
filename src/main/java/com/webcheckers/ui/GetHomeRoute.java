@@ -93,8 +93,13 @@ public class GetHomeRoute implements Route {
     vm.put(MESSAGE, WELCOME_MSG);
 
     final Session httpSession = request.session();
+    Message messageError = httpSession.attribute(GetGameRoute.MESSAGE_ERR);
       if (playerLobby != null) {
           Player currentPlayer = httpSession.attribute("Player");
+          if(messageError != null){
+              ModelAndView mv = error(vm,messageError, currentPlayer);
+              httpSession.removeAttribute(GetGameRoute.MESSAGE_ERR);
+          }
           if (currentPlayer != null){
               if (currentPlayer.isInGame()){
                   response.redirect(WebServer.GAME_URL);
@@ -150,4 +155,19 @@ public class GetHomeRoute implements Route {
         vm.put(USERS_LIST, userList);
         return new ModelAndView(vm, VIEW_NAME);
     }
+
+    private ModelAndView error(final Map<String, Object> vm, final Message message, final Player currentPlayer) {
+        vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
+        //vm.put(GetHomeRoute.CURRENT_USER, playerLobby.getPlayers().get(playerLobby.getPlayers().size()-1));
+        //final Session session = request.session();
+        //Player currentPlayer = session.attribute("Player");
+        vm.put(CURRENT_USER, currentPlayer);
+        vm.put(PostSignInRoute.CURRENT, currentPlayer.getName());
+        vm.put(PLAYERS_ON, PLAYERS_ONLINE);
+        vm.put(USERS_LIST, playerLobby.getUsernames());
+        vm.put(MESSAGE, message);
+        return new ModelAndView(vm, VIEW_NAME);
+    }
+
+
 }

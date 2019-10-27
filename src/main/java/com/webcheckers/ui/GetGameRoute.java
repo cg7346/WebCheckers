@@ -33,6 +33,9 @@ public class GetGameRoute implements Route {
     static final String GAME_OVER_ATTR = "gameOverMessage";
     static final Message GAME_OVER_ATTR_MSG = Message.info("The game is over"); /* Get the game over message */
     static final String VIEW_NAME = "game.ftl";
+    private static final String PLAYER_IN_GAME= "Chosen player is already in a game.";
+    static final String MESSAGE_ATTR = "message";
+    static final String MESSAGE_ERR = "message error";
 
     static final String USER_PARAM = "opponent";
 
@@ -73,12 +76,20 @@ public class GetGameRoute implements Route {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = null;
+        Map<String, Object> vm = new HashMap<>();
         //that means a player click on another one, get their name and make a game
         if (!request.queryParams().isEmpty()){
             String opponentName = request.queryParams().iterator().next();
                 Player chosenOpponent = playerLobby.findPlayer(opponentName);
                 if (playerLobby.isInGame(chosenOpponent)|| chosenOpponent == null ){
                     //we will send an error
+                    Message er = Message.error(PLAYER_IN_GAME);
+                    //ModelAndView mv = error(vm, er, currentPlayer);
+                    //TODO session attribute
+                    session.attribute(MESSAGE_ERR, er);
+                    response.redirect(WebServer.HOME_URL);
+                    halt();
+                    return null;
                 }
                 else{game = gameManager.makeGame(currentPlayer, chosenOpponent);}
         //you are the person click on, find your game
@@ -88,7 +99,6 @@ public class GetGameRoute implements Route {
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
         BoardView board = new BoardView(currentPlayer, game);
-        Map<String, Object> vm = new HashMap<>();
         vm.put(TITLE_ATTR, TITLE_ATTR_MSG);
         vm.put(CURRENT_USER_ATTR, currentPlayer);
         vm.put("viewMode", viewMode.PLAY);
@@ -102,5 +112,18 @@ public class GetGameRoute implements Route {
         vm.put(BOARD_ATTR, board);
         vm.put(START_ATTR, START_ATTR_MSG);
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+    }
+
+    private ModelAndView error(final Map<String, Object> vm, final Message message, final Player currentPlayer) {
+        vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
+        //vm.put(GetHomeRoute.CURRENT_USER, playerLobby.getPlayers().get(playerLobby.getPlayers().size()-1));
+        //final Session session = request.session();
+        //Player currentPlayer = session.attribute("Player");
+        vm.put(GetHomeRoute.CURRENT_USER, currentPlayer);
+        vm.put(PostSignInRoute.CURRENT, currentPlayer.getName());
+        vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
+        vm.put(GetHomeRoute.USERS_LIST, playerLobby.getUsernames());
+        vm.put(MESSAGE_ATTR, message);
+        return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
     }
 }
