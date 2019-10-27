@@ -1,7 +1,6 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.model.CheckersGame;
-import com.webcheckers.model.Player;
+import com.webcheckers.model.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,8 +38,6 @@ public class BoardView {
             spaceList = new ArrayList<>();
             for(int j = 0; j < checkersGame.COLS; j++){
                 Space s;
-                //TODO: for testing purposes take out
-                //System.out.print( "|" + board[j][i].getSymbol() + "|");
                 switch (board[j][i]){
                     case EMPTY_BLACK:
                         s = new Space(j, true);
@@ -60,14 +57,10 @@ public class BoardView {
                     // If the board symbol does not match any of the cases provided
                     default:
                         s = null;
-//                        TODO: remember to take out
-                        System.out.println("This case has not been addressed yet");
                         break;
                 }
                 spaceList.add(s);
             }
-            //for testing purposes take out
-            //System.out.println();
             rows.add(new Row(i, spaceList));
         }
     }
@@ -80,18 +73,4 @@ public class BoardView {
         return rows.iterator();
     }
 
-    public static void main(String[] args){
-        //little bit of testing
-        Player testRed = new Player("TestRed");
-        Player testWhite = new Player("TestRed");
-        CheckersGame testGame = new CheckersGame(testRed, testWhite, 0);
-        // TODO: remember to take out
-        //System.out.println(testGame.toString());
-        System.out.println("MAKING RED PLAYER....");
-        new BoardView(testRed, testGame);
-
-        // TODO: remember to take out
-        System.out.println("MAKING WHITE PLAYER");
-        new BoardView(testWhite, testGame);
-    }
 }

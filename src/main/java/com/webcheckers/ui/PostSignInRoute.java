@@ -23,12 +23,13 @@ public class PostSignInRoute implements Route {
 
     // Values used in the view-model map for rendering the game view after a
     // guess.
-    private static final String USERNAME = "myUsername";
-    private static final String MESSAGE_ATTR = "message";
+    static final String USERNAME = "myUsername";
+    static final String CURRENT = "current";
+    static final String MESSAGE_ATTR = "message";
 
-    private static final String INVALID_USR = "Must start with at least one alphanumeric character.";
-    private static final String TAKEN_USR = "Username has already been taken.";
-    private static final String VIEW_NAME = "signin.ftl";
+    static final String INVALID_USR = "Must start with at least one alphanumeric character.";
+    static final String TAKEN_USR = "Username has already been taken.";
+    static final String VIEW_NAME = "signin.ftl";
 
 
     //
@@ -71,11 +72,9 @@ public class PostSignInRoute implements Route {
      */
     PostSignInRoute(TemplateEngine templateEngine, PlayerLobby playerLobby) {
         // validation
-        Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
 
-        // instantiating attributes
-        this.templateEngine = templateEngine;
-        this.playerLobby = playerLobby;
     }
 
     /**
@@ -105,27 +104,20 @@ public class PostSignInRoute implements Route {
          * In either case, we will redirect back to home.
          */
         if (playerLobby != null) {
-            // make the guess and create the appropriate ModelAndView for rendering
+            // make the player and create the appropriate ModelAndView for rendering
             ModelAndView mv;
             if (!playerLobby.isValidPlayer(player)) {
                 mv = error(vm, makeInvalidUsrMessage());
-                return templateEngine.render(mv);
             } else if (!playerLobby.isNewPlayer(player)) {
                 mv = error(vm, makeTakenUsrMessage());
-                return templateEngine.render(mv);
             } else {
                 playerLobby.addPlayer(player);
-                playerLobby.setPlayer(player);
                 session.attribute("Player", player);
-                mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
-//                mv = currentUser(playerLobby.getUsernames(), vm, player, playerLobby);
-//                TODO: check why this mv isn't being used?
+                mv = currentUser(playerLobby.getUsernames(), vm, player);
+                response.redirect(WebServer.HOME_URL);
             }
-            response.redirect(WebServer.HOME_URL);
-            halt();
-            return null;
-        }
-        else {
+            return templateEngine.render(mv);
+        } else {
             response.redirect(WebServer.HOME_URL);
             halt();
             return null;
@@ -141,20 +133,16 @@ public class PostSignInRoute implements Route {
         return new ModelAndView(vm, VIEW_NAME);
     }
 
-    public ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player,
-                                     final PlayerLobby playerLobby) {
-//    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player) {
+    public ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player) {
         vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
         vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
 
         vm.put(GetHomeRoute.CURRENT_USER, player);
         vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
+        String currentPlayer = player.getName();
         vm.put(GetHomeRoute.USERS_LIST, userList);
+        vm.put(CURRENT, currentPlayer);
         return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
     }
 
-    //TODO: going to need this later
-//    private ModelAndView signout() {
-//        return ;
-//    }
 }

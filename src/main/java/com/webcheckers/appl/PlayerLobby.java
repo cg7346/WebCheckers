@@ -49,7 +49,7 @@ public class PlayerLobby {
      * Determines whether or not the player's name is valid
      *
      * @param player the Player's name to validate
-     * @return a boolean of whether or not the player's name is vaild
+     * @return a boolean of whether or not the player's name is valid
      */
     public boolean isValidPlayer(Player player) {
         if (player != null) {
@@ -105,11 +105,17 @@ public class PlayerLobby {
         return usernames;
     }
 
+    /**
+     * Finds a player given there username.
+     *
+     * @param name username
+     * @return player of the string entered or null if not found
+     */
     public Player findPlayer(String name){
         for (Player player : players){
             // TODO: remember to delete this
 //            System.out.println(player.getName());
-            //TODO OVERRIDE EQUALSLLFSKLD
+            //TODO OVERRIDE EQUALS FIELD
             if (player.getName().equals(name)){
                 return player;
             }
@@ -120,6 +126,11 @@ public class PlayerLobby {
         return this.player;
     }
 
+//    /**
+//     * Cleanup the @Linkplain{PlayerLobby} object when the session expires.
+//     * The only cleanup will be to remove the player.
+//     */
+//    public void endSession() { player = null; }
     //TODO: implement these
 
     /**
@@ -133,16 +144,16 @@ public class PlayerLobby {
         return null;
     }
 
-    public void setPlayer(Player player){
-        this.player = player;
-    }
-    /**
-     * Cleanup the @Linkplain{PlayerLobby} object when the session expires.
-     * The only cleanup will be to remove the game.
-     * TODO: game = null;
-     */
-    public void endSession() {
-    }
+//    public void setPlayer(Player player){
+//        this.player = player;
+//    }
+//    /**
+//     * Cleanup the @Linkplain{PlayerLobby} object when the session expires.
+//     * The only cleanup will be to remove the game.
+//     * TODO: game = null;
+//     */
+//    public void endSession() {
+//    }
 }
 
 

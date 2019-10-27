@@ -47,10 +47,9 @@ public class PostEndGame implements Route {
      */
     public PostEndGame(TemplateEngine templateEngine, PlayerLobby playerLobby) {
         // validation
-        Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
 
-        this.templateEngine = templateEngine;
-        this.playerLobby = playerLobby;
     }
 
 

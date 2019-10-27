@@ -39,8 +39,8 @@ public class GetSignInRoute implements Route {
      *   the HTML template rendering engine
      */
     public GetSignInRoute(final TemplateEngine templateEngine) {
+        // validation
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
-        //
         LOG.config("GetSignInRoute is initialized.");
     }
 
@@ -59,17 +59,10 @@ public class GetSignInRoute implements Route {
     public Object handle(Request request, Response response) {
         LOG.finer("GetSignInRoute is invoked.");
 
-        //TODO: game = playerLobby.currentGame()
-
-        //
         Map<String, Object> vm = new HashMap<>();
-        //vm.put(NEW_PLAYER_ATTR, playerLobby.isNewPlayer());
-
         vm.put(TITLE, TITLE_MSG);
-
         // display a user message in the Home page
         vm.put(MESSAGE, SIGNIN_MSG);
-
         // render the View
         return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
     }

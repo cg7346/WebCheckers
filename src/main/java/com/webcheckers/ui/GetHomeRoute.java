@@ -13,6 +13,8 @@ import spark.*;
 
 import com.webcheckers.util.Message;
 
+import static spark.Spark.halt;
+
 
 /**
  * The UI Controller to GET the Home page.
@@ -62,10 +64,10 @@ public class GetHomeRoute implements Route {
      * @param templateEngine the HTML template rendering engine
      */
     public GetHomeRoute(final TemplateEngine templateEngine, PlayerLobby playerLobby, GameManager gameManager) {
+        // validation
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
-        this.gameManager = gameManager;
-        this.playerLobby = playerLobby;
-        //
+        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+        this.gameManager = Objects.requireNonNull(gameManager, "gameManager is required");
         LOG.config("GetHomeRoute is initialized.");
     }
 
@@ -91,19 +93,18 @@ public class GetHomeRoute implements Route {
     vm.put(MESSAGE, WELCOME_MSG);
 
     final Session httpSession = request.session();
-      // TODO: remember to take out
-//    System.out.println(httpSession.attributes());
-//    if (httpSession.attribute(PLAYERLOBBY_KEY) == null) {
-//      httpSession.attribute(PLAYERLOBBY_KEY, new PlayerLobby(null));
-//      //PlayerLobby playerLobby = httpSession.attribute(PLAYERLOBBY_KEY);
-//    }
-//    PlayerLobby playerLobby = httpSession.attribute(PLAYERLOBBY_KEY);
-
+    Message messageError = httpSession.attribute(GetGameRoute.MESSAGE_ERR);
       if (playerLobby != null) {
           Player currentPlayer = httpSession.attribute("Player");
+          if(messageError != null){
+              ModelAndView mv = error(vm,messageError, currentPlayer);
+              httpSession.removeAttribute(GetGameRoute.MESSAGE_ERR);
+          }
           if (currentPlayer != null){
               if (currentPlayer.isInGame()){
                   response.redirect(WebServer.GAME_URL);
+                  halt();
+                  return null;
               }
               ModelAndView mv = currentUser(vm, request);
               return templateEngine.render(mv);
@@ -122,10 +123,15 @@ public class GetHomeRoute implements Route {
     //
     // Private Methods
     //
+
+    /**
+     * active player of the model view
+     * @param vm
+     * @param request
+     * @return
+     */
     private ModelAndView playerActive(Map<String, Object> vm, Request request) {
         vm.put(PLAYERS_ON, PLAYERS_ONLINE);
-        //final Session session = request.session();
-        //final PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
         Integer playerCount = playerLobby.getPlayers().size();
         if (playerCount == 0) {
             vm.put(PLAYERS_COUNT, NO_PLAYERS);
@@ -139,18 +145,42 @@ public class GetHomeRoute implements Route {
         return new ModelAndView(vm, VIEW_NAME);
     }
 
+    /**
+     * current user of the model view
+     * @param vm
+     * @param request
+     * @return
+     */
     public ModelAndView currentUser(Map<String, Object> vm, Request request) {
-//    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player) {
         final Session session = request.session();
-        //final PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
         List<String> userList = playerLobby.getUsernames();
         Player player = session.attribute("Player");
-
-        //vm.put(WELCOME_ATTR, WELCOME_ATTR_MSG);
-        //vm.put(MESSAGE, WELCOME_MSG);
         vm.put(CURRENT_USER, player);
         vm.put(PLAYERS_ON, PLAYERS_ONLINE);
+        vm.put(PostSignInRoute.CURRENT, player.getName());
         vm.put(USERS_LIST, userList);
         return new ModelAndView(vm, VIEW_NAME);
     }
+
+    /**
+     * this handles errors in the model view
+     * @param vm
+     * @param message
+     * @param currentPlayer
+     * @return
+     */
+    private ModelAndView error(final Map<String, Object> vm, final Message message, final Player currentPlayer) {
+        vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
+        //vm.put(GetHomeRoute.CURRENT_USER, playerLobby.getPlayers().get(playerLobby.getPlayers().size()-1));
+        //final Session session = request.session();
+        //Player currentPlayer = session.attribute("Player");
+        vm.put(CURRENT_USER, currentPlayer);
+        vm.put(PostSignInRoute.CURRENT, currentPlayer.getName());
+        vm.put(PLAYERS_ON, PLAYERS_ONLINE);
+        vm.put(USERS_LIST, playerLobby.getUsernames());
+        vm.put(MESSAGE, message);
+        return new ModelAndView(vm, VIEW_NAME);
+    }
+
+
 }
