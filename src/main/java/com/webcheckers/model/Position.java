@@ -10,6 +10,11 @@ public class Position {
     private int row;
     private  int col;
 
+    /**
+     * constructor for position
+     * @param row
+     * @param col
+     */
     public Position(int row, int col){
         if(row <= 7 && row >= 0){
             this.row = row;
@@ -17,5 +22,21 @@ public class Position {
         if(col <= 7 && col >= 0) {
             this.col = col;
         }
+    }
+
+    /**
+     * getter for row
+     * @return
+     */
+    public int getRow(){
+        return this.row;
+    }
+
+    /**
+     * getter for col
+     * @return
+     */
+    public int getCol(){
+        return this.col;
     }
 }
