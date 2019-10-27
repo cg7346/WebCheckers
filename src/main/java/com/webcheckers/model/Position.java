@@ -18,12 +18,12 @@ public class Position {
      * @param cell
      */
     public Position(int row, int cell){
-        if(row <= 7 && row >= 0){
-            this.row = row;
+        if(row > 7 || row < 0 || cell > 7 || cell < 0) {
+            throw new IllegalArgumentException("the rows and cells must be between 0 and 7");
         }
-        if(cell <= 7 && cell >= 0) {
-            this.cell = cell;
-        }
+        this.row = row;
+        this.cell = cell;
+
     }
 
     /**
