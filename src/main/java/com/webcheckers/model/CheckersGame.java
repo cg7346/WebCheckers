@@ -196,6 +196,14 @@ public class CheckersGame {
         return builder.toString();
     }
 
+    /**
+     * validates a move in the game
+     * @return
+     */
+    public boolean validateMove(){
+        return false;
+    }
+
 
 
     //Just some in class testing
