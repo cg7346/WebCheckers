@@ -180,7 +180,7 @@ public class WebServer {
     get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager, gson));
 
     //validates the move for current player
-    post(VALIDATEMOVE_URL, new PostValidateMove(playerLobby, gameManager));
+    post(VALIDATEMOVE_URL, new PostValidateMove(playerLobby, gameManager, gson));
 
     //
     LOG.config("WebServer is initialized.");
