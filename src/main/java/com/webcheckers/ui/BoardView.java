@@ -1,7 +1,6 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.model.CheckersGame;
-import com.webcheckers.model.Player;
+import com.webcheckers.model.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
