@@ -84,8 +84,6 @@ public class GetGameRoute implements Route {
                 if (playerLobby.isInGame(chosenOpponent)|| chosenOpponent == null ){
                     //we will send an error
                     Message er = Message.error(PLAYER_IN_GAME);
-                    //ModelAndView mv = error(vm, er, currentPlayer);
-                    //TODO session attribute
                     session.attribute(MESSAGE_ERR, er);
                     response.redirect(WebServer.HOME_URL);
                     halt();
