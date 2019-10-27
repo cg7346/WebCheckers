@@ -8,10 +8,9 @@ import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+
+import static spark.Spark.halt;
 
 /**
  * The UI controller to GET the Game page
@@ -35,6 +34,8 @@ public class GetGameRoute implements Route {
     static final Message GAME_OVER_ATTR_MSG = Message.info("The game is over"); /* Get the game over message */
     static final String VIEW_NAME = "game.ftl";
 
+    static final String USER_PARAM = "opponent";
+
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
     private final Gson gson;
@@ -55,8 +56,10 @@ public class GetGameRoute implements Route {
                         GameManager gameManager, Gson gson)
     {
         // validation
+
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
-        this.playerLobby = playerLobby;
+
+        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobbu must not be null");
         this.gameManager = gameManager;
 
         this.gson = gson;
@@ -68,18 +71,27 @@ public class GetGameRoute implements Route {
     @Override
     public String handle(Request request, Response response) {
         Session session = request.session();
-        Player currentUser = session.attribute("Player");
-
-        CheckersGame game = gameManager.getGame(currentUser);
+        Player currentPlayer = session.attribute("Player");
+        CheckersGame game = null;
+        //that means a player click on another one, get their name and make a game
+        if (!request.queryParams().isEmpty()){
+            String opponentName = request.queryParams().iterator().next();
+                Player chosenOpponent = playerLobby.findPlayer(opponentName);
+                if (playerLobby.isInGame(chosenOpponent)|| chosenOpponent == null ){
+                    //we will send an error
+                }
+                else{game = gameManager.makeGame(currentPlayer, chosenOpponent);}
+        //you are the person click on, find your game
+        }else{
+            game = gameManager.getGame(currentPlayer);
+        }
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
-        BoardView board = new BoardView(currentUser, game);
-
+        BoardView board = new BoardView(currentPlayer, game);
         Map<String, Object> vm = new HashMap<>();
         vm.put(TITLE_ATTR, TITLE_ATTR_MSG);
-        vm.put(CURRENT_USER_ATTR, currentUser);
+        vm.put(CURRENT_USER_ATTR, currentPlayer);
         vm.put("viewMode", viewMode.PLAY);
-
         final Map<String, Object> modeOptions = new HashMap<>(2);
         modeOptions.put("isGameOver", false);
         modeOptions.put(GAME_OVER_ATTR, GAME_OVER_ATTR_MSG);
@@ -89,8 +101,6 @@ public class GetGameRoute implements Route {
         vm.put(COLOR_ATTR, activeColor.RED);
         vm.put(BOARD_ATTR, board);
         vm.put(START_ATTR, START_ATTR_MSG);
-
-
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
 }

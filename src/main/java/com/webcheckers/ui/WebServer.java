@@ -171,8 +171,6 @@ public class WebServer {
     //Shows the Checkers game board
     get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager, gson));
 
-    //post to gam to srart gam
-    post(GAME_URL, new PostGameRoute(templateEngine, playerLobby,  gameManager));
     //
     LOG.config("WebServer is initialized.");
   }

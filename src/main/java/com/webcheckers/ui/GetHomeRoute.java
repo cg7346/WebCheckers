@@ -65,7 +65,7 @@ public class GetHomeRoute implements Route {
      */
     public GetHomeRoute(final TemplateEngine templateEngine, PlayerLobby playerLobby, GameManager gameManager) {
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
-        this.gameManager = gameManager;
+        this.gameManager = Objects.requireNonNull(gameManager, "gameManager is required");
         this.playerLobby = playerLobby;
         //
         LOG.config("GetHomeRoute is initialized.");
@@ -93,14 +93,6 @@ public class GetHomeRoute implements Route {
     vm.put(MESSAGE, WELCOME_MSG);
 
     final Session httpSession = request.session();
-      // TODO: remember to take out
-//    System.out.println(httpSession.attributes());
-//    if (httpSession.attribute(PLAYERLOBBY_KEY) == null) {
-//      httpSession.attribute(PLAYERLOBBY_KEY, new PlayerLobby(null));
-//      //PlayerLobby playerLobby = httpSession.attribute(PLAYERLOBBY_KEY);
-//    }
-//    PlayerLobby playerLobby = httpSession.attribute(PLAYERLOBBY_KEY);
-
       if (playerLobby != null) {
           Player currentPlayer = httpSession.attribute("Player");
           if (currentPlayer != null){

@@ -22,18 +22,19 @@
 
     <#if currentUser??>
         <h2>${playersOnline}</h2>
-        <form action="./game" method="POST">
+        <!--<form action="./game" method="POST"> -->
         <ol>
 
             <#list userList as user>
                 <#if user == current>
 <#--                    <button name = "name" type="submit" disabled="true" value=${user}>${user}</button>-->
                 <#else>
-                    <button name = "name" type="submit" value=${user}>${user}</button>
+                    <a href="/game?${user}">${user}</a>
+                    <!--<button name = "name" type="submit" value=<${user}>${user}</button> -->
                 </#if>
             </#list>
         </ol>
-        </form>
+        <!--</form>-->
     <#else>
         <h2>${playersOnline}</h2>
         <blockquote>
