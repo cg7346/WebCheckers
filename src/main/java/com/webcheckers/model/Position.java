@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import java.util.Objects;
+
 /**
  * Position of the piece
  * @author jil4009
@@ -8,19 +10,19 @@ package com.webcheckers.model;
 public class Position {
 
     private int row;
-    private  int col;
+    private  int cell;
 
     /**
      * constructor for position
      * @param row
-     * @param col
+     * @param cell
      */
-    public Position(int row, int col){
+    public Position(int row, int cell){
         if(row <= 7 && row >= 0){
             this.row = row;
         }
-        if(col <= 7 && col >= 0) {
-            this.col = col;
+        if(cell <= 7 && cell >= 0) {
+            this.cell = cell;
         }
     }
 
@@ -33,10 +35,36 @@ public class Position {
     }
 
     /**
-     * getter for col
+     * getter for cell
      * @return
      */
     public int getCol(){
-        return this.col;
+        return this.cell;
     }
+
+    /**
+     * equals method for postion
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Position) {
+            return this.row == ((Position) obj).row && this.cell == ((Position) obj).cell;
+        }
+        return false;
+    }
+
+    /**
+     * hashcode for position
+     * @return
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(row, cell);
+    }
+
+
+
+
 }
