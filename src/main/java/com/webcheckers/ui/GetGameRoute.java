@@ -23,6 +23,7 @@ public class GetGameRoute implements Route {
 
     static final String TITLE_ATTR = "title";
     static final String TITLE_ATTR_MSG = "Game Title";
+    static final String GAME_ID_ATTR = "gameID";
     static final String CURRENT_USER_ATTR = "currentUser";
     static final String START_ATTR = "message";
     static final Message START_ATTR_MSG = Message.info("A game has been started");
@@ -86,10 +87,12 @@ public class GetGameRoute implements Route {
                 else{game = gameManager.makeGame(currentPlayer, chosenOpponent);}
         //you are the person click on, find your game
         }else{ game = gameManager.getGame(currentPlayer);}
+        int gameID = game.getGameID();
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
         BoardView board = new BoardView(currentPlayer, game);
         vm.put(TITLE_ATTR, TITLE_ATTR_MSG);
+        vm.put(GAME_ID_ATTR, gameID);
         vm.put(CURRENT_USER_ATTR, currentPlayer);
         vm.put("viewMode", viewMode.PLAY);
         final Map<String, Object> modeOptions = new HashMap<>(2);

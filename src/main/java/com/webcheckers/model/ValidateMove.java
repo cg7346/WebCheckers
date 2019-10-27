@@ -1,7 +1,5 @@
 package com.webcheckers.model;
 
-import com.sun.tools.doclint.Checker;
-
 /**
  * this class validates various moves
  * @author jil4009
