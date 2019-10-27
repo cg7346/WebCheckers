@@ -64,9 +64,17 @@ public class WebServer {
    */
   public static final String SIGNOUT_URL = "/signout";
   /**
-   * The URL patter to request the game page
+   * The URL pattern to request the game page
    */
   public static final String GAME_URL = "/game";
+  /**
+   * the URL pattern to check if it is player's turn
+   */
+  public static final String CHECKTURN_URL = "/checkTurn";
+  /**
+   * the URL pattern to check if it is player's turn
+   */
+  public static final String VALIDATEMOVE_URL = "/validateMove";
 
 
   //
