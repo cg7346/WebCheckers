@@ -120,8 +120,6 @@ public class GetHomeRoute implements Route {
     //
     private ModelAndView playerActive(Map<String, Object> vm, Request request) {
         vm.put(PLAYERS_ON, PLAYERS_ONLINE);
-        //final Session session = request.session();
-        //final PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
         Integer playerCount = playerLobby.getPlayers().size();
         if (playerCount == 0) {
             vm.put(PLAYERS_COUNT, NO_PLAYERS);
@@ -136,14 +134,9 @@ public class GetHomeRoute implements Route {
     }
 
     public ModelAndView currentUser(Map<String, Object> vm, Request request) {
-//    private ModelAndView currentUser(List<String> userList, Map<String, Object> vm, final Player player) {
         final Session session = request.session();
-        //final PlayerLobby playerLobby = session.attribute(GetHomeRoute.PLAYERLOBBY_KEY);
         List<String> userList = playerLobby.getUsernames();
         Player player = session.attribute("Player");
-
-        //vm.put(WELCOME_ATTR, WELCOME_ATTR_MSG);
-        //vm.put(MESSAGE, WELCOME_MSG);
         vm.put(CURRENT_USER, player);
         vm.put(PLAYERS_ON, PLAYERS_ONLINE);
         vm.put(PostSignInRoute.CURRENT, player.getName());
