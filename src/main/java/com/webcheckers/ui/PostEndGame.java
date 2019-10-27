@@ -18,7 +18,7 @@ import java.util.Objects;
  *
  * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella</a>
  */
-public class PostResignGame implements Route {
+public class PostEndGame implements Route {
 
     //
     // Constants
@@ -45,7 +45,7 @@ public class PostResignGame implements Route {
      * @param templateEngine template engine to use for rendering HTML page
      * @throws NoSuchElementException when the {@code Player} or {@code templateEngine} parameter is null
      */
-    public PostResignGame(TemplateEngine templateEngine, PlayerLobby playerLobby) {
+    public PostEndGame(TemplateEngine templateEngine, PlayerLobby playerLobby) {
         // validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
 
