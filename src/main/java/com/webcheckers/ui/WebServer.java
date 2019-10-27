@@ -179,6 +179,9 @@ public class WebServer {
     //Shows the Checkers game board
     get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager, gson));
 
+    //validates the move for current player
+    post(VALIDATEMOVE_URL, new PostValidateMove(playerLobby, gameManager));
+
     //
     LOG.config("WebServer is initialized.");
   }
