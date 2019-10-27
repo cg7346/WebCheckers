@@ -24,9 +24,23 @@ public class ValidateMove {
     }
 
     public boolean validateMove(){
-        if(game.getSpace(endMove.getCol(), endMove.getRow()) == 'O'){
-            return true;
+        char endSpace = game.getSpace(endMove.getCol(), endMove.getRow());
+        if(endSpace != 'O'){
+            return false;
         }
+        int rowDifference = Math.abs(endMove.getRow() - startMove.getRow());
+        int cellDifference = Math.abs(endMove.getCol() - startMove.getCol());
+
+        if(rowDifference > 2 || rowDifference < 1){ //if the move was more than less than one row or greater than 1 then its false
+            return false;
+        }
+
+        if(cellDifference == 1){ //moved over once
+            if(endSpace == 'O'){
+                return true;
+            }
+        }
+
         return false;
     }
 
