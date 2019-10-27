@@ -6,6 +6,7 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.ValidateMove;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -31,7 +32,13 @@ public class PostValidateMove implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String moveString = request.queryParams("actionData");
+        String gameIdString = request.queryParams("gameID");
+
         Move move = gson.fromJson(moveString, Move.class);
+        Player currentPlayer = playerLobby.getPlayer();
+        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
+        boolean result = new ValidateMove(game, move).validateMove();
+        System.out.println(result);
         //System.out.println(request.queryParams("actionData"));
 
         return null;
