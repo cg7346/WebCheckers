@@ -33,7 +33,7 @@ public class ValidateMove {
             return false;
         }
 
-        if(cellDifference == 1){ //moved over once
+        if(cellDifference == 1){ //moved over once on col
             if(endSpace == 'O'){
                 return true;
             }
