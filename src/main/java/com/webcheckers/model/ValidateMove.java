@@ -23,6 +23,13 @@ public class ValidateMove {
         this.endMove = move.getEnd();
     }
 
+    public boolean validateMove(){
+        if(game.getSpace(endMove.getCol(), endMove.getRow()) == 'O'){
+            return true;
+        }
+        return false;
+    }
+
 
 
 }
