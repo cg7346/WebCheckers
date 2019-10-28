@@ -64,7 +64,7 @@ public class GameManager {
      * @param player the player to look for
      * @return true if in, false if not
      */
-    public boolean isPlayerInGame(CheckersGame game, Player player){
+    public synchronized boolean isPlayerInGame(CheckersGame game, Player player) {
         return player.equals(game.getRedPlayer()) || player.equals(game.getWhitePlayer());
     }
 }

@@ -1,7 +1,5 @@
 package com.webcheckers.model;
 
-import java.util.ArrayList;
-
 /**
  * Class to represent a Checkers game
  * Holds the logic for an average game of checkers
@@ -24,28 +22,13 @@ public class CheckersGame {
     public final static int ROWS = 8;
     public final static int COLS = 8;
 
-    /**
-     * Represent a space on the board that will mark
-     * if it is empty (black or white) or if it has
-     * a chip on it (red or white)
-     */
-    public enum Space {
-        RED_PLAYER('R'),
-        WHITE_PLAYER('W'),
-        EMPTY_BLACK('O'),
-        EMPTY_WHITE('X');
+    //Just some in class testing
+    public static void main(String[] args) {
+        CheckersGame testGame = new CheckersGame(new Player("1"),
+                new Player("2"), 0);
+//        System.out.println(testGame.toString());
+//        TODO: remember to delete this
 
-        //Add stuff for king later
-
-        private char symbol;
-
-        private Space(char symbol) {
-            this.symbol = symbol;
-        }
-
-        public char getSymbol() {
-            return symbol;
-        }
     }
 
     //2D array that represents a checkers board
@@ -197,16 +180,34 @@ public class CheckersGame {
     }
 
 
+    /**
+     * Represent a space on the board that will mark
+     * if it is empty (black or white) or if it has
+     * a chip on it (red or white)
+     */
+    public enum Space {
+        RED_PLAYER('R'),
+        WHITE_PLAYER('W'),
+        EMPTY_BLACK('O'),
+        EMPTY_WHITE('X');
 
-    //Just some in class testing
-    public static void main(String[] args){
-        CheckersGame testGame = new CheckersGame(new Player("1"),
-                new Player("2"), 0);
-//        System.out.println(testGame.toString());
-//        TODO: remember to delete this
+        //Add stuff for king later
 
+        private char symbol;
 
+        Space(char symbol) {
+            this.symbol = symbol;
+        }
+
+        public char getSymbol() {
+            return symbol;
+        }
     }
 
+//    TODO: need a record of is the game is won or not
+
+//    TODO: need a boolean method if someone has won or not (change status)
+
+//    TODO: is won method
 
 }

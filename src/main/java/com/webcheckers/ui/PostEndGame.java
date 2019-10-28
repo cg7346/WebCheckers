@@ -1,11 +1,10 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.appl.GameManager;
 import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import spark.TemplateEngine;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,30 +31,32 @@ public class PostEndGame implements Route {
     //
     // Static Methods
     //
-    private final TemplateEngine templateEngine;
+//    private final TemplateEngine templateEngine;
 
     //
     // Attributes
     //
-    private final PlayerLobby playerLobby;
-
-    /**
-     * The constructor for the {@code POST /resignGame} route handler.
-     *
-     * @param templateEngine template engine to use for rendering HTML page
-     * @throws NoSuchElementException when the {@code Player} or {@code templateEngine} parameter is null
-     */
-    public PostEndGame(TemplateEngine templateEngine, PlayerLobby playerLobby) {
-        // validation
-        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
-        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
-
-    }
+//    private final PlayerLobby playerLobby;
+    private final GameManager gameManager;
 
 
     //
     // Constructor
     //
+    /**
+     * The constructor for the {@code POST /resignGame} route handler.
+     *
+     * @param gameManager used to end a game of checkers
+     * @throws NoSuchElementException when the {@code Player} or {@code templateEngine} parameter is null
+     */
+    public PostEndGame(GameManager gameManager) {
+        // validation
+        Objects.requireNonNull(gameManager, "gameManger must not be null");
+//        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+//        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+
+        this.gameManager = gameManager;
+    }
 
     /**
      * A String representing how the game ended. Such as:
@@ -73,8 +74,8 @@ public class PostEndGame implements Route {
     /**
      * {@inheritDoc}
      *
-     * @param request
-     * @param response
+     * @param request the HTTP request
+     * @param response the HTTP response
      * @return templateEngine to render a view or null
      * @throws java.util.NoSuchElementException when an invalid username is returned
      */
