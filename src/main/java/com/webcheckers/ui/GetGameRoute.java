@@ -33,9 +33,10 @@ public class GetGameRoute implements Route {
     static final String GAME_OVER_ATTR = "gameOverMessage";
     static final Message GAME_OVER_ATTR_MSG = Message.info("The game is over"); /* Get the game over message */
     static final String VIEW_NAME = "game.ftl";
-    private static final String PLAYER_IN_GAME= "Chosen player is already in a game.";
+    static final String PLAYER_IN_GAME= "Chosen player is already in a game.";
     static final String MESSAGE_ATTR = "message";
     static final String MESSAGE_ERR = "message error";
+    static final String OPP_USER = "opp_user";
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
     private final Gson gson;
@@ -72,7 +73,7 @@ public class GetGameRoute implements Route {
         Map<String, Object> vm = new HashMap<>();
         //that means a player click on another one, get their name and make a game
         if (!request.queryParams().isEmpty()){
-            String opponentName = request.queryParams().iterator().next();
+            String opponentName = request.queryParams(OPP_USER);
                 Player chosenOpponent = playerLobby.findPlayer(opponentName);
                 if (playerLobby.isInGame(chosenOpponent)|| chosenOpponent == null ){
                     //we will send an error
