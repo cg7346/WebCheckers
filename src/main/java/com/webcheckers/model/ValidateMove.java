@@ -38,6 +38,9 @@ public class ValidateMove {
                 return true;
             }
         }
+        //if cell difference was 2 than it would be a jump
+        //check if jump is available and if it is this needs to be true, if jump is available a simple move should
+        //be false so change if cell difference is 1 to include if jump available.
 
         return false;
     }
