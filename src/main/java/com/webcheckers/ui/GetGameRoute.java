@@ -109,8 +109,8 @@ public class GetGameRoute implements Route {
      * @param vm
      * @param message
      * @param currentPlayer
-     * @return
-     */
+     * @return new Model and View
+     * */
     private ModelAndView error(final Map<String, Object> vm, final Message message, final Player currentPlayer) {
         vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
         vm.put(GetHomeRoute.CURRENT_USER, currentPlayer);
