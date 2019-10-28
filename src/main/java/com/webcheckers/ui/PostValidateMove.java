@@ -7,6 +7,7 @@ import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
 import com.webcheckers.model.ValidateMove;
+import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -39,8 +40,17 @@ public class PostValidateMove implements Route {
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
         boolean result = new ValidateMove(game, move).validateMove();
         System.out.println(result);
+
+        Message responseMessage = null;
+        if(result){
+            responseMessage = Message.info("Valid Move!");
+
+        }else {
+            responseMessage = Message.error("Invalid MMMOOOOVEEE!");
+        }
+        response.body(gson.toJson(responseMessage));
         //System.out.println(request.queryParams("actionData"));
 
-        return null;
+        return gson.toJson(responseMessage);
     }
 }
