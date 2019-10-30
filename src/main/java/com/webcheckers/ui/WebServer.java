@@ -64,7 +64,7 @@ public class WebServer {
    */
   public static final String SIGNOUT_URL = "/signout";
   /**
-   * The URL patter to request the game page
+   * The URL pattern to request the game page
    */
   public static final String GAME_URL = "/game";
 
