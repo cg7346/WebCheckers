@@ -1,16 +1,11 @@
 package com.webcheckers.ui;
-import com.webcheckers.appl.GameManager;
-import static org.junit.jupiter.api.Assertions.*;
 
+import com.webcheckers.model.BoardView;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.Iterator;
 
 /**
  * tests the board view

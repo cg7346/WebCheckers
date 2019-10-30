@@ -38,11 +38,10 @@ public class PostValidateMove implements Route {
         Move move = gson.fromJson(moveString, Move.class);
         Player currentPlayer = playerLobby.getPlayer();
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
-        boolean result = new ValidateMove(game, move).validateMove();
-        System.out.println(result);
-
+        game.lookForMoves();
+        boolean isPossibleMove = game.isInMoves(move);
         Message responseMessage = null;
-        if(result){
+        if(isPossibleMove){
             responseMessage = Message.info("Valid Move!");
 
         }else {

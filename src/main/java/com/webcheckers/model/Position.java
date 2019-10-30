@@ -14,8 +14,8 @@ public class Position {
 
     /**
      * constructor for position
-     * @param row
-     * @param cell
+     * @param row Board row position is in
+     * @param cell Board col position is in
      */
     public Position(int row, int cell){
         if(row > 7 || row < 0 || cell > 7 || cell < 0) {
@@ -28,7 +28,7 @@ public class Position {
 
     /**
      * getter for row
-     * @return
+     * @return int row position
      */
     public int getRow(){
         return this.row;
@@ -43,21 +43,22 @@ public class Position {
     }
 
     /**
-     * equals method for postion
-     * @param obj
-     * @return
+     * equals method for position
+     * @param obj Object to compare
+     * @return true if equals, false if not
      */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Position) {
-            return this.row == ((Position) obj).row && this.cell == ((Position) obj).cell;
+            Position otherPos = (Position)obj;
+            return this.row == otherPos.row && this.cell == otherPos.cell;
         }
         return false;
     }
 
     /**
      * hashcode for position
-     * @return
+     * @return int hashcode
      */
     @Override
     public int hashCode() {

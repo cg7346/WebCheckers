@@ -35,4 +35,18 @@ public class Move {
     public Position getEnd(){
         return this.end;
     }
+
+    /**
+     * Moves are equal if positions are equal
+     * @param obj the Object to compare
+     * @return true if same, false if not
+     */
+    @Override
+    public boolean equals(Object obj){
+        if (obj == this) return true;
+        if (!(obj instanceof Move)) return false;
+        final Move otherMove = (Move) obj;
+        return otherMove.start.equals(this.start) && otherMove.end.equals(this.end);
+    }
+
 }
