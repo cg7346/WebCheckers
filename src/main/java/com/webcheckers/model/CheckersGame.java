@@ -30,7 +30,7 @@ public class CheckersGame {
     private Space[][] board;
 
     //Whose turn is it? Red Player is R, White Player is W
-    private char turn;
+    private Player activePlayer;
 
 
     /**
@@ -80,8 +80,8 @@ public class CheckersGame {
 
             }
         }
-        //red player
-        turn = 0;
+        //redPlayer starts the game
+        activePlayer = redPlayer;
     }
 
     /**
@@ -145,29 +145,14 @@ public class CheckersGame {
     public Player getWhitePlayer(){return whitePlayer;}
     public int getGameID(){return gameID;}
 
-
     /**
-     * Checks to see if a space in a certain row can move
-     * @param col column to check
-     * @param row row to check
-     * @return true if can move, false if not
+     * Returns who the activePlayer is (whose turn)
+     * @return either RedPlayer or WhitePlayer
      */
-//    public boolean canPieceMove(int row, int col){
-//        Space space = getSpace(row, col);
-//        return space.canPieceMove();
-//    }
-
-    /**
-     * Either enables or disables ability for piece
-     * to be moved
-     * @param col column piece lives in
-     * @param row row piece lives in
-     * @param choice true to enable, false to disable
-     */
-    public void enableDisableMove(int row, int col, boolean choice){
-        Space space = getSpace(row, col);
-        space.disableEnableMove(choice);
+    public Player getActivePlayer(){
+        return activePlayer;
     }
+
 
     public boolean isValid(int row, int col){
         Space space = getSpace(row, col);
@@ -252,6 +237,7 @@ public class CheckersGame {
         }
     }
 
+    //TODO: Add King Moves
     public ArrayList<Move> checkWhiteKingMoves(int row, int col) {
         return null;
     }

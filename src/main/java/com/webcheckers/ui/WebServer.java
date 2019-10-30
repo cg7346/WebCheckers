@@ -75,6 +75,10 @@ public class WebServer {
    * the URL pattern to check if it is player's turn
    */
   public static final String VALIDATEMOVE_URL = "/validateMove";
+  /**
+   * the URL pattern to to submit someone's turn
+   */
+  public static final String SUBMITTURN_URL = "/submitTurn";
 
 
   //
@@ -181,6 +185,9 @@ public class WebServer {
 
     //validates the move for current player
     post(VALIDATEMOVE_URL, new PostValidateMove(playerLobby, gameManager, gson));
+
+    //submits the turn of the current player
+    post(SUBMITTURN_URL, new PostSubmitTurn(playerLobby, gameManager));
 
     //
     LOG.config("WebServer is initialized.");
