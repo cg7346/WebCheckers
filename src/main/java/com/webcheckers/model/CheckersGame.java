@@ -142,15 +142,21 @@ public class CheckersGame {
         return board;
     }
 
-    private void removePiece(int row, int col){
+    private Piece removePieceToMove(int row, int col){
         Space space = getSpace(row, col);
+        Piece piece = null;
         if (space.hasPiece()){
+            piece = space.getPiece();
             space.removePiece();
         }
+        return piece;
     }
 
-    private void addPiece(int row, int col){
-
+    private void addPiece(int row, int col, Piece piece){
+        Space space = getSpace(row, col);
+        if (!space.hasPiece()){
+            space.addPiece(piece);
+        }
     }
 
     /**
@@ -304,9 +310,10 @@ public class CheckersGame {
 
     public void makeMove(Move move){
         Position start = move.getStart();
-        removePiece(start.getRow(), start.getCol());
+        Piece piece = removePieceToMove(start.getRow(), start.getCol());
         Position end = move.getEnd();
-        addPiece(end.getRow(), end.getCol());
-
+        if (piece != null){
+            addPiece(end.getRow(), end.getCol(), piece);
+        }
     }
 }

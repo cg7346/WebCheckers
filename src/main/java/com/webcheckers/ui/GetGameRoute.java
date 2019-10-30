@@ -89,7 +89,9 @@ public class GetGameRoute implements Route {
         vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
         vm.put(RED_PLAYER_ATTR, redPlayer);
         vm.put(WHITE_PLAYER_ATTR, whitePlayer);
-        vm.put(COLOR_ATTR, activeColor.RED);
+        activeColor color = (game.getActivePlayer().equals(redPlayer))
+                ? activeColor.RED : activeColor.WHITE;
+        vm.put(COLOR_ATTR, color);
         vm.put(BOARD_ATTR, board);
         vm.put(START_ATTR, START_ATTR_MSG);
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
