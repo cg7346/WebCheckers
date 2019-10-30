@@ -1,7 +1,5 @@
 package com.webcheckers.model;
 
-import com.webcheckers.ui.PostSubmitTurn;
-
 import java.util.ArrayList;
 
 /**
@@ -18,9 +16,12 @@ public class CheckersGame {
     private Player redPlayer;
     //(the person clicked on by the other player)
     private Player whitePlayer;
-    //possible moves to be made by other people
+
+    //possible moves to be made the current player
+    //according to their apparent location on BoardView
     private ArrayList<Move> singleMoves;
 
+    //unique identifier for the game
     private int gameID;
 
     //Dimensions for the board
@@ -33,6 +34,7 @@ public class CheckersGame {
     //Whose turn is it?
     private Player activePlayer;
 
+    //The last move made in the game
     private Move lastMove;
 
 
@@ -51,7 +53,7 @@ public class CheckersGame {
         this.gameID = gameID;
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
-        this.singleMoves = new ArrayList<Move>();
+        this.singleMoves = new ArrayList<>();
         this.lastMove = null;
 
         board = new Space[ROWS][COLS];
@@ -92,16 +94,11 @@ public class CheckersGame {
      * Returns the symbol in a row and column
      * on a board
      *
-     * R - Red Player
-     * W - White Player
-     * X - White
-     * O - Black
-     *
      * @param col column of space
      * @param row row of space
      * @return char symbol that represents space
      */
-    public Space getSpace(int row, int col){
+    private Space getSpace(int row, int col){
         return board[row][col];
     }
 
@@ -122,7 +119,7 @@ public class CheckersGame {
      * can see their pieces near them
      *
      * So instead of white at top it's red
-     * @return
+     * @return the board, but reverse
      */
     public Space[][] inverseBoard(){
         Space[][] inverseBoard = new Space[ROWS][COLS];
@@ -142,6 +139,12 @@ public class CheckersGame {
         return board;
     }
 
+    /**
+     * Removes a piece from the board
+     * @param row row where piece lived
+     * @param col col where piece lived
+     * @return the piece that used to live in that location
+     */
     private Piece removePieceToMove(int row, int col){
         Space space = getSpace(row, col);
         Piece piece = null;
@@ -152,9 +155,15 @@ public class CheckersGame {
         return piece;
     }
 
+    /**
+     * Add a piece to the a new space
+     * @param row row to put piece
+     * @param col col to put piece
+     * @param piece the piece to put in the square
+     */
     private void addPiece(int row, int col, Piece piece){
         Space space = getSpace(row, col);
-        if (!space.hasPiece()){
+        if (!space.hasPiece() && space.isValid()){
             space.addPiece(piece);
         }
     }
@@ -184,11 +193,9 @@ public class CheckersGame {
     }
 
 
-    public boolean isValid(int row, int col){
-        Space space = getSpace(row, col);
-        return space.isValid();
-    }
-
+    /**
+     * Looks for moves possible in the game
+     */
     public void lookForMoves() {
         for (int row = 0; row < ROWS; row++) {
             System.out.println();
@@ -198,10 +205,12 @@ public class CheckersGame {
                     Piece p = space.getPiece();
                     //piece if white and single
                     if (!p.isRedPiece() && !p.isPieceKing()) {
+                        System.out.println("Checking White------");
                         checkWhiteSingleMoves(row, col);
                     }
                     //piece red and single
                     if (p.isRedPiece() && !p.isPieceKing()) {
+                        System.out.println("Checking Red--------");
                         checkRedSingleMoves(row, col);
                     }
                     //piece white and king
@@ -229,6 +238,7 @@ public class CheckersGame {
             if (getSpace(nextRow, col+1).isValid()) {
                 Move moveToAdd = new Move(new Position(row, col),
                         new Position(nextRow, col + 1));
+                System.out.println(moveToAdd);
                 singleMoves.add(moveToAdd);
             }
         }
@@ -236,6 +246,7 @@ public class CheckersGame {
             if (getSpace(nextRow, col-1).isValid()) {
                 Move moveToAdd = new Move(new Position(row, col),
                         new Position(nextRow, col - 1));
+                System.out.println(moveToAdd);
                 singleMoves.add(moveToAdd);
             }
         }
@@ -283,6 +294,7 @@ public class CheckersGame {
      * @return true if in, false if not
      */
     public boolean isInMoves(Move move){
+        move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
         for (Move possibleMove : singleMoves){
             if (possibleMove.equals(move)){
                 return true;
@@ -308,12 +320,44 @@ public class CheckersGame {
         return lastMove;
     }
 
+    /**
+     * Makes a move and updates the board according
+     * @param move the move to make
+     */
     public void makeMove(Move move){
+        move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
         Position start = move.getStart();
         Piece piece = removePieceToMove(start.getRow(), start.getCol());
         Position end = move.getEnd();
         if (piece != null){
             addPiece(end.getRow(), end.getCol(), piece);
         }
+    }
+
+    /**
+     * Converts a move made by the whitePlayer on
+     * the board view to something we can check
+     * with the official CheckersGame Board
+     * @param move the Move to convert
+     * @return a move flipped of the original
+     */
+    public Move moveConverter(Move move){
+        System.out.println("COVERTING MOVE--------");
+        System.out.println("ORIGINAL: " + move);
+        Position start = move.getStart();
+        Position end = move.getEnd();
+        if (!activePlayer.equals(redPlayer)) {
+            Position convertedStart = new Position(
+                    ROWS - start.getRow() - 1,
+                    COLS - start.getCol());
+            Position convertedEnd = new Position(
+                    ROWS - end.getRow() - 1,
+                    COLS - end.getCol());
+            Move newMove = new Move(convertedStart, convertedEnd);
+            System.out.println("CONVERTED: " + newMove);
+            System.out.println();
+            return new Move(convertedStart, convertedEnd);
+        }
+        return move;
     }
 }

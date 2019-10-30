@@ -10,6 +10,7 @@ import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.Session;
 
 import java.util.Objects;
 
@@ -32,14 +33,18 @@ public class PostCheckTurn implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
+        Session session = request.session();
+        Player currentPlayer = session.attribute("Player");
         String gameIdString = request.queryParams("gameID");
-        Player currentPlayer = playerLobby.getPlayer();
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
-
-        if (game.getActivePlayer().equals(currentPlayer)) {
-            return gson.toJson(Message.info("true"));
-        } else {
-            return gson.toJson(Message.info("false"));
+        //sometimes having the game undefined breaks the builder
+        if (game != null) {
+            if (game.getActivePlayer().equals(currentPlayer)) {
+                return gson.toJson(Message.info("true"));
+            } else {
+                return gson.toJson(Message.info("false"));
+            }
         }
+        return null;
     }
 }
