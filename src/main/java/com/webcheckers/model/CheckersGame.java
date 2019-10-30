@@ -1,6 +1,7 @@
 package com.webcheckers.model;
 
-import java.awt.*;
+import com.webcheckers.ui.PostSubmitTurn;
+
 import java.util.ArrayList;
 
 /**
@@ -17,7 +18,7 @@ public class CheckersGame {
     private Player redPlayer;
     //(the person clicked on by the other player)
     private Player whitePlayer;
-
+    //possible moves to be made by other people
     private ArrayList<Move> singleMoves;
 
     private int gameID;
@@ -29,8 +30,10 @@ public class CheckersGame {
     //2D array that represents a checkers board
     private Space[][] board;
 
-    //Whose turn is it? Red Player is R, White Player is W
+    //Whose turn is it?
     private Player activePlayer;
+
+    private Move lastMove;
 
 
     /**
@@ -49,6 +52,7 @@ public class CheckersGame {
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.singleMoves = new ArrayList<Move>();
+        this.lastMove = null;
 
         board = new Space[ROWS][COLS];
         for (int row=0; row < ROWS; row++){
@@ -138,6 +142,17 @@ public class CheckersGame {
         return board;
     }
 
+    private void removePiece(int row, int col){
+        Space space = getSpace(row, col);
+        if (space.hasPiece()){
+            space.removePiece();
+        }
+    }
+
+    private void addPiece(int row, int col){
+
+    }
+
     /**
      * These are getters
      */
@@ -151,6 +166,15 @@ public class CheckersGame {
      */
     public Player getActivePlayer(){
         return activePlayer;
+    }
+
+    /**
+     * Swaps the players for their next turn
+     * If player is currently red -> white,
+     * otherwise -> red
+     */
+    public void swapPlayers(){
+        activePlayer = activePlayer.equals(redPlayer) ? whitePlayer : redPlayer;
     }
 
 
@@ -246,6 +270,12 @@ public class CheckersGame {
         return null;
     }
 
+    /**
+     * Looks to see if a move is in the list
+     * of possible moves for the game
+     * @param move Move to see if is possible
+     * @return true if in, false if not
+     */
     public boolean isInMoves(Move move){
         for (Move possibleMove : singleMoves){
             if (possibleMove.equals(move)){
@@ -253,5 +283,30 @@ public class CheckersGame {
             }
         }
         return false;
+    }
+
+    /**
+     * Keeps track of the last move
+     * @param move the Move to keep track of
+     */
+    public void keepLastMove(Move move){
+        this.lastMove = move;
+    }
+
+    /**
+     * Returns the last move made by a player in
+     * a game
+     * @return a Move that shows the last move made
+     */
+    public Move getLastMove(){
+        return lastMove;
+    }
+
+    public void makeMove(Move move){
+        Position start = move.getStart();
+        removePiece(start.getRow(), start.getCol());
+        Position end = move.getEnd();
+        addPiece(end.getRow(), end.getCol());
+
     }
 }

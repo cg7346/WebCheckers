@@ -45,7 +45,6 @@ public class GetGameRoute implements Route {
     enum viewMode {PLAY, SPECTATOR,REPLAY}
     enum activeColor {RED, WHITE}
 
-    static CheckersGame game;
 
     private final TemplateEngine templateEngine;
 
@@ -71,23 +70,11 @@ public class GetGameRoute implements Route {
     public String handle(Request request, Response response) {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
-        CheckersGame game = null;
+        CheckersGame game = gameManager.getGame(currentPlayer);
+        if (game == null){
+            game = handleNewGame(request, response, currentPlayer);
+        }
         Map<String, Object> vm = new HashMap<>();
-        //that means a player click on another one, get their name and make a game
-        if (!request.queryParams().isEmpty()){
-            String opponentName = request.queryParams(OPP_USER);
-                Player chosenOpponent = playerLobby.findPlayer(opponentName);
-                if (playerLobby.isInGame(chosenOpponent)|| chosenOpponent == null ){
-                    //we will send an error
-                    Message er = Message.error(PLAYER_IN_GAME);
-                    session.attribute(MESSAGE_ERR, er);
-                    response.redirect(WebServer.HOME_URL);
-                    halt();
-                    return null;
-                }
-                else{game = gameManager.makeGame(currentPlayer, chosenOpponent);}
-        //you are the person click on, find your game
-        }else{ game = gameManager.getGame(currentPlayer);}
         int gameID = game.getGameID();
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
@@ -108,20 +95,24 @@ public class GetGameRoute implements Route {
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
 
-    /**
-     * this handles errors in the model view
-     * @param vm
-     * @param message
-     * @param currentPlayer
-     * @return
-     */
-    private ModelAndView error(final Map<String, Object> vm, final Message message, final Player currentPlayer) {
-        vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
-        vm.put(GetHomeRoute.CURRENT_USER, currentPlayer);
-        vm.put(PostSignInRoute.CURRENT, currentPlayer.getName());
-        vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
-        vm.put(GetHomeRoute.USERS_LIST, playerLobby.getUsernames());
-        vm.put(MESSAGE_ATTR, message);
-        return new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
+    private CheckersGame handleNewGame(Request request, Response response, Player currentPlayer){
+        CheckersGame game = null;
+        Session session = request.session();
+        if (!request.queryParams().isEmpty()){
+            String opponentName = request.queryParams(OPP_USER);
+            Player chosenOpponent = playerLobby.findPlayer(opponentName);
+            if (playerLobby.isInGame(chosenOpponent)|| chosenOpponent == null ){
+                //we will send an error
+                Message er = Message.error(PLAYER_IN_GAME);
+                session.attribute(MESSAGE_ERR, er);
+                response.redirect(WebServer.HOME_URL);
+                halt();
+                return null;
+            }
+            else{
+                game = gameManager.makeGame(currentPlayer, chosenOpponent);
+            }}
+        return game;
     }
 }
+
