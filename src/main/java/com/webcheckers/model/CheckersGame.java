@@ -232,11 +232,11 @@ public class CheckersGame {
                     }
                     //piece white and king
                     if (!p.isRedPiece() && p.isPieceKing()) {
-                        checkWhiteKingMoves(row, col);
+                        checkKingMoves(row, col, singleWhiteMoves);
                     }
                     //piece red and king
                     if (p.isRedPiece() && p.isPieceKing()) {
-                        checkRedKingMoves(row, col);
+                        checkKingMoves(row, col, singleRedMoves);
                     }
                 }
                 }
@@ -279,7 +279,7 @@ public class CheckersGame {
     public void checkWhiteSingleMoves(int row, int col) {
         //check next row closer to top
         int nextRow = row + 1;
-        if (nextRow >= 0) {
+        if (nextRow < 8) {
                 singleWhiteMoves.addAll(checkColumns(row, col, nextRow));
             }
         }
@@ -298,8 +298,15 @@ public class CheckersGame {
     }
 
     //TODO: Add King Moves
-    public ArrayList<Move> checkWhiteKingMoves(int row, int col) {
-        return null;
+    public void checkKingMoves(int row, int col, ArrayList<Move> moveArray) {
+        int rowUp = row -1;
+        if(rowUp >= 0){
+            moveArray.addAll(checkColumns(row, col, rowUp));
+        }
+        int rowDown = row + 1;
+        if(row < 8){
+            moveArray.addAll(checkColumns(row, col, rowDown));
+        }
     }
 
     public ArrayList<Move> checkRedKingMoves(int row, int col) {
