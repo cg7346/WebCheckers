@@ -19,7 +19,8 @@ public class CheckersGame {
 
     //possible moves to be made the current player
     //according to their apparent location on BoardView
-    private ArrayList<Move> singleMoves;
+    private ArrayList<Move> singleRedMoves;
+    private ArrayList<Move> singleWhiteMoves;
 
     //unique identifier for the game
     private int gameID;
@@ -53,7 +54,8 @@ public class CheckersGame {
         this.gameID = gameID;
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
-        this.singleMoves = new ArrayList<>();
+        this.singleRedMoves = new ArrayList<>();
+        this.singleWhiteMoves = new ArrayList<>();
         this.currentTurn = new Turn();
 
         board = new Space[ROWS][COLS];
@@ -249,13 +251,14 @@ public class CheckersGame {
      * @param row row to look in
      * @param col column to left and right of
      */
-    public void checkColumns(int row, int col, int nextRow) {
+    public ArrayList<Move> checkColumns(int row, int col, int nextRow) {
+        ArrayList<Move> moves = new ArrayList<>();
         if (col + 1 < COLS) {
             if (getSpace(nextRow, col+1).isValid()) {
                 Move moveToAdd = new Move(new Position(row, col),
                         new Position(nextRow, col + 1));
                 System.out.println(moveToAdd);
-                singleMoves.add(moveToAdd);
+                moves.add(moveToAdd);
             }
         }
         if (col - 1 >= 0) {
@@ -263,9 +266,10 @@ public class CheckersGame {
                 Move moveToAdd = new Move(new Position(row, col),
                         new Position(nextRow, col - 1));
                 System.out.println(moveToAdd);
-                singleMoves.add(moveToAdd);
+                moves.add(moveToAdd);
             }
         }
+        return moves;
     }
 
     /**
@@ -277,7 +281,7 @@ public class CheckersGame {
         //check next row closer to top
         int nextRow = row + 1;
         if (nextRow >= 0) {
-                checkColumns(row, col, nextRow);
+                singleWhiteMoves.addAll(checkColumns(row, col, nextRow));
             }
         }
 
@@ -290,7 +294,7 @@ public class CheckersGame {
         //check next row closer to top
         int nextRow = row - 1;
         if (nextRow >= 0) {
-            checkColumns(row, col, nextRow);
+            singleRedMoves.addAll(checkColumns(row, col, nextRow));
         }
     }
 
@@ -310,8 +314,10 @@ public class CheckersGame {
      * @return true if in, false if not
      */
     public boolean isInMoves(Move move){
-        move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
-        for (Move possibleMove : singleMoves){
+        boolean isRed = activePlayer.equals(redPlayer);
+        move = isRed ? move : moveConverter(move);
+        ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
+        for (Move possibleMove : moves){
             if (possibleMove.equals(move)){
                 return true;
             }
