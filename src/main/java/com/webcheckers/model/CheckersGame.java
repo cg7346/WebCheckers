@@ -1,5 +1,5 @@
 package com.webcheckers.model;
-
+import java.util.ArrayList;
 /**
  * Class to represent a Checkers game
  * Holds the logic for an average game of checkers

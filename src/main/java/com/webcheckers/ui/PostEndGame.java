@@ -1,6 +1,9 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
+import com.webcheckers.appl.GameManager;
+import com.webcheckers.model.BoardView;
+import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
@@ -9,9 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-
-import static com.webcheckers.ui.GetGameRoute.game;
-
 
 /**
  * The {@code POST /EndGame} route handler
@@ -48,6 +48,7 @@ public class PostEndGame implements Route {
     // Attributes
     //
     private final TemplateEngine templateEngine;
+    private final GameManager gameManager;
     private final Gson gson;
 
 
@@ -58,15 +59,18 @@ public class PostEndGame implements Route {
      * The constructor for the {@code POST /endGame} route handler.
      *
      * @param templateEngine
+     * @param gameManager
      * @param gson
      * @throws NoSuchElementException when the {@code Player} or {@code templateEngine} parameter is null
      */
-    public PostEndGame(TemplateEngine templateEngine, Gson gson) {
+    public PostEndGame(TemplateEngine templateEngine, GameManager gameManager, Gson gson) {
         // validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        Objects.requireNonNull(gameManager, "gameManager must not be null");
         Objects.requireNonNull(gson, "gson must not be null");
 
         this.templateEngine = templateEngine;
+        this.gameManager = gameManager;
         this.gson = gson;
     }
 
@@ -111,6 +115,7 @@ public class PostEndGame implements Route {
         Player currentPlayer = session.attribute("Player");
         final Map<String, Object> vm = new HashMap<>(2);
         final Map<String, Object> modeOptions = new HashMap<>(2);
+        CheckersGame game = gameManager.getGame(currentPlayer);
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
         BoardView board = new BoardView(currentPlayer, game);
