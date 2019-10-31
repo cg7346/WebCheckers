@@ -51,8 +51,19 @@ public class Piece {
         return pieceColor == color.RED;
     }
 
+    /**
+     * checks if the piece is a king or not
+     * @return
+     */
     public boolean isPieceKing(){
         return pieceType == type.KING;
+    }
+
+    /**
+     * make a piece king
+     */
+    public void makePieceKing(){
+        pieceType = type.KING;
     }
 
     /**

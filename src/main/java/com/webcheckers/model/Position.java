@@ -65,6 +65,11 @@ public class Position {
         return Objects.hash(row, cell);
     }
 
+    @Override
+    public String toString(){
+        return "(" + row + ", " + cell + ")";
+    }
+
 
 
 

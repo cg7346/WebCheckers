@@ -75,6 +75,10 @@ public class WebServer {
    * the URL pattern to check if it is player's turn
    */
   public static final String VALIDATEMOVE_URL = "/validateMove";
+  /**
+   * the URL pattern to to submit someone's turn
+   */
+  public static final String SUBMITTURN_URL = "/submitTurn";
 
 
   //
@@ -176,11 +180,17 @@ public class WebServer {
     // Posts the Checkers game Sign Out page
     post(SIGNOUT_URL, new PostSignOutRoute(templateEngine, playerLobby));
 
-    //Shows the Checkers game board
+    // Shows the Checkers game board
     get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager, gson));
 
-    //validates the move for current player
+    // Validates the move for current player
     post(VALIDATEMOVE_URL, new PostValidateMove(playerLobby, gameManager, gson));
+
+    // Submits the turn of the current player
+    post(SUBMITTURN_URL, new PostSubmitTurn(playerLobby, gameManager, gson));
+
+    // Checks to see if the game is ready for next turn
+    post(CHECKTURN_URL, new PostCheckTurn(playerLobby, gameManager, gson));
 
     //
     LOG.config("WebServer is initialized.");

@@ -49,4 +49,9 @@ public class Move {
         return otherMove.start.equals(this.start) && otherMove.end.equals(this.end);
     }
 
+    @Override
+    public String toString(){
+        return "Start: " + start + " End: " + end;
+    }
+
 }
