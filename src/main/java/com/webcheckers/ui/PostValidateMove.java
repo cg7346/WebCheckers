@@ -49,6 +49,7 @@ public class PostValidateMove implements Route {
         }
         response.body(gson.toJson(responseMessage));
         //System.out.println(request.queryParams("actionData"));
+        System.out.println(game);
 
         return gson.toJson(responseMessage);
     }

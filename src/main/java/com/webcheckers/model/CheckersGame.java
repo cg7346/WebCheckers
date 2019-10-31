@@ -268,4 +268,19 @@ public class CheckersGame {
         }
         return false;
     }
+
+    @Override
+    public String toString()
+    {
+        String gameString = "";
+        for(int i = 0; i < board.length; i++)
+        {
+            for(int j = 0; j < board[i].length; j++)
+            {
+                gameString += board[i][j];
+            }
+            gameString += "/n";
+        }
+        return gameString;
+    }
 }
