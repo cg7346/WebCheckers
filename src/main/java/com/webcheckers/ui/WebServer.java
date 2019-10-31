@@ -79,6 +79,10 @@ public class WebServer {
    * the URL pattern to to submit someone's turn
    */
   public static final String SUBMITTURN_URL = "/submitTurn";
+  /**
+   * the URL pattern to backup someone's turn
+   */
+  public static final String BACKUPTURN_URL = "/backupTurn";
 
 
   //
@@ -185,6 +189,9 @@ public class WebServer {
 
     // Validates the move for current player
     post(VALIDATEMOVE_URL, new PostValidateMove(playerLobby, gameManager, gson));
+
+    // Backs up the move for current player
+    post(BACKUPTURN_URL, new PostBackupRoute(gameManager, gson));
 
     // Submits the turn of the current player
     post(SUBMITTURN_URL, new PostSubmitTurn(playerLobby, gameManager, gson));
