@@ -304,7 +304,7 @@ public class CheckersGame {
             moveArray.addAll(checkColumns(row, col, rowUp));
         }
         int rowDown = row + 1;
-        if(row < 8){
+        if(rowDown < 8){
             moveArray.addAll(checkColumns(row, col, rowDown));
         }
     }
