@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
+import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -26,7 +27,23 @@ public class PostBackupRoute implements Route {
     {
         String gameIDString = request.queryParams("gameID");
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
+        game.BackupMove();
         Move lastMove = game.getLastMove();
+
+        /*
+        Message responseMessage = null;
+        if (lastMove != null){
+            //TODO: Check to see if there are jump moves
+            game.makeMove(lastMove);
+            game.swapPlayers();
+            responseMessage = Message.info("Valid Move!");
+        }else{
+            responseMessage = Message.error("Make move first");
+        }
+        response.body(gson.toJson(responseMessage));
+
+        return gson.toJson(responseMessage);
+        */
 
 
         return null;

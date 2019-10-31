@@ -35,7 +35,7 @@ public class CheckersGame {
     private Player activePlayer;
 
     //The last move made in the game
-    private Move lastMove;
+    private Turn currentTurn;
 
 
     /**
@@ -54,7 +54,7 @@ public class CheckersGame {
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
         this.singleMoves = new ArrayList<>();
-        this.lastMove = null;
+        this.currentTurn = new Turn();
 
         board = new Space[ROWS][COLS];
         for (int row=0; row < ROWS; row++){
@@ -205,6 +205,7 @@ public class CheckersGame {
      */
     public void swapPlayers(){
         activePlayer = activePlayer.equals(redPlayer) ? whitePlayer : redPlayer;
+        currentTurn = new Turn();
     }
 
 
@@ -323,7 +324,7 @@ public class CheckersGame {
      * @param move the Move to keep track of
      */
     public void keepLastMove(Move move){
-        this.lastMove = move;
+        this.currentTurn.AddMove(move);
     }
 
     /**
@@ -332,7 +333,15 @@ public class CheckersGame {
      * @return a Move that shows the last move made
      */
     public Move getLastMove(){
-        return lastMove;
+        return currentTurn.LastMove();
+    }
+
+    /**
+     * Removes the last turn made by the user
+     */
+    public void BackupMove()
+    {
+        Piece p = currentTurn.BackupLastMove();
     }
 
     /**

@@ -8,9 +8,10 @@ public class Turn {
     private Stack<Piece> removedPieces;
     private Piece movePiece;
 
-    public Turn(Piece movePiece)
+    public Turn()
     {
-        this.movePiece = movePiece;
+        moves = new Stack<>();
+        removedPieces = new Stack<>();
     }
 
     public Move LastMove()
@@ -21,10 +22,25 @@ public class Turn {
     public void AddMove(Move m, Piece p)
     {
         moves.push(m);
-        if(p != null)
+        removedPieces.push(p);
+    }
+
+    public void AddMove(Move m)
+    {
+        moves.push(m);
+    }
+
+    public Piece BackupLastMove()
+    {
+        if(!moves.empty())
         {
-            removedPieces.push(p);
+            moves.pop();
+            if(!removedPieces.empty())
+            {
+                return removedPieces.pop();
+            }
         }
+        return null;
     }
 
 
