@@ -123,11 +123,23 @@ public class CheckersGame {
      */
     public Space[][] inverseBoard(){
         Space[][] inverseBoard = new Space[ROWS][COLS];
-        for (int row=0; row < ROWS; row++) {
-           for (int col = 0; col < COLS; col++) {
-               inverseBoard[row][col] = board[ROWS-row-1][COLS-col-1];
+        int rowOriginal = -1;
+        for (int row = 7; row >= 0; row--) {
+            rowOriginal++;
+            int colOriginal = -1;
+           for (int col = 7; col >= 0; col--) {
+               colOriginal++;
+               inverseBoard[row][col] = board[rowOriginal][colOriginal];
+               System.out.println("original row" + rowOriginal);
+               System.out.println("original col" + colOriginal);
+               System.out.println("new row" + row);
+               System.out.println("new col" + col);
+               System.out.println("--------------------------------------------");
             }
+
         }
+
+
       return inverseBoard;
    }
 
@@ -349,10 +361,10 @@ public class CheckersGame {
         if (!activePlayer.equals(redPlayer)) {
             Position convertedStart = new Position(
                     ROWS - start.getRow() - 1,
-                    COLS - start.getCol());
+                    COLS - start.getCol() - 1);
             Position convertedEnd = new Position(
                     ROWS - end.getRow() - 1,
-                    COLS - end.getCol());
+                    COLS - end.getCol() - 1);
             Move newMove = new Move(convertedStart, convertedEnd);
             System.out.println("CONVERTED: " + newMove);
             System.out.println();
