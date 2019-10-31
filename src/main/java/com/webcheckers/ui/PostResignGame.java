@@ -80,7 +80,7 @@ public class PostResignGame implements Route {
      * @return the message that will be displayed when a player resigns
      */
     public static Message resignMessage(Player player) {
-        return Message.info(String.format(RESIGN, player));
+        return Message.info(String.format(RESIGN, player.getName()));
     }
 
 
@@ -96,25 +96,25 @@ public class PostResignGame implements Route {
     public Object handle(Request request, Response response) throws Exception {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
-        final Map<String, Object> vm = new HashMap<>(2);
+//        final Map<String, Object> vm = new HashMap<>(2);
         final Map<String, Object> modeOptions = new HashMap<>(2);
         CheckersGame game = gameManager.getGame(currentPlayer);
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
         BoardView board = new BoardView(currentPlayer, game);
-        vm.put(TITLE_ATTR, TITLE_ATTR_MSG);
-        vm.put(CURRENT_USER_ATTR, currentPlayer);
-        vm.put("viewMode", GetGameRoute.viewMode.PLAY);
-        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
-        vm.put(RED_PLAYER_ATTR, redPlayer);
-        vm.put(WHITE_PLAYER_ATTR, whitePlayer);
-        vm.put(COLOR_ATTR, GetGameRoute.activeColor.RED);
-        vm.put(BOARD_ATTR, board);
+//        vm.put(TITLE_ATTR, TITLE_ATTR_MSG);
+//        vm.put(CURRENT_USER_ATTR, currentPlayer);
+//        vm.put("viewMode", GetGameRoute.viewMode.PLAY);
+//        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+//        vm.put(RED_PLAYER_ATTR, redPlayer);
+//        vm.put(WHITE_PLAYER_ATTR, whitePlayer);
+//        vm.put(COLOR_ATTR, GetGameRoute.activeColor.RED);
+//        vm.put(BOARD_ATTR, board);
         // start building a View-Model
         modeOptions.put("isGameOver", true);
         modeOptions.put(GAME_OVER_ATTR, resignMessage(currentPlayer));
-        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
-        return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
+//        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+        return gson.toJson(modeOptions);
     }
 }
 

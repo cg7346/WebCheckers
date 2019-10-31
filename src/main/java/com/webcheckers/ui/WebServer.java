@@ -78,6 +78,10 @@ public class WebServer {
    * the URL pattern to to submit someone's turn
    */
   public static final String SUBMITTURN_URL = "/submitTurn";
+  /**
+   * the URL pattern to resign game
+   */
+  public static final String RESIGN_URL = "/resignGame";
 
 
   //
@@ -190,6 +194,9 @@ public class WebServer {
 
     // Checks to see if the game is ready for next turn
     post(CHECKTURN_URL, new PostCheckTurn(playerLobby, gameManager, gson));
+
+    // Checks to see if the game is ready for next turn
+    post(RESIGN_URL, new PostResignGame(templateEngine, gameManager, gson));
 
     //
     LOG.config("WebServer is initialized.");
