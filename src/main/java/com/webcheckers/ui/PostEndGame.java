@@ -1,9 +1,6 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
-import com.webcheckers.appl.GameManager;
-import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
@@ -14,7 +11,6 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static com.webcheckers.ui.GetGameRoute.game;
-import static spark.Spark.halt;
 
 
 /**
@@ -59,7 +55,6 @@ public class PostEndGame implements Route {
     //
 //    private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
-    private final GameManager gameManager;
     private final Gson gson;
 
 
@@ -69,17 +64,15 @@ public class PostEndGame implements Route {
     /**
      * The constructor for the {@code POST /resignGame} route handler.
      *
-     * @param gameManager used to end a game of checkers
+     * @param templateEngine used to end a game of checkers
      * @throws NoSuchElementException when the {@code Player} or {@code templateEngine} parameter is null
      */
-    public PostEndGame(TemplateEngine templateEngine, GameManager gameManager, Gson gson) {
+    public PostEndGame(TemplateEngine templateEngine, Gson gson) {
         // validation
-        Objects.requireNonNull(gameManager, "gameManger must not be null");
-//        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
 //        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
 
-        this.templateEngine = templateEngine;
-        this.gameManager = gameManager;
+//        this.templateEngine = templateEngine;
         this.gson = gson;
     }
 
@@ -122,6 +115,7 @@ public class PostEndGame implements Route {
         Player currentPlayer = session.attribute("Player");
         final Map<String, Object> vm = new HashMap<>(2);
         final Map<String, Object> modeOptions = new HashMap<>(2);
+
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
         BoardView board = new BoardView(currentPlayer, game);

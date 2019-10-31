@@ -1,15 +1,14 @@
 package com.webcheckers.ui;
 
-import static spark.Spark.*;
+import com.google.gson.Gson;
+import com.webcheckers.appl.GameManager;
+import com.webcheckers.appl.PlayerLobby;
+import spark.TemplateEngine;
 
 import java.util.Objects;
 import java.util.logging.Logger;
 
-import com.google.gson.Gson;
-
-import com.webcheckers.appl.GameManager;
-import com.webcheckers.appl.PlayerLobby;
-import spark.TemplateEngine;
+import static spark.Spark.*;
 
 
 /**
@@ -67,6 +66,11 @@ public class WebServer {
    * The URL pattern to request the game page
    */
   public static final String GAME_URL = "/game";
+    /**
+     * The URL patter to request the resign page
+     */
+    public static final String RESIGN_URL = "/resignGame";
+
 
 
   //
@@ -170,6 +174,9 @@ public class WebServer {
 
     //Shows the Checkers game board
     get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager, gson));
+
+      // Posts the Checkers game Resign page
+      get(RESIGN_URL, new GetGameRoute(templateEngine, playerLobby, gameManager, gson));
 
     //
     LOG.config("WebServer is initialized.");

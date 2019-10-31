@@ -136,7 +136,7 @@ define(function(require){
   };
 
   /**
-   * Queries whether the game is over; IOWs someone won or resgined.
+   * Queries whether the game is over; IOWs someone won or resigned.
    */
   GameState.prototype.isGameOver = function isGameOver() {
       return this.getModeOption(GameState.IS_END_OPTION) || false;
