@@ -337,7 +337,17 @@ public class CheckersGame {
      * @param move the Move to keep track of
      */
     public void keepLastMove(Move move){
-        this.currentTurn.AddMove(move);
+        this.currentTurn.addMove(move);
+    }
+
+    /**
+     * Keeps track of the last jump move
+     * @param move the Move to keep track of
+     * @param piece the Piece jumped over
+     */
+    public void keepLastJumpMove(Move move, Piece piece)
+    {
+        this.currentTurn.addMove(move, piece);
     }
 
     /**
@@ -346,7 +356,7 @@ public class CheckersGame {
      * @return a Move that shows the last move made
      */
     public Move getLastMove(){
-        return currentTurn.LastMove();
+        return currentTurn.lastMove();
     }
 
     /**
@@ -354,15 +364,18 @@ public class CheckersGame {
      */
     public void backupMove()
     {
-        Move lastMove = currentTurn.LastMove();
+        Move lastMove = currentTurn.lastMove();
         Position start = lastMove.getStart();
         Position end = lastMove.getEnd();
         Piece piece = removePieceToMove(end.getRow(), end.getCol());
         addPiece(start.getRow(), start.getCol(), piece);
-        Piece p = currentTurn.BackupLastMove();
+        Piece p = currentTurn.backupLastMove();
         if(p != null)
         {
-
+            Position p_Pos = new Position(
+                    start.getRow() + ((end.getRow() - start.getRow()) / 2),
+                    start.getCol() + ((end.getCol() - start.getCol()) / 2));
+            addPiece(p_Pos.getRow(), p_Pos.getCol(), p);
         }
     }
 

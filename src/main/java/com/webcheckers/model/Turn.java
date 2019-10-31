@@ -14,23 +14,23 @@ public class Turn {
         removedPieces = new Stack<>();
     }
 
-    public Move LastMove()
+    public Move lastMove()
     {
         return moves.peek();
     }
 
-    public void AddMove(Move m, Piece p)
+    public void addMove(Move m, Piece p)
     {
         moves.push(m);
         removedPieces.push(p);
     }
 
-    public void AddMove(Move m)
+    public void addMove(Move m)
     {
         moves.push(m);
     }
 
-    public Piece BackupLastMove()
+    public Piece backupLastMove()
     {
         if(!moves.empty())
         {
