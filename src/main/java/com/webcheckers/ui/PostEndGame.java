@@ -1,9 +1,6 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
-import com.webcheckers.appl.GameManager;
-import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
@@ -14,7 +11,6 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static com.webcheckers.ui.GetGameRoute.game;
-import static spark.Spark.halt;
 
 
 /**
@@ -43,23 +39,15 @@ public class PostEndGame implements Route {
     private static final String GAME_OVER_ATTR = "gameOverMessage";
     private static final Message GAME_OVER_ATTR_MSG = Message.info("The game is over"); /* Get the game over message */
     private static final String VIEW_NAME = "game.ftl";
-    private static final String MESSAGE_ATTR = "message";
-    private static final String MESSAGE_ERR = "message error";
-    private static final String OPP_USER = "opp_user";
-    enum viewMode {PLAY, SPECTATOR,REPLAY}
-    enum activeColor {RED, WHITE}
 
     //
     // Static Methods
     //
-//    private final TemplateEngine templateEngine;
 
     //
     // Attributes
     //
-//    private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
-    private final GameManager gameManager;
     private final Gson gson;
 
 
@@ -67,19 +55,18 @@ public class PostEndGame implements Route {
     // Constructor
     //
     /**
-     * The constructor for the {@code POST /resignGame} route handler.
+     * The constructor for the {@code POST /endGame} route handler.
      *
-     * @param gameManager used to end a game of checkers
+     * @param templateEngine
+     * @param gson
      * @throws NoSuchElementException when the {@code Player} or {@code templateEngine} parameter is null
      */
-    public PostEndGame(TemplateEngine templateEngine, GameManager gameManager, Gson gson) {
+    public PostEndGame(TemplateEngine templateEngine, Gson gson) {
         // validation
-        Objects.requireNonNull(gameManager, "gameManger must not be null");
-//        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
-//        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
+        Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        Objects.requireNonNull(gson, "gson must not be null");
 
         this.templateEngine = templateEngine;
-        this.gameManager = gameManager;
         this.gson = gson;
     }
 
@@ -95,6 +82,7 @@ public class PostEndGame implements Route {
 //        TODO: String.Format(PIECES_CAP, currentPlayer, opponent)
         return Message.info(PIECES_CAP);
     }
+
     /**
      * A String representing how the game ended. Such as:
      * <p>
@@ -107,6 +95,7 @@ public class PostEndGame implements Route {
 //        TODO: String.Format(RESIGN, opponent)
         return Message.info(RESIGN);
     }
+
 
     /**
      * {@inheritDoc}
@@ -137,9 +126,26 @@ public class PostEndGame implements Route {
         vm.put(BOARD_ATTR, board);
         // start buildiing a View-Model
         modeOptions.put("isGameOver", true);
-        // TODO: IF statement for certain gameOverMessage
-        modeOptions.put(GAME_OVER_ATTR, resignMessage());
+        //TODO: if statements
+        resign(vm, modeOptions);
         vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
+
+    //
+    // Private methods
+    //
+
+    private ModelAndView piecesCap(final Map<String, Object> vm,
+                                 final Map<String, Object> modeOptions) {
+        modeOptions.put(GAME_OVER_ATTR, piecesCapMessage());
+        return new ModelAndView(vm, VIEW_NAME);
+    }
+
+    private ModelAndView resign(final Map<String, Object> vm,
+                                   final Map<String, Object> modeOptions) {
+        modeOptions.put(GAME_OVER_ATTR, piecesCapMessage());
+        return new ModelAndView(vm, VIEW_NAME);
+    }
 }
+
