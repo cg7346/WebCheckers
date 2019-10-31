@@ -6,7 +6,6 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
-import com.webcheckers.model.ValidateMove;
 import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
@@ -15,43 +14,37 @@ import spark.Session;
 
 import java.util.Objects;
 
-public class PostValidateMove implements Route {
+/**
+ * this checks for the turn of the user
+ * @author jil4009
+ */
+public class PostCheckTurn implements Route {
     private CheckersGame game;
     private Move move;
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
     private final Gson gson;
 
-
-    public PostValidateMove(PlayerLobby playerLobby, GameManager gameManager, Gson gson){
+    public PostCheckTurn(PlayerLobby playerLobby, GameManager gameManager,Gson gson){
         this.playerLobby = Objects.requireNonNull(playerLobby, "player lobby is required");
         this.gameManager = Objects.requireNonNull(gameManager, "game manager is required");
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
-
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        String moveString = request.queryParams("actionData");
-        System.out.println("move string is this " + moveString);
+        Session session = request.session();
+        Player currentPlayer = session.attribute("Player");
         String gameIdString = request.queryParams("gameID");
-
-        Move move = gson.fromJson(moveString, Move.class);
-        System.out.println("------Checking for THIS move!!");
-        System.out.println(move);
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
-        game.lookForMoves();
-        boolean isPossibleMove = game.isInMoves(move);
-        System.out.println(isPossibleMove);
-        Message responseMessage = null;
-        if(isPossibleMove){
-            responseMessage = Message.info("Valid Move!");
-            game.keepLastMove(move);
-
-        }else {
-            responseMessage = Message.error("Invalid MMMOOOOVEEE!");
+        //sometimes having the game undefined breaks the builder
+        if (game != null) {
+            if (game.getActivePlayer().equals(currentPlayer)) {
+                return gson.toJson(Message.info("true"));
+            } else {
+                return gson.toJson(Message.info("false"));
+            }
         }
-        response.body(gson.toJson(responseMessage));
-        return gson.toJson(responseMessage);
+        return null;
     }
 }
