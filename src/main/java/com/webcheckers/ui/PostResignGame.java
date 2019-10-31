@@ -19,15 +19,13 @@ import java.util.Objects;
  * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella</a>
  * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</a>
  */
-public class PostEndGame implements Route {
+public class PostResignGame implements Route {
 
     //
     // Constants
     //
 
     // Values used in the view-model map for rendering the game view after a guess/
-    private static final String PIECES_CAP = "You are playing a game of checkers with %s\n" +
-            "%s has captured all pieces.";
     private static final String RESIGN = "%s has resigned.";
     private static final String TITLE_ATTR = "title";
     private static final String TITLE_ATTR_MSG = "Game Title";
@@ -63,8 +61,7 @@ public class PostEndGame implements Route {
      * @param gson
      * @throws NoSuchElementException when the {@code Player} or {@code templateEngine} parameter is null
      */
-    public PostEndGame(TemplateEngine templateEngine, GameManager gameManager, Gson gson) {
-        // validation
+    public PostResignGame(TemplateEngine templateEngine, GameManager gameManager, Gson gson) {
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         Objects.requireNonNull(gameManager, "gameManager must not be null");
         Objects.requireNonNull(gson, "gson must not be null");
@@ -80,24 +77,10 @@ public class PostEndGame implements Route {
      * Bryan has captured all of the pieces.
      * Fred has resigned.
      *
-     * @return the message that will be displayed when the pieces are cap
-     */
-    public static Message piecesCapMessage() {
-//        TODO: String.Format(PIECES_CAP, currentPlayer, opponent)
-        return Message.info(PIECES_CAP);
-    }
-
-    /**
-     * A String representing how the game ended. Such as:
-     * <p>
-     * Bryan has captured all of the pieces.
-     * Fred has resigned.
-     *
      * @return the message that will be displayed when a player resigns
      */
-    public static Message resignMessage() {
-//        TODO: String.Format(RESIGN, opponent)
-        return Message.info(RESIGN);
+    public static Message resignMessage(Player player) {
+        return Message.info(String.format(RESIGN, player));
     }
 
 
@@ -122,35 +105,16 @@ public class PostEndGame implements Route {
         vm.put(TITLE_ATTR, TITLE_ATTR_MSG);
         vm.put(CURRENT_USER_ATTR, currentPlayer);
         vm.put("viewMode", GetGameRoute.viewMode.PLAY);
-        modeOptions.put("isGameOver", false);
-        modeOptions.put(GAME_OVER_ATTR, GAME_OVER_ATTR_MSG);
         vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
         vm.put(RED_PLAYER_ATTR, redPlayer);
         vm.put(WHITE_PLAYER_ATTR, whitePlayer);
         vm.put(COLOR_ATTR, GetGameRoute.activeColor.RED);
         vm.put(BOARD_ATTR, board);
-        // start buildiing a View-Model
+        // start building a View-Model
         modeOptions.put("isGameOver", true);
-        //TODO: if statements
-        resign(vm, modeOptions);
+        modeOptions.put(GAME_OVER_ATTR, resignMessage(currentPlayer));
         vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
-    }
-
-    //
-    // Private methods
-    //
-
-    private ModelAndView piecesCap(final Map<String, Object> vm,
-                                 final Map<String, Object> modeOptions) {
-        modeOptions.put(GAME_OVER_ATTR, piecesCapMessage());
-        return new ModelAndView(vm, VIEW_NAME);
-    }
-
-    private ModelAndView resign(final Map<String, Object> vm,
-                                   final Map<String, Object> modeOptions) {
-        modeOptions.put(GAME_OVER_ATTR, piecesCapMessage());
-        return new ModelAndView(vm, VIEW_NAME);
     }
 }
 
