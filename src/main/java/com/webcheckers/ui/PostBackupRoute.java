@@ -27,8 +27,12 @@ public class PostBackupRoute implements Route {
     {
         String gameIDString = request.queryParams("gameID");
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
-        game.BackupMove();
-        Move lastMove = game.getLastMove();
+        game.backupMove();
+
+        Message responseMessage = Message.info("BACK IT UP!");
+        response.body(gson.toJson(responseMessage));
+
+        return gson.toJson(responseMessage);
 
         /*
         Message responseMessage = null;
@@ -44,8 +48,5 @@ public class PostBackupRoute implements Route {
 
         return gson.toJson(responseMessage);
         */
-
-
-        return null;
     }
 }

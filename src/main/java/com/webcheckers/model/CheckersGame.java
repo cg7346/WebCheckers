@@ -345,9 +345,18 @@ public class CheckersGame {
     /**
      * Removes the last turn made by the user
      */
-    public void BackupMove()
+    public void backupMove()
     {
+        Move lastMove = currentTurn.LastMove();
+        Position start = lastMove.getStart();
+        Position end = lastMove.getEnd();
+        Piece piece = removePieceToMove(end.getRow(), end.getCol());
+        addPiece(start.getRow(), start.getCol(), piece);
         Piece p = currentTurn.BackupLastMove();
+        if(p != null)
+        {
+
+        }
     }
 
     /**
