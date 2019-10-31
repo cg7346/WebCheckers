@@ -48,6 +48,7 @@ public class PostEndGame implements Route {
     // Attributes
     //
     private final TemplateEngine templateEngine;
+    private final GameManager gameManager;
     private final Gson gson;
 
 
@@ -62,13 +63,14 @@ public class PostEndGame implements Route {
      * @param gson
      * @throws NoSuchElementException when the {@code Player} or {@code templateEngine} parameter is null
      */
-    public PostEndGame(TemplateEngine templateEngine, Gson gson) {
+    public PostEndGame(TemplateEngine templateEngine, GameManager gameManager, Gson gson) {
         // validation
         Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         Objects.requireNonNull(gameManager, "gameManager must not be null");
         Objects.requireNonNull(gson, "gson must not be null");
 
-//        this.templateEngine = templateEngine;
+        this.templateEngine = templateEngine;
+        this.gameManager = gameManager;
         this.gson = gson;
     }
 
