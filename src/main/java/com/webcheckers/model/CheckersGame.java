@@ -17,7 +17,8 @@ public class CheckersGame {
 
     //possible moves to be made the current player
     //according to their apparent location on BoardView
-    private ArrayList<Move> singleMoves;
+    private ArrayList<Move> singleRedMoves;
+    private ArrayList<Move> singleWhiteMoves;
 
     //unique identifier for the game
     private int gameID;
@@ -33,7 +34,7 @@ public class CheckersGame {
     private Player activePlayer;
 
     //The last move made in the game
-    private Move lastMove;
+    private Turn currentTurn;
 
 
     /**
@@ -51,8 +52,9 @@ public class CheckersGame {
         this.gameID = gameID;
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
-        this.singleMoves = new ArrayList<>();
-        this.lastMove = null;
+        this.singleRedMoves = new ArrayList<>();
+        this.singleWhiteMoves = new ArrayList<>();
+        this.currentTurn = new Turn();
 
         board = new Space[ROWS][COLS];
         for (int row=0; row < ROWS; row++){
@@ -203,6 +205,7 @@ public class CheckersGame {
      */
     public void swapPlayers(){
         activePlayer = activePlayer.equals(redPlayer) ? whitePlayer : redPlayer;
+        currentTurn = new Turn();
     }
 
 
@@ -228,11 +231,11 @@ public class CheckersGame {
                     }
                     //piece white and king
                     if (!p.isRedPiece() && p.isPieceKing()) {
-                        checkWhiteKingMoves(row, col);
+                        checkKingMoves(row, col, singleWhiteMoves);
                     }
                     //piece red and king
                     if (p.isRedPiece() && p.isPieceKing()) {
-                        checkRedKingMoves(row, col);
+                        checkKingMoves(row, col, singleRedMoves);
                     }
                 }
                 }
@@ -246,13 +249,14 @@ public class CheckersGame {
      * @param row row to look in
      * @param col column to left and right of
      */
-    public void checkColumns(int row, int col, int nextRow) {
+    public ArrayList<Move> checkColumns(int row, int col, int nextRow) {
+        ArrayList<Move> moves = new ArrayList<>();
         if (col + 1 < COLS) {
             if (getSpace(nextRow, col+1).isValid()) {
                 Move moveToAdd = new Move(new Position(row, col),
                         new Position(nextRow, col + 1));
                 System.out.println(moveToAdd);
-                singleMoves.add(moveToAdd);
+                moves.add(moveToAdd);
             }
         }
         if (col - 1 >= 0) {
@@ -260,9 +264,10 @@ public class CheckersGame {
                 Move moveToAdd = new Move(new Position(row, col),
                         new Position(nextRow, col - 1));
                 System.out.println(moveToAdd);
-                singleMoves.add(moveToAdd);
+                moves.add(moveToAdd);
             }
         }
+        return moves;
     }
 
     /**
@@ -273,8 +278,8 @@ public class CheckersGame {
     public void checkWhiteSingleMoves(int row, int col) {
         //check next row closer to top
         int nextRow = row + 1;
-        if (nextRow >= 0) {
-                checkColumns(row, col, nextRow);
+        if (nextRow < 8) {
+                singleWhiteMoves.addAll(checkColumns(row, col, nextRow));
             }
         }
 
@@ -287,13 +292,20 @@ public class CheckersGame {
         //check next row closer to top
         int nextRow = row - 1;
         if (nextRow >= 0) {
-            checkColumns(row, col, nextRow);
+            singleRedMoves.addAll(checkColumns(row, col, nextRow));
         }
     }
 
     //TODO: Add King Moves
-    public ArrayList<Move> checkWhiteKingMoves(int row, int col) {
-        return null;
+    public void checkKingMoves(int row, int col, ArrayList<Move> moveArray) {
+        int rowUp = row -1;
+        if(rowUp >= 0){
+            moveArray.addAll(checkColumns(row, col, rowUp));
+        }
+        int rowDown = row + 1;
+        if(rowDown < 8){
+            moveArray.addAll(checkColumns(row, col, rowDown));
+        }
     }
 
     public ArrayList<Move> checkRedKingMoves(int row, int col) {
@@ -307,8 +319,10 @@ public class CheckersGame {
      * @return true if in, false if not
      */
     public boolean isInMoves(Move move){
-        move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
-        for (Move possibleMove : singleMoves){
+        boolean isRed = activePlayer.equals(redPlayer);
+        move = isRed ? move : moveConverter(move);
+        ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
+        for (Move possibleMove : moves){
             if (possibleMove.equals(move)){
                 return true;
             }
@@ -321,7 +335,7 @@ public class CheckersGame {
      * @param move the Move to keep track of
      */
     public void keepLastMove(Move move){
-        this.lastMove = move;
+        this.currentTurn.AddMove(move);
     }
 
     /**
@@ -330,7 +344,24 @@ public class CheckersGame {
      * @return a Move that shows the last move made
      */
     public Move getLastMove(){
-        return lastMove;
+        return currentTurn.LastMove();
+    }
+
+    /**
+     * Removes the last turn made by the user
+     */
+    public void backupMove()
+    {
+        Move lastMove = currentTurn.LastMove();
+        Position start = lastMove.getStart();
+        Position end = lastMove.getEnd();
+        Piece piece = removePieceToMove(end.getRow(), end.getCol());
+        addPiece(start.getRow(), start.getCol(), piece);
+        Piece p = currentTurn.BackupLastMove();
+        if(p != null)
+        {
+
+        }
     }
 
     /**
@@ -343,6 +374,12 @@ public class CheckersGame {
         Piece piece = removePieceToMove(start.getRow(), start.getCol());
         Position end = move.getEnd();
         if (piece != null){
+            if(piece.isRedPiece() && end.getRow() == 0){
+                piece.makePieceKing();
+            }
+            if(!piece.isRedPiece() && end.getRow() == 7){
+                piece.makePieceKing();
+            }
             addPiece(end.getRow(), end.getCol(), piece);
         }
     }
