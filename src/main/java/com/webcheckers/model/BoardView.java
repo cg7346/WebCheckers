@@ -1,4 +1,4 @@
-package com.webcheckers.ui;
+package com.webcheckers.model;
 
 import com.webcheckers.model.*;
 
@@ -25,7 +25,7 @@ public class BoardView {
     public BoardView(Player player, CheckersGame checkersGame){
         this.rows = new ArrayList<>();
 
-        CheckersGame.Space[][] board;
+        Space[][] board;
         if(!checkersGame.isRedPlayer(player)){
             //inverse items
             board = checkersGame.inverseBoard();
@@ -37,29 +37,7 @@ public class BoardView {
         for(int i = 0; i < checkersGame.ROWS; i++){
             spaceList = new ArrayList<>();
             for(int j = 0; j < checkersGame.COLS; j++){
-                Space s;
-                switch (board[j][i]){
-                    case EMPTY_BLACK:
-                        s = new Space(j, true);
-                        break;
-                    case RED_PLAYER:
-                        s = new Space(j, true);
-                        s.addPiece(new Piece(0));
-                        break;
-                    case WHITE_PLAYER:
-                        s = new Space(j, true);
-                        s.addPiece(new Piece(1));
-                        break;
-                    case EMPTY_WHITE:
-                        s = new Space(j, false);
-                        break;
-
-                    // If the board symbol does not match any of the cases provided
-                    default:
-                        s = null;
-                        break;
-                }
-                spaceList.add(s);
+                spaceList.add(board[i][j]);
             }
             rows.add(new Row(i, spaceList));
         }

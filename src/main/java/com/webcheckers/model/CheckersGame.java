@@ -15,27 +15,25 @@ public class CheckersGame {
     //(the person clicked on by the other player)
     private Player whitePlayer;
 
-    //Game ID
+    //possible moves to be made the current player
+    //according to their apparent location on BoardView
+    private ArrayList<Move> singleMoves;
+
+    //unique identifier for the game
     private int gameID;
 
     //Dimensions for the board
     public final static int ROWS = 8;
     public final static int COLS = 8;
 
-    //Just some in class testing
-    public static void main(String[] args) {
-        CheckersGame testGame = new CheckersGame(new Player("1"),
-                new Player("2"), 0);
-//        System.out.println(testGame.toString());
-//        TODO: remember to delete this
-
-    }
-
     //2D array that represents a checkers board
     private Space[][] board;
 
-    //Whose turn is it? Red Player is R, White Player is W
-    private char turn;
+    //Whose turn is it?
+    private Player activePlayer;
+
+    //The last move made in the game
+    private Move lastMove;
 
 
     /**
@@ -53,52 +51,53 @@ public class CheckersGame {
         this.gameID = gameID;
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
+        this.singleMoves = new ArrayList<>();
+        this.lastMove = null;
 
-         board = new Space[COLS][ROWS];
-        for (int col=0; col < COLS; col++){
-            for (int row=0; row < ROWS; row ++){
+        board = new Space[ROWS][COLS];
+        for (int row=0; row < ROWS; row++){
+            for (int col=0; col < COLS; col ++){
                 //if both row and column are even or odd then it is white space
                 if ((col%2 == 0 && row%2 ==0) ||
                         (col%2 != 0 && row%2 != 0)){
-                    board[col][row] = Space.EMPTY_WHITE;
+                    board[row][col] = new Space(col, false);
                 }
                 //calling top of board row 0
                 else {
                     //putting white player at top of board
                     if (row <= 2){
-                        board[col][row] = Space.WHITE_PLAYER;
+                        Space newSpace = new Space(col, true);
+                        newSpace.addPiece(new Piece(1));
+                        board[row][col] = newSpace;
                     }
                     //putting red player at bottom of board
                     else if (row >= 5) {
-                        board[col][row] = Space.RED_PLAYER;
+                        Space newSpace = new Space(col, true);
+                        newSpace.addPiece(new Piece(0));
+                        board[row][col] = newSpace;
                     }
                     //middle spaces empty black
                     else{
-                        board[col][row] = Space.EMPTY_BLACK;
+                        board[row][col] = new Space(col, true);
                     }
                 }
 
             }
         }
-        //red player
-        turn = 0;
+        //redPlayer starts the game
+        activePlayer = redPlayer;
     }
 
     /**
      * Returns the symbol in a row and column
      * on a board
      *
-     * R - Red Player
-     * W - White Player
-     * X - White
-     * O - Black
-     *
      * @param col column of space
      * @param row row of space
      * @return char symbol that represents space
      */
-    public char getSpace(int col, int row){
-        return board[col][row].getSymbol();
+    private Space getSpace(int row, int col){
+        return board[row][col];
     }
 
     /**
@@ -117,31 +116,33 @@ public class CheckersGame {
      * Flips the white and red colors so that a player
      * can see their pieces near them
      *
+     *
+     * DESIGN CHOICE - decided to reverse rows only due to difficulty with conversions of colums
+     *
      * So instead of white at top it's red
-     * @return
+     * @return the board, but reverse
      */
     public Space[][] inverseBoard(){
-        Space[][] inverseBoard = new Space[COLS][ROWS];
-        for (int col=0; col < COLS; col++) {
-            for (int row = 0; row < ROWS; row++) {
-
-                //flip red to white
-                if (board[col][row] == Space.RED_PLAYER) {
-                    inverseBoard[col][row] = Space.WHITE_PLAYER;
-
-                //flip white to red
-                } else if (board[col][row] == Space.WHITE_PLAYER) {
-                    inverseBoard[col][row] = Space.RED_PLAYER;
-                }
-
-                //keep everything else
-                else{
-                    inverseBoard[col][row] = board[col][row];
-                }
+        Space[][] inverseBoard = new Space[ROWS][COLS];
+        int rowOriginal = -1;
+        for (int row = 7; row >= 0; row--) {
+            rowOriginal++;
+            int colOriginal = -1;
+           for (int col = 7; col >= 0; col--) {
+               colOriginal++;
+               inverseBoard[row][col] = board[rowOriginal][colOriginal];
+               System.out.println("original row" + rowOriginal);
+               System.out.println("original col" + colOriginal);
+               System.out.println("new row" + row);
+               System.out.println("new col" + colOriginal);
+               System.out.println("--------------------------------------------");
             }
+
         }
-        return inverseBoard;
-    }
+
+
+      return inverseBoard;
+   }
 
     /**
      * Returns the original not flipped board
@@ -152,6 +153,35 @@ public class CheckersGame {
     }
 
     /**
+     * Removes a piece from the board
+     * @param row row where piece lived
+     * @param col col where piece lived
+     * @return the piece that used to live in that location
+     */
+    private Piece removePieceToMove(int row, int col){
+        Space space = getSpace(row, col);
+        Piece piece = null;
+        if (space.hasPiece()){
+            piece = space.getPiece();
+            space.removePiece();
+        }
+        return piece;
+    }
+
+    /**
+     * Add a piece to the a new space
+     * @param row row to put piece
+     * @param col col to put piece
+     * @param piece the piece to put in the square
+     */
+    private void addPiece(int row, int col, Piece piece){
+        Space space = getSpace(row, col);
+        if (!space.hasPiece() && space.isValid()){
+            space.addPiece(piece);
+        }
+    }
+
+    /**
      * These are getters
      */
     public Player getRedPlayer(){return redPlayer;}
@@ -159,55 +189,188 @@ public class CheckersGame {
     public int getGameID(){return gameID;}
 
     /**
-     * Returns a {@link String} representation of the board, suitable for
-     * printing. Used mostly for testing
-     *
-     * @return A {@link String} representation of the board.
+     * Returns who the activePlayer is (whose turn)
+     * @return either RedPlayer or WhitePlayer
      */
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
+    public Player getActivePlayer(){
+        return activePlayer;
+    }
 
-        for(int r=0; r<ROWS; r++) {
-            for(int c=0; c<COLS; c++) {
-                builder.append('|');
-                builder.append(board[c][r].getSymbol());
-                builder.append('|');
-            }
-            builder.append('\n');
-        }
-        return builder.toString();
+    /**
+     * Swaps the players for their next turn
+     * If player is currently red -> white,
+     * otherwise -> red
+     */
+    public void swapPlayers(){
+        activePlayer = activePlayer.equals(redPlayer) ? whitePlayer : redPlayer;
     }
 
 
     /**
-     * Represent a space on the board that will mark
-     * if it is empty (black or white) or if it has
-     * a chip on it (red or white)
+     * Looks for moves possible in the game
      */
-    public enum Space {
-        RED_PLAYER('R'),
-        WHITE_PLAYER('W'),
-        EMPTY_BLACK('O'),
-        EMPTY_WHITE('X');
+    public void lookForMoves() {
+        for (int row = 0; row < ROWS; row++) {
+            System.out.println();
+            for (int col = 0; col < COLS; col++) {
+                Space space = getSpace(row, col);
+                if (space.hasPiece()) {
+                    Piece p = space.getPiece();
+                    //piece if white and single
+                    if (!p.isRedPiece() && !p.isPieceKing()) {
+                        System.out.println("Checking White------");
+                        checkWhiteSingleMoves(row, col);
+                    }
+                    //piece red and single
+                    if (p.isRedPiece() && !p.isPieceKing()) {
+                        System.out.println("Checking Red--------");
+                        checkRedSingleMoves(row, col);
+                    }
+                    //piece white and king
+                    if (!p.isRedPiece() && p.isPieceKing()) {
+                        checkWhiteKingMoves(row, col);
+                    }
+                    //piece red and king
+                    if (p.isRedPiece() && p.isPieceKing()) {
+                        checkRedKingMoves(row, col);
+                    }
+                }
+                }
+            }
+    }
 
-        //Add stuff for king later
 
-        private char symbol;
-
-        Space(char symbol) {
-            this.symbol = symbol;
+    /**
+     * Checks the left and right column of the next
+     * row for a piece to see if a move is available
+     * @param row row to look in
+     * @param col column to left and right of
+     */
+    public void checkColumns(int row, int col, int nextRow) {
+        if (col + 1 < COLS) {
+            if (getSpace(nextRow, col+1).isValid()) {
+                Move moveToAdd = new Move(new Position(row, col),
+                        new Position(nextRow, col + 1));
+                System.out.println(moveToAdd);
+                singleMoves.add(moveToAdd);
+            }
         }
-
-        public char getSymbol() {
-            return symbol;
+        if (col - 1 >= 0) {
+            if (getSpace(nextRow, col-1).isValid()) {
+                Move moveToAdd = new Move(new Position(row, col),
+                        new Position(nextRow, col - 1));
+                System.out.println(moveToAdd);
+                singleMoves.add(moveToAdd);
+            }
         }
     }
 
-//    TODO: need a record of is the game is won or not
+    /**
+     * Checking to see if any single white pieces have moves
+     * @param row row piece lives
+     * @param col col piece lives
+     */
+    public void checkWhiteSingleMoves(int row, int col) {
+        //check next row closer to top
+        int nextRow = row + 1;
+        if (nextRow >= 0) {
+                checkColumns(row, col, nextRow);
+            }
+        }
 
-//    TODO: need a boolean method if someone has won or not (change status)
+    /**
+     * Checking to see if any single red pieces have moves
+     * @param row row piece lives
+     * @param col col piece lives
+     */
+    public void checkRedSingleMoves(int row, int col) {
+        //check next row closer to top
+        int nextRow = row - 1;
+        if (nextRow >= 0) {
+            checkColumns(row, col, nextRow);
+        }
+    }
 
-//    TODO: is won method
+    //TODO: Add King Moves
+    public ArrayList<Move> checkWhiteKingMoves(int row, int col) {
+        return null;
+    }
 
+    public ArrayList<Move> checkRedKingMoves(int row, int col) {
+        return null;
+    }
+
+    /**
+     * Looks to see if a move is in the list
+     * of possible moves for the game
+     * @param move Move to see if is possible
+     * @return true if in, false if not
+     */
+    public boolean isInMoves(Move move){
+        move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
+        for (Move possibleMove : singleMoves){
+            if (possibleMove.equals(move)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Keeps track of the last move
+     * @param move the Move to keep track of
+     */
+    public void keepLastMove(Move move){
+        this.lastMove = move;
+    }
+
+    /**
+     * Returns the last move made by a player in
+     * a game
+     * @return a Move that shows the last move made
+     */
+    public Move getLastMove(){
+        return lastMove;
+    }
+
+    /**
+     * Makes a move and updates the board according
+     * @param move the move to make
+     */
+    public void makeMove(Move move){
+        move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
+        Position start = move.getStart();
+        Piece piece = removePieceToMove(start.getRow(), start.getCol());
+        Position end = move.getEnd();
+        if (piece != null){
+            addPiece(end.getRow(), end.getCol(), piece);
+        }
+    }
+
+    /**
+     * Converts a move made by the whitePlayer on
+     * the board view to something we can check
+     * with the official CheckersGame Board
+     * @param move the Move to convert
+     * @return a move flipped of the original
+     */
+    public Move moveConverter(Move move){
+        System.out.println("COVERTING MOVE--------");
+        System.out.println("ORIGINAL: " + move);
+        Position start = move.getStart();
+        Position end = move.getEnd();
+        if (!activePlayer.equals(redPlayer)) {
+            Position convertedStart = new Position(
+                    ROWS - start.getRow() - 1,
+                    start.getCol());
+            Position convertedEnd = new Position(
+                    ROWS - end.getRow() - 1,
+                    end.getCol());
+            Move newMove = new Move(convertedStart, convertedEnd);
+            System.out.println("CONVERTED: " + newMove);
+            System.out.println();
+            return new Move(convertedStart, convertedEnd);
+        }
+        return move;
+    }
 }

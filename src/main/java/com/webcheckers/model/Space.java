@@ -13,6 +13,7 @@ public class Space {
     private Piece piece;
     private boolean isBlack;
 
+
     /**
      * Creates a space on the board without a piece
      *
@@ -44,8 +45,7 @@ public class Space {
      *
      * @return validity of space
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         return !hasPiece() && isBlack;
     }
 
@@ -89,4 +89,28 @@ public class Space {
     {
         return piece != null;
     }
+
+    /**
+     * Keeps track of its piece can move
+     * @return true if it can move, false if not
+     */
+//    public boolean canPieceMove(){
+//        if (hasPiece()){
+//            return piece.getCanMove();
+//        }
+//        return false;
+//    }
+
+    /**
+     * Either enables or disables ability for piece
+     * to be moved
+     * @param choice true to enable, false to disable
+     */
+    public void disableEnableMove(boolean choice){
+        if (hasPiece()){
+            piece.disableEnableMove(choice);
+        }
+
+    }
+
 }

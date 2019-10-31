@@ -56,6 +56,15 @@ public class GameManager {
         return  null;
     }
 
+    public CheckersGame getGame(int gameID){
+        for (CheckersGame game : games){
+            if (game.getGameID() == gameID){
+                return game;
+            }
+        }
+        return null;
+    }
+
 
     /**
      * Just checking to see if the Player is in a particular
