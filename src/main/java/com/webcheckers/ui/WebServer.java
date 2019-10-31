@@ -82,6 +82,10 @@ public class WebServer {
    * the URL pattern to backup someone's turn
    */
   public static final String BACKUPTURN_URL = "/backupMove";
+  /**
+   * the URL pattern to resign game
+   */
+  public static final String RESIGN_URL = "/resignGame";
 
 
   //

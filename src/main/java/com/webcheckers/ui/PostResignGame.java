@@ -111,10 +111,16 @@ public class PostResignGame implements Route {
 //        vm.put(COLOR_ATTR, GetGameRoute.activeColor.RED);
 //        vm.put(BOARD_ATTR, board);
         // start building a View-Model
-        modeOptions.put("isGameOver", true);
-        modeOptions.put(GAME_OVER_ATTR, resignMessage(currentPlayer));
+//        modeOptions.put("isGameOver", true);
+//        modeOptions.put(GAME_OVER_ATTR, resignMessage(currentPlayer));
+        if (currentPlayer == redPlayer){
+            //TODO: Set whitePlayer as winner
+        } else {
+            //TODO: Set redPlayer as winner
+        }
+
 //        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
-        return gson.toJson(modeOptions);
+        return gson.toJson(resignMessage(currentPlayer));
     }
 }
 

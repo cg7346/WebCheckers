@@ -410,4 +410,5 @@ public class CheckersGame {
         }
         return move;
     }
+
 }
