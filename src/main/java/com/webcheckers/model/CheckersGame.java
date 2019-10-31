@@ -345,6 +345,12 @@ public class CheckersGame {
         Piece piece = removePieceToMove(start.getRow(), start.getCol());
         Position end = move.getEnd();
         if (piece != null){
+            if(piece.isRedPiece() && end.getRow() == 0){
+                piece.makePieceKing();
+            }
+            if(!piece.isRedPiece() && end.getRow() == 7){
+                piece.makePieceKing();
+            }
             addPiece(end.getRow(), end.getCol(), piece);
         }
     }

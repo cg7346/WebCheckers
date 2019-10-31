@@ -46,6 +46,9 @@ public class PostSubmitTurn implements Route {
             responseMessage = Message.error("Make move first");
         }
         response.body(gson.toJson(responseMessage));
+
+
+
         return gson.toJson(responseMessage);
     }
 }
