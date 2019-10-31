@@ -118,6 +118,9 @@ public class CheckersGame {
      * Flips the white and red colors so that a player
      * can see their pieces near them
      *
+     *
+     * DESIGN CHOICE - decided to reverse rows only due to difficulty with conversions of colums
+     *
      * So instead of white at top it's red
      * @return the board, but reverse
      */
@@ -133,7 +136,7 @@ public class CheckersGame {
                System.out.println("original row" + rowOriginal);
                System.out.println("original col" + colOriginal);
                System.out.println("new row" + row);
-               System.out.println("new col" + col);
+               System.out.println("new col" + colOriginal);
                System.out.println("--------------------------------------------");
             }
 
@@ -306,7 +309,7 @@ public class CheckersGame {
      * @return true if in, false if not
      */
     public boolean isInMoves(Move move){
-        //move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
+        move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
         for (Move possibleMove : singleMoves){
             if (possibleMove.equals(move)){
                 return true;
@@ -337,7 +340,7 @@ public class CheckersGame {
      * @param move the move to make
      */
     public void makeMove(Move move){
-        //move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
+        move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
         Position start = move.getStart();
         Piece piece = removePieceToMove(start.getRow(), start.getCol());
         Position end = move.getEnd();
@@ -361,10 +364,10 @@ public class CheckersGame {
         if (!activePlayer.equals(redPlayer)) {
             Position convertedStart = new Position(
                     ROWS - start.getRow() - 1,
-                    COLS - start.getCol() - 1);
+                    start.getCol());
             Position convertedEnd = new Position(
                     ROWS - end.getRow() - 1,
-                    COLS - end.getCol() - 1);
+                    end.getCol());
             Move newMove = new Move(convertedStart, convertedEnd);
             System.out.println("CONVERTED: " + newMove);
             System.out.println();
