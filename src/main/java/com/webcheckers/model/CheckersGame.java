@@ -306,7 +306,7 @@ public class CheckersGame {
      * @return true if in, false if not
      */
     public boolean isInMoves(Move move){
-        move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
+        //move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
         for (Move possibleMove : singleMoves){
             if (possibleMove.equals(move)){
                 return true;
@@ -337,7 +337,7 @@ public class CheckersGame {
      * @param move the move to make
      */
     public void makeMove(Move move){
-        move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
+        //move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
         Position start = move.getStart();
         Piece piece = removePieceToMove(start.getRow(), start.getCol());
         Position end = move.getEnd();
