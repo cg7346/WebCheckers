@@ -49,7 +49,10 @@ public class Move {
     }
 
     public Piece getPiece() {
-        return jumpedPiece;
+        if (hasPiece()){
+            return jumpedPiece;
+        }
+        return null;
     }
 
     /**
@@ -67,7 +70,11 @@ public class Move {
 
     @Override
     public String toString(){
-        return "Start: " + start + " End: " + end;
+        String s = "Start: " + start + " End: " + end;
+        if (hasPiece()){
+            s = s.concat(" with JumpPiece!");
+        }
+        return s;
     }
 
 }
