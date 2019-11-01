@@ -244,6 +244,43 @@ public class CheckersGame {
             }
     }
 
+    public Move checkMoveValid(Position currentPos, Position newPos)
+    {
+        Space space = getSpace(newPos.getRow(), newPos.getCol());
+        if(space.isValid())
+        {
+            return new Move(currentPos, newPos);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    
+    Move checkMove(int startRow, int startCol, int endRow, int endCol)
+    {
+        if(endCol >= COLS || endCol < 0 || endRow >= ROWS || endRow < 0) {return null;}
+
+        Space space = getSpace(endRow, endCol);
+        if(space.isValid()) {
+            return new Move(new Position(startRow, startCol), new Position(endRow, endCol));
+        }
+        else if(space.hasPiece()) { //TODO Check if piece is opponent piece
+            Piece piece = space.getPiece();
+            endRow = startRow + ((endRow - startRow) * 2);
+            endCol = startCol + ((endCol - startCol) * 2);
+
+            if(endCol >= COLS || endCol < 0 || endRow >= ROWS || endRow < 0) {return null;}
+
+            space = getSpace(endRow, endCol);
+            if(space.isValid()) {
+                return new Move(new Position(startRow, startCol), new Position(endRow, endCol), piece);
+            }
+        }
+
+        return null;
+    }
 
     /**
      * Checks the left and right column of the next
@@ -254,27 +291,30 @@ public class CheckersGame {
     public ArrayList<Move> checkColumns(int row, int col, int nextRow) {
         ArrayList<Move> moves = new ArrayList<>();
         ArrayList<Move> jumpMoves = new ArrayList<>();
-        if (col + 1 < COLS) {
-            Space space = getSpace(nextRow, col + 1);
-            if (space.isValid()) {
-                Move moveToAdd = new Move(new Position(row, col),
-                        new Position(nextRow, col + 1));
-                System.out.println(moveToAdd);
-                moves.add(moveToAdd);
-            } else if (space.hasPiece() ) { //TODO: add in if the piece is the opposite color
-                Space jumpSpace = getSpace(row + ((nextRow - row) * 2), col + 2);
-                //if()
-            }
-        }
-        if (col - 1 >= 0) {
-            if (getSpace(nextRow, col-1).isValid()) {
-                Move moveToAdd = new Move(new Position(row, col),
-                        new Position(nextRow, col - 1));
-                System.out.println(moveToAdd);
+
+        //check moving to the right
+        Move moveToAdd = checkMove(row, col, nextRow, col + 1);
+        if(moveToAdd != null)
+        {
+            if(moveToAdd.hasPiece()) {
+                jumpMoves.add(moveToAdd);
+            } else {
                 moves.add(moveToAdd);
             }
         }
-        return moves;
+        //check moving to the left
+        moveToAdd = checkMove(row, col, nextRow, col - 1);
+        if(moveToAdd != null)
+        {
+            if(moveToAdd.hasPiece()) {
+                jumpMoves.add(moveToAdd);
+            } else {
+                moves.add(moveToAdd);
+            }
+        }
+
+        if(jumpMoves.size() > 0) { return jumpMoves; }
+        else { return moves; }
     }
 
     /**

@@ -9,6 +9,7 @@ public class Move {
 
     private final Position start;
     private final Position end;
+    private final Piece jumpedPiece;
 
     /**
      * contructor for move
@@ -18,6 +19,13 @@ public class Move {
     public Move(Position start, Position end){
         this.start = start;
         this.end = end;
+        jumpedPiece = null;
+    }
+
+    public Move(Position start, Position end, Piece piece) {
+        this.start = start;
+        this.end = end;
+        this.jumpedPiece = piece;
     }
 
     /**
@@ -34,6 +42,14 @@ public class Move {
      */
     public Position getEnd(){
         return this.end;
+    }
+
+    public boolean hasPiece() {
+        return jumpedPiece != null;
+    }
+
+    public Piece getPiece() {
+        return jumpedPiece;
     }
 
     /**
