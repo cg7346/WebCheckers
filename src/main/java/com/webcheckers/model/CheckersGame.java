@@ -298,7 +298,12 @@ public class CheckersGame {
         }
     }
 
-    //TODO: Add King Moves
+    /**
+     * this checks for king moves and adds it to the move array
+     * @param row
+     * @param col
+     * @param moveArray
+     */
     public void checkKingMoves(int row, int col, ArrayList<Move> moveArray) {
         int rowUp = row -1;
         if(rowUp >= 0){
@@ -310,9 +315,6 @@ public class CheckersGame {
         }
     }
 
-    public ArrayList<Move> checkRedKingMoves(int row, int col) {
-        return null;
-    }
 
     /**
      * Looks to see if a move is in the list
