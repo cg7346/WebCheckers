@@ -42,6 +42,18 @@ public class PostResignGame implements Route {
     // Static Methods
     //
 
+    /**
+     * A String representing how the game ended. Such as:
+     * <p>
+     * Bryan has captured all of the pieces.
+     * Fred has resigned.
+     *
+     * @return the message that will be displayed when a player resigns
+     */
+    public static Message resignMessage(Player player) {
+        return Message.info(String.format(RESIGN, player.getName()));
+    }
+
     //
     // Attributes
     //
@@ -60,23 +72,14 @@ public class PostResignGame implements Route {
      * @throws NoSuchElementException when the {@code gameManager} or {@code gson} parameter is null
      */
     public PostResignGame(GameManager gameManager, Gson gson) {
+        // Makes sure the gameManager and gson objects are not null
         Objects.requireNonNull(gameManager, "gameManager must not be null");
         Objects.requireNonNull(gson, "gson must not be null");
 
+        // Sets the gameManager attribute
         this.gameManager = gameManager;
+        // Sets the gson attribute
         this.gson = gson;
-    }
-
-    /**
-     * A String representing how the game ended. Such as:
-     * <p>
-     * Bryan has captured all of the pieces.
-     * Fred has resigned.
-     *
-     * @return the message that will be displayed when a player resigns
-     */
-    public static Message resignMessage(Player player) {
-        return Message.info(String.format(RESIGN, player.getName()));
     }
 
 
@@ -90,25 +93,38 @@ public class PostResignGame implements Route {
      */
     @Override
     public Object handle(Request request, Response response) throws Exception {
+        // Gets the seesion
         Session session = request.session();
+        // Gets the session's player attribute
         Player currentPlayer = session.attribute("Player");
+        // Gets the game ID
         String gameIDString = request.queryParams("gameID");
+        // Gets the checkers game
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
         Player winner = null;
+        // Mode options for the JSON
         final Map<String, Object> modeOptions = new HashMap<>(2);
+        // Gets the red player
         Player redPlayer = game.getRedPlayer();
+        // Gets the while player
         Player whitePlayer = game.getWhitePlayer();
         // start building a mode options
         modeOptions.put(IS_GAME_OVER, true);
         modeOptions.put(GAME_OVER_ATTR, resignMessage(currentPlayer));
+        // If the current player is the red player and they resign, then the
+        // white player wins
         if (currentPlayer == redPlayer){
             //TODO: Set whitePlayer as winner
             winner = whitePlayer;
+         // If the current player is the white player and they resign, then the
+         // red player wins
         } else if (currentPlayer == whitePlayer) {
             //TODO: Set redPlayer as winner
             winner = redPlayer;
         }
+        // Sends the resign message to the html body
         response.body(gson.toJson(resignMessage(currentPlayer)));
+        // Returns the JSON mode options
         return gson.toJson(modeOptions);
     }
 }

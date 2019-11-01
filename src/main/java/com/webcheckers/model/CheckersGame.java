@@ -133,11 +133,6 @@ public class CheckersGame {
            for (int col = 7; col >= 0; col--) {
                colOriginal++;
                inverseBoard[row][col] = board[rowOriginal][colOriginal];
-               System.out.println("original row" + rowOriginal);
-               System.out.println("original col" + colOriginal);
-               System.out.println("new row" + row);
-               System.out.println("new col" + colOriginal);
-               System.out.println("--------------------------------------------");
             }
 
         }

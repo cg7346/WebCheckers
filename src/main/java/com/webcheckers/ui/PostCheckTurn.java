@@ -30,6 +30,7 @@ public class PostCheckTurn implements Route {
     /**
      * The constructor for the {@code POST /checkTurn} route handler.
      *
+     * @param playerLobby
      * @param gameManager
      * @param gson
      * @throws NoSuchElementException when the {@code gameManager} or {@code gson} parameter is null
