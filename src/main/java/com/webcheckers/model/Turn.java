@@ -10,11 +10,13 @@ public class Turn {
 
     private Stack<Move> moves;
     private Stack<Piece> removedPieces;
+    private boolean isJumpPossible;
 
     public Turn()
     {
         moves = new Stack<>();
         removedPieces = new Stack<>();
+        isJumpPossible = false;
     }
 
     public Move lastMove()
@@ -50,5 +52,13 @@ public class Turn {
         return null;
     }
 
+    public void jumpIsPossible()
+    {
+        isJumpPossible = true;
+    }
 
+    public boolean isJumpPossible()
+    {
+        return isJumpPossible;
+    }
 }

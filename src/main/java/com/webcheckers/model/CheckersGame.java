@@ -257,7 +257,7 @@ public class CheckersGame {
         }
     }
 
-    
+
     Move checkMove(int startRow, int startCol, int endRow, int endCol)
     {
         if(endCol >= COLS || endCol < 0 || endRow >= ROWS || endRow < 0) {return null;}
@@ -268,14 +268,14 @@ public class CheckersGame {
         }
         else if(space.hasPiece()) { //TODO Check if piece is opponent piece
             Piece piece = space.getPiece();
-            endRow = startRow + ((endRow - startRow) * 2);
-            endCol = startCol + ((endCol - startCol) * 2);
+            int newEndRow = startRow + ((endRow - startRow) * 2);
+            int newEndCol = startCol + ((endCol - startCol) * 2);
 
-            if(endCol >= COLS || endCol < 0 || endRow >= ROWS || endRow < 0) {return null;}
+            if(newEndCol >= COLS || newEndCol < 0 || newEndRow >= ROWS || newEndRow < 0) {return null;}
 
-            space = getSpace(endRow, endCol);
+            space = getSpace(newEndRow, newEndCol);
             if(space.isValid()) {
-                return new Move(new Position(startRow, startCol), new Position(endRow, endCol), piece);
+                return new Move(new Position(startRow, startCol), new Position(newEndRow, newEndCol), piece);
             }
         }
 
@@ -297,6 +297,7 @@ public class CheckersGame {
         if(moveToAdd != null)
         {
             if(moveToAdd.hasPiece()) {
+                currentTurn.jumpIsPossible();
                 jumpMoves.add(moveToAdd);
             } else {
                 moves.add(moveToAdd);
@@ -307,6 +308,7 @@ public class CheckersGame {
         if(moveToAdd != null)
         {
             if(moveToAdd.hasPiece()) {
+                currentTurn.jumpIsPossible();
                 jumpMoves.add(moveToAdd);
             } else {
                 moves.add(moveToAdd);
@@ -374,6 +376,10 @@ public class CheckersGame {
         ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
         for (Move possibleMove : moves){
             if (possibleMove.equals(move)){
+                if(currentTurn.isJumpPossible())
+                {
+                    return possibleMove.hasPiece();
+                }
                 return true;
             }
         }
@@ -448,6 +454,11 @@ public class CheckersGame {
                 piece.makePieceKing();
             }
             addPiece(end.getRow(), end.getCol(), piece);
+        }
+        if(move.hasPiece()) {
+            Position piecePos = new Position(move.getStart().getRow() + ((move.getEnd().getRow() - move.getStart().getRow()) / 2),
+                    move.getStart().getCol() + ((move.getEnd().getCol() - move.getStart().getCol()) / 2));
+            removePieceToMove(piecePos.getRow(), piecePos.getCol());
         }
     }
 
