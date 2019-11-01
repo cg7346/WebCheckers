@@ -91,15 +91,17 @@ public class Space {
     }
 
     /**
-     * Keeps track of its piece can move
-     * @return true if it can move, false if not
+     * If there is a piece in the space,
+     * is it red? Use with has piece to see
+     * if the piece is white
+     * @return true if red piece, false if not
      */
-//    public boolean canPieceMove(){
-//        if (hasPiece()){
-//            return piece.getCanMove();
-//        }
-//        return false;
-//    }
+    public boolean isRedPiece(){
+        if (hasPiece()){
+            return piece.isRedPiece();
+        }
+        return false;
+    }
 
     /**
      * Either enables or disables ability for piece

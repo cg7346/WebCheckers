@@ -14,6 +14,10 @@ public class CheckersGame {
     private Player redPlayer;
     //(the person clicked on by the other player)
     private Player whitePlayer;
+    // The winner of the game
+    private Player winner;
+    // The loser of the game
+    private Player loser;
 
     //possible moves to be made the current player
     //according to their apparent location on BoardView
@@ -33,7 +37,7 @@ public class CheckersGame {
     //Whose turn is it?
     private Player activePlayer;
 
-    //The last move made in the game
+    //The current turn being made
     private Turn currentTurn;
 
 
@@ -133,11 +137,6 @@ public class CheckersGame {
            for (int col = 7; col >= 0; col--) {
                colOriginal++;
                inverseBoard[row][col] = board[rowOriginal][colOriginal];
-//               System.out.println("original row" + rowOriginal);
-//               System.out.println("original col" + colOriginal);
-//               System.out.println("new row" + row);
-//               System.out.println("new col" + colOriginal);
-//               System.out.println("--------------------------------------------");
             }
 
         }
@@ -214,19 +213,16 @@ public class CheckersGame {
      */
     public void lookForMoves() {
         for (int row = 0; row < ROWS; row++) {
-            System.out.println();
             for (int col = 0; col < COLS; col++) {
                 Space space = getSpace(row, col);
                 if (space.hasPiece()) {
                     Piece p = space.getPiece();
                     //piece if white and single
                     if (!p.isRedPiece() && !p.isPieceKing()) {
-//                        System.out.println("Checking White------");
                         checkWhiteSingleMoves(row, col);
                     }
                     //piece red and single
                     if (p.isRedPiece() && !p.isPieceKing()) {
-//                        System.out.println("Checking Red--------");
                         checkRedSingleMoves(row, col);
                     }
                     //piece white and king
@@ -255,7 +251,6 @@ public class CheckersGame {
             if (getSpace(nextRow, col+1).isValid()) {
                 Move moveToAdd = new Move(new Position(row, col),
                         new Position(nextRow, col + 1));
-                System.out.println(moveToAdd);
                 moves.add(moveToAdd);
             }
         }
@@ -263,7 +258,6 @@ public class CheckersGame {
             if (getSpace(nextRow, col-1).isValid()) {
                 Move moveToAdd = new Move(new Position(row, col),
                         new Position(nextRow, col - 1));
-                System.out.println(moveToAdd);
                 moves.add(moveToAdd);
             }
         }
@@ -335,7 +329,17 @@ public class CheckersGame {
      * @param move the Move to keep track of
      */
     public void keepLastMove(Move move){
-        this.currentTurn.AddMove(move);
+        this.currentTurn.addMove(move);
+    }
+
+    /**
+     * Keeps track of the last jump move
+     * @param move the Move to keep track of
+     * @param piece the Piece jumped over
+     */
+    public void keepLastJumpMove(Move move, Piece piece)
+    {
+        this.currentTurn.addMove(move, piece);
     }
 
     /**
@@ -344,7 +348,7 @@ public class CheckersGame {
      * @return a Move that shows the last move made
      */
     public Move getLastMove(){
-        return currentTurn.LastMove();
+        return currentTurn.lastMove();
     }
 
     /**
@@ -352,15 +356,22 @@ public class CheckersGame {
      */
     public void backupMove()
     {
-        Move lastMove = currentTurn.LastMove();
+        Move lastMove = currentTurn.lastMove();
         Position start = lastMove.getStart();
         Position end = lastMove.getEnd();
         Piece piece = removePieceToMove(end.getRow(), end.getCol());
         addPiece(start.getRow(), start.getCol(), piece);
-        Piece p = currentTurn.BackupLastMove();
+
+        //remove the last move and get the piece associated
+        Piece p = currentTurn.backupLastMove();
+
+        //if there was a piece removed in that move return it to the game board
         if(p != null)
         {
-
+            Position p_Pos = new Position(
+                    start.getRow() + ((end.getRow() - start.getRow()) / 2),
+                    start.getCol() + ((end.getCol() - start.getCol()) / 2));
+            addPiece(p_Pos.getRow(), p_Pos.getCol(), p);
         }
     }
 
@@ -392,8 +403,6 @@ public class CheckersGame {
      * @return a move flipped of the original
      */
     public Move moveConverter(Move move){
-//        System.out.println("CONVERTING MOVE--------");
-//        System.out.println("ORIGINAL: " + move);
         Position start = move.getStart();
         Position end = move.getEnd();
         if (!activePlayer.equals(redPlayer)) {
@@ -404,11 +413,17 @@ public class CheckersGame {
                     ROWS - end.getRow() - 1,
                     end.getCol());
             Move newMove = new Move(convertedStart, convertedEnd);
-//            System.out.println("CONVERTED: " + newMove);
-//            System.out.println();
             return new Move(convertedStart, convertedEnd);
         }
         return move;
     }
 
+    public void setWinners(Player winPlayer) {
+        this.winner = winPlayer;
+        if(winPlayer != redPlayer){
+            this.loser = redPlayer;
+        } else if (winPlayer != whitePlayer){
+            this.loser = whitePlayer;
+        }
+    }
 }
