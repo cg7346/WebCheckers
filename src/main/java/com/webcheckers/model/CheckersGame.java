@@ -209,19 +209,16 @@ public class CheckersGame {
      */
     public void lookForMoves() {
         for (int row = 0; row < ROWS; row++) {
-            System.out.println();
             for (int col = 0; col < COLS; col++) {
                 Space space = getSpace(row, col);
                 if (space.hasPiece()) {
                     Piece p = space.getPiece();
                     //piece if white and single
                     if (!p.isRedPiece() && !p.isPieceKing()) {
-                        System.out.println("Checking White------");
                         checkWhiteSingleMoves(row, col);
                     }
                     //piece red and single
                     if (p.isRedPiece() && !p.isPieceKing()) {
-                        System.out.println("Checking Red--------");
                         checkRedSingleMoves(row, col);
                     }
                     //piece white and king
@@ -250,7 +247,6 @@ public class CheckersGame {
             if (getSpace(nextRow, col+1).isValid()) {
                 Move moveToAdd = new Move(new Position(row, col),
                         new Position(nextRow, col + 1));
-                System.out.println(moveToAdd);
                 moves.add(moveToAdd);
             }
         }
@@ -258,7 +254,6 @@ public class CheckersGame {
             if (getSpace(nextRow, col-1).isValid()) {
                 Move moveToAdd = new Move(new Position(row, col),
                         new Position(nextRow, col - 1));
-                System.out.println(moveToAdd);
                 moves.add(moveToAdd);
             }
         }
@@ -387,8 +382,6 @@ public class CheckersGame {
      * @return a move flipped of the original
      */
     public Move moveConverter(Move move){
-        System.out.println("COVERTING MOVE--------");
-        System.out.println("ORIGINAL: " + move);
         Position start = move.getStart();
         Position end = move.getEnd();
         if (!activePlayer.equals(redPlayer)) {
@@ -399,8 +392,6 @@ public class CheckersGame {
                     ROWS - end.getRow() - 1,
                     end.getCol());
             Move newMove = new Move(convertedStart, convertedEnd);
-            System.out.println("CONVERTED: " + newMove);
-            System.out.println();
             return new Move(convertedStart, convertedEnd);
         }
         return move;

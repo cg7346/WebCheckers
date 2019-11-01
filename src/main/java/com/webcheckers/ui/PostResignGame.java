@@ -29,6 +29,7 @@ public class PostResignGame implements Route {
     private static final String GAME_OVER_ATTR = "gameOverMessage";
     // Values used in the mode options for JSON after the resign button is clicked
     private static final String RESIGN = "%s has resigned.";
+    private static final String WINNER = "%s have won!";
 
 //    private static final String TITLE_ATTR = "title";
 //    private static final String TITLE_ATTR_MSG = "Game Title";
@@ -50,6 +51,15 @@ public class PostResignGame implements Route {
      * @return the message that will be displayed when a player resigns
      */
     public static Message resignMessage(Player player) {
+        return Message.info(String.format(RESIGN, player.getName()));
+    }
+
+    /**
+     * Winner message after a player clicks the resign button
+     *
+     * @return the message that will be displayed when a player resigns
+     */
+    public static Message winnerMessage(Player player) {
         return Message.info(String.format(RESIGN, player.getName()));
     }
 
@@ -95,7 +105,6 @@ public class PostResignGame implements Route {
         String gameIDString = request.queryParams("gameID");
         // Gets the checkers game
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
-        Player winner = null;
         // Mode options for the JSON
         final Map<String, Object> modeOptions = new HashMap<>(2);
         // Gets the red player
@@ -109,15 +118,17 @@ public class PostResignGame implements Route {
         // white player wins
         if (currentPlayer == redPlayer){
             //TODO: Set whitePlayer as winner
-            winner = whitePlayer;
+            response.body(gson.toJson(winnerMessage(whitePlayer)));
          // If the current player is the white player and they resign, then the
          // red player wins
         } else if (currentPlayer == whitePlayer) {
             //TODO: Set redPlayer as winner
-            winner = redPlayer;
+            response.body(gson.toJson(winnerMessage(redPlayer)));
         }
         // Sends the resign message to the html body
         response.body(gson.toJson(resignMessage(currentPlayer)));
+        System.out.println(response.body());
+        System.out.println(gson.toJson(modeOptions));
         // Returns the JSON mode options
         return gson.toJson(modeOptions);
     }
