@@ -5,10 +5,11 @@ import com.webcheckers.appl.GameManager;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
-import spark.*;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+import spark.Session;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -45,12 +46,17 @@ public class PostResignGame implements Route {
     //
 
     /**
-     * Resign message after a player clicks the resign button
+     * The constructor for the {@code POST /resignGame} route handler.
      *
-     * @return the message that will be displayed when a player resigns
+     * @param gameManager is the game manager from the game manager class
+     * @param gson is the JSON
+     * @throws NoSuchElementException when the {@code gameManager} or {@code gson} parameter is null
      */
-    public static Message resignMessage(Player player) {
-        return Message.error(String.format(RESIGN, player.getName()));
+    public PostResignGame(GameManager gameManager, Gson gson) {
+        // Sets and validates the gameManager attribute to not be null
+        this.gameManager = Objects.requireNonNull(gameManager, "gameManager must not be null");
+        // Sets and validates the gson attribute to not be null
+        this.gson = Objects.requireNonNull(gson, "gson must not be null");
     }
 
     //
@@ -62,20 +68,15 @@ public class PostResignGame implements Route {
     //
     // Constructor
     //
-    /**
-     * The constructor for the {@code POST /resignGame} route handler.
-     *
-     * @param gameManager is the game manager from the game manager class
-     * @param gson is the JSON
-     * @throws NoSuchElementException when the {@code gameManager} or {@code gson} parameter is null
-     */
-    public PostResignGame(GameManager gameManager, Gson gson) {
-        // Sets and validates the gameManager attribute to not be null
-        this.gameManager = Objects.requireNonNull(gameManager, "gameManager must not be null");;
-        // Sets and validates the gson attribute to not be null
-        this.gson = Objects.requireNonNull(gson, "gson must not be null");
-    }
 
+    /**
+     * Resign message after a player clicks the resign button
+     *
+     * @return the message that will be displayed when a player resigns
+     */
+    public static Message resignMessage(Player player) {
+        return Message.info(String.format(RESIGN, player.getName()));
+    }
 
     /**
      * {@inheritDoc}
@@ -87,38 +88,43 @@ public class PostResignGame implements Route {
      */
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        // Gets the seesion
+        String gameIDString = request.queryParams("gameID");
+        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
+        game.setGameOver(true);
+
+
+        // Gets the session
         Session session = request.session();
         // Gets the session's player attribute
         Player currentPlayer = session.attribute("Player");
-        // Gets the game ID
-        String gameIDString = request.queryParams("gameID");
-        // Gets the checkers game
-        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
-        // Mode options for the JSON
-        final Map<String, Object> modeOptions = new HashMap<>(2);
-        // Gets the red player
-        Player redPlayer = game.getRedPlayer();
-        // Gets the while player
-        Player whitePlayer = game.getWhitePlayer();
-        // start building a mode options
-        modeOptions.put(IS_GAME_OVER, true);
-        modeOptions.put(GAME_OVER_ATTR, resignMessage(currentPlayer));
-        // If the current player is the red player and they resign, then the
-        // white player wins
-        if (currentPlayer == redPlayer){
-            game.setWinners(whitePlayer);
-         // If the current player is the white player and they resign, then the
-         // red player wins
-        } else if (currentPlayer == whitePlayer) {
-            game.setWinners(redPlayer);
-        }
-        // Sends the resign message to the html body
-        response.body(gson.toJson(resignMessage(currentPlayer)));
-        System.out.println(response.body());
-        System.out.println(gson.toJson(modeOptions));
-        // Returns the JSON mode options
-        gson.toJson(modeOptions);
+//        // Gets the game ID
+//        String gameIDString = request.queryParams("gameID");
+//        // Gets the checkers game
+//        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
+//        // Mode options for the JSON
+//        final Map<String, Object> modeOptions = new HashMap<>(2);
+//        // Gets the red player
+//        Player redPlayer = game.getRedPlayer();
+//        // Gets the while player
+//        Player whitePlayer = game.getWhitePlayer();
+//        // start building a mode options
+//        modeOptions.put(IS_GAME_OVER, true);
+//        modeOptions.put(GAME_OVER_ATTR, resignMessage(currentPlayer));
+//        // If the current player is the red player and they resign, then the
+//        // white player wins
+//        if (currentPlayer == redPlayer){
+//            game.setWinners(whitePlayer);
+//         // If the current player is the white player and they resign, then the
+//         // red player wins
+//        } else if (currentPlayer == whitePlayer) {
+//            game.setWinners(redPlayer);
+//        }
+//        // Sends the resign message to the html body
+//        response.body(gson.toJson(resignMessage(currentPlayer)));
+//        // Returns the JSON mode options
+//        gson.toJson(modeOptions);
+//        return gson.toJson(resignMessage(currentPlayer));
+////        return gson.toJson(new Message());
         return gson.toJson(resignMessage(currentPlayer));
     }
 }

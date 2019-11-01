@@ -18,6 +18,7 @@ public class CheckersGame {
     private Player winner;
     // The loser of the game
     private Player loser;
+    private Boolean gameOver = false;
 
     //possible moves to be made the current player
     //according to their apparent location on BoardView
@@ -418,8 +419,14 @@ public class CheckersGame {
         return move;
     }
 
+    /**
+     * Sets the winner of the checkers game
+     * @param winPlayer the winner player
+     */
     public void setWinners(Player winPlayer) {
+        // Sets the winner player
         this.winner = winPlayer;
+        // Sets the loser player
         if(winPlayer != redPlayer){
             this.loser = redPlayer;
         } else if (winPlayer != whitePlayer){
@@ -427,11 +434,27 @@ public class CheckersGame {
         }
     }
 
+    /**
+     * Gets the winner of the checkers game
+     * @return the winning player
+     */
     public Player getWinner(){
         return this.winner;
     }
 
+    /**
+     * Gets the loser of the checkers game
+     * @return the losing player
+     */
     public Player getLoser(){
         return this.loser;
+    }
+
+    public Boolean getGameOver() {
+        return this.gameOver;
+    }
+
+    public void setGameOver(Boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }

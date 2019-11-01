@@ -9,7 +9,9 @@ import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import static spark.Spark.halt;
 
@@ -43,6 +45,7 @@ public class GetGameRoute implements Route {
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
     private final Gson gson;
+    private Boolean gameOver = false;
     enum viewMode {PLAY, SPECTATOR,REPLAY}
     enum activeColor {RED, WHITE}
 
@@ -84,9 +87,8 @@ public class GetGameRoute implements Route {
         vm.put(GAME_ID_ATTR, gameID);
         vm.put(CURRENT_USER_ATTR, currentPlayer);
         vm.put("viewMode", viewMode.PLAY);
-        final Map<String, Object> modeOptions = new HashMap<>(2);
-        modeOptions.put("isGameOver", false);
-        modeOptions.put(GAME_OVER_ATTR, GAME_OVER_ATTR_MSG);
+        this.gameOver = game.getGameOver();
+        final Map<String, Object> modeOptions = handleGameOver(new HashMap<>(2), currentPlayer);
         vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
         vm.put(RED_PLAYER_ATTR, redPlayer);
         vm.put(WHITE_PLAYER_ATTR, whitePlayer);
@@ -116,6 +118,17 @@ public class GetGameRoute implements Route {
                 game = gameManager.makeGame(currentPlayer, chosenOpponent);
             }}
         return game;
+    }
+
+
+    private Map<String, Object> handleGameOver(Map<String, Object> modeOptions, Player currentPlayer) {
+        modeOptions.put("isGameOver", gameOver);
+        if (!gameOver) {
+            modeOptions.put(GAME_OVER_ATTR, GAME_OVER_ATTR_MSG);
+        } else {
+            modeOptions.put(GAME_OVER_ATTR, PostResignGame.resignMessage(currentPlayer));
+        }
+        return modeOptions;
     }
 }
 
