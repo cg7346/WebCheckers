@@ -2,10 +2,8 @@ package com.webcheckers.ui;
 
 import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
-import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
-import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
@@ -13,29 +11,30 @@ import spark.Route;
 
 import java.util.Objects;
 
-public class PostSubmitTurn implements Route {
+public class PostBackupRoute implements Route {
 
-    private PlayerLobby playerLobby;
     private GameManager gameManager;
     private final Gson gson;
 
-    /**
-     * Construct a Post Submit Turn
-     * @param playerLobby PlayerLobby of the session
-     * @param gameManager GameManager of the session
-     */
-    public PostSubmitTurn(PlayerLobby playerLobby, GameManager gameManager, Gson gson){
-        this.playerLobby = Objects.requireNonNull(playerLobby, "player lobby is required");
+    public PostBackupRoute(GameManager gameManager, Gson gson)
+    {
         this.gameManager = Objects.requireNonNull(gameManager, "game manager is required");
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
-
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(Request request, Response response) throws Exception
+    {
         String gameIDString = request.queryParams("gameID");
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
-        Move lastMove = game.getLastMove();
+        game.backupMove();
+
+        Message responseMessage = Message.info("BACK IT UP!");
+        response.body(gson.toJson(responseMessage));
+
+        return gson.toJson(responseMessage);
+
+        /*
         Message responseMessage = null;
         if (lastMove != null){
             //TODO: Check to see if there are jump moves
@@ -47,8 +46,7 @@ public class PostSubmitTurn implements Route {
         }
         response.body(gson.toJson(responseMessage));
 
-
-
         return gson.toJson(responseMessage);
+        */
     }
 }
