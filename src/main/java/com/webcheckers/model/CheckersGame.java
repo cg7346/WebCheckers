@@ -133,11 +133,11 @@ public class CheckersGame {
            for (int col = 7; col >= 0; col--) {
                colOriginal++;
                inverseBoard[row][col] = board[rowOriginal][colOriginal];
-               System.out.println("original row" + rowOriginal);
-               System.out.println("original col" + colOriginal);
-               System.out.println("new row" + row);
-               System.out.println("new col" + colOriginal);
-               System.out.println("--------------------------------------------");
+//               System.out.println("original row" + rowOriginal);
+//               System.out.println("original col" + colOriginal);
+//               System.out.println("new row" + row);
+//               System.out.println("new col" + colOriginal);
+//               System.out.println("--------------------------------------------");
             }
 
         }
@@ -221,12 +221,12 @@ public class CheckersGame {
                     Piece p = space.getPiece();
                     //piece if white and single
                     if (!p.isRedPiece() && !p.isPieceKing()) {
-                        System.out.println("Checking White------");
+//                        System.out.println("Checking White------");
                         checkWhiteSingleMoves(row, col);
                     }
                     //piece red and single
                     if (p.isRedPiece() && !p.isPieceKing()) {
-                        System.out.println("Checking Red--------");
+//                        System.out.println("Checking Red--------");
                         checkRedSingleMoves(row, col);
                     }
                     //piece white and king
@@ -392,8 +392,8 @@ public class CheckersGame {
      * @return a move flipped of the original
      */
     public Move moveConverter(Move move){
-        System.out.println("COVERTING MOVE--------");
-        System.out.println("ORIGINAL: " + move);
+//        System.out.println("CONVERTING MOVE--------");
+//        System.out.println("ORIGINAL: " + move);
         Position start = move.getStart();
         Position end = move.getEnd();
         if (!activePlayer.equals(redPlayer)) {
@@ -404,8 +404,8 @@ public class CheckersGame {
                     ROWS - end.getRow() - 1,
                     end.getCol());
             Move newMove = new Move(convertedStart, convertedEnd);
-            System.out.println("CONVERTED: " + newMove);
-            System.out.println();
+//            System.out.println("CONVERTED: " + newMove);
+//            System.out.println();
             return new Move(convertedStart, convertedEnd);
         }
         return move;

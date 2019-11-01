@@ -40,6 +40,13 @@ public class PostCheckTurn implements Route {
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @Override
     public Object handle(Request request, Response response) throws Exception {
         Session session = request.session();
