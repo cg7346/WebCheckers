@@ -13,6 +13,7 @@ public class Space {
     private Piece piece;
     private boolean isBlack;
 
+
     /**
      * Creates a space on the board without a piece
      *
@@ -44,8 +45,7 @@ public class Space {
      *
      * @return validity of space
      */
-    public boolean isValid()
-    {
+    public boolean isValid() {
         return !hasPiece() && isBlack;
     }
 
@@ -89,4 +89,30 @@ public class Space {
     {
         return piece != null;
     }
+
+    /**
+     * If there is a piece in the space,
+     * is it red? Use with has piece to see
+     * if the piece is white
+     * @return true if red piece, false if not
+     */
+    public boolean isRedPiece(){
+        if (hasPiece()){
+            return piece.isRedPiece();
+        }
+        return false;
+    }
+
+    /**
+     * Either enables or disables ability for piece
+     * to be moved
+     * @param choice true to enable, false to disable
+     */
+    public void disableEnableMove(boolean choice){
+        if (hasPiece()){
+            piece.disableEnableMove(choice);
+        }
+
+    }
+
 }

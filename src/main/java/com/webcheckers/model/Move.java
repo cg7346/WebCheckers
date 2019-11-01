@@ -11,7 +11,7 @@ public class Move {
     private final Position end;
 
     /**
-     * constructor for move
+     * contructor for move
      * @param start
      * @param end
      */
