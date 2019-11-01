@@ -202,7 +202,7 @@ public class WebServer {
     // Checks to see if the game is ready for next turn
     post(CHECKTURN_URL, new PostCheckTurn(playerLobby, gameManager, gson));
 
-    // Checks to see if the game is ready for next turn
+    // Posts after the resign button is clicked
     post(RESIGN_URL, new PostResignGame(gameManager, gson));
 
     //
