@@ -253,12 +253,17 @@ public class CheckersGame {
      */
     public ArrayList<Move> checkColumns(int row, int col, int nextRow) {
         ArrayList<Move> moves = new ArrayList<>();
+        ArrayList<Move> jumpMoves = new ArrayList<>();
         if (col + 1 < COLS) {
-            if (getSpace(nextRow, col+1).isValid()) {
+            Space space = getSpace(nextRow, col + 1);
+            if (space.isValid()) {
                 Move moveToAdd = new Move(new Position(row, col),
                         new Position(nextRow, col + 1));
                 System.out.println(moveToAdd);
                 moves.add(moveToAdd);
+            } else if (space.hasPiece() ) { //TODO: add in if the piece is the opposite color
+                Space jumpSpace = getSpace(row + ((nextRow - row) * 2), col + 2);
+                //if()
             }
         }
         if (col - 1 >= 0) {
@@ -314,6 +319,7 @@ public class CheckersGame {
             moveArray.addAll(checkColumns(row, col, rowDown));
         }
     }
+
 
 
     /**
