@@ -369,7 +369,11 @@ public class CheckersGame {
         Position end = lastMove.getEnd();
         Piece piece = removePieceToMove(end.getRow(), end.getCol());
         addPiece(start.getRow(), start.getCol(), piece);
+
+        //remove the last move and get the piece associated
         Piece p = currentTurn.backupLastMove();
+
+        //if there was a piece removed in that move return it to the game board
         if(p != null)
         {
             Position p_Pos = new Position(

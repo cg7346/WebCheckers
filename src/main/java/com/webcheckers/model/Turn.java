@@ -2,6 +2,10 @@ package com.webcheckers.model;
 
 import java.util.Stack;
 
+/**
+ * Class to represent a turn being made in the game
+ * Holds the logic to store the moves being made and to undo them
+ */
 public class Turn {
 
     private Stack<Move> moves;
@@ -29,6 +33,10 @@ public class Turn {
         moves.push(m);
     }
 
+    /**
+     * Removes the most recent move and piece associated (if there is one)
+     * @return the piece removed in the move. Null if no piece associated
+     */
     public Piece backupLastMove()
     {
         if(!moves.empty())
