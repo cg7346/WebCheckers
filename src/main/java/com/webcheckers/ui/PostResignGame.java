@@ -50,7 +50,7 @@ public class PostResignGame implements Route {
      * @return the message that will be displayed when a player resigns
      */
     public static Message resignMessage(Player player) {
-        return Message.info(String.format(RESIGN, player.getName()));
+        return Message.error(String.format(RESIGN, player.getName()));
     }
 
     //
@@ -118,7 +118,8 @@ public class PostResignGame implements Route {
         System.out.println(response.body());
         System.out.println(gson.toJson(modeOptions));
         // Returns the JSON mode options
-        return gson.toJson(modeOptions);
+        gson.toJson(modeOptions);
+        return gson.toJson(resignMessage(currentPlayer));
     }
 }
 

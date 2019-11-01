@@ -426,4 +426,12 @@ public class CheckersGame {
             this.loser = whitePlayer;
         }
     }
+
+    public Player getWinner(){
+        return this.winner;
+    }
+
+    public Player getLoser(){
+        return this.loser;
+    }
 }
