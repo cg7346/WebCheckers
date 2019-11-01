@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
- * The {@code POST /EndGame} route handler
+ * The {@code POST /resignGame} route handler
  *
  * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella</a>
  * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</a>
@@ -34,6 +34,7 @@ public class PostResignGame implements Route {
     private static final String COLOR_ATTR = "activeColor";
     private static final String RED_PLAYER_ATTR = "redPlayer";
     private static final String WHITE_PLAYER_ATTR = "whitePlayer";
+    private static final String IS_GAME_OVER = "isGameOver";
     private static final String GAME_OVER_ATTR = "gameOverMessage";
     private static final Message GAME_OVER_ATTR_MSG = Message.info("The game is over"); /* Get the game over message */
     private static final String VIEW_NAME = "game.ftl";
@@ -45,7 +46,6 @@ public class PostResignGame implements Route {
     //
     // Attributes
     //
-    private final TemplateEngine templateEngine;
     private final GameManager gameManager;
     private final Gson gson;
 
@@ -54,19 +54,16 @@ public class PostResignGame implements Route {
     // Constructor
     //
     /**
-     * The constructor for the {@code POST /endGame} route handler.
+     * The constructor for the {@code POST /resignGame} route handler.
      *
-     * @param templateEngine
      * @param gameManager
      * @param gson
-     * @throws NoSuchElementException when the {@code Player} or {@code templateEngine} parameter is null
+     * @throws NoSuchElementException when the {@code gameManager} or {@code gson} parameter is null
      */
-    public PostResignGame(TemplateEngine templateEngine, GameManager gameManager, Gson gson) {
-        Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+    public PostResignGame(GameManager gameManager, Gson gson) {
         Objects.requireNonNull(gameManager, "gameManager must not be null");
         Objects.requireNonNull(gson, "gson must not be null");
 
-        this.templateEngine = templateEngine;
         this.gameManager = gameManager;
         this.gson = gson;
     }
@@ -96,31 +93,22 @@ public class PostResignGame implements Route {
     public Object handle(Request request, Response response) throws Exception {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
-//        final Map<String, Object> vm = new HashMap<>(2);
+        Player winner = null;
         final Map<String, Object> modeOptions = new HashMap<>(2);
         CheckersGame game = gameManager.getGame(currentPlayer);
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
-        BoardView board = new BoardView(currentPlayer, game);
-//        vm.put(TITLE_ATTR, TITLE_ATTR_MSG);
-//        vm.put(CURRENT_USER_ATTR, currentPlayer);
-//        vm.put("viewMode", GetGameRoute.viewMode.PLAY);
-//        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
-//        vm.put(RED_PLAYER_ATTR, redPlayer);
-//        vm.put(WHITE_PLAYER_ATTR, whitePlayer);
-//        vm.put(COLOR_ATTR, GetGameRoute.activeColor.RED);
-//        vm.put(BOARD_ATTR, board);
-        // start building a View-Model
-//        modeOptions.put("isGameOver", true);
-//        modeOptions.put(GAME_OVER_ATTR, resignMessage(currentPlayer));
+        // start building a mode options
+        modeOptions.put(IS_GAME_OVER, true);
+        modeOptions.put(GAME_OVER_ATTR, resignMessage(currentPlayer));
         if (currentPlayer == redPlayer){
             //TODO: Set whitePlayer as winner
-        } else {
+            winner = whitePlayer;
+        } else if (currentPlayer == whitePlayer) {
             //TODO: Set redPlayer as winner
+            winner = redPlayer;
         }
-
-//        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
-        return gson.toJson(resignMessage(currentPlayer));
+        return gson.toJson(modeOptions);
     }
 }
 
