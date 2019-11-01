@@ -2,7 +2,6 @@ package com.webcheckers.ui;
 
 import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
-import com.webcheckers.model.BoardView;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
@@ -93,9 +92,10 @@ public class PostResignGame implements Route {
     public Object handle(Request request, Response response) throws Exception {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
+        String gameIDString = request.queryParams("gameID");
+        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
         Player winner = null;
         final Map<String, Object> modeOptions = new HashMap<>(2);
-        CheckersGame game = gameManager.getGame(currentPlayer);
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
         // start building a mode options
@@ -108,6 +108,7 @@ public class PostResignGame implements Route {
             //TODO: Set redPlayer as winner
             winner = redPlayer;
         }
+        response.body(gson.toJson(resignMessage(currentPlayer)));
         return gson.toJson(modeOptions);
     }
 }
