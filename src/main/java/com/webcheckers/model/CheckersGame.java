@@ -258,7 +258,7 @@ public class CheckersGame {
     }
 
 
-    Move checkMove(int startRow, int startCol, int endRow, int endCol)
+    Move checkMove(int startRow, int startCol, int endRow, int endCol, Piece.color playerColor)
     {
         if(endCol >= COLS || endCol < 0 || endRow >= ROWS || endRow < 0) {return null;}
 
@@ -266,7 +266,7 @@ public class CheckersGame {
         if(space.isValid()) {
             return new Move(new Position(startRow, startCol), new Position(endRow, endCol));
         }
-        else if(space.hasPiece()) { //TODO Check if piece is opponent piece
+        else if(space.hasPiece() && space.getPiece().getColor() != playerColor) { //TODO Check if piece is opponent piece
             Piece piece = space.getPiece();
             int newEndRow = startRow + ((endRow - startRow) * 2);
             int newEndCol = startCol + ((endCol - startCol) * 2);
@@ -288,12 +288,12 @@ public class CheckersGame {
      * @param row row to look in
      * @param col column to left and right of
      */
-    public ArrayList<Move> checkColumns(int row, int col, int nextRow) {
+    public ArrayList<Move> checkColumns(int row, int col, int nextRow, Piece.color playerColor) {
         ArrayList<Move> moves = new ArrayList<>();
         ArrayList<Move> jumpMoves = new ArrayList<>();
 
         //check moving to the right
-        Move moveToAdd = checkMove(row, col, nextRow, col + 1);
+        Move moveToAdd = checkMove(row, col, nextRow, col + 1, playerColor);
         if(moveToAdd != null)
         {
             if(moveToAdd.hasPiece()) {
@@ -304,7 +304,7 @@ public class CheckersGame {
             }
         }
         //check moving to the left
-        moveToAdd = checkMove(row, col, nextRow, col - 1);
+        moveToAdd = checkMove(row, col, nextRow, col - 1, playerColor);
         if(moveToAdd != null)
         {
             if(moveToAdd.hasPiece()) {
@@ -328,7 +328,7 @@ public class CheckersGame {
         //check next row closer to top
         int nextRow = row + 1;
         if (nextRow < 8) {
-                singleWhiteMoves.addAll(checkColumns(row, col, nextRow));
+                singleWhiteMoves.addAll(checkColumns(row, col, nextRow, Piece.color.WHITE));
             }
         }
 
@@ -341,7 +341,7 @@ public class CheckersGame {
         //check next row closer to top
         int nextRow = row - 1;
         if (nextRow >= 0) {
-            singleRedMoves.addAll(checkColumns(row, col, nextRow));
+            singleRedMoves.addAll(checkColumns(row, col, nextRow, Piece.color.RED));
         }
     }
 
@@ -354,11 +354,11 @@ public class CheckersGame {
     public void checkKingMoves(int row, int col, ArrayList<Move> moveArray) {
         int rowUp = row -1;
         if(rowUp >= 0){
-            moveArray.addAll(checkColumns(row, col, rowUp));
+            moveArray.addAll(checkColumns(row, col, rowUp, Piece.color.WHITE)); //TODO fix this so it's player color
         }
         int rowDown = row + 1;
         if(rowDown < 8){
-            moveArray.addAll(checkColumns(row, col, rowDown));
+            moveArray.addAll(checkColumns(row, col, rowDown, Piece.color.WHITE)); //TODO fix this so it's player color
         }
     }
 
