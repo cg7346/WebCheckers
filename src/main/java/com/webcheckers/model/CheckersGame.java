@@ -14,6 +14,10 @@ public class CheckersGame {
     private Player redPlayer;
     //(the person clicked on by the other player)
     private Player whitePlayer;
+    // The winner of the game
+    private Player winner;
+    // The loser of the game
+    private Player loser;
 
     //possible moves to be made the current player
     //according to their apparent location on BoardView
@@ -414,4 +418,12 @@ public class CheckersGame {
         return move;
     }
 
+    public void setWinners(Player winPlayer) {
+        this.winner = winPlayer;
+        if(winPlayer != redPlayer){
+            this.loser = redPlayer;
+        } else if (winPlayer != whitePlayer){
+            this.loser = whitePlayer;
+        }
+    }
 }

@@ -29,7 +29,6 @@ public class PostResignGame implements Route {
     private static final String GAME_OVER_ATTR = "gameOverMessage";
     // Values used in the mode options for JSON after the resign button is clicked
     private static final String RESIGN = "%s has resigned.";
-    private static final String WINNER = "%s have won!";
 
 //    private static final String TITLE_ATTR = "title";
 //    private static final String TITLE_ATTR_MSG = "Game Title";
@@ -51,15 +50,6 @@ public class PostResignGame implements Route {
      * @return the message that will be displayed when a player resigns
      */
     public static Message resignMessage(Player player) {
-        return Message.info(String.format(RESIGN, player.getName()));
-    }
-
-    /**
-     * Winner message after a player clicks the resign button
-     *
-     * @return the message that will be displayed when a player resigns
-     */
-    public static Message winnerMessage(Player player) {
         return Message.info(String.format(RESIGN, player.getName()));
     }
 
@@ -117,13 +107,11 @@ public class PostResignGame implements Route {
         // If the current player is the red player and they resign, then the
         // white player wins
         if (currentPlayer == redPlayer){
-            //TODO: Set whitePlayer as winner
-            response.body(gson.toJson(winnerMessage(whitePlayer)));
+            game.setWinners(whitePlayer);
          // If the current player is the white player and they resign, then the
          // red player wins
         } else if (currentPlayer == whitePlayer) {
-            //TODO: Set redPlayer as winner
-            response.body(gson.toJson(winnerMessage(redPlayer)));
+            game.setWinners(redPlayer);
         }
         // Sends the resign message to the html body
         response.body(gson.toJson(resignMessage(currentPlayer)));
