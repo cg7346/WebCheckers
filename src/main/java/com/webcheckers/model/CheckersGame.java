@@ -35,7 +35,7 @@ public class CheckersGame {
     //Whose turn is it?
     private Player activePlayer;
 
-    //The last move made in the game
+    //The current turn being made
     private Turn currentTurn;
 
 

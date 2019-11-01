@@ -6,7 +6,6 @@ public class Turn {
 
     private Stack<Move> moves;
     private Stack<Piece> removedPieces;
-    private Piece movePiece;
 
     public Turn()
     {
