@@ -35,7 +35,7 @@ public class CheckersGame {
     //Whose turn is it?
     private Player activePlayer;
 
-    //The last move made in the game
+    //The current turn being made
     private Turn currentTurn;
 
 
@@ -244,6 +244,43 @@ public class CheckersGame {
             }
     }
 
+    public Move checkMoveValid(Position currentPos, Position newPos)
+    {
+        Space space = getSpace(newPos.getRow(), newPos.getCol());
+        if(space.isValid())
+        {
+            return new Move(currentPos, newPos);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
+    Move checkMove(int startRow, int startCol, int endRow, int endCol)
+    {
+        if(endCol >= COLS || endCol < 0 || endRow >= ROWS || endRow < 0) {return null;}
+
+        Space space = getSpace(endRow, endCol);
+        if(space.isValid()) {
+            return new Move(new Position(startRow, startCol), new Position(endRow, endCol));
+        }
+        else if(space.hasPiece()) { //TODO Check if piece is opponent piece
+            Piece piece = space.getPiece();
+            int newEndRow = startRow + ((endRow - startRow) * 2);
+            int newEndCol = startCol + ((endCol - startCol) * 2);
+
+            if(newEndCol >= COLS || newEndCol < 0 || newEndRow >= ROWS || newEndRow < 0) {return null;}
+
+            space = getSpace(newEndRow, newEndCol);
+            if(space.isValid()) {
+                return new Move(new Position(startRow, startCol), new Position(newEndRow, newEndCol), piece);
+            }
+        }
+
+        return null;
+    }
 
     /**
      * Checks the left and right column of the next
@@ -254,27 +291,32 @@ public class CheckersGame {
     public ArrayList<Move> checkColumns(int row, int col, int nextRow) {
         ArrayList<Move> moves = new ArrayList<>();
         ArrayList<Move> jumpMoves = new ArrayList<>();
-        if (col + 1 < COLS) {
-            Space space = getSpace(nextRow, col + 1);
-            if (space.isValid()) {
-                Move moveToAdd = new Move(new Position(row, col),
-                        new Position(nextRow, col + 1));
-                System.out.println(moveToAdd);
-                moves.add(moveToAdd);
-            } else if (space.hasPiece() ) { //TODO: add in if the piece is the opposite color
-                Space jumpSpace = getSpace(row + ((nextRow - row) * 2), col + 2);
-                //if()
-            }
-        }
-        if (col - 1 >= 0) {
-            if (getSpace(nextRow, col-1).isValid()) {
-                Move moveToAdd = new Move(new Position(row, col),
-                        new Position(nextRow, col - 1));
-                System.out.println(moveToAdd);
+
+        //check moving to the right
+        Move moveToAdd = checkMove(row, col, nextRow, col + 1);
+        if(moveToAdd != null)
+        {
+            if(moveToAdd.hasPiece()) {
+                currentTurn.jumpIsPossible();
+                jumpMoves.add(moveToAdd);
+            } else {
                 moves.add(moveToAdd);
             }
         }
-        return moves;
+        //check moving to the left
+        moveToAdd = checkMove(row, col, nextRow, col - 1);
+        if(moveToAdd != null)
+        {
+            if(moveToAdd.hasPiece()) {
+                currentTurn.jumpIsPossible();
+                jumpMoves.add(moveToAdd);
+            } else {
+                moves.add(moveToAdd);
+            }
+        }
+
+        if(jumpMoves.size() > 0) { return jumpMoves; }
+        else { return moves; }
     }
 
     /**
@@ -334,6 +376,10 @@ public class CheckersGame {
         ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
         for (Move possibleMove : moves){
             if (possibleMove.equals(move)){
+                if(currentTurn.isJumpPossible())
+                {
+                    return possibleMove.hasPiece();
+                }
                 return true;
             }
         }
@@ -345,7 +391,17 @@ public class CheckersGame {
      * @param move the Move to keep track of
      */
     public void keepLastMove(Move move){
-        this.currentTurn.AddMove(move);
+        this.currentTurn.addMove(move);
+    }
+
+    /**
+     * Keeps track of the last jump move
+     * @param move the Move to keep track of
+     * @param piece the Piece jumped over
+     */
+    public void keepLastJumpMove(Move move, Piece piece)
+    {
+        this.currentTurn.addMove(move, piece);
     }
 
     /**
@@ -354,7 +410,7 @@ public class CheckersGame {
      * @return a Move that shows the last move made
      */
     public Move getLastMove(){
-        return currentTurn.LastMove();
+        return currentTurn.lastMove();
     }
 
     /**
@@ -362,15 +418,22 @@ public class CheckersGame {
      */
     public void backupMove()
     {
-        Move lastMove = currentTurn.LastMove();
+        Move lastMove = currentTurn.lastMove();
         Position start = lastMove.getStart();
         Position end = lastMove.getEnd();
         Piece piece = removePieceToMove(end.getRow(), end.getCol());
         addPiece(start.getRow(), start.getCol(), piece);
-        Piece p = currentTurn.BackupLastMove();
+
+        //remove the last move and get the piece associated
+        Piece p = currentTurn.backupLastMove();
+
+        //if there was a piece removed in that move return it to the game board
         if(p != null)
         {
-
+            Position p_Pos = new Position(
+                    start.getRow() + ((end.getRow() - start.getRow()) / 2),
+                    start.getCol() + ((end.getCol() - start.getCol()) / 2));
+            addPiece(p_Pos.getRow(), p_Pos.getCol(), p);
         }
     }
 
@@ -391,6 +454,11 @@ public class CheckersGame {
                 piece.makePieceKing();
             }
             addPiece(end.getRow(), end.getCol(), piece);
+        }
+        if(move.hasPiece()) {
+            Position piecePos = new Position(move.getStart().getRow() + ((move.getEnd().getRow() - move.getStart().getRow()) / 2),
+                    move.getStart().getCol() + ((move.getEnd().getCol() - move.getStart().getCol()) / 2));
+            removePieceToMove(piecePos.getRow(), piecePos.getCol());
         }
     }
 
