@@ -253,12 +253,17 @@ public class CheckersGame {
      */
     public ArrayList<Move> checkColumns(int row, int col, int nextRow) {
         ArrayList<Move> moves = new ArrayList<>();
+        ArrayList<Move> jumpMoves = new ArrayList<>();
         if (col + 1 < COLS) {
-            if (getSpace(nextRow, col+1).isValid()) {
+            Space space = getSpace(nextRow, col + 1);
+            if (space.isValid()) {
                 Move moveToAdd = new Move(new Position(row, col),
                         new Position(nextRow, col + 1));
                 System.out.println(moveToAdd);
                 moves.add(moveToAdd);
+            } else if (space.hasPiece() ) { //TODO: add in if the piece is the opposite color
+                Space jumpSpace = getSpace(row + ((nextRow - row) * 2), col + 2);
+                //if()
             }
         }
         if (col - 1 >= 0) {
@@ -298,7 +303,12 @@ public class CheckersGame {
         }
     }
 
-    //TODO: Add King Moves
+    /**
+     * this checks for king moves and adds it to the move array
+     * @param row
+     * @param col
+     * @param moveArray
+     */
     public void checkKingMoves(int row, int col, ArrayList<Move> moveArray) {
         int rowUp = row -1;
         if(rowUp >= 0){
@@ -310,9 +320,7 @@ public class CheckersGame {
         }
     }
 
-    public ArrayList<Move> checkRedKingMoves(int row, int col) {
-        return null;
-    }
+
 
     /**
      * Looks to see if a move is in the list
