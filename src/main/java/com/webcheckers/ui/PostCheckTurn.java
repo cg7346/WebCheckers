@@ -12,9 +12,11 @@ import spark.Response;
 import spark.Route;
 import spark.Session;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
+ * The {@code POST /checkTurn} route handler
  * this checks for the turn of the user
  * @author jil4009
  */
@@ -25,6 +27,13 @@ public class PostCheckTurn implements Route {
     private final GameManager gameManager;
     private final Gson gson;
 
+    /**
+     * The constructor for the {@code POST /checkTurn} route handler.
+     *
+     * @param gameManager
+     * @param gson
+     * @throws NoSuchElementException when the {@code gameManager} or {@code gson} parameter is null
+     */
     public PostCheckTurn(PlayerLobby playerLobby, GameManager gameManager,Gson gson){
         this.playerLobby = Objects.requireNonNull(playerLobby, "player lobby is required");
         this.gameManager = Objects.requireNonNull(gameManager, "game manager is required");
