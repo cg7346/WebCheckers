@@ -9,7 +9,7 @@ package com.webcheckers.model;
  */
 public class Piece {
     private enum type {SINGLE, KING}
-    private enum color {RED, WHITE}
+    enum color {RED, WHITE}
 
     private type pieceType;
     private color pieceColor;
