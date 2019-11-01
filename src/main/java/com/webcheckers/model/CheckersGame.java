@@ -418,8 +418,14 @@ public class CheckersGame {
         return move;
     }
 
+    /**
+     * Sets the winner of the checkers game
+     * @param winPlayer the winner player
+     */
     public void setWinners(Player winPlayer) {
+        // Sets the winner player
         this.winner = winPlayer;
+        // Sets the loser player
         if(winPlayer != redPlayer){
             this.loser = redPlayer;
         } else if (winPlayer != whitePlayer){
@@ -427,10 +433,18 @@ public class CheckersGame {
         }
     }
 
+    /**
+     * Gets the winner of the checkers game
+     * @return the winning player
+     */
     public Player getWinner(){
         return this.winner;
     }
 
+    /**
+     * Gets the loser of the checkers game
+     * @return the losing player
+     */
     public Player getLoser(){
         return this.loser;
     }
