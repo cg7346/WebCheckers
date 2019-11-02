@@ -8,6 +8,7 @@ import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.Session;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -80,12 +81,16 @@ public class PostResignGame implements Route {
         String gameIDString = request.queryParams("gameID");
         // Gets the checkers game
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
+        Session session = request.session();
         // Gets the active player
-        Player activePlayer = game.getActivePlayer();
+        Player currentPlayer = session.attribute("Player");
+        // Sets the resigned player
+        game.setResignedPlayer(currentPlayer);
         // Sets game over to true
         game.setGameOver(true);
+        response.body(gson.toJson(resignMessage(currentPlayer)));
         // Returns the to JSON the resign message
-        return gson.toJson(resignMessage(activePlayer));
+        return gson.toJson(resignMessage(currentPlayer));
     }
 }
 

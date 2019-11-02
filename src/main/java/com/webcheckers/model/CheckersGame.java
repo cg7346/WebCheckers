@@ -18,6 +18,8 @@ public class CheckersGame {
     private Player winner;
     // The loser of the game
     private Player loser;
+    // The player that resigned
+    private Player resignedPlayer;
     private Boolean gameOver = false;
 
     //possible moves to be made the current player
@@ -423,7 +425,7 @@ public class CheckersGame {
      * Sets the winner of the checkers game
      * @param winPlayer the winner player
      */
-    public void setWinners(Player winPlayer) {
+    public void setWinner(Player winPlayer) {
         // Sets the winner player
         this.winner = winPlayer;
         // Sets the loser player
@@ -473,15 +475,16 @@ public class CheckersGame {
      * @return the resigned player
      */
     public Player getResignedPlayer() {
+        return this.resignedPlayer;
+    }
+
+    /**
+     * Sets the resigned player of the checkers game
+     *
+     * @param player is the player that resigned
+     */
+    public void setResignedPlayer(Player player) {
         // resignedPlayer is the player that resigned
-        final Player resignedPlayer;
-        // If the active player is red then set red as the resigned player
-        if (activePlayer == redPlayer) {
-            resignedPlayer = redPlayer;
-            // If the active player is white then set white as the resigned player
-        } else {
-            resignedPlayer = whitePlayer;
-        }
-        return resignedPlayer;
+        this.resignedPlayer = player;
     }
 }
