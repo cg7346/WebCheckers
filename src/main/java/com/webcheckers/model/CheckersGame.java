@@ -1,7 +1,7 @@
 package com.webcheckers.model;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * Class to represent a Checkers game
@@ -312,7 +312,7 @@ public class CheckersGame {
         if(moveToAdd != null) {
             if(moveToAdd.hasPiece()) {
                 System.out.println("Move has piece!");
-                currentTurn.jumpIsPossible();
+                //currentTurn.jumpIsPossible();
                 jumpMoves.add(moveToAdd);
             } else {
                 moves.add(moveToAdd);
@@ -324,7 +324,7 @@ public class CheckersGame {
         if(moveToAdd != null) {
             if(moveToAdd.hasPiece()) {
                 System.out.println("Move has piece!");
-                currentTurn.jumpIsPossible();
+                //currentTurn.jumpIsPossible();
                 jumpMoves.add(moveToAdd);
             } else {
                 moves.add(moveToAdd);
@@ -394,8 +394,8 @@ public class CheckersGame {
         ArrayList<Move> jumps = isRed ? jumpRedMoves : jumpWhiteMoves;
         for (Move possibleMove : moves){
             if (possibleMove.equals(move)){
-                if(currentTurn.isJumpPossible()) {
-                    return possibleMove.hasPiece();
+                if(jumps.size() != 0) {
+                    return false;
                 }
                 return true;
             }
@@ -533,5 +533,18 @@ public class CheckersGame {
             return convertedMove;
         }
         return move;
+    }
+
+    /**
+     * Completes the turn for the player
+     * Loops through every move made and swaps
+     * the current player
+     */
+    public void completeTurn(){
+        Stack<Move> moves = currentTurn.getMoves();
+        while(!moves.empty()){
+            makeMove(moves.pop());
+        }
+        swapPlayers();
     }
 }

@@ -63,7 +63,7 @@ public class Turn {
         return isJumpPossible;
     }
 
-    public Player getActivePlayer(){
-        return activePlayer;
-    }
+    public Stack<Move> getMoves(){
+        return this.moves;
+    };
 }
