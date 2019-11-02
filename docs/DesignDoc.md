@@ -203,13 +203,13 @@ This section describes the web interface flow; this is how the user views and in
 > The Application Tier provides support and functionality for the game. 
 > It is designed to handle the logic of game and act as the middle man between the Model Tier and the UI Tier.
 > The classes currently stored within the Application Tier in the UML diagram below. 
-![The WebCheckers Application tier]()
+![The WebCheckers Application tier](Application_uml.png)
 
 ### Model Tier
 > The model tier is the basic structure for the game.
-> We use a Board View, Checkers Game, Move, Piece, Player, Position, Row, Space, Turn and Validate move in our model tier.
+> We use a Board View, Checkers Game, Move, Piece, Player, Position, Row, Space and Turn in our model tier.
 > The classes that are within the Model tier are shown in the UML Diagram below. 
-![The WebCheckers_Model tier]()
+![The WebCheckers_Model tier](model_uml.png)
 
 ### Design Improvements
 > To improve our design we should adhere to Object-Oriented design principles more. 
