@@ -1,11 +1,12 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.model.BoardView;
-import com.webcheckers.model.CheckersGame;
-import com.webcheckers.model.Player;
+import com.webcheckers.model.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.Iterator;
 
 /**
  * tests the board view
@@ -28,14 +29,13 @@ public class BoardViewTest {
 
         this.CuT = new BoardView(this.red, this.checkersGame);
     }
-
-    /*
+/*
     //test to check red view
     @Test
     void iteratorRedTest() {
         int rowNum = 7;
         Iterator<Row> rows = CuT.iterator();
-        CheckersGame.Space[][] boardSpaces = this.checkersGame.getBoard();
+        Space[][] boardSpaces = this.checkersGame.getBoard();
         while (rows.hasNext()) {
             int colNum = 7;
             Row row = rows.next();
@@ -48,27 +48,8 @@ public class BoardViewTest {
             }
             rowNum--;
         }
-    }
 
-    //test to check white test
-    @Test
-    void iteratorWhiteTest() {
-        CheckersGame.Space[][] boardSpaces = this.checkersGame.inverseBoard();
-        this.CuT = new BoardView(this.white, this.checkersGame);
-        int rowNum = 0;
-        Iterator<Row> rows = CuT.iterator();
-        while (rows.hasNext()) {
-            int colNum = 0;
-            Row row = rows.next();
-            Iterator<Space> spaces = row.iterator();
-            while (spaces.hasNext()) {
-                Space space = spaces.next();
-                //TODO figure out how to compare the spaces correctly
-                Assertions.assertEquals(boardSpaces[rowNum][colNum], space, "Space mismatch in iterator");
-                colNum++;
-            }
-            rowNum++;
-        }
     }
     */
+
 }
