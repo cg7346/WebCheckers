@@ -64,12 +64,11 @@ public class Space {
      *
      * @param piece the piece to add
      */
-    public void addPiece(Piece piece)
-    {
-        if(!isValid()) {
-            //TODO add functionality if invalid move here
+    public void addPiece(Piece piece){
+        if(isValid()) {
+            this.piece = piece;
         }
-        this.piece = piece;
+
     }
 
     /**

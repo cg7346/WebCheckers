@@ -11,12 +11,13 @@ public class Turn {
     private Stack<Move> moves;
     private Stack<Piece> removedPieces;
     private boolean isJumpPossible;
+    private Player activePlayer;
 
-    public Turn()
-    {
+    public Turn(Player activePlayer) {
         moves = new Stack<>();
         removedPieces = new Stack<>();
         isJumpPossible = false;
+        this.activePlayer = activePlayer;
     }
 
     public Move lastMove()
@@ -60,5 +61,9 @@ public class Turn {
     public boolean isJumpPossible()
     {
         return isJumpPossible;
+    }
+
+    public Player getActivePlayer(){
+        return activePlayer;
     }
 }

@@ -56,7 +56,7 @@ public class CheckersGame {
         this.whitePlayer = whitePlayer;
         this.singleRedMoves = new ArrayList<>();
         this.singleWhiteMoves = new ArrayList<>();
-        this.currentTurn = new Turn();
+        this.currentTurn = new Turn(activePlayer);
 
         board = new Space[ROWS][COLS];
         for (int row=0; row < ROWS; row++){
@@ -207,7 +207,7 @@ public class CheckersGame {
      */
     public void swapPlayers(){
         activePlayer = activePlayer.equals(redPlayer) ? whitePlayer : redPlayer;
-        currentTurn = new Turn();
+        currentTurn = new Turn(activePlayer);
     }
 
 
@@ -275,6 +275,8 @@ public class CheckersGame {
 
             space = getSpace(newEndRow, newEndCol);
             if(space.isValid()) {
+                Move newMove = new Move(new Position(startRow, startCol), new Position(newEndRow, newEndCol), piece);
+                System.out.println(newMove);
                 return new Move(new Position(startRow, startCol), new Position(newEndRow, newEndCol), piece);
             }
         }
@@ -376,8 +378,7 @@ public class CheckersGame {
         ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
         for (Move possibleMove : moves){
             if (possibleMove.equals(move)){
-                if(currentTurn.isJumpPossible())
-                {
+                if(currentTurn.isJumpPossible()) {
                     return possibleMove.hasPiece();
                 }
                 return true;
