@@ -80,6 +80,7 @@ public class GetGameRoute implements Route {
         }
         Map<String, Object> vm = new HashMap<>();
         int gameID = game.getGameID();
+        System.out.println(gameID);
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
         BoardView board = new BoardView(currentPlayer, game);
@@ -89,7 +90,8 @@ public class GetGameRoute implements Route {
         vm.put("viewMode", viewMode.PLAY);
         this.gameOver = game.getGameOver();
         final Player resignedPlayer = game.getResignedPlayer();
-        final Map<String, Object> modeOptions = handleGameOver(new HashMap<>(2), vm, resignedPlayer);
+        final Map<String, Object> modeOptions = handleGameOver(request, new HashMap<>(2), vm,
+                resignedPlayer, game);
         vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
         vm.put(RED_PLAYER_ATTR, redPlayer);
         vm.put(WHITE_PLAYER_ATTR, whitePlayer);
@@ -121,15 +123,23 @@ public class GetGameRoute implements Route {
     }
 
 
-    private Map<String, Object> handleGameOver(Map<String, Object> modeOptions, Map<String, Object> vm, Player resignedPlayer) {
+    private Map<String, Object> handleGameOver(Request request, Map<String, Object> modeOptions,
+                                               Map<String, Object> vm, Player resignedPlayer,
+                                               CheckersGame game) {
         modeOptions.put("isGameOver", gameOver);
         if (!gameOver) {
             modeOptions.put(GAME_OVER_ATTR, GAME_OVER_ATTR_MSG);
             vm.put(START_ATTR, START_ATTR_MSG);
         } else {
-            modeOptions.put(GAME_OVER_ATTR, PostResignGame.resignMessage(resignedPlayer));
-            vm.put(START_ATTR, PostResignGame.resignMessage(resignedPlayer));
+            if (request.queryParams().isEmpty()) {
+                modeOptions.put(GAME_OVER_ATTR, PostResignGame.resignMessage(resignedPlayer));
+                vm.put(START_ATTR, PostResignGame.resignMessage(resignedPlayer));
+            } else {
+                // Removes the game from game manager
+                gameManager.removeGame(game, game.getRedPlayer(), game.getWhitePlayer());
+            }
         }
+
         return modeOptions;
     }
 }

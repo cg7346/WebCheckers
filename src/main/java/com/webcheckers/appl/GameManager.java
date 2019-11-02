@@ -43,6 +43,28 @@ public class GameManager {
     }
 
     /**
+     * Removes game ID for players to end game
+     * <p>
+     * A POST method should define who is redPlayer (the clicker) and
+     * whitePlayer (the player clicked on)
+     *
+     * @param redPlayer
+     * @param whitePlayer
+     * @return
+     */
+    public CheckersGame removeGame(CheckersGame game, Player redPlayer, Player whitePlayer) {
+
+        synchronized (this) {
+            totalGames--;
+            redPlayer.setInGame(false);
+            whitePlayer.setInGame(false);
+            games.remove(game.getGameID());
+            return null;
+        }
+    }
+
+
+    /**
      * Gets a game that the sessionPlayer is in
      * @param sessionPlayer the Player looking at the screen
      * @return the game if the player has one, null if not
