@@ -55,6 +55,22 @@ This section describes the features of the application.
 >* A player will be only be able to drag and drop a piece on valid spaces.
 >* A player will only be able to move there pieces.
 >
+>Simple Move
+>* A user will be able to move along the board when it is their turn.
+>* A user can backup their move, and submit their turn.
+>* A user can also be kinged when at a king spot and move backwards when kinged.
+>
+>Jump Move
+>* A user will be able to jump over an opponent and capture their opponent piece
+>* A user will be able to make a single jump or multiple jumps.
+>* A user will be able to backup one jump at a time. 
+>
+>End Game
+>* A user will be able to win, lose, or tie a game.
+>* A USer will be able to resign a game be lose when resigned
+>* A user is only able to resign a game when it is their turn.
+>* A user wins by capturing all opponents pieces or making their opponent no longer able to move
+>
 >_In this section you do not need to be exhaustive and list every
 > story.  Focus on top-level features from the Vision document and
 > maybe Epics and critical Stories._
@@ -174,6 +190,7 @@ This section describes the web interface flow; this is how the user views and in
 > Describe the types of components in the tier and describe their
 > responsibilities.  This should be a narrative description, i.e. it has
 > a flow or "story line" that the reader can follow._
+>
 
 > _At appropriate places as part of this narrative provide one or more
 > static models (UML class structure or object diagrams) with some
