@@ -222,15 +222,15 @@ public class CheckersGame {
                 Space space = getSpace(row, col);
                 if (space.hasPiece()) {
                     Piece p = space.getPiece();
-                    System.out.println("AT -> " + row + " " + col + " ");
+                    //System.out.println("AT -> " + row + " " + col + " ");
                     //piece if white and single
                     if (!p.isRedPiece() && !p.isPieceKing()) {
-                        System.out.println("Checking White------");
+                        //System.out.println("Checking White------");
                         checkWhiteSingleMoves(row, col);
                     }
                     //piece red and single
                     if (p.isRedPiece() && !p.isPieceKing()) {
-                        System.out.println("Checking Red--------");
+                        //System.out.println("Checking Red--------");
                         checkRedSingleMoves(row, col);
                     }
                     //piece white and king
@@ -308,7 +308,7 @@ public class CheckersGame {
 
         //check moving to the right
         Move moveToAdd = checkMove(row, col, nextRow, col + 1, playerColor);
-        System.out.println("\t"+moveToAdd);
+        //System.out.println("\t"+moveToAdd);
         if(moveToAdd != null) {
             if(moveToAdd.hasPiece()) {
                 System.out.println("Move has piece!");
@@ -320,7 +320,7 @@ public class CheckersGame {
         }
         //check moving to the left
         moveToAdd = checkMove(row, col, nextRow, col - 1, playerColor);
-        System.out.println("\t"+moveToAdd);
+        //System.out.println("\t"+moveToAdd);
         if(moveToAdd != null) {
             if(moveToAdd.hasPiece()) {
                 System.out.println("Move has piece!");
@@ -422,9 +422,7 @@ public class CheckersGame {
         if ( Math.abs(startPos.getRow() - endPos.getRow()) == 2 &&
                 Math.abs(startPos.getCol() - endPos.getCol()) == 2){
             System.out.println("We have a difference");
-            Space space = getSpace(startPos.getRow() + ((endPos.getRow() - startPos.getRow()) / 2),
-                    startPos.getCol() + ((endPos.getCol() - startPos.getCol()) / 2));
-            Piece piece = space.getPiece();
+            Piece piece = findPiece((activePlayer.equals(redPlayer)) ? move : moveConverter(move));
             this.currentTurn.addMove(move, piece);
         }
         else{
@@ -433,15 +431,17 @@ public class CheckersGame {
 
     }
 
-    /**
-     * Keeps track of the last jump move
-     * @param move the Move to keep track of
-     * @param piece the Piece jumped over
-     */
-    public void keepLastJumpMove(Move move, Piece piece)
-    {
-        this.currentTurn.addMove(move, piece);
+    public Piece findPiece(Move move){
+        Position startPos = move.getStart();
+        Position endPos = move.getEnd();
+        int x = startPos.getRow() + ((endPos.getRow() - startPos.getRow()) / 2);
+        int y = startPos.getCol() + ((endPos.getCol() - startPos.getCol()) / 2);
+        Space space = getSpace(startPos.getRow() + ((endPos.getRow() - startPos.getRow()) / 2),
+                startPos.getCol() + ((endPos.getCol() - startPos.getCol()) / 2));
+        System.out.println("Looking for piece at " + x + ", " + y);
+        return space.getPiece();
     }
+
 
     /**
      * Returns the last move made by a player in
@@ -526,7 +526,11 @@ public class CheckersGame {
             Move newMove = new Move(convertedStart, convertedEnd);
             System.out.println("CONVERTED: " + newMove);
             System.out.println();
-            return new Move(convertedStart, convertedEnd);
+            Move convertedMove = new Move(convertedStart, convertedEnd);
+            if (move.hasPiece()){
+                convertedMove.addPiece(move.getPiece());
+            }
+            return convertedMove;
         }
         return move;
     }
