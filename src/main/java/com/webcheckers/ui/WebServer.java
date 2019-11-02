@@ -86,6 +86,10 @@ public class WebServer {
    * the URL pattern to resign game
    */
   public static final String RESIGN_URL = "/resignGame";
+  /**
+   * the URL pattern to resign game
+   */
+  public static final String EXIT_URL = "/exitGame";
 
 
   //
@@ -205,8 +209,9 @@ public class WebServer {
     // Posts after the resign button is clicked
     post(RESIGN_URL, new PostResignGame(gameManager, gson));
 
-    //
-    LOG.config("WebServer is initialized.");
+    // Posts after the resign button is clicked
+    post(EXIT_URL, new PostExitGame(gameManager, gson));
+
   }
 
 }

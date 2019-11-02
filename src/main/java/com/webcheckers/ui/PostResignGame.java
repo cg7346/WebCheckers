@@ -8,7 +8,6 @@ import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import spark.Session;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -25,24 +24,11 @@ public class PostResignGame implements Route {
     // Constants
     //
 
-    // Variables used in the mode options for JSON after the resign button is clicked
-    private static final String IS_GAME_OVER = "isGameOver";
-    private static final String GAME_OVER_ATTR = "gameOverMessage";
     // Values used in the mode options for JSON after the resign button is clicked
     private static final String RESIGN = "%s has resigned.";
 
-//    private static final String TITLE_ATTR = "title";
-//    private static final String TITLE_ATTR_MSG = "Game Title";
-//    private static final String CURRENT_USER_ATTR = "currentUser";
-//    private static final String BOARD_ATTR = "board";
-//    private static final String COLOR_ATTR = "activeColor";
-//    private static final String RED_PLAYER_ATTR = "redPlayer";
-//    private static final String WHITE_PLAYER_ATTR = "whitePlayer";
-//    private static final Message GAME_OVER_ATTR_MSG = Message.info("The game is over"); /* Get the game over message */
-//    private static final String VIEW_NAME = "game.ftl";
-
     //
-    // Static Methods
+    // Constructor
     //
 
     /**
@@ -66,7 +52,7 @@ public class PostResignGame implements Route {
     private final Gson gson;
 
     //
-    // Constructor
+    // Static Methods
     //
 
     /**
@@ -88,44 +74,29 @@ public class PostResignGame implements Route {
      */
     @Override
     public Object handle(Request request, Response response) throws Exception {
+        // Gets the game ID
         String gameIDString = request.queryParams("gameID");
+        // Gets the checkers game
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
+        // Gets the active player
+        Player activePlayer = game.getActivePlayer();
+        // Gets the red player
+        Player redPlayer = game.getRedPlayer();
+        // Gets the while player
+        Player whitePlayer = game.getWhitePlayer();
+        // Once a player resigns set the resigned player and finalize it
+        final Player resignedPlayer;
+        // If the active player is red then set red as the resigned player
+        if (activePlayer == redPlayer) {
+            resignedPlayer = redPlayer;
+        // If the active player is white then set white as the resigned player
+        } else {
+            resignedPlayer = whitePlayer;
+        }
+        // Sets game over to true
         game.setGameOver(true);
-
-
-        // Gets the session
-        Session session = request.session();
-        // Gets the session's player attribute
-        Player currentPlayer = session.attribute("Player");
-//        // Gets the game ID
-//        String gameIDString = request.queryParams("gameID");
-//        // Gets the checkers game
-//        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
-//        // Mode options for the JSON
-//        final Map<String, Object> modeOptions = new HashMap<>(2);
-//        // Gets the red player
-//        Player redPlayer = game.getRedPlayer();
-//        // Gets the while player
-//        Player whitePlayer = game.getWhitePlayer();
-//        // start building a mode options
-//        modeOptions.put(IS_GAME_OVER, true);
-//        modeOptions.put(GAME_OVER_ATTR, resignMessage(currentPlayer));
-//        // If the current player is the red player and they resign, then the
-//        // white player wins
-//        if (currentPlayer == redPlayer){
-//            game.setWinners(whitePlayer);
-//         // If the current player is the white player and they resign, then the
-//         // red player wins
-//        } else if (currentPlayer == whitePlayer) {
-//            game.setWinners(redPlayer);
-//        }
-//        // Sends the resign message to the html body
-//        response.body(gson.toJson(resignMessage(currentPlayer)));
-//        // Returns the JSON mode options
-//        gson.toJson(modeOptions);
-//        return gson.toJson(resignMessage(currentPlayer));
-////        return gson.toJson(new Message());
-        return gson.toJson(resignMessage(currentPlayer));
+        // Returns the to JSON the resign message
+        return gson.toJson(resignMessage(resignedPlayer));
     }
 }
 
