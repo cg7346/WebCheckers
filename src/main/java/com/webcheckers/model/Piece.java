@@ -17,11 +17,9 @@ public class Piece {
 
     /**
      * The constructor for a Piece. Takes an integer for the color
-     *
      * @param colorNum 0 for RED, 1 for WHITE
      */
-    public Piece(int colorNum)
-    {
+    public Piece(int colorNum) {
         pieceType = type.SINGLE;
         pieceColor = color.values()[colorNum];
         canMove = true;
@@ -29,7 +27,6 @@ public class Piece {
 
     /**
      * Gets the type of the Piece
-     *
      * @return type.SINGLE or type.KING
      */
     public type getType()
@@ -39,7 +36,6 @@ public class Piece {
 
     /**
      * Returns the color of the Piece
-     *
      * @return color.RED or color.WHITE
      */
     public color getColor()
@@ -53,7 +49,7 @@ public class Piece {
 
     /**
      * checks if the piece is a king or not
-     * @return
+     * @return true if piece is king, false if single
      */
     public boolean isPieceKing(){
         return pieceType == type.KING;
@@ -66,12 +62,5 @@ public class Piece {
         pieceType = type.KING;
     }
 
-    /**
-     * Either enables or disables ability for piece
-     * to be moved
-     * @param choice true to enable, false to disable
-     */
-    public void disableEnableMove(boolean choice){
-        canMove = choice;
-    }
+
 }
