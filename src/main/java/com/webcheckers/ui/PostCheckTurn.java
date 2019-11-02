@@ -27,6 +27,8 @@ public class PostCheckTurn implements Route {
     private final GameManager gameManager;
     private final Gson gson;
 
+    public static Boolean checked = false;
+
     /**
      * The constructor for the {@code POST /checkTurn} route handler.
      *
@@ -56,7 +58,8 @@ public class PostCheckTurn implements Route {
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
         //sometimes having the game undefined breaks the builder
         if (game != null) {
-            if (game.getActivePlayer().equals(currentPlayer)) {
+            if (game.getActivePlayer().equals(currentPlayer) || !game.getResignedPlayer().getName().isEmpty()) {
+                checked = true;
                 return gson.toJson(Message.info("true"));
             } else {
                 return gson.toJson(Message.info("false"));
