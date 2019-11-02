@@ -27,6 +27,7 @@ public class PostResignGame implements Route {
     // Values used in the mode options for JSON after the resign button is clicked
     private static final String RESIGN = "%s has resigned.";
 
+
     //
     // Constructor
     //
@@ -50,6 +51,7 @@ public class PostResignGame implements Route {
     //
     private final GameManager gameManager;
     private final Gson gson;
+
 
     //
     // Static Methods
@@ -80,23 +82,10 @@ public class PostResignGame implements Route {
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
         // Gets the active player
         Player activePlayer = game.getActivePlayer();
-        // Gets the red player
-        Player redPlayer = game.getRedPlayer();
-        // Gets the while player
-        Player whitePlayer = game.getWhitePlayer();
-        // Once a player resigns set the resigned player and finalize it
-        final Player resignedPlayer;
-        // If the active player is red then set red as the resigned player
-        if (activePlayer == redPlayer) {
-            resignedPlayer = redPlayer;
-        // If the active player is white then set white as the resigned player
-        } else {
-            resignedPlayer = whitePlayer;
-        }
         // Sets game over to true
         game.setGameOver(true);
         // Returns the to JSON the resign message
-        return gson.toJson(resignMessage(resignedPlayer));
+        return gson.toJson(resignMessage(activePlayer));
     }
 }
 

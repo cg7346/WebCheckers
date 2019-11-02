@@ -88,7 +88,8 @@ public class GetGameRoute implements Route {
         vm.put(CURRENT_USER_ATTR, currentPlayer);
         vm.put("viewMode", viewMode.PLAY);
         this.gameOver = game.getGameOver();
-        final Map<String, Object> modeOptions = handleGameOver(new HashMap<>(2), vm, currentPlayer);
+        final Player resignedPlayer = game.getResignedPlayer();
+        final Map<String, Object> modeOptions = handleGameOver(new HashMap<>(2), vm, resignedPlayer);
         vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
         vm.put(RED_PLAYER_ATTR, redPlayer);
         vm.put(WHITE_PLAYER_ATTR, whitePlayer);
@@ -120,14 +121,14 @@ public class GetGameRoute implements Route {
     }
 
 
-    private Map<String, Object> handleGameOver(Map<String, Object> modeOptions, Map<String, Object> vm, Player currentPlayer) {
+    private Map<String, Object> handleGameOver(Map<String, Object> modeOptions, Map<String, Object> vm, Player resignedPlayer) {
         modeOptions.put("isGameOver", gameOver);
         if (!gameOver) {
             modeOptions.put(GAME_OVER_ATTR, GAME_OVER_ATTR_MSG);
             vm.put(START_ATTR, START_ATTR_MSG);
         } else {
-            modeOptions.put(GAME_OVER_ATTR, PostResignGame.resignMessage(currentPlayer));
-            vm.put(START_ATTR, PostResignGame.resignMessage(currentPlayer));
+            modeOptions.put(GAME_OVER_ATTR, PostResignGame.resignMessage(resignedPlayer));
+            vm.put(START_ATTR, PostResignGame.resignMessage(resignedPlayer));
         }
         return modeOptions;
     }

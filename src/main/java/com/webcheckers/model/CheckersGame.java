@@ -450,11 +450,38 @@ public class CheckersGame {
         return this.loser;
     }
 
+    /**
+     * Gets the game over of the checkers game
+     *
+     * @return whether or not the game is over
+     */
     public Boolean getGameOver() {
         return this.gameOver;
     }
 
+    /**
+     * Sets the game over of the checkers game
+     * @param gameOver is a boolean to indicate whether or not the game is over
+     */
     public void setGameOver(Boolean gameOver) {
         this.gameOver = gameOver;
+    }
+
+    /**
+     * Gets the resigned player of the checkers game
+     *
+     * @return the resigned player
+     */
+    public Player getResignedPlayer() {
+        // resignedPlayer is the player that resigned
+        final Player resignedPlayer;
+        // If the active player is red then set red as the resigned player
+        if (activePlayer == redPlayer) {
+            resignedPlayer = redPlayer;
+            // If the active player is white then set white as the resigned player
+        } else {
+            resignedPlayer = whitePlayer;
+        }
+        return resignedPlayer;
     }
 }
