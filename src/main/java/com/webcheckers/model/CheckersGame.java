@@ -1,5 +1,6 @@
 package com.webcheckers.model;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -21,6 +22,8 @@ public class CheckersGame {
     //according to their apparent location on BoardView
     private ArrayList<Move> singleRedMoves;
     private ArrayList<Move> singleWhiteMoves;
+    private ArrayList<Move> jumpRedMoves;
+    private ArrayList<Move> jumpWhiteMoves;
 
     //unique identifier for the game
     private int gameID;
@@ -169,6 +172,7 @@ public class CheckersGame {
             piece = space.getPiece();
             space.removePiece();
         }
+        System.out.println(space.getPiece());
         return piece;
     }
 
@@ -266,7 +270,7 @@ public class CheckersGame {
         if(space.isValid()) {
             return new Move(new Position(startRow, startCol), new Position(endRow, endCol));
         }
-        else if(space.hasPiece() && space.getPiece().getColor() != playerColor) { //TODO Check if piece is opponent piece
+        else if(space.hasPiece() && space.getPiece().getColor() != playerColor) {
             Piece piece = space.getPiece();
             int newEndRow = startRow + ((endRow - startRow) * 2);
             int newEndCol = startCol + ((endCol - startCol) * 2);
@@ -290,7 +294,9 @@ public class CheckersGame {
      */
     public ArrayList<Move> checkColumns(int row, int col, int nextRow, Piece.color playerColor) {
         ArrayList<Move> moves = new ArrayList<>();
-        ArrayList<Move> jumpMoves = new ArrayList<>();
+        //ArrayList<Move> jumpMoves = new ArrayList<>();
+        ArrayList<Move> jumpMoves = playerColor.equals(Piece.color.RED) ? jumpRedMoves : jumpWhiteMoves;
+
 
         //check moving to the right
         Move moveToAdd = checkMove(row, col, nextRow, col + 1, playerColor);
