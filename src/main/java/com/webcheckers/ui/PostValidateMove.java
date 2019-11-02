@@ -33,9 +33,7 @@ public class PostValidateMove implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String moveString = request.queryParams("actionData");
-        System.out.println("move string is this " + moveString);
         String gameIdString = request.queryParams("gameID");
-
         Move move = gson.fromJson(moveString, Move.class);
         System.out.println("------Checking for THIS move!!");
         System.out.println(move);

@@ -36,6 +36,7 @@ public class PostSubmitTurn implements Route {
         String gameIDString = request.queryParams("gameID");
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
         Move lastMove = game.getLastMove();
+        System.out.println("LastMoveMade ->> " + lastMove);
         Message responseMessage = null;
         if (lastMove != null){
             //TODO: Check to see if there are jump moves

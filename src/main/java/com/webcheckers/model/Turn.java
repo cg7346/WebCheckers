@@ -27,7 +27,7 @@ public class Turn {
 
     public void addMove(Move m, Piece p)
     {
-        moves.push(m);
+        moves.push(m.addPiece(p));
         removedPieces.push(p);
     }
 

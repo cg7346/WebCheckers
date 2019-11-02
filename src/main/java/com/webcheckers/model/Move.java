@@ -9,7 +9,7 @@ public class Move {
 
     private final Position start;
     private final Position end;
-    private final Piece jumpedPiece;
+    private Piece jumpedPiece;
 
     /**
      * contructor for move
@@ -44,15 +44,33 @@ public class Move {
         return this.end;
     }
 
+    /**
+     * Adds a piece to a move
+     * So for jumps this is the move's luggage, what
+     * it picked up when it jumped
+     * @param p the piece to add to the move
+     * @return the Move with its fresh new piece
+     */
+    public Move addPiece(Piece p){
+        this.jumpedPiece = p;
+        return this;
+    }
+
+    /**
+     * Does the move have a piece it jumped
+     * @return true if it does, false if not
+     */
     public boolean hasPiece() {
         return jumpedPiece != null;
     }
 
+    /**
+     * Returns the piece we jumped over
+     * @return the piece we jumped over, or null
+     * if nothing was jumped
+     */
     public Piece getPiece() {
-        if (hasPiece()){
             return jumpedPiece;
-        }
-        return null;
     }
 
     /**
