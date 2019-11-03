@@ -35,7 +35,7 @@ public class PostValidateMove implements Route {
         System.out.println("------Checking for THIS move!!");
         System.out.println(move);
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
-        game.lookForMoves();
+        //game.lookForMoves();
         boolean isPossibleMove = game.isInMoves(move);
         System.out.println(isPossibleMove);
         Message responseMessage = null;
