@@ -123,6 +123,7 @@ public class GetGameRoute implements Route {
                     Message er = Message.error(PLAYER_IN_GAME);
                     session.attribute(MESSAGE_ERR, er);
                 }
+                // If chosenOpponent is null, then its because player resigned
                 response.redirect(WebServer.HOME_URL);
                 halt();
                 return null;
