@@ -32,11 +32,22 @@ public class PostValidateMove implements Route {
         String moveString = request.queryParams("actionData");
 //        System.out.println("move string is this " + moveString);
         String gameIdString = request.queryParams("gameID");
-
         Move move = gson.fromJson(moveString, Move.class);
 //        System.out.println("------Checking for THIS move!!");
 //        System.out.println(move);
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
+        boolean isPossibleMove = game.isInMoves(move);
+        System.out.println(isPossibleMove);
+        Message responseMessage = null;
+        if(isPossibleMove){
+            responseMessage = Message.info("Valid Move!");
+            game.keepLastMove(move);
+            game.completeMove();
+            if(move.hasPiece()) {
+                System.out.println("AAAAAAHHHHHHHHH");
+                move = game.moveConverter(move);
+                game.lookInSpace(move.getEnd().getRow(), move.getEnd().getCol());
+            }
         if (game != null) {
             game.lookForMoves();
             boolean isPossibleMove = game.isInMoves(move);

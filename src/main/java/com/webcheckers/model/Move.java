@@ -9,6 +9,7 @@ public class Move {
 
     private final Position start;
     private final Position end;
+    private Piece jumpedPiece;
 
     /**
      * contructor for move
@@ -18,6 +19,13 @@ public class Move {
     public Move(Position start, Position end){
         this.start = start;
         this.end = end;
+        jumpedPiece = null;
+    }
+
+    public Move(Position start, Position end, Piece piece) {
+        this.start = start;
+        this.end = end;
+        this.jumpedPiece = piece;
     }
 
     /**
@@ -37,6 +45,35 @@ public class Move {
     }
 
     /**
+     * Adds a piece to a move
+     * So for jumps this is the move's luggage, what
+     * it picked up when it jumped
+     * @param p the piece to add to the move
+     * @return the Move with its fresh new piece
+     */
+    public Move addPiece(Piece p){
+        this.jumpedPiece = p;
+        return this;
+    }
+
+    /**
+     * Does the move have a piece it jumped
+     * @return true if it does, false if not
+     */
+    public boolean hasPiece() {
+        return jumpedPiece != null;
+    }
+
+    /**
+     * Returns the piece we jumped over
+     * @return the piece we jumped over, or null
+     * if nothing was jumped
+     */
+    public Piece getPiece() {
+            return jumpedPiece;
+    }
+
+    /**
      * Moves are equal if positions are equal
      * @param obj the Object to compare
      * @return true if same, false if not
@@ -51,7 +88,11 @@ public class Move {
 
     @Override
     public String toString(){
-        return "Start: " + start + " End: " + end;
+        String s = "Start: " + start + " End: " + end;
+        if (hasPiece()){
+            s = s.concat(" with JumpPiece!");
+        }
+        return s;
     }
 
 }

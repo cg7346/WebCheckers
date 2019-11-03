@@ -55,6 +55,22 @@ This section describes the features of the application.
 >* A player will be only be able to drag and drop a piece on valid spaces.
 >* A player will only be able to move there pieces.
 >
+>Simple Move
+>* A user will be able to move along the board when it is their turn.
+>* A user can backup their move, and submit their turn.
+>* A user can also be kinged when at a king spot and move backwards when kinged.
+>
+>Jump Move
+>* A user will be able to jump over an opponent and capture their opponent piece
+>* A user will be able to make a single jump or multiple jumps.
+>* A user will be able to backup one jump at a time. 
+>
+>End Game
+>* A user will be able to win, lose, or tie a game.
+>* A USer will be able to resign a game be lose when resigned
+>* A user is only able to resign a game when it is their turn.
+>* A user wins by capturing all opponents pieces or making their opponent no longer able to move
+>
 >_In this section you do not need to be exhaustive and list every
 > story.  Focus on top-level features from the Vision document and
 > maybe Epics and critical Stories._
@@ -166,62 +182,51 @@ This section describes the web interface flow; this is how the user views and in
 
 ### UI Tier
 > This level of the application contains everything the user will interact with.
-> It will interact with the Application and Model tiers.
+> It will interact with the Application and Model tiers. The following UML diagram shows the 
+> classes used in the UI 
 
 ![The WebCheckers UI tier](UML-class-diagram_signin-game-lobby.png)
 
-> _Provide a summary of the Server-side UI tier of your architecture.
-> Describe the types of components in the tier and describe their
-> responsibilities.  This should be a narrative description, i.e. it has
-> a flow or "story line" that the reader can follow._
 
-> _At appropriate places as part of this narrative provide one or more
-> static models (UML class structure or object diagrams) with some
-> details such as critical attributes and methods._
+> A Sequence diagram of the start a game and sign in was created to showcase 
+> a better understanding of the functionality of how start a game and sign in works.
 
-> _You must also provide any dynamic models, such as statechart and
-> sequence diagrams, as is relevant to a particular aspect of the design
-> that you are describing.  For example, in WebCheckers you might create
-> a sequence diagram of the `POST /validateMove` HTTP request processing
-> or you might show a statechart diagram if the Game component uses a
-> state machine to manage the game._
+![The WebCheckers UI tier](Sign-in-SD.png)
+>
+![The WebCheckers UI tier](Start-Game-SD.png)
 
-> _If a dynamic model, such as a statechart describes a feature that is
-> not mostly in this tier and cuts across multiple tiers, you can
-> consider placing the narrative description of that feature in a
-> separate section for describing significant features. Place this after
-> you describe the design of the three tiers._
+> These diagrams breaks down what each class handles or is expecting and how they connect to each other.
+> You are able to follow the arrows to see how GetGameRoute uses other aspects to get a game and show it to the user.
+
 
 ### Application Tier
-> _Provide a summary of the Application tier of your architecture. This
-> section will follow the same instructions that are given for the UI
-> Tier above._
+> The Application Tier provides support and functionality for the game. 
+> It is designed to handle the logic of game and act as the middle man between the Model Tier and the UI Tier.
+> The classes currently stored within the Application Tier in the UML diagram below. 
+![The WebCheckers Application tier](Application_uml.png)
 
 ### Model Tier
-> _Provide a summary of the Application tier of your architecture. This
-> section will follow the same instructions that are given for the UI
-> Tier above._
+> The model tier is the basic structure for the game.
+> We use a Board View, Checkers Game, Move, Piece, Player, Position, Row, Space and Turn in our model tier.
+> The classes that are within the Model tier are shown in the UML Diagram below. 
+![The WebCheckers_Model tier](model_uml.png)
 
 ### Design Improvements
-> _Discuss design improvements that you would make if the project were
-> to continue. These improvement should be based on your direct
-> analysis of where there are problems in the code base which could be
-> addressed with design changes, and describe those suggested design
-> improvements. After completion of the Code metrics exercise, you
-> will also discuss the resutling metric measurements.  Indicate the
-> hot spots the metrics identified in your code base, and your
-> suggested design improvements to address those hot spots._
+> To improve our design we should adhere to Object-Oriented design principles more. 
+> To adhere to the controller principle we should ensure that we do not make multiple unnecessary controllers and try to combine controllers together. For example keeping Signing in and out in the same controller.
+> To adhere to the polymorphism principle we should use method overloading to have different arguments within the parameters. 
+> We currently do not adhere to the Liskov Principle and to do this we can add in pre and post conditions that will help improve our adherence as well as having subclasses properly extending super classes will allow our team to have more adherence to the principle.   
+> To improve our usage of the open/closed principle, we can create more classes as the base for other classes that share common properties. This would help limit the code in each class and lower cohesion.
+> We also currently do not follow pure fabrication. We can use pure fabrication in the future for our design to lower cohesion and clean up the overall readability with our code. Classes can be made to calculate or examine movement options, or just test the possibility of decisions made by a player in the game. They would have no physical representation on the UI, but they would be referenceable in multiple scenarios and aid future class codings. 
 
 ## Testing
-> _This section will provide information about the testing performed
-> and the results of the testing._
 
 ### Acceptance Testing
-> _Report on the number of user stories that have passed all their
-> acceptance criteria tests, the number that have some acceptance
-> criteria tests failing, and the number of user stories that
-> have not had any testing yet. Highlight the issues found during
-> acceptance testing and if there are any concerns._
+> We had acceptance criteria that we used to create acceptance tests in Spring 1 and 2. During Sprint 1, we were unable to finish the 
+> acceptance criteria that stated that a user would be able to be automatically directed to start a game. We were able to pass
+> all other acceptance criteria tests in Spring 1. In Sprint 2, we were able to pass all acceptance criteria from Sprint 1 as well as new acceptance
+> criteria from other user stories added to the game. 
+![The WebCheckers Acceptance Testing]()
 
 ### Unit Testing and Code Coverage
 > _Discuss your unit testing strategy. Report on the code coverage
@@ -229,3 +234,4 @@ This section describes the web interface flow; this is how the user views and in
 > coverage targets, why you selected those values, and how well your
 > code coverage met your targets. If there are any anomalies, discuss
 > those._
+![The WebCheckers Unit Testing]()

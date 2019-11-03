@@ -6,6 +6,7 @@ import com.webcheckers.ui.GetGameRoute;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * Class to represent a Checkers game
@@ -34,6 +35,8 @@ public class CheckersGame {
     //according to their apparent location on BoardView
     private ArrayList<Move> singleRedMoves;
     private ArrayList<Move> singleWhiteMoves;
+    private ArrayList<Move> jumpRedMoves;
+    private ArrayList<Move> jumpWhiteMoves;
 
     //unique identifier for the game
     private int gameID = 0;
@@ -51,8 +54,6 @@ public class CheckersGame {
     //The current turn being made
     private Turn currentTurn;
 
-    private GetGameRoute.activeColor activeTurnColor;
-
 //    public enum activeColor {RED, WHITE}
 
     /**
@@ -61,7 +62,7 @@ public class CheckersGame {
      * that start with 3 rows of alternating R and X
      * then two rows of alternative O and X then
      * three final rows of W and X
-     * <p>
+     *
      * Sets turn to red player
      *
      * @param gameID int, unique identifier for the game
@@ -74,7 +75,9 @@ public class CheckersGame {
         this.singleWhiteMoves = new ArrayList<>();
         this.currentTurn = new Turn();
         this.modeOptionsAsJSON = new HashMap<>(2);
-        this.activeTurnColor = GetGameRoute.activeColor.RED;
+        this.jumpRedMoves = new ArrayList<>();
+        this.jumpWhiteMoves = new ArrayList<>();
+        this.currentTurn = new Turn(activePlayer);
 
         board = new Space[ROWS][COLS];
         for (int row = 0; row < ROWS; row++) {
@@ -108,6 +111,7 @@ public class CheckersGame {
         }
         //redPlayer starts the game
         activePlayer = redPlayer;
+        lookForMoves();
     }
 
     /**
@@ -155,6 +159,9 @@ public class CheckersGame {
             for (int col = 7; col >= 0; col--) {
                 colOriginal++;
                 inverseBoard[row][col] = board[rowOriginal][colOriginal];
+           for (int col = 7; col >= 0; col--) {
+               colOriginal++;
+               inverseBoard[row][col] = board[rowOriginal][colOriginal];
             }
 
         }
@@ -184,6 +191,7 @@ public class CheckersGame {
         Piece piece = null;
         if (space.hasPiece()) {
             piece = space.getPiece();
+//            System.out.println("Piece to remove at" + "(" + row + ", " + col +")");
             space.removePiece();
         }
         return piece;
@@ -234,31 +242,8 @@ public class CheckersGame {
      */
     public void swapPlayers() {
         activePlayer = activePlayer.equals(redPlayer) ? whitePlayer : redPlayer;
-        currentTurn = new Turn();
     }
 
-//    /**
-//     * @return this.activeTurnColor
-//     */
-//    public GetGameRoute.activeColor whoseTurn(CheckersGame game) {
-//        if (game.getActivePlayer().equals(redPlayer)) {
-//            activeTurnColor = GetGameRoute.activeColor.RED;
-//        } else {
-//            activeTurnColor = GetGameRoute.activeColor.WHITE;
-//        }
-//        return activeTurnColor;
-//    }
-//
-//    /**
-//     * Changes who's turn it is
-//     */
-//    public void colorTurn() {
-//        if (activeTurnColor == GetGameRoute.activeColor.RED) {
-//            activeTurnColor = GetGameRoute.activeColor.WHITE;
-//        } else {
-//            activeTurnColor = GetGameRoute.activeColor.RED;
-//        }
-//    }
 
     /**
      * Looks for moves possible in the game
@@ -266,30 +251,76 @@ public class CheckersGame {
     public void lookForMoves() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                Space space = getSpace(row, col);
-                if (space.hasPiece()) {
-                    Piece p = space.getPiece();
-                    //piece if white and single
-                    if (!p.isRedPiece() && !p.isPieceKing()) {
-                        checkWhiteSingleMoves(row, col);
-                    }
-                    //piece red and single
-                    if (p.isRedPiece() && !p.isPieceKing()) {
-                        checkRedSingleMoves(row, col);
-                    }
-                    //piece white and king
-                    if (!p.isRedPiece() && p.isPieceKing()) {
-                        checkKingMoves(row, col, singleWhiteMoves);
-                    }
-                    //piece red and king
-                    if (p.isRedPiece() && p.isPieceKing()) {
-                        checkKingMoves(row, col, singleRedMoves);
-                    }
-                }
+                lookInSpace(row, col);
             }
         }
     }
 
+
+    /**
+     * Looks for moves possible in the game
+     */
+    public void lookInSpace(int row, int col) {
+        Space space = getSpace(row, col);
+        if(space.hasPiece()) {
+            Piece p = space.getPiece();
+            System.out.println("AT -> " + row + " " + col + " ");
+            //piece if white and single
+            if (!p.isRedPiece() && !p.isPieceKing()) {
+                System.out.println("Checking White------");
+                checkWhiteSingleMoves(row, col);
+            }
+            //piece red and single
+            if (p.isRedPiece() && !p.isPieceKing()) {
+                System.out.println("Checking Red--------");
+                checkRedSingleMoves(row, col);
+            }
+            //piece white and king
+            if (!p.isRedPiece() && p.isPieceKing()) {
+                checkKingMoves(row, col, singleWhiteMoves, Piece.color.WHITE);
+            }
+            //piece red and king
+            if (p.isRedPiece() && p.isPieceKing()) {
+                checkKingMoves(row, col, singleRedMoves, Piece.color.RED);
+            }
+        }
+    }
+
+
+    /**
+     * Locally checks a move to see if it is valid
+     * @param startRow start row of piece
+     * @param startCol start col of piece
+     * @param endRow end row of piece
+     * @param endCol end col of piece
+     * @param playerColor the Piece.color to match the player
+     * @return a move if it is valid
+     */
+    Move checkMove(int startRow, int startCol, int endRow, int endCol, Piece.color playerColor)
+    {
+        if(endCol >= COLS || endCol < 0 || endRow >= ROWS || endRow < 0) {return null;}
+
+        Space space = getSpace(endRow, endCol);
+        if(space.isValid()) {
+            return new Move(new Position(startRow, startCol), new Position(endRow, endCol));
+        }
+        else if(space.hasPiece() && space.getPiece().getColor() != playerColor) {
+            Piece piece = space.getPiece();
+            int newEndRow = startRow + ((endRow - startRow) * 2);
+            int newEndCol = startCol + ((endCol - startCol) * 2);
+
+            if(newEndCol >= COLS || newEndCol < 0 || newEndRow >= ROWS || newEndRow < 0) {return null;}
+
+            space = getSpace(newEndRow, newEndCol);
+            if(space.isValid()) {
+                Move newMove = new Move(new Position(startRow, startCol), new Position(newEndRow, newEndCol), piece);
+                System.out.println("New Move!" + newMove);
+                return new Move(new Position(startRow, startCol), new Position(newEndRow, newEndCol), piece);
+            }
+        }
+
+        return null;
+    }
 
     /**
      * Checks the left and right column of the next
@@ -298,22 +329,42 @@ public class CheckersGame {
      * @param row row to look in
      * @param col column to left and right of
      */
-    public ArrayList<Move> checkColumns(int row, int col, int nextRow) {
+    public ArrayList<Move> checkColumns(int row, int col, int nextRow, Piece.color playerColor) {
         ArrayList<Move> moves = new ArrayList<>();
-        if (col + 1 < COLS) {
-            if (getSpace(nextRow, col + 1).isValid()) {
-                Move moveToAdd = new Move(new Position(row, col),
-                        new Position(nextRow, col + 1));
+        ArrayList<Move> jumpMoves = playerColor.equals(Piece.color.RED) ? jumpRedMoves : jumpWhiteMoves;
+
+
+        //check moving to the right
+        Move moveToAdd = checkMove(row, col, nextRow, col + 1, playerColor);
+        //System.out.println("\t"+moveToAdd);
+        if(moveToAdd != null) {
+            if(moveToAdd.hasPiece()) {
+                System.out.println("Move has piece!");
+                //currentTurn.jumpIsPossible();
+                jumpMoves.add(moveToAdd);
+            }
+            else {
+                System.out.println(moveToAdd);
                 moves.add(moveToAdd);
             }
         }
-        if (col - 1 >= 0) {
-            if (getSpace(nextRow, col - 1).isValid()) {
-                Move moveToAdd = new Move(new Position(row, col),
-                        new Position(nextRow, col - 1));
+        //check moving to the left
+        moveToAdd = checkMove(row, col, nextRow, col - 1, playerColor);
+        //System.out.println("\t"+moveToAdd);
+        if(moveToAdd != null) {
+            if(moveToAdd.hasPiece()) {
+                System.out.println("Move has piece!");
+                //currentTurn.jumpIsPossible();
+                jumpMoves.add(moveToAdd);
+            }
+            else {
+                System.out.println(moveToAdd);
                 moves.add(moveToAdd);
             }
         }
+
+        //if(jumpMoves.size() > 0) { return jumpMoves; }
+        //else { return moves; }
         return moves;
     }
 
@@ -327,9 +378,9 @@ public class CheckersGame {
         //check next row closer to top
         int nextRow = row + 1;
         if (nextRow < 8) {
-            singleWhiteMoves.addAll(checkColumns(row, col, nextRow));
+                singleWhiteMoves.addAll(checkColumns(row, col, nextRow, Piece.color.WHITE));
+            }
         }
-    }
 
     /**
      * Checking to see if any single red pieces have moves
@@ -341,25 +392,28 @@ public class CheckersGame {
         //check next row closer to top
         int nextRow = row - 1;
         if (nextRow >= 0) {
-            singleRedMoves.addAll(checkColumns(row, col, nextRow));
+            singleRedMoves.addAll(checkColumns(row, col, nextRow, Piece.color.RED));
         }
     }
 
-    //TODO: Add King Moves
-    public void checkKingMoves(int row, int col, ArrayList<Move> moveArray) {
-        int rowUp = row - 1;
-        if (rowUp >= 0) {
-            moveArray.addAll(checkColumns(row, col, rowUp));
+    /**
+     * this checks for king moves and adds it to the move array
+     * @param row
+     * @param col
+     * @param moveArray
+     */
+    public void checkKingMoves(int row, int col, ArrayList<Move> moveArray, Piece.color color) {
+        int rowUp = row -1;
+        if(rowUp >= 0){
+            moveArray.addAll(checkColumns(row, col, rowUp, color)); //TODO fix this so it's player color
         }
         int rowDown = row + 1;
-        if (rowDown < 8) {
-            moveArray.addAll(checkColumns(row, col, rowDown));
+        if(rowDown < 8){
+            moveArray.addAll(checkColumns(row, col, rowDown, color)); //TODO fix this so it's player color
         }
     }
 
-    public ArrayList<Move> checkRedKingMoves(int row, int col) {
-        return null;
-    }
+
 
     /**
      * Looks to see if a move is in the list
@@ -372,8 +426,23 @@ public class CheckersGame {
         boolean isRed = activePlayer.equals(redPlayer);
         move = isRed ? move : moveConverter(move);
         ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
-        for (Move possibleMove : moves) {
-            if (possibleMove.equals(move)) {
+        ArrayList<Move> jumps = isRed ? jumpRedMoves : jumpWhiteMoves;
+        System.out.println("Current single moves...");
+        for (Move possibleMove : moves){
+            System.out.println("\t" + possibleMove);
+            if (possibleMove.equals(move) && !currentTurn.isJumpPossible()){
+                if(jumps.size() != 0) {
+                    return false;
+                }
+                return true;
+            }
+        }
+        System.out.println("Current jump moves... ");
+        for (Move possibleMove : jumps){
+            currentTurn.jumpIsPossible();
+            System.out.println("\t" + possibleMove);
+            System.out.println("Jump Move ->> " + possibleMove);
+            if (possibleMove.equals(move)){
                 return true;
             }
         }
@@ -385,19 +454,35 @@ public class CheckersGame {
      *
      * @param move the Move to keep track of
      */
-    public void keepLastMove(Move move) {
-        this.currentTurn.addMove(move);
+    public void keepLastMove(Move move){
+        System.out.println("keeping move " + move);
+        Position startPos = move.getStart();
+        System.out.print("\tstarting at " + startPos);
+        Position endPos = move.getEnd();
+        System.out.println(" and ending at " + endPos);
+        if ( Math.abs(startPos.getRow() - endPos.getRow()) == 2 &&
+                Math.abs(startPos.getCol() - endPos.getCol()) == 2){
+            System.out.println("\tWe have a difference");
+            Piece piece = findPiece((activePlayer.equals(redPlayer)) ? move : moveConverter(move));
+            this.currentTurn.addMove(move, piece);
+        }
+        else{
+            this.currentTurn.addMove(move);
+        }
+
     }
 
-    /**
-     * Keeps track of the last jump move
-     *
-     * @param move  the Move to keep track of
-     * @param piece the Piece jumped over
-     */
-    public void keepLastJumpMove(Move move, Piece piece) {
-        this.currentTurn.addMove(move, piece);
+    public Piece findPiece(Move move){
+        Position startPos = move.getStart();
+        Position endPos = move.getEnd();
+        int x = startPos.getRow() + ((endPos.getRow() - startPos.getRow()) / 2);
+        int y = startPos.getCol() + ((endPos.getCol() - startPos.getCol()) / 2);
+        Space space = getSpace(startPos.getRow() + ((endPos.getRow() - startPos.getRow()) / 2),
+                startPos.getCol() + ((endPos.getCol() - startPos.getCol()) / 2));
+        System.out.println("Looking for piece at " + x + ", " + y);
+        return space.getPiece();
     }
+
 
     /**
      * Returns the last move made by a player in
@@ -441,14 +526,22 @@ public class CheckersGame {
         Position start = move.getStart();
         Piece piece = removePieceToMove(start.getRow(), start.getCol());
         Position end = move.getEnd();
-        if (piece != null) {
-            if (piece.isRedPiece() && end.getRow() == 0) {
+//        System.out.println(move);
+        if (piece != null){
+            if(piece.isRedPiece() && end.getRow() == 0){
                 piece.makePieceKing();
             }
             if (!piece.isRedPiece() && end.getRow() == 7) {
                 piece.makePieceKing();
             }
             addPiece(end.getRow(), end.getCol(), piece);
+        }
+        if(move.hasPiece()) {
+            System.out.print("We have a move piece to remove");
+            Position piecePos = new Position(move.getStart().getRow() + ((move.getEnd().getRow() - move.getStart().getRow()) / 2),
+                    move.getStart().getCol() + ((move.getEnd().getCol() - move.getStart().getCol()) / 2));
+            System.out.println(" at " + piecePos);
+            removePieceToMove(piecePos.getRow(), piecePos.getCol());
         }
     }
 
@@ -461,6 +554,8 @@ public class CheckersGame {
      * @return a move flipped of the original
      */
     public Move moveConverter(Move move) {
+//        System.out.println("COVERTING MOVE--------");
+//        System.out.println("\tORIGINAL: " + move);
         Position start = move.getStart();
         Position end = move.getEnd();
         if (!activePlayer.equals(redPlayer)) {
@@ -471,9 +566,42 @@ public class CheckersGame {
                     ROWS - end.getRow() - 1,
                     end.getCol());
             Move newMove = new Move(convertedStart, convertedEnd);
-            return new Move(convertedStart, convertedEnd);
+            System.out.println("\tCONVERTED: " + newMove);
+            System.out.println();
+            Move convertedMove = new Move(convertedStart, convertedEnd);
+            if (move.hasPiece()){
+                convertedMove.addPiece(move.getPiece());
+            }
+            return convertedMove;
         }
         return move;
+    }
+
+    /**
+     * Completes the turn for the player
+     * Loops through every move made and swaps
+     * the current player
+     */
+    public void completeTurn(){
+        Stack<Move> moves = currentTurn.getMoves();
+        while(!moves.empty()){
+            makeMove(moves.pop());
+        }
+        swapPlayers();
+        currentTurn = new Turn(activePlayer);
+        singleRedMoves = new ArrayList<>();
+        singleWhiteMoves = new ArrayList<>();
+        jumpRedMoves = new ArrayList<>();
+        jumpWhiteMoves = new ArrayList<>();
+        lookForMoves();
+    }
+
+    public void completeMove() {
+        makeMove(currentTurn.lastMove());
+        singleRedMoves = new ArrayList<>();
+        singleWhiteMoves = new ArrayList<>();
+        jumpRedMoves = new ArrayList<>();
+        jumpWhiteMoves = new ArrayList<>();
     }
 
     /**

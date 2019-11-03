@@ -24,7 +24,6 @@ public class Row {
         }
         spaceList = new ArrayList<>();
         spaceList.addAll(spaces);
-
     }
 
     /**
@@ -44,24 +43,4 @@ public class Row {
 
     }
 
-    /**
-     * Returns if that space has a piece that can move
-     * @param col the column of piece to check
-     * @return true if can move, false if not
-     */
-//    public boolean canSpaceFromRow(int col){
-//        Space space = spaceList.get(col);
-//        return space.canPieceMove();
-//    }
-
-    /**
-     * Either enables or disables ability for piece
-     * to be moved
-     * @param col the column of piece to check
-     * @param choice true to enable, false to disable
-     */
-    public void disableEnableMove(int col, boolean choice){
-        Space space = spaceList.get(col);
-        space.disableEnableMove(choice);
-    }
 }

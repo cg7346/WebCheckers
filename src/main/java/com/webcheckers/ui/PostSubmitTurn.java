@@ -62,5 +62,19 @@ public class PostSubmitTurn implements Route {
             modeOptionsAsJSON.put("gameOverMessage", player.getName() + " has resigned.");
             return gson.toJson(Message.info(player.getName() + " has resigned."));
         }
+        Move lastMove = game.getLastMove();
+        System.out.println("LastMoveMade ->> " + lastMove);
+        Message responseMessage = null;
+        if (lastMove != null){
+            game.completeTurn();
+            responseMessage = Message.info("Valid Move!");
+        }else{
+            responseMessage = Message.error("Make move first");
+        }
+        response.body(gson.toJson(responseMessage));
+
+
+
+        return gson.toJson(responseMessage);
     }
 }

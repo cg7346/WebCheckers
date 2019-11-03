@@ -10,11 +10,14 @@ public class Turn {
 
     private Stack<Move> moves;
     private Stack<Piece> removedPieces;
+    private boolean isJumpPossible;
+    private Player activePlayer;
 
-    public Turn()
-    {
+    public Turn(Player activePlayer) {
         moves = new Stack<>();
         removedPieces = new Stack<>();
+        isJumpPossible = false;
+        this.activePlayer = activePlayer;
     }
 
     public Move lastMove()
@@ -24,7 +27,7 @@ public class Turn {
 
     public void addMove(Move m, Piece p)
     {
-        moves.push(m);
+        moves.push(m.addPiece(p));
         removedPieces.push(p);
     }
 
@@ -50,5 +53,17 @@ public class Turn {
         return null;
     }
 
+    public void jumpIsPossible()
+    {
+        isJumpPossible = true;
+    }
 
+    public boolean isJumpPossible()
+    {
+        return isJumpPossible;
+    }
+
+    public Stack<Move> getMoves(){
+        return this.moves;
+    };
 }
