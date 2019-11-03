@@ -64,12 +64,11 @@ public class Space {
      *
      * @param piece the piece to add
      */
-    public void addPiece(Piece piece)
-    {
-        if(!isValid()) {
-            //TODO add functionality if invalid move here
+    public void addPiece(Piece piece){
+        if(isValid()) {
+            this.piece = piece;
         }
-        this.piece = piece;
+
     }
 
     /**
@@ -102,17 +101,7 @@ public class Space {
         }
         return false;
     }
+    
 
-    /**
-     * Either enables or disables ability for piece
-     * to be moved
-     * @param choice true to enable, false to disable
-     */
-    public void disableEnableMove(boolean choice){
-        if (hasPiece()){
-            piece.disableEnableMove(choice);
-        }
-
-    }
 
 }

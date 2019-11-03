@@ -5,13 +5,10 @@ import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
-import com.webcheckers.model.Player;
-import com.webcheckers.model.ValidateMove;
 import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import spark.Session;
 
 import java.util.Objects;
 
@@ -33,20 +30,23 @@ public class PostValidateMove implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String moveString = request.queryParams("actionData");
-        System.out.println("move string is this " + moveString);
         String gameIdString = request.queryParams("gameID");
-
         Move move = gson.fromJson(moveString, Move.class);
         System.out.println("------Checking for THIS move!!");
         System.out.println(move);
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
-        game.lookForMoves();
         boolean isPossibleMove = game.isInMoves(move);
         System.out.println(isPossibleMove);
         Message responseMessage = null;
         if(isPossibleMove){
             responseMessage = Message.info("Valid Move!");
             game.keepLastMove(move);
+            game.completeMove();
+            if(move.hasPiece()) {
+                System.out.println("AAAAAAHHHHHHHHH");
+                move = game.moveConverter(move);
+                game.lookInSpace(move.getEnd().getRow(), move.getEnd().getCol());
+            }
 
         }else {
             responseMessage = Message.error("Invalid MMMOOOOVEEE!");

@@ -36,18 +36,15 @@ public class PostSubmitTurn implements Route {
         String gameIDString = request.queryParams("gameID");
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
         Move lastMove = game.getLastMove();
+        System.out.println("LastMoveMade ->> " + lastMove);
         Message responseMessage = null;
         if (lastMove != null){
-            //TODO: Check to see if there are jump moves
-            game.makeMove(lastMove);
-            game.swapPlayers();
+            game.completeTurn();
             responseMessage = Message.info("Valid Move!");
         }else{
             responseMessage = Message.error("Make move first");
         }
         response.body(gson.toJson(responseMessage));
-
-
 
         return gson.toJson(responseMessage);
     }

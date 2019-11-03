@@ -32,8 +32,13 @@ public class GameManagerTest {
         GameManager gm = new GameManager();
         Player p1 = new Player("glados");
         Player p2 = new Player("yoshi");
-        CheckersGame game = gm.makeGame(p1, p2);
-        assertNotNull(game, "error, please check test and code");
+        Player p3 = new Player("Hello");
+        CheckersGame game1 = gm.makeGame(p1, p2);
+        CheckersGame game2 = gm.makeGame(p1, p3);
+        assertNotNull(game1, "error, please check test and code");
+        assertNull(game2, "error, should be null");
+
+
     }
 
     /**
@@ -49,6 +54,7 @@ public class GameManagerTest {
         CheckersGame game = gm.makeGame(p1,p3);
         CheckersGame p1Game = gm.getGame(p1);
         CheckersGame p2Game = gm.getGame(p2);
+        CheckersGame gameFromGameID = gm.getGame(game.getGameID());
         assertNull(p2Game, "error, please check test and code");
         assertNotNull(p1Game, "error, please check test and code");
     }
