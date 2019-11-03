@@ -391,7 +391,7 @@ public class CheckersGame {
         System.out.println("Current single moves...");
         for (Move possibleMove : moves){
             System.out.println("\t" + possibleMove);
-            if (possibleMove.equals(move)){
+            if (possibleMove.equals(move) && !currentTurn.isJumpPossible()){
                 if(jumps.size() != 0) {
                     return false;
                 }
@@ -400,6 +400,7 @@ public class CheckersGame {
         }
         System.out.println("Current jump moves... ");
         for (Move possibleMove : jumps){
+            currentTurn.jumpIsPossible();
             System.out.println("\t" + possibleMove);
             System.out.println("Jump Move ->> " + possibleMove);
             if (possibleMove.equals(move)){
