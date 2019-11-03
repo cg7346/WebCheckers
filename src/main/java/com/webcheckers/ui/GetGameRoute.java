@@ -131,7 +131,7 @@ public class GetGameRoute implements Route {
             modeOptions.put(GAME_OVER_ATTR, GAME_OVER_ATTR_MSG);
             vm.put(START_ATTR, START_ATTR_MSG);
         } else {
-            if (!PostCheckTurn.checked) {
+            if (!PostCheckTurn.resigned) {
                 modeOptions.put("isGameOver", gameOver);
                 modeOptions.put(GAME_OVER_ATTR, PostResignGame.resignMessage(resignedPlayer));
                 vm.put(START_ATTR, PostResignGame.resignMessage(resignedPlayer));
@@ -142,7 +142,7 @@ public class GetGameRoute implements Route {
                 } else if (resignedPlayer == white) {
                     game.setWinner(red);
                 }
-                response.body(gson.toJson(PostResignGame.resignMessage(resignedPlayer)));
+                //response.body(gson.toJson(PostResignGame.resignMessage(resignedPlayer)));
                 // Resets gameOver to false
                 gameOver = false;
             } else {
@@ -152,7 +152,6 @@ public class GetGameRoute implements Route {
                 gameOver = false;
             }
         }
-
         return modeOptions;
     }
 }

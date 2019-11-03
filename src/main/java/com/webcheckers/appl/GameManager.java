@@ -58,7 +58,12 @@ public class GameManager {
             totalGames--;
             redPlayer.setInGame(false);
             whitePlayer.setInGame(false);
-            games.remove(game.getGameID());
+            try {
+                System.out.println(games);
+                games.remove(game);
+            } catch (IndexOutOfBoundsException err) {
+                System.err.println(err);
+            }
             return null;
         }
     }
