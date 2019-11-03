@@ -3,6 +3,7 @@ package com.webcheckers.model;
 import com.webcheckers.appl.GameManager;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -456,21 +457,32 @@ public class CheckersGame {
         Move lastMove = currentTurn.lastMove();
         Position start = lastMove.getStart();
         Position end = lastMove.getEnd();
-        Piece piece = removePieceToMove(end.getRow(), end.getCol());
-        addPiece(start.getRow(), start.getCol(), piece);
+        Move reverseMove = new Move(lastMove.getEnd(), lastMove.getStart());
+        makeMove(reverseMove);
+        /*Piece piece = removePieceToMove(end.getRow(), end.getCol());
+        addPiece(start.getRow(), start.getCol(), piece);*/
 
         //remove the last move and get the piece associated
         Piece p = currentTurn.backupLastMove();
 
         //if there was a piece removed in that move return it to the game board
-        if (p != null) {
+        if(p != null) {
+            Move convertedMove = moveConverter(lastMove);
             Position p_Pos = new Position(
-                    start.getRow() + ((end.getRow() - start.getRow()) / 2),
-                    start.getCol() + ((end.getCol() - start.getCol()) / 2));
+                    convertedMove.getStart().getRow() + ((convertedMove.getEnd().getRow() - convertedMove.getStart().getRow()) / 2),
+                    convertedMove.getStart().getCol() + ((convertedMove.getEnd().getCol() - convertedMove.getStart().getCol()) / 2));
+            System.out.println("GUCCI " + p_Pos);
             addPiece(p_Pos.getRow(), p_Pos.getCol(), p);
         }
 
-
+        if(currentTurn.isEmpty()) {
+            lookForMoves();
+        } else {
+            System.out.println("AAAAAAHHHHHHH " + lastMove);
+            lastMove = moveConverter(lastMove);
+            System.out.println("AAAAAAHHHHHHH " + lastMove);
+            lookInSpace(lastMove.getStart().getRow(), lastMove.getStart().getCol());
+        }
     }
 
     /**

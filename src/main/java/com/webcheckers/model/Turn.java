@@ -66,4 +66,9 @@ public class Turn {
     public Stack<Move> getMoves(){
         return this.moves;
     };
+
+    public boolean isEmpty()
+    {
+        return moves.isEmpty();
+    }
 }
