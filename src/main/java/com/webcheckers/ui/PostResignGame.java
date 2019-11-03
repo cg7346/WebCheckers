@@ -10,7 +10,6 @@ import spark.Response;
 import spark.Route;
 import spark.Session;
 
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
@@ -27,7 +26,6 @@ public class PostResignGame implements Route {
 
     // Values used in the mode options for JSON after the resign button is clicked
     private static final String RESIGN = "%s has resigned.";
-
 
     //
     // Constructor
@@ -83,24 +81,11 @@ public class PostResignGame implements Route {
 
         final Session httpSession = request.session();
         Player player = httpSession.attribute("Player");
-        Player opponent;
-        game.setResignedPlayer(player);
-        if (player == game.getRedPlayer()) {
-            opponent = game.getWhitePlayer();
-        } else {
-            opponent = game.getRedPlayer();
-        }
 
-        if (game.whoseTurn(game) == GetGameRoute.activeColor.RED) {
-            if (game.getRedPlayer() == player) {
-                game.colorTurn();
-            }
-        } else if (game.getWhitePlayer() == player) {
-            game.colorTurn();
-        }
-        game.endGame(player.getName() + " has resigned.", opponent.getName());
-
-        return gson.toJson(Message.info(player.getName() + " resigned"));
+        //        game.swapPlayers();
+        game.endGame(gameManager, player.getName() + " has resigned.");
+        response.body(gson.toJson(Message.info(player.getName() + " has resigned.")));
+        return gson.toJson(Message.info(player.getName() + " has resigned."));
         // Sets the resigned player
 //        game.setResignedPlayer(player);
         // Sets game over to true

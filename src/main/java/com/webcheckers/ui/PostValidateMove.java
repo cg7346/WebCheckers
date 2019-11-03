@@ -5,13 +5,10 @@ import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
-import com.webcheckers.model.Player;
-import com.webcheckers.model.ValidateMove;
 import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import spark.Session;
 
 import java.util.Objects;
 
@@ -40,18 +37,23 @@ public class PostValidateMove implements Route {
 //        System.out.println("------Checking for THIS move!!");
 //        System.out.println(move);
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
-        game.lookForMoves();
-        boolean isPossibleMove = game.isInMoves(move);
-//        System.out.println(isPossibleMove);
-        Message responseMessage = null;
-        if(isPossibleMove){
-            responseMessage = Message.info("Valid Move!");
-            game.keepLastMove(move);
+        if (game != null) {
+            game.lookForMoves();
+            boolean isPossibleMove = game.isInMoves(move);
+            //        System.out.println(isPossibleMove);
+            Message responseMessage = null;
+            if (isPossibleMove) {
+                responseMessage = Message.info("Valid Move!");
+                game.keepLastMove(move);
 
-        }else {
-            responseMessage = Message.error("Invalid MMMOOOOVEEE!");
+            } else {
+                responseMessage = Message.error("Invalid MMMOOOOVEEE!");
+            }
+            response.body(gson.toJson(responseMessage));
+            return gson.toJson(responseMessage);
+        } else {
+            //halt();
+            return gson.toJson("false");
         }
-        response.body(gson.toJson(responseMessage));
-        return gson.toJson(responseMessage);
     }
 }

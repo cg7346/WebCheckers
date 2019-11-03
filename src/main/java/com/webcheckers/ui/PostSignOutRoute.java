@@ -1,5 +1,6 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import spark.*;
@@ -18,6 +19,7 @@ public class PostSignOutRoute implements Route {
     // Attributes
     //
 
+    private final GameManager gameManager;
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
 
@@ -34,7 +36,9 @@ public class PostSignOutRoute implements Route {
      * @throws NoSuchElementException
      *    when the {@code Player} or {@code templateEngine} parameter is null
      */
-    PostSignOutRoute(TemplateEngine templateEngine, PlayerLobby playerLobby) {
+    PostSignOutRoute(GameManager gameManager, TemplateEngine templateEngine, PlayerLobby playerLobby) {
+        // Sets and validates the templateEngine attribute to not be null
+        this.gameManager = Objects.requireNonNull(gameManager, "gameManager must not be null");
         // Sets and validates the templateEngine attribute to not be null
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
         // Sets and validates the playerLobby attribute to not be null
@@ -77,6 +81,7 @@ public class PostSignOutRoute implements Route {
             String count = String.format(GetHomeRoute.PLAYERS, playerCount);
             vm.put(GetHomeRoute.PLAYERS_COUNT, count);
         }
+        //gameManager.resignGame(currentPlayer);
         // Redirects to home, signed out
         response.redirect(WebServer.HOME_URL);
         // Renders home

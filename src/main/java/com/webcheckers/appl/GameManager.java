@@ -3,7 +3,6 @@ package com.webcheckers.appl;
 
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
-import com.webcheckers.ui.GetGameRoute;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,6 @@ public class GameManager {
     public CheckersGame makeGame(Player redPlayer, Player whitePlayer){
 
         synchronized (this){
-            redPlayer.startGame();
             totalGames++;
             if (!redPlayer.isInGame() && !whitePlayer.isInGame()){
                 CheckersGame game = new CheckersGame(redPlayer, whitePlayer, totalGames);
@@ -56,17 +54,15 @@ public class GameManager {
      */
     public CheckersGame removeGame(CheckersGame game, Player redPlayer, Player whitePlayer) {
 
-        synchronized (this) {
+        synchronized (game) {
             totalGames--;
-            redPlayer.endGame(true);
-            redPlayer.setInGame(false);
-            whitePlayer.setInGame(false);
             try {
-                System.out.println(games);
                 games.remove(game);
             } catch (IndexOutOfBoundsException err) {
                 System.err.println(err);
             }
+            redPlayer.setInGame(false);
+            whitePlayer.setInGame(false);
             return null;
         }
     }
@@ -107,30 +103,27 @@ public class GameManager {
         return player.equals(game.getRedPlayer()) || player.equals(game.getWhitePlayer());
     }
 
-    /**
-     * Resign all currently active games with the given player in it
-     * use when signing out
-     *
-     * @param player player who's games are being resigned
-     */
-    public void resignAllGames(Player player) {
-        synchronized (games) {
-            for (CheckersGame id : games) {
-                if (id.hasPlayer(player)) {
-                    String opponent = "";
-                    if (id.whoseTurn(id) == GetGameRoute.activeColor.RED) {
-                        if (id.getRedPlayer() == player) {
-                            id.colorTurn();
-                            opponent = id.getWhitePlayer().getName();
-                        }
-                    } else if (id.getWhitePlayer() == player) {
-                        id.colorTurn();
-                        opponent = id.getRedPlayer().getName();
-                    }
-                    id.endGame(player.getName() + " has resigned.", opponent);
-                }
-                id.endGame(player.getName() + " has resigned.", "");
-            }
-        }
-    }
+//    /**
+//     * Resign currently active game with the given player in it
+//     * use when signing out
+//     *
+//     * @param player player who's games are being resigned
+//     */
+//    public void resignGame(Player player) {
+//        synchronized (games) {
+//            for (CheckersGame id : games) {
+//                if (id.hasPlayer(player)) {
+//                    if (id.whoseTurn(id) == GetGameRoute.activeColor.RED) {
+//                        if (id.getRedPlayer() == player) {
+//                            id.colorTurn();
+//                        }
+//                    } else if (id.getWhitePlayer() == player) {
+//                        id.colorTurn();
+//                    }
+//                    id.endGame(player.getName() + " has resigned.");
+//                }
+//                id.endGame(player.getName() + " has resigned.");
+//            }
+//        }
+//    }
 }

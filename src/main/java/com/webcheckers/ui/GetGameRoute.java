@@ -83,6 +83,11 @@ public class GetGameRoute implements Route {
             game = handleNewGame(request, response, currentPlayer);
         }
         Map<String, Object> vm = new HashMap<>();
+        if (game.getGameID() == 0) {
+            response.redirect(WebServer.HOME_URL);
+            halt();
+            return null;
+        }
         int gameID = game.getGameID();
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
@@ -98,11 +103,14 @@ public class GetGameRoute implements Route {
 //        final Map<String, Object> modeOptions = new HashMap<>(2);
 
         vm.put("modeOptionsAsJSON", gson.toJson(game.getOptions()));
+        if (!game.isGameOver()) {
+            vm.put(START_ATTR, START_ATTR_MSG);
+        }
         vm.put(RED_PLAYER_ATTR, redPlayer);
         vm.put(WHITE_PLAYER_ATTR, whitePlayer);
-//        activeColor color = (game.getActivePlayer().equals(redPlayer))
-//                ? activeColor.RED : activeColor.WHITE;
-        vm.put(COLOR_ATTR, game.whoseTurn(game));
+        activeColor color = (game.getActivePlayer().equals(redPlayer))
+                ? activeColor.RED : activeColor.WHITE;
+        vm.put(COLOR_ATTR, color);
         vm.put(BOARD_ATTR, board);
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
@@ -138,7 +146,7 @@ public class GetGameRoute implements Route {
             modeOptions.put(GAME_OVER_ATTR, GAME_OVER_ATTR_MSG);
             vm.put(START_ATTR, START_ATTR_MSG);
         } else {
-            if (!PostCheckTurn.resigned) {
+            if (true) {
                 modeOptions.put("isGameOver", gameOver);
                 modeOptions.put(GAME_OVER_ATTR, PostResignGame.resignMessage(resignedPlayer));
                 vm.put(START_ATTR, PostResignGame.resignMessage(resignedPlayer));

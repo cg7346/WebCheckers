@@ -1,5 +1,6 @@
 package com.webcheckers.model;
 
+import com.webcheckers.appl.GameManager;
 import com.webcheckers.ui.GetGameRoute;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class CheckersGame {
     private ArrayList<Move> singleWhiteMoves;
 
     //unique identifier for the game
-    private int gameID;
+    private int gameID = 0;
 
     //Dimensions for the board
     public final static int ROWS = 8;
@@ -236,28 +237,28 @@ public class CheckersGame {
         currentTurn = new Turn();
     }
 
-    /**
-     * @return this.activeTurnColor
-     */
-    public GetGameRoute.activeColor whoseTurn(CheckersGame game) {
-        if (game.getActivePlayer().equals(redPlayer)) {
-            activeTurnColor = GetGameRoute.activeColor.RED;
-        } else {
-            activeTurnColor = GetGameRoute.activeColor.WHITE;
-        }
-        return activeTurnColor;
-    }
-
-    /**
-     * Changes who's turn it is
-     */
-    public void colorTurn() {
-        if (activeTurnColor == GetGameRoute.activeColor.RED) {
-            activeTurnColor = GetGameRoute.activeColor.WHITE;
-        } else {
-            activeTurnColor = GetGameRoute.activeColor.RED;
-        }
-    }
+//    /**
+//     * @return this.activeTurnColor
+//     */
+//    public GetGameRoute.activeColor whoseTurn(CheckersGame game) {
+//        if (game.getActivePlayer().equals(redPlayer)) {
+//            activeTurnColor = GetGameRoute.activeColor.RED;
+//        } else {
+//            activeTurnColor = GetGameRoute.activeColor.WHITE;
+//        }
+//        return activeTurnColor;
+//    }
+//
+//    /**
+//     * Changes who's turn it is
+//     */
+//    public void colorTurn() {
+//        if (activeTurnColor == GetGameRoute.activeColor.RED) {
+//            activeTurnColor = GetGameRoute.activeColor.WHITE;
+//        } else {
+//            activeTurnColor = GetGameRoute.activeColor.RED;
+//        }
+//    }
 
     /**
      * Looks for moves possible in the game
@@ -522,26 +523,6 @@ public class CheckersGame {
         return modeOptionsAsJSON;
     }
 
-//    /**
-//     * End a game between two players
-//     * @param gameOverMessage message to be shown to the players
-//     * @param winner name of the player who won
-//     */
-//    public void endGame(String gameOverMessage, String winner) {
-//        whitePlayer.removeOpponent(redPlayer);
-//        redPlayer.removeOpponent(whitePlayer);
-//        if(winner.equals(whitePlayer.getName())){
-//            whitePlayer.endGame(true);
-//            redPlayer.endGame(false);
-//        }
-//        else{
-//            whitePlayer.endGame(false);
-//            redPlayer.endGame(true);
-//        }
-//        modeOptionsAsJSON.put("isGameOver", true);
-//        modeOptionsAsJSON.put("gameOverMessage", gameOverMessage);
-//    }
-
     /**
      * Gets the resigned player of the checkers game
      *
@@ -565,37 +546,17 @@ public class CheckersGame {
      * End a game between two players
      *
      * @param gameOverMessage message to be shown to the players
-     * @param winner          name of the player who won
      */
-    public void endGame(String gameOverMessage, String winner) {
-        whitePlayer.removeOpponent(redPlayer);
-        redPlayer.removeOpponent(whitePlayer);
-        if (winner.equals(whitePlayer.getName())) {
-            whitePlayer.setInGame(false);
-            whitePlayer.endGame(true);
-            redPlayer.setInGame(true);
-            redPlayer.endGame(false);
-        } else {
-            whitePlayer.setInGame(true);
-            whitePlayer.endGame(false);
-            redPlayer.setInGame(false);
-            redPlayer.endGame(true);
-        }
+    public void endGame(GameManager gameManager, String gameOverMessage) {
         modeOptionsAsJSON.put("isGameOver", true);
         modeOptionsAsJSON.put("gameOverMessage", gameOverMessage);
+        CheckersGame game = gameManager.getGame(gameID);
+        // Removes the game from game manager
+        gameManager.removeGame(game, game.getRedPlayer(), game.getWhitePlayer());
     }
 
     public boolean isGameOver() {
         return (modeOptionsAsJSON.containsKey("isGameOver") && modeOptionsAsJSON.get("isGameOver").equals(true));
-    }
-
-    /**
-     * Sets the game over of the checkers game
-     *
-     * @param gameOver is a boolean to indicate whether or not the game is over
-     */
-    public void setGameOver(Boolean gameOver) {
-        this.gameOver = gameOver;
     }
 
     public boolean hasPlayer(Player player) {

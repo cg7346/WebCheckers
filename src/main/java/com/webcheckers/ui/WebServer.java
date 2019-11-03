@@ -184,7 +184,7 @@ public class WebServer {
     post(SIGNIN_URL, new PostSignInRoute(templateEngine, playerLobby));
 
     // Posts the Checkers game Sign Out page
-    post(SIGNOUT_URL, new PostSignOutRoute(templateEngine, playerLobby));
+    post(SIGNOUT_URL, new PostSignOutRoute(gameManager, templateEngine, playerLobby));
 
     // Shows the Checkers game board
     get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager, gson));
@@ -198,11 +198,12 @@ public class WebServer {
     // Submits the turn of the current player
     post(SUBMITTURN_URL, new PostSubmitTurn(playerLobby, gameManager, gson));
 
+    // Posts after the resign button is clicked
+    post(RESIGN_URL, new PostResignGame(gameManager, gson));
+
     // Checks to see if the game is ready for next turn
     post(CHECKTURN_URL, new PostCheckTurn(playerLobby, gameManager, gson));
 
-    // Posts after the resign button is clicked
-    post(RESIGN_URL, new PostResignGame(gameManager, gson));
 
   }
 
