@@ -20,8 +20,8 @@ import static spark.Spark.halt;
  * @author <a href='mailto:jil4009@rit.edu'>Jacquelyn Leung</a>
  * @author <a href='mailto:mmb2582@rit.edu'>Mallory Bridge</a>
  * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
- * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella<a/>
  * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</a>
+ * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella<a/>
  */
 public class GetGameRoute implements Route {
 
@@ -116,10 +116,14 @@ public class GetGameRoute implements Route {
         if (!request.queryParams().isEmpty()){
             String opponentName = request.queryParams(OPP_USER);
             Player chosenOpponent = playerLobby.findPlayer(opponentName);
-            if (playerLobby.isInGame(chosenOpponent)|| chosenOpponent == null ){
-                //we will send an error
-                Message er = Message.error(PLAYER_IN_GAME);
-                session.attribute(MESSAGE_ERR, er);
+            System.out.println(chosenOpponent);
+            if (playerLobby.isInGame(chosenOpponent) || chosenOpponent == null){
+                if(chosenOpponent != null) {
+                    //we will send an error
+                    Message er = Message.error(PLAYER_IN_GAME);
+                    session.attribute(MESSAGE_ERR, er);
+                }
+                // If chosenOpponent is null, then its because player resigned
                 response.redirect(WebServer.HOME_URL);
                 halt();
                 return null;
