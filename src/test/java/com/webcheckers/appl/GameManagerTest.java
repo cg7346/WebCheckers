@@ -54,7 +54,8 @@ public class GameManagerTest {
         CheckersGame game = gm.makeGame(p1,p3);
         CheckersGame p1Game = gm.getGame(p1);
         CheckersGame p2Game = gm.getGame(p2);
-        CheckersGame p2Game = gm.getGame()
+        CheckersGame gameFromGameID = gm.getGame(game.getGameID());
+        assertNotNull(gameFromGameID, "Error, please check test and code");
         assertNull(p2Game, "error, please check test and code");
         assertNotNull(p1Game, "error, please check test and code");
     }
