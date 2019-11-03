@@ -39,6 +39,7 @@ public class GetGameRoute implements Route {
     static final Message GAME_OVER_ATTR_MSG = Message.info("The game is over"); /* Get the game over message */
     static final String VIEW_NAME = "game.ftl";
     static final String PLAYER_IN_GAME= "Chosen player is already in a game.";
+    static final String PLAYER_RESIGNED = "Opponent has resigned.";
     static final String MESSAGE_ATTR = "message";
     static final String MESSAGE_ERR = "message error";
     static final String OPP_USER = "opp_user";
@@ -124,6 +125,8 @@ public class GetGameRoute implements Route {
                     session.attribute(MESSAGE_ERR, er);
                 }
                 // If chosenOpponent is null, then its because player resigned
+                Message er = Message.error(PLAYER_RESIGNED);
+                session.attribute(MESSAGE_ERR, er);
                 response.redirect(WebServer.HOME_URL);
                 halt();
                 return null;
