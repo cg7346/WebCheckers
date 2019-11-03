@@ -21,18 +21,42 @@ public class BoardViewTest {
     private BoardView CuT;
 
 
-    @Test
-    void testSetup(){
+    void testSetup(boolean isRedPlayer){
         this.red = Mockito.mock(Player.class);
         this.white = Mockito.mock(Player.class);
+
         this.checkersGame = new CheckersGame(this.red, this.white, 0);
 
-        this.CuT = new BoardView(this.red, this.checkersGame);
+        if(!isRedPlayer){
+            this.CuT = new BoardView(this.white, this.checkersGame);
+        } else {
+            this.CuT = new BoardView(this.red, this.checkersGame);
+        }
     }
-/*
-    //test to check red view
+    //test to check view
     @Test
     void iteratorRedTest() {
+        testSetup(true);
+        int rowNum = 0;
+        Iterator<Row> rows = CuT.iterator();
+        Space[][] boardSpaces = this.checkersGame.getBoard();
+        while (rows.hasNext()) {
+            int colNum = 0;
+            Row row = rows.next();
+            Iterator<Space> spaces = row.iterator();
+            while (spaces.hasNext()) {
+                Space space = spaces.next();
+                Assertions.assertEquals(boardSpaces[rowNum][colNum].getCellIdx(), space.getCellIdx(), "Space mismatch in iterator");
+                colNum++;
+            }
+            rowNum++;
+        }
+
+    }
+
+    @Test
+    void iteratorWhiteTest(){
+        testSetup(false);
         int rowNum = 7;
         Iterator<Row> rows = CuT.iterator();
         Space[][] boardSpaces = this.checkersGame.getBoard();
@@ -42,14 +66,21 @@ public class BoardViewTest {
             Iterator<Space> spaces = row.iterator();
             while (spaces.hasNext()) {
                 Space space = spaces.next();
-                //TODO how to figure out how to get the space symbol
-                Assertions.assertEquals(boardSpaces[rowNum][colNum], space, "Space mismatch in iterator");
+                Assertions.assertEquals(boardSpaces[rowNum][colNum].getCellIdx(), space.getCellIdx(), "Space mismatch in iterator");
                 colNum--;
             }
             rowNum--;
         }
-
     }
-    */
+
+    @Test
+    void iteratorTest(){
+        testSetup(true);
+        Iterator<Row> rowsRed = CuT.iterator();
+        testSetup(false);
+        Iterator<Row> rowsWhite = CuT.iterator();
+        Assertions.assertNotEquals(rowsWhite, rowsRed, "Something wrong with the row iterator");
+    }
+
 
 }
