@@ -40,14 +40,10 @@ public class PostSubmitTurn implements Route {
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
         if (game != null) {
             Move lastMove = game.getLastMove();
+            System.out.println("LastMoveMade ->> " + lastMove);
             Message responseMessage = null;
-            //TODO: check is there are any moves possible
-            //      //TODO: if not then endGame   game.endGame(String.format(PIECES_CAPTURED_STRING, name),name);
-            //TODO: set winner and loser and create message   game.endGame(loser + " cannot make a move", winner);
             if (lastMove != null) {
-                //TODO: Check to see if there are jump moves
-                game.makeMove(lastMove);
-                game.swapPlayers();
+                game.completeTurn();
                 responseMessage = Message.info("Valid Move!");
             } else {
                 responseMessage = Message.error("Make move first");
@@ -62,19 +58,5 @@ public class PostSubmitTurn implements Route {
             modeOptionsAsJSON.put("gameOverMessage", player.getName() + " has resigned.");
             return gson.toJson(Message.info(player.getName() + " has resigned."));
         }
-        Move lastMove = game.getLastMove();
-        System.out.println("LastMoveMade ->> " + lastMove);
-        Message responseMessage = null;
-        if (lastMove != null){
-            game.completeTurn();
-            responseMessage = Message.info("Valid Move!");
-        }else{
-            responseMessage = Message.error("Make move first");
-        }
-        response.body(gson.toJson(responseMessage));
-
-
-
-        return gson.toJson(responseMessage);
     }
 }
