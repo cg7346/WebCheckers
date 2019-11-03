@@ -24,7 +24,6 @@ public class Row {
         }
         spaceList = new ArrayList<>();
         spaceList.addAll(spaces);
-
     }
 
     /**
