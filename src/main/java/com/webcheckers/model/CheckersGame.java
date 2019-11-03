@@ -555,6 +555,10 @@ public class CheckersGame {
             makeMove(moves.pop());
         }
         swapPlayers();
+        singleRedMoves = new ArrayList<>();
+        singleWhiteMoves = new ArrayList<>();
+        jumpRedMoves = new ArrayList<>();
+        jumpWhiteMoves = new ArrayList<>();
         lookForMoves();
     }
 }
