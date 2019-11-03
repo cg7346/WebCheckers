@@ -236,11 +236,11 @@ public class CheckersGame {
                     }
                     //piece white and king
                     if (!p.isRedPiece() && p.isPieceKing()) {
-                        checkKingMoves(row, col, singleWhiteMoves);
+                        checkKingMoves(row, col, singleWhiteMoves, Piece.color.WHITE);
                     }
                     //piece red and king
                     if (p.isRedPiece() && p.isPieceKing()) {
-                        checkKingMoves(row, col, singleRedMoves);
+                        checkKingMoves(row, col, singleRedMoves, Piece.color.RED);
                     }
                 }
                 }
@@ -373,14 +373,14 @@ public class CheckersGame {
      * @param col
      * @param moveArray
      */
-    public void checkKingMoves(int row, int col, ArrayList<Move> moveArray) {
+    public void checkKingMoves(int row, int col, ArrayList<Move> moveArray, Piece.color color) {
         int rowUp = row -1;
         if(rowUp >= 0){
-            moveArray.addAll(checkColumns(row, col, rowUp, Piece.color.WHITE)); //TODO fix this so it's player color
+            moveArray.addAll(checkColumns(row, col, rowUp, color)); //TODO fix this so it's player color
         }
         int rowDown = row + 1;
         if(rowDown < 8){
-            moveArray.addAll(checkColumns(row, col, rowDown, Piece.color.WHITE)); //TODO fix this so it's player color
+            moveArray.addAll(checkColumns(row, col, rowDown, color)); //TODO fix this so it's player color
         }
     }
 
