@@ -46,8 +46,6 @@ public class PostSubmitTurn implements Route {
         }
         response.body(gson.toJson(responseMessage));
 
-
-
         return gson.toJson(responseMessage);
     }
 }

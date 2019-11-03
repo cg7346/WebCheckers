@@ -1,6 +1,7 @@
 package com.webcheckers.model;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.Stack;
 
 /**
