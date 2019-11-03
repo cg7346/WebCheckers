@@ -35,13 +35,17 @@ public class PostValidateMove implements Route {
         System.out.println("------Checking for THIS move!!");
         System.out.println(move);
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
-        game.lookForMoves();
         boolean isPossibleMove = game.isInMoves(move);
         System.out.println(isPossibleMove);
         Message responseMessage = null;
         if(isPossibleMove){
             responseMessage = Message.info("Valid Move!");
             game.keepLastMove(move);
+            game.completeMove();
+            if(move.hasPiece()) {
+                System.out.println("AAAAAAHHHHHHHHH");
+                game.lookInSpace(move.getEnd().getRow(), move.getEnd().getCol());
+            }
 
         }else {
             responseMessage = Message.error("Invalid MMMOOOOVEEE!");

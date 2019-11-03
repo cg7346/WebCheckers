@@ -209,54 +209,45 @@ public class CheckersGame {
      */
     public void swapPlayers(){
         activePlayer = activePlayer.equals(redPlayer) ? whitePlayer : redPlayer;
-        currentTurn = new Turn(activePlayer);
+    }
+
+    public void lookForMoves()
+    {
+        for (int row = 0; row < ROWS; row++) {
+            System.out.println();
+            for (int col = 0; col < COLS; col++) {
+                lookInSpace(row, col);
+            }
+        }
     }
 
 
     /**
      * Looks for moves possible in the game
      */
-    public void lookForMoves() {
-        for (int row = 0; row < ROWS; row++) {
-            System.out.println();
-            for (int col = 0; col < COLS; col++) {
-                Space space = getSpace(row, col);
-                if (space.hasPiece()) {
-                    Piece p = space.getPiece();
-                    System.out.println("AT -> " + row + " " + col + " ");
-                    //piece if white and single
-                    if (!p.isRedPiece() && !p.isPieceKing()) {
-                        System.out.println("Checking White------");
-                        checkWhiteSingleMoves(row, col);
-                    }
-                    //piece red and single
-                    if (p.isRedPiece() && !p.isPieceKing()) {
-                        System.out.println("Checking Red--------");
-                        checkRedSingleMoves(row, col);
-                    }
-                    //piece white and king
-                    if (!p.isRedPiece() && p.isPieceKing()) {
-                        checkKingMoves(row, col, singleWhiteMoves, Piece.color.WHITE);
-                    }
-                    //piece red and king
-                    if (p.isRedPiece() && p.isPieceKing()) {
-                        checkKingMoves(row, col, singleRedMoves, Piece.color.RED);
-                    }
-                }
-                }
+    public void lookInSpace(int row, int col) {
+        Space space = getSpace(row, col);
+        if(space.hasPiece()) {
+            Piece p = space.getPiece();
+            System.out.println("AT -> " + row + " " + col + " ");
+            //piece if white and single
+            if (!p.isRedPiece() && !p.isPieceKing()) {
+                System.out.println("Checking White------");
+                checkWhiteSingleMoves(row, col);
             }
-    }
-
-    public Move checkMoveValid(Position currentPos, Position newPos)
-    {
-        Space space = getSpace(newPos.getRow(), newPos.getCol());
-        if(space.isValid())
-        {
-            return new Move(currentPos, newPos);
-        }
-        else
-        {
-            return null;
+            //piece red and single
+            if (p.isRedPiece() && !p.isPieceKing()) {
+                System.out.println("Checking Red--------");
+                checkRedSingleMoves(row, col);
+            }
+            //piece white and king
+            if (!p.isRedPiece() && p.isPieceKing()) {
+                checkKingMoves(row, col, singleWhiteMoves, Piece.color.WHITE);
+            }
+            //piece red and king
+            if (p.isRedPiece() && p.isPieceKing()) {
+                checkKingMoves(row, col, singleRedMoves, Piece.color.RED);
+            }
         }
     }
 
@@ -483,6 +474,8 @@ public class CheckersGame {
                     start.getCol() + ((end.getCol() - start.getCol()) / 2));
             addPiece(p_Pos.getRow(), p_Pos.getCol(), p);
         }
+
+
     }
 
     /**
@@ -555,10 +548,19 @@ public class CheckersGame {
             makeMove(moves.pop());
         }
         swapPlayers();
+        currentTurn = new Turn(activePlayer);
         singleRedMoves = new ArrayList<>();
         singleWhiteMoves = new ArrayList<>();
         jumpRedMoves = new ArrayList<>();
         jumpWhiteMoves = new ArrayList<>();
         lookForMoves();
+    }
+
+    public void completeMove() {
+        makeMove(currentTurn.lastMove());
+        singleRedMoves = new ArrayList<>();
+        singleWhiteMoves = new ArrayList<>();
+        jumpRedMoves = new ArrayList<>();
+        jumpWhiteMoves = new ArrayList<>();
     }
 }
