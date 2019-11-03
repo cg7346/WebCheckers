@@ -5,7 +5,6 @@ import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
-import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
@@ -37,6 +36,9 @@ public class PostSubmitTurn implements Route {
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
         Move lastMove = game.getLastMove();
         Message responseMessage = null;
+        //TODO: check is there are any moves possible
+//      //TODO: if not then endGame   game.endGame(String.format(PIECES_CAPTURED_STRING, name),name);
+        //TODO: set winner and loser and create message   game.endGame(loser + " cannot make a move", winner);
         if (lastMove != null){
             //TODO: Check to see if there are jump moves
             game.makeMove(lastMove);

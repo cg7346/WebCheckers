@@ -21,6 +21,7 @@ import static spark.Spark.halt;
  * @author <a href='mailto:jil4009@rit.edu'>Jacquelyn Leung</a>
  * @author <a href='mailto:mmb2582@rit.edu'>Mallory Bridge</a>
  * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
+ * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella<a/>
  * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</a>
  */
 public class GetGameRoute implements Route {
@@ -47,11 +48,12 @@ public class GetGameRoute implements Route {
     private final Gson gson;
     private Boolean gameOver = false;
     private Integer visited = 0;
-    enum viewMode {PLAY, SPECTATOR,REPLAY}
-    enum activeColor {RED, WHITE}
-
 
     private final TemplateEngine templateEngine;
+    enum viewMode {PLAY, SPECTATOR,REPLAY}
+
+    private activeColor activeTurnColor;
+
 
     /**
      * The constructor for the {@code GET /game} route handler.
@@ -66,6 +68,7 @@ public class GetGameRoute implements Route {
         this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
         this.gameManager = Objects.requireNonNull(gameManager, "gameManager must not be null");
         this.gson = gson;
+        this.activeTurnColor = activeColor.RED;
     }
 
     /**
@@ -88,19 +91,23 @@ public class GetGameRoute implements Route {
         vm.put(GAME_ID_ATTR, gameID);
         vm.put(CURRENT_USER_ATTR, currentPlayer);
         vm.put("viewMode", viewMode.PLAY);
-        this.gameOver = game.getGameOver();
-        final Player resignedPlayer = game.getResignedPlayer();
-        final Map<String, Object> modeOptions = handleGameOver(response, request, new HashMap<>(2), vm,
-                resignedPlayer, game);
-        vm.put("modeOptionsAsJSON", gson.toJson(modeOptions));
+//        this.gameOver = game.getGameOver();
+//        final Player resignedPlayer = game.getResignedPlayer();
+//        final Map<String, Object> modeOptions = handleGameOver(response, request, new HashMap<>(2), vm,
+//                resignedPlayer, game);
+//        final Map<String, Object> modeOptions = new HashMap<>(2);
+
+        vm.put("modeOptionsAsJSON", gson.toJson(game.getOptions()));
         vm.put(RED_PLAYER_ATTR, redPlayer);
         vm.put(WHITE_PLAYER_ATTR, whitePlayer);
-        activeColor color = (game.getActivePlayer().equals(redPlayer))
-                ? activeColor.RED : activeColor.WHITE;
-        vm.put(COLOR_ATTR, color);
+//        activeColor color = (game.getActivePlayer().equals(redPlayer))
+//                ? activeColor.RED : activeColor.WHITE;
+        vm.put(COLOR_ATTR, game.whoseTurn(game));
         vm.put(BOARD_ATTR, board);
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
+
+    public enum activeColor {RED, WHITE}
 
     private CheckersGame handleNewGame(Request request, Response response, Player currentPlayer){
         CheckersGame game = null;

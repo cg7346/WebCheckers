@@ -38,7 +38,7 @@ public class PostResignGame implements Route {
      *
      * @param gameManager is the game manager from the game manager class
      * @param gson is the JSON
-     * @throws NoSuchElementException when the {@code gameManager} or {@code gson} parameter is null
+    //     * @throws NoSuchElementException when the {@code gameManager} or {@code gson} parameter is null
      */
     public PostResignGame(GameManager gameManager, Gson gson) {
         // Sets and validates the gameManager attribute to not be null
@@ -77,20 +77,52 @@ public class PostResignGame implements Route {
      */
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        // Gets the game ID
-        String gameIDString = request.queryParams("gameID");
-        // Gets the checkers game
-        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
-        Session session = request.session();
-        // Gets the active player
-        Player currentPlayer = session.attribute("Player");
+        String gameIDAsString = request.queryParams("gameID");
+        Integer gameID = Integer.parseInt(gameIDAsString);
+        CheckersGame game = gameManager.getGame(gameID);
+
+        final Session httpSession = request.session();
+        Player player = httpSession.attribute("Player");
+        Player opponent;
+        game.setResignedPlayer(player);
+        if (player == game.getRedPlayer()) {
+            opponent = game.getWhitePlayer();
+        } else {
+            opponent = game.getRedPlayer();
+        }
+
+        if (game.whoseTurn(game) == GetGameRoute.activeColor.RED) {
+            if (game.getRedPlayer() == player) {
+                game.colorTurn();
+            }
+        } else if (game.getWhitePlayer() == player) {
+            game.colorTurn();
+        }
+        game.endGame(player.getName() + " has resigned.", opponent.getName());
+
+        return gson.toJson(Message.info(player.getName() + " resigned"));
         // Sets the resigned player
-        game.setResignedPlayer(currentPlayer);
+//        game.setResignedPlayer(player);
         // Sets game over to true
-        game.setGameOver(true);
-        response.body(gson.toJson(resignMessage(currentPlayer)));
-        // Returns the to JSON the resign message
-        return gson.toJson(resignMessage(currentPlayer));
+//        game.setGameOver(true);
+//        game.endGame(player.getName() + " has resigned.", opponent.getName());
+//        return gson.toJson(Message.info(player.getName() + " resigned"));
+
+//   // Gets the game ID
+//        String gameIDString = request.queryParams("gameID");
+//        // Gets the checkers game
+//        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
+//        Session session = request.session();
+//        // Gets the active player
+//        Player currentPlayer = session.attribute("Player");
+//        // Sets the resigned player
+//        game.setResignedPlayer(player);
+//        // Sets game over to true
+//        game.setGameOver(true);
+//        response.body(gson.toJson(resignMessage(currentPlayer)));
+//        // Returns the to JSON the resign message
+//        return gson.toJson(resignMessage(player));
+//        game.endGame(player.getName() + " has resigned.", opponent.getName());
     }
 }
 
