@@ -78,36 +78,11 @@ public class PostResignGame implements Route {
         String gameIDAsString = request.queryParams("gameID");
         Integer gameID = Integer.parseInt(gameIDAsString);
         CheckersGame game = gameManager.getGame(gameID);
-
         final Session httpSession = request.session();
         Player player = httpSession.attribute("Player");
-
-        //        game.swapPlayers();
         game.endGame(gameManager, player.getName() + " has resigned.");
-        response.body(gson.toJson(Message.info(player.getName() + " has resigned.")));
-        return gson.toJson(Message.info(player.getName() + " has resigned."));
-        // Sets the resigned player
-//        game.setResignedPlayer(player);
-        // Sets game over to true
-//        game.setGameOver(true);
-//        game.endGame(player.getName() + " has resigned.", opponent.getName());
-//        return gson.toJson(Message.info(player.getName() + " resigned"));
-
-//   // Gets the game ID
-//        String gameIDString = request.queryParams("gameID");
-//        // Gets the checkers game
-//        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
-//        Session session = request.session();
-//        // Gets the active player
-//        Player currentPlayer = session.attribute("Player");
-//        // Sets the resigned player
-//        game.setResignedPlayer(player);
-//        // Sets game over to true
-//        game.setGameOver(true);
-//        response.body(gson.toJson(resignMessage(currentPlayer)));
-//        // Returns the to JSON the resign message
-//        return gson.toJson(resignMessage(player));
-//        game.endGame(player.getName() + " has resigned.", opponent.getName());
+        response.body(gson.toJson(resignMessage(player)));
+        return gson.toJson(resignMessage(player));
     }
 }
 

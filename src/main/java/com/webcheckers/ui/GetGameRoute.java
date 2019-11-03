@@ -95,12 +95,6 @@ public class GetGameRoute implements Route {
         vm.put(GAME_ID_ATTR, gameID);
         vm.put(CURRENT_USER_ATTR, currentPlayer);
         vm.put("viewMode", viewMode.PLAY);
-//        this.gameOver = game.getGameOver();
-//        final Player resignedPlayer = game.getResignedPlayer();
-//        final Map<String, Object> modeOptions = handleGameOver(response, request, new HashMap<>(2), vm,
-//                resignedPlayer, game);
-//        final Map<String, Object> modeOptions = new HashMap<>(2);
-
         vm.put("modeOptionsAsJSON", gson.toJson(game.getOptions()));
         if (!game.isGameOver()) {
             vm.put(START_ATTR, START_ATTR_MSG);
@@ -134,39 +128,6 @@ public class GetGameRoute implements Route {
                 game = gameManager.makeGame(currentPlayer, chosenOpponent);
             }}
         return game;
-    }
-
-
-    private Map<String, Object> handleGameOver(Response response, Request request, Map<String, Object> modeOptions,
-                                               Map<String, Object> vm, Player resignedPlayer,
-                                               CheckersGame game) {
-        if (!gameOver) {
-            modeOptions.put("isGameOver", gameOver);
-            modeOptions.put(GAME_OVER_ATTR, GAME_OVER_ATTR_MSG);
-            vm.put(START_ATTR, START_ATTR_MSG);
-        } else {
-            if (true) {
-                modeOptions.put("isGameOver", gameOver);
-                modeOptions.put(GAME_OVER_ATTR, PostResignGame.resignMessage(resignedPlayer));
-                vm.put(START_ATTR, PostResignGame.resignMessage(resignedPlayer));
-                Player red = game.getRedPlayer();
-                Player white = game.getWhitePlayer();
-                if (resignedPlayer == red) {
-                    game.setWinner(white);
-                } else if (resignedPlayer == white) {
-                    game.setWinner(red);
-                }
-                //response.body(gson.toJson(PostResignGame.resignMessage(resignedPlayer)));
-                // Resets gameOver to false
-                gameOver = false;
-            } else {
-                // Removes the game from game manager
-                gameManager.removeGame(game, game.getRedPlayer(), game.getWhitePlayer());
-                // Resets gameOver to false
-                gameOver = false;
-            }
-        }
-        return modeOptions;
     }
 }
 
