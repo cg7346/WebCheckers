@@ -226,7 +226,10 @@ This section describes the web interface flow; this is how the user views and in
 > acceptance criteria that stated that a user would be able to be automatically directed to start a game. We were able to pass
 > all other acceptance criteria tests in Spring 1. In Sprint 2, we were able to pass all acceptance criteria from Sprint 1 as well as new acceptance
 > criteria from other user stories added to the game. 
-![The WebCheckers Acceptance Testing]()
+![The WebCheckers Acceptance Testing](acceptance-test-plan-1.png)
+>
+>
+![The WebCheckers Acceptance Testing](acceptance-test-plan-2.png)
 
 ### Unit Testing and Code Coverage
 > _Discuss your unit testing strategy. Report on the code coverage
