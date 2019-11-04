@@ -26,6 +26,10 @@ public class PostCheckTurn implements Route {
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
     private final Gson gson;
+    static final String PLAYER_RESIGNED = "Opponent has resigned.";
+    static final String MESSAGE_ERR = "message error";
+
+
 
     public PostCheckTurn(PlayerLobby playerLobby, GameManager gameManager,Gson gson){
         this.playerLobby = Objects.requireNonNull(playerLobby, "player lobby is required");
@@ -41,6 +45,7 @@ public class PostCheckTurn implements Route {
         CheckersGame game = gameManager.getGame(currentPlayer);
         //sometimes having the game undefined breaks the builder
         if (game != null) {
+            System.out.println(PostResignGame.called);
             if (game.getActivePlayer().equals(currentPlayer)) {
                 return gson.toJson(Message.info("true"));
             } else if (PostResignGame.called) {
@@ -55,10 +60,15 @@ public class PostCheckTurn implements Route {
                     game.setWinner(game.getRedPlayer());
                 }
                 return gson.toJson(Message.info("true"));
-            } else {
+            } else if (!game.getActivePlayer().equals(currentPlayer)){
                 return gson.toJson(Message.info("false"));
             }
         }
-        return null;
+        GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
+        GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
+        response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
+        Message er = Message.error(PLAYER_RESIGNED);
+        session.attribute(MESSAGE_ERR, er);
+        return gson.toJson(Message.info("true"));
     }
 }
