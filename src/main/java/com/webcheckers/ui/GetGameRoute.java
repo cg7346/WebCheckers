@@ -39,7 +39,6 @@ public class GetGameRoute implements Route {
     static final Message GAME_OVER_ATTR_MSG = Message.info("The game is over"); /* Get the game over message */
     static final String VIEW_NAME = "game.ftl";
     static final String PLAYER_IN_GAME= "Chosen player is already in a game.";
-    static final String PLAYER_RESIGNED = "Opponent has resigned.";
     static final String MESSAGE_ATTR = "message";
     static final String MESSAGE_ERR = "message error";
     static final String OPP_USER = "opp_user";
@@ -90,6 +89,7 @@ public class GetGameRoute implements Route {
             response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
             gameManager.removeGame(game);
             response.redirect(WebServer.HOME_URL);
+            return gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer));
         }
         int gameID = game.getGameID();
         Player redPlayer = game.getRedPlayer();

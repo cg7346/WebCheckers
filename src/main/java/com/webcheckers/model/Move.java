@@ -1,5 +1,7 @@
 package com.webcheckers.model;
 
+import javax.sql.RowSet;
+
 /**
  * class for move on the checkers board
  * @author jil4009

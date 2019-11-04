@@ -93,7 +93,7 @@ public class PostResignGame implements Route {
         GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
         GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", resignPlayer.getName() + " has resigned.");
         response.body(gson.toJson(resignMessage(resignPlayer)));
-        called = true;
+        this.called = true;
         return gson.toJson(resignMessage(resignPlayer));
     }
 }
