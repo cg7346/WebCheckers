@@ -25,13 +25,8 @@ public class Turn {
         this.activePlayer = activePlayer;
     }
 
-    /**
-     * Returns the last move done on the turn
-     * if the stack is not empty
-     * @return last Move or null if empty turn
-     */
     public Move lastMove() {
-        if (!moves.empty()){
+        if (!moves.isEmpty()) {
             return moves.peek();
         }
         return null;

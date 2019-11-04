@@ -1,10 +1,6 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.model.CheckersGame;
-import com.webcheckers.model.Move;
-import com.webcheckers.model.Player;
-import com.webcheckers.model.Position;
-import org.junit.jupiter.api.BeforeEach;
+import com.webcheckers.model.*;
 import org.junit.jupiter.api.Tag;
 import org.mockito.Mockito;
 import org.testng.annotations.Test;
