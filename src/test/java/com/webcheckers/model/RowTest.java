@@ -10,7 +10,10 @@ import java.util.Iterator;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-
+/**
+ * Tests the row
+ * @author jil4009
+ */
 @Tag("Model-Tier")
 public class RowTest {
 

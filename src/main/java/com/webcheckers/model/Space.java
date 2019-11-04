@@ -100,6 +100,7 @@ public class Space {
         }
         return false;
     }
+    
 
     /**
      * If there is a piece in the space,
