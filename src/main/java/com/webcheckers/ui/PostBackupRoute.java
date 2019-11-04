@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
-import com.webcheckers.model.MoveValidator;
 import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
@@ -28,7 +27,7 @@ public class PostBackupRoute implements Route {
     {
         String gameIDString = request.queryParams("gameID");
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
-        MoveValidator moveValidator = new MoveValidator(game);
+        //MoveValidator moveValidator = new MoveValidator(game);
         game.backupMove();
 
         Message responseMessage = Message.info("BACK IT UP!");

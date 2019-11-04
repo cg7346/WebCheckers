@@ -5,7 +5,6 @@ import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
-import com.webcheckers.model.MoveValidator;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.Request;
@@ -36,14 +35,18 @@ public class PostSubmitTurn implements Route {
     public Object handle(Request request, Response response) throws Exception {
         String gameIDString = request.queryParams("gameID");
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
-        System.out.println("ValidatorCreated");
-        MoveValidator moveValidator = new MoveValidator(game);
+        //System.out.println("ValidatorCreated");
+        //MoveValidator moveValidator = new MoveValidator(game);
         Move lastMove = game.getLastMove();
-        System.out.println("LastMoveMade ->> " + lastMove);
+        //System.out.println("LastMoveMade ->> " + lastMove);
         Message responseMessage = null;
         if (lastMove != null){
-            game.completeTurn();
-            responseMessage = Message.info("Valid Move!");
+            if (game.getCurrentTurn().isJumpPossible()){
+                responseMessage = Message.error("There is a jump possible");
+            }else {
+                game.completeTurn();
+                responseMessage = Message.info("Valid Move!");
+            }
         }else{
             responseMessage = Message.error("Make move first");
         }
