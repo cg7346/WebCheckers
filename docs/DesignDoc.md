@@ -226,12 +226,27 @@ This section describes the web interface flow; this is how the user views and in
 > acceptance criteria that stated that a user would be able to be automatically directed to start a game. We were able to pass
 > all other acceptance criteria tests in Spring 1. In Sprint 2, we were able to pass all acceptance criteria from Sprint 1 as well as new acceptance
 > criteria from other user stories added to the game. 
-![The WebCheckers Acceptance Testing]()
+![The WebCheckers Acceptance Testing](acceptance-test-plan-1.png)
+>
+>
+![The WebCheckers Acceptance Testing](acceptance-test-plan-2.png)
 
 ### Unit Testing and Code Coverage
-> _Discuss your unit testing strategy. Report on the code coverage
-> achieved from unit testing of the code base. Discuss the team's
-> coverage targets, why you selected those values, and how well your
-> code coverage met your targets. If there are any anomalies, discuss
-> those._
+> Each team member created unit tests to test various parts of the program.
+> Initially each member tested an item from the UI and something from the application or model tier. Afterwards, team members created more tests to try to gain high code coverage.
+> We aimed for above 85% code coverage in the application model for the lines and methods.
+> For the model tier we aimed for 90% code coverage and for the UI Tier we aimed for 85% code coverage.
+> The figures shown below are the Jacoco analysis from the tests. 
+
 ![The WebCheckers Unit Testing]()
+>
+>
+![The WebCheckers Unit Testing](code-coverage-appl.png)
+>
+>
+![The WebCheckers Unit Testing]()
+>
+>
+![The WebCheckers Unit Testing]()
+>
+>
