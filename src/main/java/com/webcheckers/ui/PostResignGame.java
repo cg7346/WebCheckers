@@ -10,8 +10,6 @@ import spark.Response;
 import spark.Route;
 import spark.Session;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -74,16 +72,16 @@ public class PostResignGame implements Route {
 
     /**
      * {@inheritDoc}
-     *
+
      * @param request the HTTP request
      * @param response the HTTP response
      * @return templateEngine to render a view or null
      * @throws java.util.NoSuchElementException when an invalid username is returned
      */
     @Override
-    public Object handle(Request request, Response response) throws Exception {
-        String gameIDAsString = request.queryParams("gameID");
-        Integer gameID = Integer.parseInt(gameIDAsString);
+    public Object handle(Request request, Response response) {
+//        String gameIDAsString = request.queryParams("gameID");
+//        Integer gameID = Integer.parseInt(gameIDAsString);
         Session session = request.session();
         resignPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(resignPlayer);
@@ -95,7 +93,7 @@ public class PostResignGame implements Route {
         GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
         GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", resignPlayer.getName() + " has resigned.");
         response.body(gson.toJson(resignMessage(resignPlayer)));
-        this.called = true;
+        called = true;
         return gson.toJson(resignMessage(resignPlayer));
     }
 }

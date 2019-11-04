@@ -1,4 +1,3 @@
-package com.webcheckers.ui;
+package com.webcheckers.ui
 
-public class WhiteSingleJumpTest {
-}
+class WhiteSingleJumpTest
