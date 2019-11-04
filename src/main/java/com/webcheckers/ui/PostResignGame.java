@@ -26,7 +26,6 @@ public class PostResignGame implements Route {
     // Constants
     //
 
-    static Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
     static Player resignPlayer;
     static Player winningPlayer;
     static Boolean called = false;
@@ -72,10 +71,6 @@ public class PostResignGame implements Route {
         return Message.info(String.format(RESIGN, player.getName()));
     }
 
-    public Map<String, Object> getOptions() {
-        return modeOptionsAsJSON;
-    }
-
 
     /**
      * {@inheritDoc}
@@ -97,8 +92,8 @@ public class PostResignGame implements Route {
         } else {
             winningPlayer = game.getRedPlayer();
         }
-        modeOptionsAsJSON.put("isGameOver", true);
-        modeOptionsAsJSON.put("gameOverMessage", resignPlayer.getName() + " has resigned.");
+        GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
+        GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", resignPlayer.getName() + " has resigned.");
         response.body(gson.toJson(resignMessage(resignPlayer)));
         this.called = true;
         return gson.toJson(resignMessage(resignPlayer));

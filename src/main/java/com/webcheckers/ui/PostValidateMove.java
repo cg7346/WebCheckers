@@ -37,7 +37,7 @@ public class PostValidateMove implements Route {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
-        if (PostResignGame.called) {
+        if (!PostResignGame.called) {
             boolean isPossibleMove = game.isInMoves(move);
             System.out.println(isPossibleMove);
             Message responseMessage = null;
@@ -56,8 +56,8 @@ public class PostValidateMove implements Route {
             response.body(gson.toJson(responseMessage));
             return gson.toJson(responseMessage);
         } else {
-            PostResignGame.modeOptionsAsJSON.put("isGameOver", true);
-            PostResignGame.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
+            GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
+            GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
             response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
             return gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer));
         }

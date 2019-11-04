@@ -48,6 +48,7 @@ public class GetGameRoute implements Route {
     private final Gson gson;
     private Boolean gameOver = false;
     private Integer visited = 0;
+    static Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
 
     private final TemplateEngine templateEngine;
     enum viewMode {PLAY, SPECTATOR,REPLAY}
@@ -83,12 +84,11 @@ public class GetGameRoute implements Route {
         if (game == null){
             game = handleNewGame(request, response, currentPlayer);
         }
-        if (PostResignGame.called) {
-            PostResignGame.modeOptionsAsJSON.put("isGameOver", true);
-            PostResignGame.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
+        if (PostResignGame.called || game == null) {
+            modeOptionsAsJSON.put("isGameOver", true);
+            modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
             response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
             gameManager.removeGame(game);
-            PostResignGame.called = false;
             response.redirect(WebServer.HOME_URL);
         }
         int gameID = game.getGameID();
@@ -99,14 +99,14 @@ public class GetGameRoute implements Route {
         vm.put(GAME_ID_ATTR, gameID);
         vm.put(CURRENT_USER_ATTR, currentPlayer);
         vm.put("viewMode", viewMode.PLAY);
-        if (PostResignGame.modeOptionsAsJSON == null) {
+        if (modeOptionsAsJSON == null) {
             Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
             modeOptionsAsJSON.put("isGameOver", false);
             modeOptionsAsJSON.put(GAME_OVER_ATTR, GAME_OVER_ATTR_MSG);
             vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
             vm.put(START_ATTR, START_ATTR_MSG);
         } else {
-            vm.put("modeOptionsAsJSON", gson.toJson(PostResignGame.modeOptionsAsJSON));
+            vm.put("modeOptionsAsJSON", gson.toJson(modeOptionsAsJSON));
         }
         vm.put(RED_PLAYER_ATTR, redPlayer);
         vm.put(WHITE_PLAYER_ATTR, whitePlayer);
@@ -122,6 +122,8 @@ public class GetGameRoute implements Route {
     private CheckersGame handleNewGame(Request request, Response response, Player currentPlayer){
         CheckersGame game = null;
         Session session = request.session();
+        modeOptionsAsJSON = new HashMap<>(2);
+        PostResignGame.called = false;
         if (!request.queryParams().isEmpty()){
             String opponentName = request.queryParams(OPP_USER);
             Player chosenOpponent = playerLobby.findPlayer(opponentName);

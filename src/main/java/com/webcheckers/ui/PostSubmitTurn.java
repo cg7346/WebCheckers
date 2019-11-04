@@ -38,7 +38,7 @@ public class PostSubmitTurn implements Route {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
-        if (PostResignGame.called) {
+        if (!PostResignGame.called) {
             Move lastMove = game.getLastMove();
             System.out.println("LastMoveMade ->> " + lastMove);
             Message responseMessage = null;
@@ -52,8 +52,8 @@ public class PostSubmitTurn implements Route {
 
             return gson.toJson(responseMessage);
         } else {
-            PostResignGame.modeOptionsAsJSON.put("isGameOver", true);
-            PostResignGame.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
+            GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
+            GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
             response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
             return gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer));
         }
