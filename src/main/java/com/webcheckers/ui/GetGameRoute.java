@@ -87,6 +87,7 @@ public class GetGameRoute implements Route {
             PostResignGame.modeOptionsAsJSON.put("isGameOver", true);
             PostResignGame.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
             response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
+            response.redirect(WebServer.HOME_URL);
             return null;
         }
         int gameID = game.getGameID();
