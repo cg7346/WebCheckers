@@ -13,6 +13,11 @@ public class Turn {
     private boolean isJumpPossible;
     private Player activePlayer;
 
+    /**
+     * Creates a new stack to keep track of the moves and if
+     * moves are possible
+     * @param activePlayer the player of current turn
+     */
     public Turn(Player activePlayer) {
         moves = new Stack<>();
         removedPieces = new Stack<>();
@@ -20,17 +25,28 @@ public class Turn {
         this.activePlayer = activePlayer;
     }
 
-    public Move lastMove()
-    {
-        return moves.peek();
+    public Move lastMove() {
+        if (!moves.isEmpty()) {
+            return moves.peek();
+        }
+        return null;
     }
 
+    /**
+     * Add a move to the stack with a piece
+     * @param m Move to add
+     * @param p Piece to add
+     */
     public void addMove(Move m, Piece p)
     {
         moves.push(m.addPiece(p));
         removedPieces.push(p);
     }
 
+    /**
+     * Add a move to the stack without a piece
+     * @param m Move to add
+     */
     public void addMove(Move m)
     {
         moves.push(m);
@@ -53,20 +69,37 @@ public class Turn {
         return null;
     }
 
+    /**
+     * Sets to true when called, meaning
+     * we found a jump on this turn and we need to do it
+     */
     public void jumpIsPossible()
     {
         isJumpPossible = true;
     }
 
+    /**
+     * Returns if we have found a move or not
+     * this turn
+     * @return
+     */
     public boolean isJumpPossible()
     {
         return isJumpPossible;
     }
 
+    /**
+     * Returns the stack of moves to loop through
+     * @return Stack full of moves
+     */
     public Stack<Move> getMoves(){
         return this.moves;
     };
 
+    /**
+     * Checks if the stack of moves is empty
+     * @return true if empty, false if not
+     */
     public boolean isEmpty()
     {
         return moves.isEmpty();

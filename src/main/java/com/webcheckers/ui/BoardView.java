@@ -11,10 +11,10 @@ import java.util.Iterator;
  * @author Jacquelyn Leung and Anthony Ferraioli
  */
 public class BoardView {
-    private enum color {RED, WHITE}
-    private enum viewModel { PLAY, SPECTATOR, REPLAY }
+    //private enum color {RED, WHITE}
+    //private enum viewModel { PLAY, SPECTATOR, REPLAY }
     private ArrayList<Row> rows;
-    private color activeColor;
+    //private color activeColor;
 
     /**
      * The constructor for the BoardView. Creates the information for each row based on the checkers game
