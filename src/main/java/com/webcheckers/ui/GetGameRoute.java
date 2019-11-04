@@ -52,6 +52,8 @@ public class GetGameRoute implements Route {
     private final TemplateEngine templateEngine;
     enum viewMode {PLAY, SPECTATOR,REPLAY}
 
+    enum activeColor {RED, WHITE}
+
     private activeColor activeTurnColor;
 
 
@@ -108,8 +110,6 @@ public class GetGameRoute implements Route {
         vm.put(BOARD_ATTR, board);
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
-
-    public enum activeColor {RED, WHITE}
 
     private CheckersGame handleNewGame(Request request, Response response, Player currentPlayer){
         CheckersGame game = null;
