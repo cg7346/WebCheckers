@@ -41,12 +41,8 @@ public class PostSubmitTurn implements Route {
         //System.out.println("LastMoveMade ->> " + lastMove);
         Message responseMessage = null;
         if (lastMove != null){
-            if (game.getCurrentTurn().isJumpPossible()){
-                responseMessage = Message.error("There is a jump possible");
-            }else {
                 game.completeTurn();
                 responseMessage = Message.info("Valid Move!");
-            }
         }else{
             responseMessage = Message.error("Make move first");
         }

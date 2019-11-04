@@ -234,6 +234,27 @@ class CheckersGameTest {
         assertTrue(RedCuT.isInMoves(jump1));
         RedCuT.keepLastMove(jump1);
         RedCuT.completeMove();
+        RedCuT.lookInSpace(jump1.getEnd().getRow(), jump1.getEnd().getCol());
+        assertTrue(RedCuT.isInMoves(jump2));
+        RedCuT.keepLastMove(jump2);
+        assertEquals(RedCuT.getLastMove(), jump2);
+        RedCuT.completeMove();
+        assertTrue(RedCuT.doesSpaceHavePiece(2, 7));
+        RedCuT.backupMove();
+        assertEquals(RedCuT.getLastMove(), jump1);
+        RedCuT.backupMove();
+        assertNull(RedCuT.getLastMove());
+        RedCuT.keepLastMove(jump1);
+        RedCuT.completeMove();
+        RedCuT.lookInSpace(jump1.getEnd().getRow(), jump1.getEnd().getCol());
+        assertTrue(RedCuT.isInMoves(jump2));
+        RedCuT.keepLastMove(jump2);
+        assertEquals(RedCuT.getLastMove(), jump2);
+        RedCuT.completeMove();
+        RedCuT.completeTurn();
+        assertFalse(RedCuT.doesSpaceHavePiece(5, 4));
+        assertFalse(RedCuT.doesSpaceHavePiece(3, 6));
+
 
 
     }
@@ -279,7 +300,7 @@ class CheckersGameTest {
         assertTrue(WhiteCuT.isSpaceValid(5, 4));
     }
 
-    void removeAllPiece(){
+    public void removeAllPiece(){
         for (int r = 0; r < 8; r++){
             for (int c = 0; c < 8; c ++){
                 RedCuT.removePieceToMove(r, c);
