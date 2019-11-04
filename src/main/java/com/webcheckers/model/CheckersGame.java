@@ -62,6 +62,7 @@ public class CheckersGame {
         this.singleWhiteMoves = new ArrayList<>();
         this.jumpRedMoves = new ArrayList<>();
         this.jumpWhiteMoves = new ArrayList<>();
+        activePlayer = redPlayer;
         this.currentTurn = new Turn(activePlayer);
 
         board = new Space[ROWS][COLS];
@@ -273,7 +274,9 @@ public class CheckersGame {
      */
     public void swapPlayers(){
         activePlayer = activePlayer.equals(redPlayer) ? whitePlayer : redPlayer;
+        currentTurn = new Turn(activePlayer);
     }
+
 
     public void lookForMoves()
     {
@@ -639,4 +642,9 @@ public class CheckersGame {
         jumpRedMoves = new ArrayList<>();
         jumpWhiteMoves = new ArrayList<>();
     }
+
+    public Turn getCurrentTurn(){
+        return currentTurn;
+    }
+
 }

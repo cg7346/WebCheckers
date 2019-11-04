@@ -35,7 +35,7 @@ public class MoveValidator {
      */
     public MoveValidator(CheckersGame game){
         this.game = game;
-        this.currentTurn = new Turn(game.getActivePlayer());
+        this.currentTurn = game.getCurrentTurn();
         this.singleRedMoves = new ArrayList<>();
         this.singleWhiteMoves = new ArrayList<>();
         this.jumpRedMoves = new ArrayList<>();
@@ -51,6 +51,7 @@ public class MoveValidator {
      * @return a new converted move, or the old move if
      * the active player is red (no conversion need)
      */
+
     public Move moveConverter(Move oldMove) {
         Position start = oldMove.getStart();
         Position end = oldMove.getEnd();
@@ -175,7 +176,6 @@ public class MoveValidator {
      * @param isRed are we looking for moves for red or white players?
      */
     public void checkColumns(int row, int col, int nextRow, boolean isRed){
-        System.out.println("Checking for moves for isRed " + isRed);
         //if we are looking for red use red's arrays, use white otherwise
         ArrayList<Move> singleMoves = isRed ? singleRedMoves : singleWhiteMoves;
         ArrayList<Move> jumpMoves = isRed ? jumpRedMoves : jumpWhiteMoves;

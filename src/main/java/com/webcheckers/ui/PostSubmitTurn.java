@@ -38,11 +38,11 @@ public class PostSubmitTurn implements Route {
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
         System.out.println("ValidatorCreated");
         MoveValidator moveValidator = new MoveValidator(game);
-        Move lastMove = moveValidator.getLastMove();
+        Move lastMove = game.getLastMove();
         System.out.println("LastMoveMade ->> " + lastMove);
         Message responseMessage = null;
         if (lastMove != null){
-            moveValidator.completeTurn();
+            game.completeTurn();
             responseMessage = Message.info("Valid Move!");
         }else{
             responseMessage = Message.error("Make move first");

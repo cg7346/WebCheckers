@@ -29,7 +29,7 @@ public class PostBackupRoute implements Route {
         String gameIDString = request.queryParams("gameID");
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
         MoveValidator moveValidator = new MoveValidator(game);
-        moveValidator.backUpMove();
+        game.backupMove();
 
         Message responseMessage = Message.info("BACK IT UP!");
         response.body(gson.toJson(responseMessage));
