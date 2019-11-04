@@ -5,6 +5,7 @@ import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
+import com.webcheckers.model.MoveValidator;
 import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
@@ -35,19 +36,16 @@ public class PostValidateMove implements Route {
         System.out.println("------Checking for THIS move!!");
         System.out.println(move);
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
-        boolean isPossibleMove = game.isInMoves(move);
+        MoveValidator moveValidator = new MoveValidator(game);
+        System.out.println("Move Validator made");
+        boolean isPossibleMove = moveValidator.isInMoves(move);
         System.out.println(isPossibleMove);
         Message responseMessage = null;
         if(isPossibleMove){
             responseMessage = Message.info("Valid Move!");
-            game.keepLastMove(move);
-            game.completeMove();
-            if(move.hasPiece()) {
-                System.out.println("AAAAAAHHHHHHHHH");
-                move = game.moveConverter(move);
-                game.lookInSpace(move.getEnd().getRow(), move.getEnd().getCol());
-            }
-
+            moveValidator.keepLastMove(move);
+            moveValidator.completeMove();
+            moveValidator.checkForDoubleJump(move);
         }else {
             responseMessage = Message.error("Invalid MMMOOOOVEEE!");
         }

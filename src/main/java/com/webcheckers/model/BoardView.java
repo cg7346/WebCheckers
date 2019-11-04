@@ -1,4 +1,4 @@
-package com.webcheckers.ui;
+package com.webcheckers.model;
 
 import com.webcheckers.model.*;
 

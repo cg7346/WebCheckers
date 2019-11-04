@@ -1,6 +1,7 @@
 package com.webcheckers.model;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * Class to help validate the moves made
@@ -39,6 +40,7 @@ public class MoveValidator {
         this.singleWhiteMoves = new ArrayList<>();
         this.jumpRedMoves = new ArrayList<>();
         this.jumpWhiteMoves = new ArrayList<>();
+        lookForMoves();
     }
 
     /**
@@ -77,6 +79,7 @@ public class MoveValidator {
      * or when we check a turn
      */
     public void lookForMoves(){
+        System.out.println("Looking for Moves");
         for (int row = 0; row < game.ROWS; row++) {
             for (int col = 0; col < game.COLS; col++) {
                 lookInSpace(row, col);
@@ -98,16 +101,16 @@ public class MoveValidator {
         boolean isRed = game.isSpaceRedPiece(row, col);
         boolean isKing = game.isSpaceKingPiece(row, col);
         if(!isRed && !isKing){
-            //checkWhiteSingleMoves
+            checkSingleMovesWhite(row, col);
         }
         if(isRed && !isKing){
-            //checkRedSingleMoves
+            checkSingleMovesRed(row, col);
         }
         if(!isRed && isKing){
-            //checkKingMove with White
+            checkKingMoves(row, col, false);
         }
         if(isRed && isKing){
-            //checkKingMove with Red
+            checkKingMoves(row, col, true);
         }
 
     }
@@ -133,9 +136,9 @@ public class MoveValidator {
      * @param row the row the red piece starts
      * @param col the column the red piece starts
      */
-    public void checkRedSingleMove(int row, int col){
+    public void checkSingleMovesRed(int row, int col){
         int nextRow = row - 1;
-        if (nextRow >= 8) {
+        if (nextRow >= 0) {
             checkColumns(row, col, nextRow, true);
         }
     }
@@ -172,6 +175,7 @@ public class MoveValidator {
      * @param isRed are we looking for moves for red or white players?
      */
     public void checkColumns(int row, int col, int nextRow, boolean isRed){
+        System.out.println("Checking for moves for isRed " + isRed);
         //if we are looking for red use red's arrays, use white otherwise
         ArrayList<Move> singleMoves = isRed ? singleRedMoves : singleWhiteMoves;
         ArrayList<Move> jumpMoves = isRed ? jumpRedMoves : jumpWhiteMoves;
@@ -196,8 +200,10 @@ public class MoveValidator {
                               ArrayList<Move> jumpMoves){
         if(move != null) {
             if (move.hasPiece()) {
+                System.out.println("Adding to jumps " + move);
                 jumpMoves.add(move);
             } else {
+                System.out.println("Adding to moves " + move);
                 singleMoves.add(move);
             }
         }
@@ -250,7 +256,7 @@ public class MoveValidator {
      */
     public boolean areThereJumpMoves(){
         ArrayList<Move> jumps = game.isActivePlayerRed() ? jumpRedMoves : jumpWhiteMoves;
-        return jumps.size() == 0;
+        return jumps.size() > 0;
     }
 
     /**
@@ -266,16 +272,20 @@ public class MoveValidator {
         ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
         ArrayList<Move> jumps = isRed ? jumpRedMoves : jumpWhiteMoves;
         for (Move possibleMove : moves){
+            System.out.println(possibleMove);
             //TODO force jump before submit turn >:)
             if (possibleMove.equals(move) && !currentTurn.isJumpPossible()){
                 // forces jump moves
+                //System.out.println(!areThereJumpMoves());
                 if(areThereJumpMoves()) {
+                    System.out.println("There are jump moves");
                     return false;
                 }
                 return true;
             }
         }
         for (Move possibleMove : jumps){
+            System.out.println(possibleMove);
             //if we see there is anything in the list of moves,
             //mark it in our turn
             currentTurn.jumpIsPossible();
@@ -312,6 +322,112 @@ public class MoveValidator {
     public Move getLastMove(){
         return currentTurn.lastMove();
     }
+
+    public Position getPiecePosition(Move move) {
+        Position p_PosStart = move.getStart();
+        Position p_PosEnd = move.getEnd();
+        Position p_Pos = new Position(
+                p_PosStart.getRow() + ((p_PosEnd.getRow() - p_PosStart.getRow()) / 2),
+                p_PosStart.getCol() + ((p_PosEnd.getCol() - p_PosStart.getCol()) / 2));
+        return p_Pos;
+    }
+
+    public void makeMove(Move move){
+        //converts the move, if need be
+        move = moveConverter(move);
+        Position start = move.getStart();
+        Piece piece = game.removePieceToMove(start.getRow(), start.getCol());
+        Position end = move.getEnd();
+        //just guarding to make sure we moved a piece
+        if (piece != null){
+            //KING ME
+            if(piece.isRedPiece() && end.getRow() == 0){
+                piece.makePieceKing();
+            }
+            if(!piece.isRedPiece() && end.getRow() == 7){
+                piece.makePieceKing();
+            }
+            //and place the piece down in it's new home
+            game.addPiece(end.getRow(), end.getCol(), piece);
+        }if(move.hasPiece()) {
+            Position piecePos = getPiecePosition(move);
+            game.removePieceToMove(piecePos.getRow(), piecePos.getCol());
+        }
+    }
+
+    public void backUpMove(){
+        Move lastMove = getLastMove();
+        //Flip flops the move so now the end is the start
+        Move reverseMove = new Move(lastMove.getEnd(), lastMove.getStart());
+        makeMove(reverseMove);
+
+        Piece p = currentTurn.backupLastMove();
+        if (p != null){
+            //even if the move is made by the red person, the original
+            //will be returned
+            Move convertedMove = moveConverter(lastMove);
+            Position piecePos = getPiecePosition(convertedMove);
+            game.addPiece(piecePos.getRow(), piecePos.getCol(), p);
+        }
+        //if we have nothing in the queue (meaning we went all the way back
+        //to start of turn, look for anymove anywhere
+        if(currentTurn.isEmpty()) {
+            lookForMoves();
+        //else, look for moves only at that last move, so the jump
+        //in the middle of the last double jump
+        } else {
+            lastMove = moveConverter(lastMove);
+            lookInSpace(lastMove.getStart().getRow(), lastMove.getStart().getCol());
+        }
+    }
+
+    /**
+     * Checks to see if a double jump can be made from
+     * a move
+     * @param move the move to examine
+     */
+    public void checkForDoubleJump(Move move){
+        if (move.hasPiece()){
+            move = moveConverter(move);
+            lookInSpace(move.getEnd().getRow(), move.getStart().getCol());
+        }
+    }
+
+    /**
+     * Creates new arrays for all moves to
+     * 'reset' them
+     */
+    public void clearArrays(){
+        singleRedMoves = new ArrayList<>();
+        singleWhiteMoves = new ArrayList<>();
+        jumpRedMoves = new ArrayList<>();
+        jumpWhiteMoves = new ArrayList<>();
+    }
+
+    /**
+     * Used in PostValidateMove to check for moves
+     * after each time the player picks and puts down a piece
+     */
+    public void completeMove() {
+        makeMove(currentTurn.lastMove());
+        clearArrays();
+    }
+
+    /**
+     * Used after a move is submitted by PostSubmitTurn
+     * Cleans up all the arrays and swaps players. Then looks
+     * for moves for the next player
+     */
+    public void completeTurn(){
+        Stack<Move> moves = currentTurn.getMoves();
+        while(!moves.empty()){
+            makeMove(moves.pop());
+        }
+        game.swapPlayers();
+        clearArrays();
+        lookForMoves();
+    }
+
 
 
 }

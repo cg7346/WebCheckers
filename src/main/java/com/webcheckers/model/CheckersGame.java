@@ -95,7 +95,7 @@ public class CheckersGame {
         }
         //redPlayer starts the game
         activePlayer = redPlayer;
-        lookForMoves();
+        //lookForMoves();
     }
 
     /**
@@ -218,7 +218,7 @@ public class CheckersGame {
      * @param col col where piece lived
      * @return the piece that used to live in that location
      */
-    private Piece removePieceToMove(int row, int col){
+    public Piece removePieceToMove(int row, int col){
         Space space = getSpace(row, col);
         Piece piece = null;
         if (space.hasPiece()){
@@ -235,7 +235,7 @@ public class CheckersGame {
      * @param col col to put piece
      * @param piece the piece to put in the square
      */
-    private void addPiece(int row, int col, Piece piece){
+    public void addPiece(int row, int col, Piece piece){
         Space space = getSpace(row, col);
         if (!space.hasPiece() && space.isValid()){
             space.addPiece(piece);
@@ -521,8 +521,7 @@ public class CheckersGame {
     /**
      * Removes the last turn made by the user
      */
-    public void backupMove()
-    {
+    public void backupMove() {
         Move lastMove = currentTurn.lastMove();
         Position start = lastMove.getStart();
         Position end = lastMove.getEnd();
@@ -535,8 +534,7 @@ public class CheckersGame {
         Piece p = currentTurn.backupLastMove();
 
         //if there was a piece removed in that move return it to the game board
-        if(p != null)
-        {
+        if(p != null) {
             Move convertedMove = moveConverter(lastMove);
             Position p_Pos = new Position(
                     convertedMove.getStart().getRow() + ((convertedMove.getEnd().getRow() - convertedMove.getStart().getRow()) / 2),
