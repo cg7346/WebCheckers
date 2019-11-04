@@ -135,6 +135,37 @@ public class CheckersGame {
     }
 
     /**
+     * Returns if the space is empty and black
+     * @param row row to check
+     * @param col column to check
+     * @return true if empty and black, false if not
+     */
+    public boolean isSpaceValid(int row, int col){
+        return getSpace(row, col).isValid();
+    }
+
+    /**
+     * Returns if the space has piece
+     * @param row row to check
+     * @param col column to check
+     * @return true if has piece, false if not
+     */
+    public boolean doesSpaceHavePiece(int row, int col){
+        return getSpace(row, col).hasPiece();
+    }
+
+    /**
+     * Returns the piece in that spot b/c we need
+     * it to construct a new move ;)
+     * @param row row to check
+     * @param col column check
+     * @return the Piece in that space (if there is one
+     * but its only called when we know a piece is there)
+     */
+    public Piece tossThatPiece(int row, int col){
+        return getSpace(row, col).getPiece();
+    }
+    /**
      * Helper method to check if the player is the
      * red player, if not then it's the white player
      * @param player the player in the game to check
@@ -252,6 +283,7 @@ public class CheckersGame {
             }
         }
     }
+
 
 
     /**
