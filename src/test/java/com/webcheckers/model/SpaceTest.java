@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @Tag("Model-Tier")
@@ -24,6 +25,7 @@ public class SpaceTest {
         this.BlackCuT = new Space(0, true);
         this.WhiteCuT = new Space(0, false);
         this.mockPiece = mock(Piece.class);
+
     }
 
     @Test
@@ -43,6 +45,34 @@ public class SpaceTest {
     //@Test test_has_piece(){
     //    assertTrue(BlackCuT.hasPiece());
     //}
+
+    /**
+     * tests the remove piece
+     */
+    @Test
+    void test_remove_piece(){
+        BlackCuT.removePiece();
+        WhiteCuT.removePiece();
+        assertFalse(BlackCuT.hasPiece(), "Something wrong with remove piece for black space");
+        assertFalse(WhiteCuT.hasPiece(), "Something wrong with remove piece for white space");
+    }
+
+    /**
+     * testing function is red piece
+     */
+    @Test
+    void test_is_red_piece(){
+        when(mockPiece.isRedPiece()).thenReturn(true);
+        BlackCuT.addPiece(mockPiece);
+        assertTrue(BlackCuT.isRedPiece(), "is red piece not working");
+        assertFalse(WhiteCuT.isRedPiece(), "is red piece not working");
+
+    }
+
+
+    /**
+     * testing is space is valid
+     */
     @Test
     void test_is_valid(){
         assertTrue(BlackCuT.isValid(), "Black space without piece is valid");

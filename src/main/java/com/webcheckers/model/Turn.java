@@ -22,7 +22,10 @@ public class Turn {
 
     public Move lastMove()
     {
-        return moves.peek();
+        if(!moves.isEmpty()) {
+            return moves.peek();
+        }
+        return null;
     }
 
     public void addMove(Move m, Piece p)
