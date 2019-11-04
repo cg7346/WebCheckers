@@ -39,7 +39,6 @@ public class PostValidateMove implements Route {
         CheckersGame game = gameManager.getGame(currentPlayer);
         if (!PostResignGame.called) {
             boolean isPossibleMove = game.isInMoves(move);
-            System.out.println(isPossibleMove);
             Message responseMessage = null;
             if(isPossibleMove) {
                 responseMessage = Message.info("Valid Move!");

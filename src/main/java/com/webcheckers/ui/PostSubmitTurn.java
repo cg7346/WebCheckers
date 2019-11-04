@@ -40,7 +40,6 @@ public class PostSubmitTurn implements Route {
         CheckersGame game = gameManager.getGame(currentPlayer);
         if (!PostResignGame.called) {
             Move lastMove = game.getLastMove();
-            System.out.println("LastMoveMade ->> " + lastMove);
             Message responseMessage = null;
             if (lastMove != null) {
                 game.completeTurn();
