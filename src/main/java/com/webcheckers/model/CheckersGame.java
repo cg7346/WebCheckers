@@ -2,6 +2,8 @@ package com.webcheckers.model;
 
 import com.webcheckers.appl.GameManager;
 
+import com.webcheckers.appl.GameManager;
+
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -126,6 +128,61 @@ public class CheckersGame {
     }
 
     /**
+     * Returns if the space we are looking at has
+     * a piece and it is red, does not care if
+     * king piece. If no piece is in it, will be false
+     * @param row row to check
+     * @param col column to check
+     * @return true if red piece, false if not
+     */
+    public boolean isSpaceRedPiece(int row, int col){
+        return getSpace(row, col).isRedPiece();
+    }
+
+    /**
+     * Returns if the space we are looking at has
+     * a king piece, does not care about color. If
+     * no piece is in it will return false
+     * @param row row to check
+     * @param col column to check
+     * @return true if king, false if not
+     */
+    public boolean isSpaceKingPiece(int row, int col){
+        return getSpace(row, col).isKingPiece();
+    }
+
+    /**
+     * Returns if the space is empty and black
+     * @param row row to check
+     * @param col column to check
+     * @return true if empty and black, false if not
+     */
+    public boolean isSpaceValid(int row, int col){
+        return getSpace(row, col).isValid();
+    }
+
+    /**
+     * Returns if the space has piece
+     * @param row row to check
+     * @param col column to check
+     * @return true if has piece, false if not
+     */
+    public boolean doesSpaceHavePiece(int row, int col){
+        return getSpace(row, col).hasPiece();
+    }
+
+    /**
+     * Returns the piece in that spot b/c we need
+     * it to construct a new move ;)
+     * @param row row to check
+     * @param col column check
+     * @return the Piece in that space (if there is one
+     * but its only called when we know a piece is there)
+     */
+    public Piece tossThatPiece(int row, int col){
+        return getSpace(row, col).getPiece();
+    }
+    /**
      * Helper method to check if the player is the
      * red player, if not then it's the white player
      * @param player the player in the game to check
@@ -222,6 +279,14 @@ public class CheckersGame {
      */
     public Player getActivePlayer() {
         return activePlayer;
+    }
+
+    /**
+     * Returns if the activePlayer is the red player
+     * @return true if red, false if white
+     */
+    public boolean isActivePlayerRed(){
+        return activePlayer.equals(redPlayer);
     }
 
     /**
@@ -399,12 +464,20 @@ public class CheckersGame {
         ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
         ArrayList<Move> jumps = isRed ? jumpRedMoves : jumpWhiteMoves;
         for (Move possibleMove : moves){
+            System.out.println("\t" + possibleMove);
+            //TODO force jump before submit turn >:)
             if (possibleMove.equals(move) && !currentTurn.isJumpPossible()){
-                return jumps.size() == 0;
+                if(jumps.size() != 0) {
+                    return false;
+                }
+                return true;
             }
         }
+        System.out.println("Current jump moves... ");
         for (Move possibleMove : jumps){
             currentTurn.jumpIsPossible();
+            System.out.println("\t" + possibleMove);
+            System.out.println("Jump Move ->> " + possibleMove);
             if (possibleMove.equals(move)){
                 return true;
             }

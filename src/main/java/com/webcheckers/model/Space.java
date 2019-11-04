@@ -91,8 +91,7 @@ public class Space {
 
     /**
      * If there is a piece in the space,
-     * is it red? Use with has piece to see
-     * if the piece is white
+     * is it red?
      * @return true if red piece, false if not
      */
     public boolean isRedPiece(){
@@ -102,6 +101,18 @@ public class Space {
         return false;
     }
     
+
+    /**
+     * If there is a piece in the space,
+     * if it a king piece? Use wit
+     * @return
+     */
+    public boolean isKingPiece(){
+        if (hasPiece()){
+            return piece.isPieceKing();
+        }
+        return false;
+    }
 
 
 }
