@@ -10,6 +10,7 @@ import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.Session;
 
 import java.util.Objects;
 
@@ -34,18 +35,27 @@ public class PostSubmitTurn implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String gameIDString = request.queryParams("gameID");
-        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
-        Move lastMove = game.getLastMove();
-        System.out.println("LastMoveMade ->> " + lastMove);
-        Message responseMessage = null;
-        if (lastMove != null){
-            game.completeTurn();
-            responseMessage = Message.info("Valid Move!");
-        }else{
-            responseMessage = Message.error("Make move first");
-        }
-        response.body(gson.toJson(responseMessage));
+        Session session = request.session();
+        Player currentPlayer = session.attribute("Player");
+        CheckersGame game = gameManager.getGame(currentPlayer);
+        if (game != null) {
+            Move lastMove = game.getLastMove();
+            System.out.println("LastMoveMade ->> " + lastMove);
+            Message responseMessage = null;
+            if (lastMove != null) {
+                game.completeTurn();
+                responseMessage = Message.info("Valid Move!");
+            } else {
+                responseMessage = Message.error("Make move first");
+            }
+            response.body(gson.toJson(responseMessage));
 
-        return gson.toJson(responseMessage);
+            return gson.toJson(responseMessage);
+        } else {
+            PostResignGame.modeOptionsAsJSON.put("isGameOver", true);
+            PostResignGame.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
+            response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
+            return gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer));
+        }
     }
 }

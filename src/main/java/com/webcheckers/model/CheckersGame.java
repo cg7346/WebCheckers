@@ -18,6 +18,10 @@ public class CheckersGame {
     private Player redPlayer;
     //(the person clicked on by the other player)
     private Player whitePlayer;
+    // The winner of the game
+    private Player winner;
+    // The loser of the game
+    private Player loser;
 
     //possible moves to be made the current player
     //according to their apparent location on BoardView
@@ -41,6 +45,9 @@ public class CheckersGame {
 
     //The current turn being made
     private Turn currentTurn;
+
+    // Whether or not the game is over
+    private Boolean gameOver;
 
 
     /**
@@ -576,4 +583,55 @@ public class CheckersGame {
         jumpRedMoves = new ArrayList<>();
         jumpWhiteMoves = new ArrayList<>();
     }
+
+    /**
+     * Gets the winner of the checkers game
+     *
+     * @return the winning player
+     */
+    public Player getWinner() {
+        return this.winner;
+    }
+    /**
+     * Sets the winner of the checkers game
+     *
+     * @param winPlayer the winner player
+     */
+    public void setWinner(Player winPlayer) {
+        // Sets the winner player
+        this.winner = winPlayer;
+        // Sets the loser player
+        if (winPlayer != redPlayer) {
+            this.loser = redPlayer;
+        } else if (winPlayer != whitePlayer) {
+            this.loser = whitePlayer;
+        }
+    }
+    /**
+     * Gets the loser of the checkers game
+     *
+     * @return the losing player
+     */
+    public Player getLoser() {
+        return this.loser;
+    }
+
+    /**
+     * Sets the game over of the checkers game
+     *
+     * @return whether or not the game is over
+     */
+    public void setGameOver(Boolean over) {
+        this.gameOver = over;
+    }
+
+    /**
+     * Gets the game over of the checkers game
+     *
+     * @return whether or not the game is over
+     */
+    public Boolean isGameOver() {
+        return this.gameOver;
+    }
+
 }

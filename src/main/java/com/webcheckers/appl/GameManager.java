@@ -29,7 +29,7 @@ public class GameManager {
     public CheckersGame makeGame(Player redPlayer, Player whitePlayer){
 
         synchronized (this){
-            totalGames ++;
+            totalGames++;
             if (!redPlayer.isInGame() && !whitePlayer.isInGame()){
                 CheckersGame game = new CheckersGame(redPlayer, whitePlayer, totalGames);
                 redPlayer.setInGame(true);
@@ -41,6 +41,32 @@ public class GameManager {
                 return null;
         }
     }
+
+    /**
+     * Removes game ID for players to end game
+     * <p>
+     * A POST method should define who is redPlayer (the clicker) and
+     * whitePlayer (the player clicked on)
+     *
+     * @param redPlayer
+     * @param whitePlayer
+     * @return
+     */
+    public CheckersGame removeGame(CheckersGame game) {
+
+        synchronized (this) {
+            totalGames--;
+            try {
+                games.remove(game);
+            } catch (IndexOutOfBoundsException err) {
+                System.err.println(err);
+            }
+            game.getRedPlayer().setInGame(false);
+            game.getWhitePlayer().setInGame(false);
+            return null;
+        }
+    }
+
 
     /**
      * Gets a game that the sessionPlayer is in
@@ -56,15 +82,6 @@ public class GameManager {
         return  null;
     }
 
-    public CheckersGame getGame(int gameID){
-        for (CheckersGame game : games){
-            if (game.getGameID() == gameID){
-                return game;
-            }
-        }
-        return null;
-    }
-
 
     /**
      * Just checking to see if the Player is in a particular
@@ -73,7 +90,8 @@ public class GameManager {
      * @param player the player to look for
      * @return true if in, false if not
      */
-    public boolean isPlayerInGame(CheckersGame game, Player player){
+    public synchronized boolean isPlayerInGame(CheckersGame game, Player player) {
         return player.equals(game.getRedPlayer()) || player.equals(game.getWhitePlayer());
     }
+
 }

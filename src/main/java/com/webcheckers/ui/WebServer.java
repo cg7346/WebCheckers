@@ -70,7 +70,7 @@ public class WebServer {
   /**
    * the URL pattern to check if it is player's turn
    */
-  public static final String CHECKTURN_URL = "/checkTurn";
+  public static final String CHECKTURN_URL = "/";
   /**
    * the URL pattern to check if it is player's turn
    */
@@ -83,6 +83,10 @@ public class WebServer {
    * the URL pattern to backup someone's turn
    */
   public static final String BACKUPTURN_URL = "/backupMove";
+  /**
+   * the URL pattern to resign a game
+   */
+  public static final String RESIGN_URL = "/resignGame";
 
 
   //
@@ -195,6 +199,9 @@ public class WebServer {
 
     // Submits the turn of the current player
     post(SUBMITTURN_URL, new PostSubmitTurn(playerLobby, gameManager, gson));
+
+    // Post the Checkers game to resign a game
+    post(RESIGN_URL, new PostResignGame(gameManager, gson));
 
     // Checks to see if the game is ready for next turn
     post(CHECKTURN_URL, new PostCheckTurn(playerLobby, gameManager, gson));

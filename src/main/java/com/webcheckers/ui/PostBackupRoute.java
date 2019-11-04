@@ -4,10 +4,12 @@ import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
+import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.Session;
 
 import java.util.Objects;
 
@@ -26,7 +28,9 @@ public class PostBackupRoute implements Route {
     public Object handle(Request request, Response response) throws Exception
     {
         String gameIDString = request.queryParams("gameID");
-        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
+        Session session = request.session();
+        Player currentPlayer = session.attribute("Player");
+        CheckersGame game = gameManager.getGame(currentPlayer);
         game.backupMove();
 
         Message responseMessage = Message.info("BACK IT UP!");

@@ -14,6 +14,8 @@ import spark.Session;
 
 import java.util.Objects;
 
+import static spark.Spark.halt;
+
 /**
  * this checks for the turn of the user
  * @author jil4009
@@ -36,10 +38,23 @@ public class PostCheckTurn implements Route {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
         String gameIdString = request.queryParams("gameID");
-        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
+        CheckersGame game = gameManager.getGame(currentPlayer);
         //sometimes having the game undefined breaks the builder
         if (game != null) {
-            if (game.getActivePlayer().equals(currentPlayer)) {
+            if (PostResignGame.modeOptionsAsJSON == null) {
+                PostResignGame.modeOptionsAsJSON.put("isGameOver", true);
+                PostResignGame.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
+                response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
+                return gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer));
+            }
+            if (game.isGameOver()) {
+                if (game.getActivePlayer() == game.getRedPlayer()) {
+                    game.setWinner(game.getWhitePlayer());
+                } else {
+                    game.setWinner(game.getRedPlayer());
+                }
+                return gson.toJson(Message.info("true"));
+            } else if (game.getActivePlayer().equals(currentPlayer)) {
                 return gson.toJson(Message.info("true"));
             } else {
                 return gson.toJson(Message.info("false"));
