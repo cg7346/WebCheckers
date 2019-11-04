@@ -70,7 +70,7 @@ public class WebServer {
   /**
    * the URL pattern to check if it is player's turn
    */
-  public static final String CHECKTURN_URL = "/";
+  public static final String CHECKTURN_URL = "/checkTurn";
   /**
    * the URL pattern to check if it is player's turn
    */

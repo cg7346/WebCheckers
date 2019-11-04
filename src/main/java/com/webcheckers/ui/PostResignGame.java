@@ -29,6 +29,7 @@ public class PostResignGame implements Route {
     static Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
     static Player resignPlayer;
     static Player winningPlayer;
+    static Boolean called = false;
 
     // Values used in the mode options for JSON after the resign button is clicked
     private static final String RESIGN = "%s has resigned.";
@@ -96,11 +97,10 @@ public class PostResignGame implements Route {
         } else {
             winningPlayer = game.getRedPlayer();
         }
-        game.setGameOver(true);
         modeOptionsAsJSON.put("isGameOver", true);
         modeOptionsAsJSON.put("gameOverMessage", resignPlayer.getName() + " has resigned.");
         response.body(gson.toJson(resignMessage(resignPlayer)));
-        gameManager.removeGame(game);
+        this.called = true;
         return gson.toJson(resignMessage(resignPlayer));
     }
 }

@@ -34,30 +34,28 @@ public class PostValidateMove implements Route {
         String moveString = request.queryParams("actionData");
         String gameIdString = request.queryParams("gameID");
         Move move = gson.fromJson(moveString, Move.class);
-        System.out.println("------Checking for THIS move!!");
-        System.out.println(move);
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
-        if (game != null) {
-        boolean isPossibleMove = game.isInMoves(move);
-        System.out.println(isPossibleMove);
-        Message responseMessage = null;
-        if(isPossibleMove) {
-            responseMessage = Message.info("Valid Move!");
-            game.keepLastMove(move);
-            game.completeMove();
-            if (move.hasPiece()) {
-                System.out.println("AAAAAAHHHHHHHHH");
-                move = game.moveConverter(move);
-                game.lookInSpace(move.getEnd().getRow(), move.getEnd().getCol());
+        if (PostResignGame.called) {
+            boolean isPossibleMove = game.isInMoves(move);
+            System.out.println(isPossibleMove);
+            Message responseMessage = null;
+            if(isPossibleMove) {
+                responseMessage = Message.info("Valid Move!");
+                game.keepLastMove(move);
+                game.completeMove();
+                if (move.hasPiece()) {
+                    System.out.println("AAAAAAHHHHHHHHH");
+                    move = game.moveConverter(move);
+                    game.lookInSpace(move.getEnd().getRow(), move.getEnd().getCol());
+                }
+            } else {
+                responseMessage = Message.error("Invalid MMMOOOOVEEE!");
             }
-        }else {
-            responseMessage = Message.error("Invalid MMMOOOOVEEE!");
-        }
-        response.body(gson.toJson(responseMessage));
-        return gson.toJson(responseMessage);
-    } else {
+            response.body(gson.toJson(responseMessage));
+            return gson.toJson(responseMessage);
+        } else {
             PostResignGame.modeOptionsAsJSON.put("isGameOver", true);
             PostResignGame.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
             response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));

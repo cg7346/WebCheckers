@@ -79,16 +79,17 @@ public class GetGameRoute implements Route {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
+        Map<String, Object> vm = new HashMap<>();
         if (game == null){
             game = handleNewGame(request, response, currentPlayer);
         }
-        Map<String, Object> vm = new HashMap<>();
-        if (game == null) {
+        if (PostResignGame.called) {
             PostResignGame.modeOptionsAsJSON.put("isGameOver", true);
             PostResignGame.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
             response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
+            gameManager.removeGame(game);
+            PostResignGame.called = false;
             response.redirect(WebServer.HOME_URL);
-            return null;
         }
         int gameID = game.getGameID();
         Player redPlayer = game.getRedPlayer();
@@ -124,17 +125,18 @@ public class GetGameRoute implements Route {
         if (!request.queryParams().isEmpty()){
             String opponentName = request.queryParams(OPP_USER);
             Player chosenOpponent = playerLobby.findPlayer(opponentName);
-            System.out.println(chosenOpponent);
             if (chosenOpponent == null) {
-                PostResignGame.modeOptionsAsJSON.put("isGameOver", true);
-                PostResignGame.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
-                response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
+                response.redirect(WebServer.HOME_URL);
+                halt();
                 return null;
             }
             if (playerLobby.isInGame(chosenOpponent)){
                 //we will send an error
                 Message er = Message.error(PLAYER_IN_GAME);
                 session.attribute(MESSAGE_ERR, er);
+                response.redirect(WebServer.HOME_URL);
+                halt();
+                return null;
             }
             else{
                 game = gameManager.makeGame(currentPlayer, chosenOpponent);

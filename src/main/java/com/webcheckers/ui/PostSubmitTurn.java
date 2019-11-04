@@ -38,7 +38,7 @@ public class PostSubmitTurn implements Route {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
-        if (game != null) {
+        if (PostResignGame.called) {
             Move lastMove = game.getLastMove();
             System.out.println("LastMoveMade ->> " + lastMove);
             Message responseMessage = null;
