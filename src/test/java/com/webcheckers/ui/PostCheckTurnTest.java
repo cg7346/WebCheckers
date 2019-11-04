@@ -18,10 +18,10 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Tag("UI-tier")
-public class PostSubmitTurnTest {
+public class PostCheckTurnTest {
 
     //CuT
-    private PostSubmitTurn CuT;
+    private PostCheckTurn CuT;
 
     //Mock Object
     private Request request;
@@ -31,10 +31,11 @@ public class PostSubmitTurnTest {
     private GameManager gameManager;
     private PlayerLobby lobby;
     private CheckersGame mockGame;
-    private Player player;
+    private Player p1;
+    private Player p2;
 
     @BeforeEach
-    void construct(){
+    void construct() {
         request = mock(Request.class);
         session = mock(Session.class);
         when(request.session()).thenReturn(session);
@@ -42,31 +43,45 @@ public class PostSubmitTurnTest {
         lobby = mock(PlayerLobby.class);
         gameManager = mock(GameManager.class);
         mockGame = mock(CheckersGame.class);
-        player = mock(Player.class);
+        p1 = mock(Player.class);
+        p2 = mock(Player.class);
         gson = new Gson();
 
-        CuT = new PostSubmitTurn(lobby, gameManager, gson);
+        CuT = new PostCheckTurn(lobby, gameManager, gson);
         String gameIdString = "3";
         when(request.queryParams("gameID")).thenReturn(gameIdString);
-        when(gameManager.getGame(player)).thenReturn(mockGame);
+        when(gameManager.getGame(Integer.parseInt(gameIdString))).thenReturn(mockGame);
     }
 
     @Test
-    void test_lastMoveIsNull(){
-        when(mockGame.getLastMove()).thenReturn(null);
-        String expected = "{\"text\":\"Make move first\",\"type\":\"ERROR\"}";
+    void test_nullGame(){
+        when(gameManager.getGame(Integer.parseInt("3"))).thenReturn(null);
         try {
             Object o = CuT.handle(request, response);
-            assertEquals(expected, o.toString());
+            assertNull(o);
         }catch (Exception e){
             //squahs
         }
     }
 
+//    @Test
+//    void test_isActivePlayer(){
+//        //when(mockGame.getActivePlayer()).thenReturn(p1);
+//        when(mockGame.getActivePlayer().equals(p1)).thenReturn(true);
+//        String expected = "true";
+//        try {
+//            Object o = CuT.handle(request, response);
+//            assertEquals(expected, o.toString());
+//        }catch (Exception e){
+//            //squahs
+//        }
+//    }
+
     @Test
-    void test_validMove(){
-        when(mockGame.getLastMove()).thenReturn(mock(Move.class));
-        String expected = "{\"text\":\"Valid Move!\",\"type\":\"INFO\"}";
+    void test_isNotActivePlayer(){
+        when(mockGame.getActivePlayer()).thenReturn(mock(Player.class));
+        when(session.attribute("Player")).thenReturn(mock(Player.class));
+        String expected = "{\"text\":\"false\",\"type\":\"INFO\"}";;
         try {
             Object o = CuT.handle(request, response);
             assertEquals(expected, o.toString());
