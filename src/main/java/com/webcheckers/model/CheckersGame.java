@@ -97,7 +97,7 @@ public class CheckersGame {
         }
         //redPlayer starts the game
         activePlayer = redPlayer;
-        //lookForMoves();
+        lookForMoves();
     }
 
     /**
