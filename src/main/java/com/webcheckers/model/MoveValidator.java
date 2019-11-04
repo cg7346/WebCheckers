@@ -11,7 +11,7 @@
 // * @author Anthony Ferraioli amf7619
 // * @author Jacquelyn Leung jil4009
 // */
-//public class MoveValidator {
+public class MoveValidator {
 //
 //    //The game we are playing
 //    private CheckersGame game;
@@ -439,4 +439,4 @@
 //
 //
 //
-//}
+}
