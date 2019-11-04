@@ -46,7 +46,6 @@ public class PostValidateMove implements Route {
                 game.keepLastMove(move);
                 game.completeMove();
                 if (move.hasPiece()) {
-                    System.out.println("AAAAAAHHHHHHHHH");
                     move = game.moveConverter(move);
                     game.lookInSpace(move.getEnd().getRow(), move.getEnd().getCol());
                 }

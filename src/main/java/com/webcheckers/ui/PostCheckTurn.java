@@ -45,7 +45,6 @@ public class PostCheckTurn implements Route {
         CheckersGame game = gameManager.getGame(currentPlayer);
         //sometimes having the game undefined breaks the builder
         if (game != null) {
-            System.out.println(PostResignGame.called);
             if (game.getActivePlayer().equals(currentPlayer)) {
                 return gson.toJson(Message.info("true"));
             } else if (PostResignGame.called) {
