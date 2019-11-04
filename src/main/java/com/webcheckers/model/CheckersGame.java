@@ -1,7 +1,6 @@
 package com.webcheckers.model;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.Stack;
 
 /**
@@ -245,10 +244,21 @@ public class CheckersGame {
     }
 
     /**
-     * These are getters
+     * Get the redPlayer
+     * @return redPlayer
      */
     public Player getRedPlayer(){return redPlayer;}
+
+    /**
+     * Get the whitePlayer
+     * @return whitePlayer
+     */
     public Player getWhitePlayer(){return whitePlayer;}
+
+    /**
+     * Get the GameID
+     * @return getGameID
+     */
     public int getGameID(){return gameID;}
 
     /**
@@ -278,6 +288,12 @@ public class CheckersGame {
     }
 
 
+    /**
+     * Iterates over the board in Checkers Game to
+     * see where each piece is and where it can move
+     * This is the first step when a game is created
+     * or when we check a turn
+     */
     public void lookForMoves()
     {
         for (int row = 0; row < ROWS; row++) {
@@ -291,7 +307,14 @@ public class CheckersGame {
 
 
     /**
-     * Looks for moves possible in the game
+     * Looks into the space at those coordinates for
+     * a piece and checks for possible moves there
+     * This dictates which array the moves are added into.
+     * Usually used after lookForMoves to check the entire board
+     * but also used after a single checkers piece jump to see
+     * if that jump is a double jump
+     * @param row the row to look for the space
+     * @param col the column to look for the space
      */
     public void lookInSpace(int row, int col) {
         Space space = getSpace(row, col);
@@ -356,8 +379,10 @@ public class CheckersGame {
     }
 
     /**
-     * Checks the left and right column of the next
-     * row for a piece to see if a move is available
+     * Checks both side the columns to the left and right of a piece
+     * to see if it is empty and a valid place to put the piece. If the
+     * space is not valid because there is a piece there, then we check for
+     * jumps.
      * @param row row to look in
      * @param col column to left and right of
      */
@@ -401,9 +426,11 @@ public class CheckersGame {
     }
 
     /**
-     * Checking to see if any single white pieces have moves
-     * @param row row piece lives
-     * @param col col piece lives
+     * Next step in looking for moves for white player.
+     * Looks for all pieces that can move up (closer to row 7)
+     * on the board without jumping over another piece
+     * @param row the row the white piece starts
+     * @param col the column the white piece starts
      */
     public void checkWhiteSingleMoves(int row, int col) {
         //check next row closer to top
@@ -414,9 +441,11 @@ public class CheckersGame {
         }
 
     /**
-     * Checking to see if any single red pieces have moves
-     * @param row row piece lives
-     * @param col col piece lives
+     * Next step in looking for moves for red player.
+     * Looks for all pieces that can move down (closer to row 0)
+     * on the board without jumping over another piece
+     * @param row the row the red piece starts
+     * @param col the column the red piece starts
      */
     public void checkRedSingleMoves(int row, int col) {
         //check next row closer to top
@@ -427,10 +456,12 @@ public class CheckersGame {
     }
 
     /**
-     * this checks for king moves and adds it to the move array
-     * @param row
-     * @param col
-     * @param moveArray
+     * Next step in looking for moves to any color
+     * king player. We look up (closer to 7) and down
+     * (closer to 0) for each king Piece
+     * @param row the row the king piece starts
+     * @param col the column the king piece starts
+     * @param moveArray array to add moves to
      */
     public void checkKingMoves(int row, int col, ArrayList<Move> moveArray, Piece.color color) {
         int rowUp = row -1;
@@ -480,8 +511,8 @@ public class CheckersGame {
     }
 
     /**
-     * Keeps track of the last move
-     * @param move the Move to keep track of
+     * Keeps a move to add to our stack of moves in our turn
+     * @param move Move to add
      */
     public void keepLastMove(Move move){
         System.out.println("keeping move " + move);
@@ -501,6 +532,11 @@ public class CheckersGame {
 
     }
 
+    /**
+     * Finds a piece in between moves
+     * @param move move to check for
+     * @return the Piece if it is there
+     */
     public Piece findPiece(Move move){
         Position startPos = move.getStart();
         Position endPos = move.getEnd();
@@ -586,11 +622,12 @@ public class CheckersGame {
     }
 
     /**
-     * Converts a move made by the whitePlayer on
-     * the board view to something we can check
-     * with the official CheckersGame Board
-     * @param move the Move to convert
-     * @return a move flipped of the original
+     * If a move was made by the white player
+     * it needs to be converted from how the board view
+     * reads spaces to how
+     * @param move the move to convert
+     * @return a new converted move, or the old move if
+     * the active player is red (no conversion need)
      */
     public Move moveConverter(Move move){
         System.out.println("COVERTING MOVE--------");
@@ -617,9 +654,9 @@ public class CheckersGame {
     }
 
     /**
-     * Completes the turn for the player
-     * Loops through every move made and swaps
-     * the current player
+     * Used after a move is submitted by PostSubmitTurn
+     * Cleans up all the arrays and swaps players. Then looks
+     * for moves for the next player
      */
     public void completeTurn(){
         Stack<Move> moves = currentTurn.getMoves();
@@ -635,6 +672,10 @@ public class CheckersGame {
         lookForMoves();
     }
 
+    /**
+     * Used in PostValidateMove to check for moves
+     * after each time the player picks and puts down a piece
+     */
     public void completeMove() {
         makeMove(currentTurn.lastMove());
         singleRedMoves = new ArrayList<>();
@@ -643,6 +684,10 @@ public class CheckersGame {
         jumpWhiteMoves = new ArrayList<>();
     }
 
+    /**
+     * Returns the current turn
+     * @return the current Turn
+     */
     public Turn getCurrentTurn(){
         return currentTurn;
     }

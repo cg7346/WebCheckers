@@ -323,6 +323,12 @@ public class MoveValidator {
         return currentTurn.lastMove();
     }
 
+    /**
+     * Returns the Position of a piece in between
+     * to positions
+     * @param move the move to look between
+     * @return the position of the piece
+     */
     public Position getPiecePosition(Move move) {
         Position p_PosStart = move.getStart();
         Position p_PosEnd = move.getEnd();
@@ -355,6 +361,9 @@ public class MoveValidator {
         }
     }
 
+    /**
+     * Backs up the turn made by the last player
+     */
     public void backUpMove(){
         Move lastMove = getLastMove();
         //Flip flops the move so now the end is the start
