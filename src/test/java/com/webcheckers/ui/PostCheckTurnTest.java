@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
-import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -12,10 +11,11 @@ import org.junit.jupiter.api.Test;
 import spark.Request;
 import spark.Response;
 import spark.Session;
-import spark.TemplateEngine;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @Tag("UI-tier")
 public class PostCheckTurnTest {
@@ -50,12 +50,12 @@ public class PostCheckTurnTest {
         CuT = new PostCheckTurn(lobby, gameManager, gson);
         String gameIdString = "3";
         when(request.queryParams("gameID")).thenReturn(gameIdString);
-        when(gameManager.getGame(Integer.parseInt(gameIdString))).thenReturn(mockGame);
+//        when(gameManager.getGame(Integer.parseInt(gameIdString))).thenReturn(mockGame);
     }
 
     @Test
     void test_nullGame(){
-        when(gameManager.getGame(Integer.parseInt("3"))).thenReturn(null);
+//        when(gameManager.getGame(Integer.parseInt("3"))).thenReturn(null);
         try {
             Object o = CuT.handle(request, response);
             assertNull(o);
@@ -81,7 +81,7 @@ public class PostCheckTurnTest {
     void test_isNotActivePlayer(){
         when(mockGame.getActivePlayer()).thenReturn(mock(Player.class));
         when(session.attribute("Player")).thenReturn(mock(Player.class));
-        String expected = "{\"text\":\"false\",\"type\":\"INFO\"}";;
+        String expected = "{\"text\":\"false\",\"type\":\"INFO\"}";
         try {
             Object o = CuT.handle(request, response);
             assertEquals(expected, o.toString());
