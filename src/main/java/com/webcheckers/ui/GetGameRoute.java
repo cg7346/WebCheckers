@@ -50,7 +50,6 @@ public class GetGameRoute implements Route {
     static Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
 
     private final TemplateEngine templateEngine;
-    enum viewMode {PLAY, SPECTATOR,REPLAY}
 
     private CheckersGame handleNewGame(Request request, Response response, Player currentPlayer) {
         CheckersGame game = null;
@@ -95,6 +94,9 @@ public class GetGameRoute implements Route {
         this.gson = gson;
         this.activeTurnColor = activeColor.RED;
     }
+
+    enum viewMode {PLAY, SPECTATOR, REPLAY}
+
 
     /**
      * {@inheritDoc}

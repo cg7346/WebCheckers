@@ -46,10 +46,12 @@ public class PostResignGameTest {
     private PlayerLobby playerLobby;
     private Player player;
     private Player resignPlayer;
+    private Player winner;
     private int ID = 2;
     private GameManager manager;
     private CheckersGame game;
     private Player winningPlayer;
+    private GetGameRoute gameRoute;
 
     // attributes holding mock objects
     private Request request;
@@ -63,16 +65,17 @@ public class PostResignGameTest {
      */
     @BeforeEach
     public void setup() {
-        this.request = mock(Request.class);
-        this.session = mock(Session.class);
+        request = mock(Request.class);
+        session = mock(Session.class);
         when(request.session()).thenReturn(session);
-        this.response = mock(Response.class);
-        this.templateEngine = mock(TemplateEngine.class);
-        this.playerLobby = mock(PlayerLobby.class);
-        this.game = mock(CheckersGame.class);
-        this.player = mock(Player.class);
-        this.manager = mock(GameManager.class);
-        this.gson = new Gson();
+        response = mock(Response.class);
+        templateEngine = mock(TemplateEngine.class);
+        playerLobby = mock(PlayerLobby.class);
+        game = mock(CheckersGame.class);
+        player = mock(Player.class);
+        manager = mock(GameManager.class);
+        gson = new Gson();
+        gameRoute = mock(GetGameRoute.class);
 
         String gameIdString = "3";
         player = new Player("p1");
@@ -107,6 +110,19 @@ public class PostResignGameTest {
         assertEquals("{Msg INFO 'p1 has resigned.'}", PostResignGame.resignMessage(player1).toString(),
                 "unexpected resign message");
         assertEquals("{Msg INFO 'p1 has resigned.'}", PostResignGame.resignMessage(player1).toString());
+    }
+
+    @Test
+    public void winning_player() {
+        Player player1 = new Player("p1");
+        Player player2 = new Player("p2");
+
+        GameManager gameManager1 = new GameManager();
+        game = gameManager1.makeGame(player1, player2);
+        game.setWinner(player2);
+        winningPlayer = game.getWinner();
+        when(resignPlayer.getName().equals(game.getRedPlayer().getName()));
+
     }
 
     /**
@@ -152,6 +168,20 @@ public class PostResignGameTest {
 
         response.body(gson.toJson(PostResignGame.resignMessage(resignPlayer)));
         assertNotNull(gson);
+        //        JASONassert.assertEquals(expectedJson, response.getBody(), false);
+
+//        when(modeOptionsAsJSON.get("isGameOver")).thenReturn(true);
+//        when(modeOptionsAsJSON.put("isGameOver", true)).thenReturn(true);
+//        assertEquals(((boolean) modeOptionsAsJSON.get("isGameOver")),
+//                ((boolean) gson.fromJson((String) CuT.get("modeOptionsAsJSON"), Map.class).get("isGameOver")));
+        assertTrue(modeOptionsAsJSON.containsKey("isGameOver") && modeOptionsAsJSON.get("isGameOver") != null);
+
+//        assertEquals(true, modeOptionsAsJSON.put("isGameOver", true));
+//        assertEquals(true, modeOptionsAsJSON.put("isGameOver", true));
+//        when(modeOptionsAsJSON.put("isGameOver", true)).thenReturn(true);
+//        doReturn(true).when(modeOptionsAsJSON.put("isGameOver", true));
+//        doReturn("gameOverMessage", resignPlayer.getName() + " has resigned.");
+//        doReturn(modeOptionsAsJSON.put("gameOverMessage", resignPlayer.getName() + " has resigned."));
 
         String expected = "{\"text\":\"p1 has resigned.\",\"type\":\"INFO\"}";
         // Invoke the test
