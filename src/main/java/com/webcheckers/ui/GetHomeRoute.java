@@ -20,6 +20,7 @@ import static spark.Spark.halt;
  * The UI Controller to GET the Home page.
  *
  * @author <a href='mailto:bdbvse@rit.edu'>Bryan Basham</a>
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</>
  * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella</>
  */
 public class GetHomeRoute implements Route {

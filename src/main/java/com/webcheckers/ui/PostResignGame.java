@@ -58,8 +58,12 @@ public class PostResignGame implements Route {
 
     /**
      * Resign message after a player clicks the resign button
+     * The constructor for the {@code POST /resignGame} route handler.
      *
      * @return the message that will be displayed when a player resigns
+     * @param gameManager is the game manager from the game manager class
+     * @param gson is the JSON
+    //     * @throws NoSuchElementException when the {@code gameManager} or {@code gson} parameter is null
      */
     public static Message resignMessage(Player player) {
         return Message.info(String.format(RESIGN, player.getName()));
@@ -85,4 +89,3 @@ public class PostResignGame implements Route {
         return gson.toJson(resignMessage(player));
     }
 }
-

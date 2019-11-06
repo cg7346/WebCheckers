@@ -8,9 +8,7 @@ import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static spark.Spark.halt;
 
@@ -39,7 +37,6 @@ public class GetGameRoute implements Route {
     static final Message GAME_OVER_ATTR_MSG = Message.info("The game is over"); /* Get the game over message */
     static final String VIEW_NAME = "game.ftl";
     static final String PLAYER_IN_GAME= "Chosen player is already in a game.";
-    static final String PLAYER_RESIGNED = "Opponent has resigned.";
     static final String MESSAGE_ATTR = "message";
     static final String MESSAGE_ERR = "message error";
     static final String OPP_USER = "opp_user";
@@ -56,6 +53,7 @@ public class GetGameRoute implements Route {
 
     private activeColor activeTurnColor;
 
+    private final TemplateEngine templateEngine;
 
     /**
      * The constructor for the {@code GET /game} route handler.
@@ -81,14 +79,17 @@ public class GetGameRoute implements Route {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
+        Map<String, Object> vm = new HashMap<>();
         if (game == null){
             game = handleNewGame(request, response, currentPlayer);
         }
-        Map<String, Object> vm = new HashMap<>();
-        if (game.getGameID() == 0) {
+        if (PostResignGame.called || game == null) {
+            modeOptionsAsJSON.put("isGameOver", true);
+            modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
+            response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
+            gameManager.removeGame(game);
             response.redirect(WebServer.HOME_URL);
-            halt();
-            return null;
+            return gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer));
         }
         int gameID = game.getGameID();
         Player redPlayer = game.getRedPlayer();
@@ -98,9 +99,14 @@ public class GetGameRoute implements Route {
         vm.put(GAME_ID_ATTR, gameID);
         vm.put(CURRENT_USER_ATTR, currentPlayer);
         vm.put("viewMode", viewMode.PLAY);
-        vm.put("modeOptionsAsJSON", gson.toJson(game.getOptions()));
-        if (!game.isGameOver()) {
+        if (modeOptionsAsJSON == null) {
+            Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
+            modeOptionsAsJSON.put("isGameOver", false);
+            modeOptionsAsJSON.put(GAME_OVER_ATTR, GAME_OVER_ATTR_MSG);
+            vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
             vm.put(START_ATTR, START_ATTR_MSG);
+        } else {
+            vm.put("modeOptionsAsJSON", gson.toJson(modeOptionsAsJSON));
         }
         vm.put(RED_PLAYER_ATTR, redPlayer);
         vm.put(WHITE_PLAYER_ATTR, whitePlayer);
@@ -114,6 +120,8 @@ public class GetGameRoute implements Route {
     private CheckersGame handleNewGame(Request request, Response response, Player currentPlayer){
         CheckersGame game = null;
         Session session = request.session();
+        modeOptionsAsJSON = new HashMap<>(2);
+        PostResignGame.called = false;
         if (!request.queryParams().isEmpty()){
             String opponentName = request.queryParams(OPP_USER);
             Player chosenOpponent = playerLobby.findPlayer(opponentName);

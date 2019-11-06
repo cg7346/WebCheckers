@@ -7,10 +7,7 @@ import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
-import spark.Request;
-import spark.Response;
-import spark.Route;
-import spark.Session;
+import spark.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +34,27 @@ public class PostSubmitTurn implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String gameIDString = request.queryParams("gameID");
+        Session session = request.session();
+        Player currentPlayer = session.attribute("Player");
+        CheckersGame game = gameManager.getGame(currentPlayer);
+        if (!PostResignGame.called) {
+            Move lastMove = game.getLastMove();
+            Message responseMessage = null;
+            if (lastMove != null) {
+                game.completeTurn();
+                responseMessage = Message.info("Valid Move!");
+            } else {
+                responseMessage = Message.error("Make move first");
+            }
+            response.body(gson.toJson(responseMessage));
+
+            return gson.toJson(responseMessage);
+        } else {
+            GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
+            GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
+            response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
+            return gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer));
+        }
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
         if (game != null) {
             Move lastMove = game.getLastMove();

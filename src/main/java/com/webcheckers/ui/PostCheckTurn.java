@@ -16,6 +16,8 @@ import java.nio.file.WatchEvent;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+import static spark.Spark.halt;
+
 /**
  * The {@code POST /checkTurn} route handler
  * this checks for the turn of the user
@@ -27,6 +29,10 @@ public class PostCheckTurn implements Route {
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
     private final Gson gson;
+    static final String PLAYER_RESIGNED = "Opponent has resigned.";
+    static final String MESSAGE_ERR = "message error";
+
+
 
     /**
      * The constructor for the {@code POST /checkTurn} route handler.
@@ -54,7 +60,7 @@ public class PostCheckTurn implements Route {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
         String gameIdString = request.queryParams("gameID");
-        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
+        CheckersGame game = gameManager.getGame(currentPlayer);
         //sometimes having the game undefined breaks the builder
         if (game != null) {
             if (game.isGameOver()) {
@@ -67,10 +73,27 @@ public class PostCheckTurn implements Route {
             }
             if (game.getActivePlayer().equals(currentPlayer) && !game.isGameOver()) {
                 return gson.toJson(Message.info("true"));
-            } else {
+            } else if (PostResignGame.called) {
+                GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
+                GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
+                response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
+                return gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer));
+            } else if (GetGameRoute.modeOptionsAsJSON != null) {
+                if (game.getActivePlayer() == game.getRedPlayer()) {
+                    game.setWinner(game.getWhitePlayer());
+                } else {
+                    game.setWinner(game.getRedPlayer());
+                }
+                return gson.toJson(Message.info("true"));
+            } else if (!game.getActivePlayer().equals(currentPlayer)){
                 return gson.toJson(Message.info("false"));
             }
         }
-        return null;
+        GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
+        GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
+        response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
+        Message er = Message.error(PLAYER_RESIGNED);
+        session.attribute(MESSAGE_ERR, er);
+        return gson.toJson(Message.info("true"));
     }
 }
