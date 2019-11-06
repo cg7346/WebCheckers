@@ -7,10 +7,11 @@ import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
-import spark.*;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+import spark.Session;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class PostSubmitTurn implements Route {
@@ -54,27 +55,6 @@ public class PostSubmitTurn implements Route {
             GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
             response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
             return gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer));
-        }
-        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
-        if (game != null) {
-            Move lastMove = game.getLastMove();
-            System.out.println("LastMoveMade ->> " + lastMove);
-            Message responseMessage = null;
-            if (lastMove != null) {
-                game.completeTurn();
-                responseMessage = Message.info("Valid Move!");
-            } else {
-                responseMessage = Message.error("Make move first");
-            }
-            response.body(gson.toJson(responseMessage));
-            return gson.toJson(responseMessage);
-        } else {
-            Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
-            Session session = request.session();
-            Player player = session.attribute("Player");
-            modeOptionsAsJSON.put("isGameOver", true);
-            modeOptionsAsJSON.put("gameOverMessage", player.getName() + " has resigned.");
-            return gson.toJson(Message.info(player.getName() + " has resigned."));
         }
     }
 }

@@ -24,6 +24,10 @@ public class PostResignGame implements Route {
     // Constants
     //
 
+    static Player resignPlayer;
+    static Player winningPlayer;
+    static Boolean called = false;
+
     // Values used in the mode options for JSON after the resign button is clicked
     private static final String RESIGN = "%s has resigned.";
 
@@ -58,12 +62,8 @@ public class PostResignGame implements Route {
 
     /**
      * Resign message after a player clicks the resign button
-     * The constructor for the {@code POST /resignGame} route handler.
      *
      * @return the message that will be displayed when a player resigns
-     * @param gameManager is the game manager from the game manager class
-     * @param gson is the JSON
-    //     * @throws NoSuchElementException when the {@code gameManager} or {@code gson} parameter is null
      */
     public static Message resignMessage(Player player) {
         return Message.info(String.format(RESIGN, player.getName()));
@@ -71,21 +71,28 @@ public class PostResignGame implements Route {
 
     /**
      * {@inheritDoc}
-     *
+
      * @param request the HTTP request
      * @param response the HTTP response
      * @return templateEngine to render a view or null
      * @throws java.util.NoSuchElementException when an invalid username is returned
      */
     @Override
-    public Object handle(Request request, Response response) throws Exception {
-        String gameIDAsString = request.queryParams("gameID");
-        Integer gameID = Integer.parseInt(gameIDAsString);
-        CheckersGame game = gameManager.getGame(gameID);
-        final Session httpSession = request.session();
-        Player player = httpSession.attribute("Player");
-        game.endGame(gameManager, player.getName() + " has resigned.");
-        response.body(gson.toJson(resignMessage(player)));
-        return gson.toJson(resignMessage(player));
+    public Object handle(Request request, Response response) {
+//        String gameIDAsString = request.queryParams("gameID");
+//        Integer gameID = Integer.parseInt(gameIDAsString);
+        Session session = request.session();
+        resignPlayer = session.attribute("Player");
+        CheckersGame game = gameManager.getGame(resignPlayer);
+        if (resignPlayer.getName().equals(game.getRedPlayer().getName())) {
+            winningPlayer = game.getWhitePlayer();
+        } else {
+            winningPlayer = game.getRedPlayer();
+        }
+        GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
+        GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", resignPlayer.getName() + " has resigned.");
+        response.body(gson.toJson(resignMessage(resignPlayer)));
+        called = true;
+        return gson.toJson(resignMessage(resignPlayer));
     }
 }

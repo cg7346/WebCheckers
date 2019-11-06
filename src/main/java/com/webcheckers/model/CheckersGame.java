@@ -1,12 +1,6 @@
 package com.webcheckers.model;
 
-import com.webcheckers.appl.GameManager;
-
-import com.webcheckers.appl.GameManager;
-
 import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
@@ -28,15 +22,8 @@ public class CheckersGame {
     private Player winner;
     // The loser of the game
     private Player loser;
-
-    // The winner of the game
-    private Player winner;
-    // The loser of the game
-    private Player loser;
-    // The player that resigned
+    // The resigned player of the game
     private Player resignedPlayer;
-    private Boolean gameOver = false;
-    private Map<String, Object> modeOptionsAsJSON;
 
     //possible moves to be made the current player
     //according to their apparent location on BoardView
@@ -61,8 +48,10 @@ public class CheckersGame {
     //The current turn being made
     private Turn currentTurn;
 
-    // Whether or not the game is over
-    private Boolean gameOver;
+    private Map<String, Object> modeOptionsAsJSON;
+
+
+
 
 
     /**
@@ -86,7 +75,6 @@ public class CheckersGame {
         this.jumpWhiteMoves = new ArrayList<>();
         activePlayer = redPlayer;
         this.currentTurn = new Turn(activePlayer);
-        this.modeOptionsAsJSON = new HashMap<>(2);
 
         board = new Space[ROWS][COLS];
         for (int row = 0; row < ROWS; row++) {
@@ -326,6 +314,7 @@ public class CheckersGame {
     }
 
 
+
     /**
      * Looks into the space at those coordinates for
      * a piece and checks for possible moves there
@@ -340,15 +329,12 @@ public class CheckersGame {
         Space space = getSpace(row, col);
         if(space.hasPiece()) {
             Piece p = space.getPiece();
-            System.out.println("AT -> " + row + " " + col + " ");
             //piece if white and single
             if (!p.isRedPiece() && !p.isPieceKing()) {
-                System.out.println("Checking White------");
                 checkWhiteSingleMoves(row, col);
             }
             //piece red and single
             if (p.isRedPiece() && !p.isPieceKing()) {
-                System.out.println("Checking Red--------");
                 checkRedSingleMoves(row, col);
             }
             //piece white and king
@@ -390,7 +376,6 @@ public class CheckersGame {
             space = getSpace(newEndRow, newEndCol);
             if(space.isValid()) {
                 Move newMove = new Move(new Position(startRow, startCol), new Position(newEndRow, newEndCol), piece);
-                System.out.println("New Move!" + newMove);
                 return new Move(new Position(startRow, startCol), new Position(newEndRow, newEndCol), piece);
             }
         }
@@ -501,13 +486,9 @@ public class CheckersGame {
         move = isRed ? move : moveConverter(move);
         ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
         ArrayList<Move> jumps = isRed ? jumpRedMoves : jumpWhiteMoves;
-        System.out.println("Current single moves...");
         for (Move possibleMove : moves){
             if (possibleMove.equals(move) && !currentTurn.isJumpPossible()){
-                if(jumps.size() != 0) {
-                    return false;
-                }
-                return true;
+                return jumps.size() == 0;
             }
         }
         for (Move possibleMove : jumps){
@@ -686,7 +667,6 @@ public class CheckersGame {
     public Player getWinner() {
         return this.winner;
     }
-
     /**
      * Sets the winner of the checkers game
      *
@@ -703,65 +683,8 @@ public class CheckersGame {
         }
     }
 
-    /**
-     * Gets the loser of the checkers game
-     *
-     * @return the losing player
-     */
-    public Player getLoser() {
-        return this.loser;
-    }
-
-    /**
-     * Gets the game over of the checkers game
-     *
-     * @return whether or not the game is over
-     */
-    public Boolean getGameOver() {
-        return this.gameOver;
-    }
-
-    public Map<String, Object> getOptions() {
-        return modeOptionsAsJSON;
-    }
-
-    /**
-     * Gets the resigned player of the checkers game
-     *
-     * @return the resigned player
-     */
-    public Player getResignedPlayer() {
-        return this.resignedPlayer;
-    }
-
-    /**
-     * Sets the resigned player of the checkers game
-     *
-     * @param player is the player that resigned
-     */
-    public void setResignedPlayer(Player player) {
-        // resignedPlayer is the player that resigned
-        this.resignedPlayer = player;
-    }
-
-    /**
-     * End a game between two players
-     *
-     * @param gameOverMessage message to be shown to the players
-     */
-    public void endGame(GameManager gameManager, String gameOverMessage) {
-        modeOptionsAsJSON.put("isGameOver", true);
-        modeOptionsAsJSON.put("gameOverMessage", gameOverMessage);
-        CheckersGame game = gameManager.getGame(gameID);
-        // Removes the game from game manager
-        gameManager.removeGame(game, game.getRedPlayer(), game.getWhitePlayer());
-    }
-
     public boolean isGameOver() {
         return (modeOptionsAsJSON.containsKey("isGameOver") && modeOptionsAsJSON.get("isGameOver").equals(true));
     }
 
-    public boolean hasPlayer(Player player) {
-        return player.equals(redPlayer) || player.equals(whitePlayer);
-    }
 }

@@ -52,17 +52,17 @@ public class GameManager {
      * @param whitePlayer
      * @return
      */
-    public CheckersGame removeGame(CheckersGame game, Player redPlayer, Player whitePlayer) {
+    public CheckersGame removeGame(CheckersGame game) {
 
-        synchronized (game) {
+        synchronized (this) {
             totalGames--;
             try {
                 games.remove(game);
             } catch (IndexOutOfBoundsException err) {
                 System.err.println(err);
             }
-            redPlayer.setInGame(false);
-            whitePlayer.setInGame(false);
+            game.getRedPlayer().setInGame(false);
+            game.getWhitePlayer().setInGame(false);
             return null;
         }
     }
@@ -82,15 +82,6 @@ public class GameManager {
         return  null;
     }
 
-    public CheckersGame getGame(int gameID){
-        for (CheckersGame game : games){
-            if (game.getGameID() == gameID){
-                return game;
-            }
-        }
-        return null;
-    }
-
 
     /**
      * Just checking to see if the Player is in a particular
@@ -103,27 +94,4 @@ public class GameManager {
         return player.equals(game.getRedPlayer()) || player.equals(game.getWhitePlayer());
     }
 
-//    /**
-//     * Resign currently active game with the given player in it
-//     * use when signing out
-//     *
-//     * @param player player who's games are being resigned
-//     */
-//    public void resignGame(Player player) {
-//        synchronized (games) {
-//            for (CheckersGame id : games) {
-//                if (id.hasPlayer(player)) {
-//                    if (id.whoseTurn(id) == GetGameRoute.activeColor.RED) {
-//                        if (id.getRedPlayer() == player) {
-//                            id.colorTurn();
-//                        }
-//                    } else if (id.getWhitePlayer() == player) {
-//                        id.colorTurn();
-//                    }
-//                    id.endGame(player.getName() + " has resigned.");
-//                }
-//                id.endGame(player.getName() + " has resigned.");
-//            }
-//        }
-//    }
 }
