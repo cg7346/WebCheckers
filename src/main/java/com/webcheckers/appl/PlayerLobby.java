@@ -66,7 +66,11 @@ public class PlayerLobby {
      */
     public boolean isInGame(Player player){
         //is it in a game
-        return player.isInGame();
+        try {
+            return player.isInGame();
+        } catch (NullPointerException err) {
+            return false;
+        }
     }
 
     /**

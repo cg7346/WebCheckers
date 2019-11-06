@@ -52,8 +52,33 @@ public class GetGameRoute implements Route {
     private final TemplateEngine templateEngine;
     enum viewMode {PLAY, SPECTATOR,REPLAY}
 
+    private CheckersGame handleNewGame(Request request, Response response, Player currentPlayer) {
+        CheckersGame game = null;
+        Session session = request.session();
+        modeOptionsAsJSON = new HashMap<>(2);
+        PostResignGame.called = false;
+        if (!request.queryParams().isEmpty()) {
+            String opponentName = request.queryParams(OPP_USER);
+            Player chosenOpponent = playerLobby.findPlayer(opponentName);
+            if (chosenOpponent == null) {
+                response.redirect(WebServer.HOME_URL);
+                halt();
+                return null;
+            }
+            if (playerLobby.isInGame(chosenOpponent)) {
+                //we will send an error
+                Message er = Message.error(PLAYER_IN_GAME);
+                session.attribute(MESSAGE_ERR, er);
+                response.redirect(WebServer.HOME_URL);
+                halt();
+                return null;
+            } else {
+                game = gameManager.makeGame(currentPlayer, chosenOpponent);
+            }
+        }
+        return game;
+    }
     private activeColor activeTurnColor;
-
 
     /**
      * The constructor for the {@code GET /game} route handler.
@@ -118,32 +143,5 @@ public class GetGameRoute implements Route {
     }
 
     public enum activeColor {RED, WHITE}
-
-    private CheckersGame handleNewGame(Request request, Response response, Player currentPlayer){
-        CheckersGame game = null;
-        Session session = request.session();
-        modeOptionsAsJSON = new HashMap<>(2);
-        PostResignGame.called = false;
-        if (!request.queryParams().isEmpty()){
-            String opponentName = request.queryParams(OPP_USER);
-            Player chosenOpponent = playerLobby.findPlayer(opponentName);
-            if (chosenOpponent == null) {
-                response.redirect(WebServer.HOME_URL);
-                halt();
-                return null;
-            }
-            if (playerLobby.isInGame(chosenOpponent)){
-                //we will send an error
-                Message er = Message.error(PLAYER_IN_GAME);
-                session.attribute(MESSAGE_ERR, er);
-                response.redirect(WebServer.HOME_URL);
-                halt();
-                return null;
-            }
-            else{
-                game = gameManager.makeGame(currentPlayer, chosenOpponent);
-            }}
-        return game;
-    }
 }
 
