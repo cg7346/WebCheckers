@@ -50,13 +50,13 @@ public class PostCheckTurnTest {
         CuT = new PostCheckTurn(lobby, gameManager, gson);
         String gameIdString = "3";
         when(request.queryParams("gameID")).thenReturn(gameIdString);
-        // TODO: check why this is throwing error now
+        // TODO: check why this error is occuring now
         //  when(gameManager.getGame(Integer.parseInt(gameIdString))).thenReturn(mockGame);
     }
 
     @Test
     void test_nullGame(){
-        // TODO: check why this is throwing error now
+        // TODO: check why this error is occuring now
         //  when(gameManager.getGame(Integer.parseInt("3"))).thenReturn(null);
         try {
             Object o = CuT.handle(request, response);
