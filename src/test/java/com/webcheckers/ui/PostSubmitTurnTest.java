@@ -5,17 +5,16 @@ import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
-import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import spark.Request;
 import spark.Response;
 import spark.Session;
-import spark.TemplateEngine;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @Tag("UI-tier")
 public class PostSubmitTurnTest {
@@ -31,7 +30,6 @@ public class PostSubmitTurnTest {
     private GameManager gameManager;
     private PlayerLobby lobby;
     private CheckersGame mockGame;
-    private Player player;
 
     @BeforeEach
     void construct(){
@@ -42,13 +40,12 @@ public class PostSubmitTurnTest {
         lobby = mock(PlayerLobby.class);
         gameManager = mock(GameManager.class);
         mockGame = mock(CheckersGame.class);
-        player = mock(Player.class);
         gson = new Gson();
 
         CuT = new PostSubmitTurn(lobby, gameManager, gson);
         String gameIdString = "3";
         when(request.queryParams("gameID")).thenReturn(gameIdString);
-        when(gameManager.getGame(player)).thenReturn(mockGame);
+        when(gameManager.getGame(Integer.parseInt(gameIdString))).thenReturn(mockGame);
     }
 
     @Test
