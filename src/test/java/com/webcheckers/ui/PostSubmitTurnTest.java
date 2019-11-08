@@ -5,6 +5,7 @@ import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
+import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,7 @@ public class PostSubmitTurnTest {
     private GameManager gameManager;
     private PlayerLobby lobby;
     private CheckersGame mockGame;
+    private Player player;
 
     @BeforeEach
     void construct(){
@@ -40,12 +42,13 @@ public class PostSubmitTurnTest {
         lobby = mock(PlayerLobby.class);
         gameManager = mock(GameManager.class);
         mockGame = mock(CheckersGame.class);
+        player = mock(Player.class);
         gson = new Gson();
 
         CuT = new PostSubmitTurn(lobby, gameManager, gson);
         String gameIdString = "3";
         when(request.queryParams("gameID")).thenReturn(gameIdString);
-        when(gameManager.getGame(Integer.parseInt(gameIdString))).thenReturn(mockGame);
+        when(gameManager.getGame(player)).thenReturn(mockGame);
     }
 
     @Test
