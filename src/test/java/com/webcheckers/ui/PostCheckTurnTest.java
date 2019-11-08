@@ -88,7 +88,7 @@ public class PostCheckTurnTest {
             Object o = CuT.handle(request, response);
             assertEquals(expected, o.toString());
         }catch (Exception e){
-            //squahs
+            //squash
         }
     }
 }

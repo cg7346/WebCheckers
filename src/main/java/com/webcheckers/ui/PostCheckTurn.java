@@ -12,11 +12,14 @@ import spark.Response;
 import spark.Route;
 import spark.Session;
 
+import java.nio.file.WatchEvent;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static spark.Spark.halt;
 
 /**
+ * The {@code POST /checkTurn} route handler
  * this checks for the turn of the user
  * @author jil4009
  */
@@ -31,12 +34,27 @@ public class PostCheckTurn implements Route {
 
 
 
+    /**
+     * The constructor for the {@code POST /checkTurn} route handler.
+     *
+     * @param playerLobby
+     * @param gameManager
+     * @param gson
+     * @throws NoSuchElementException when the {@code gameManager} or {@code gson} parameter is null
+     */
     public PostCheckTurn(PlayerLobby playerLobby, GameManager gameManager,Gson gson){
         this.playerLobby = Objects.requireNonNull(playerLobby, "player lobby is required");
         this.gameManager = Objects.requireNonNull(gameManager, "game manager is required");
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @Override
     public Object handle(Request request, Response response) throws Exception {
         Session session = request.session();
@@ -45,7 +63,15 @@ public class PostCheckTurn implements Route {
         CheckersGame game = gameManager.getGame(currentPlayer);
         //sometimes having the game undefined breaks the builder
         if (game != null) {
-            if (game.getActivePlayer().equals(currentPlayer)) {
+            if (game.isGameOver()) {
+                if (game.getActivePlayer() == game.getRedPlayer()) {
+                    game.setWinner(game.getWhitePlayer());
+                } else {
+                    game.setWinner(game.getRedPlayer());
+                }
+                return gson.toJson(Message.info("true"));
+            }
+            if (game.getActivePlayer().equals(currentPlayer) && !game.isGameOver()) {
                 return gson.toJson(Message.info("true"));
             } else if (PostResignGame.called) {
                 GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);

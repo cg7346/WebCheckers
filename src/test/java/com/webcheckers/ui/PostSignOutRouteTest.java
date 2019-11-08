@@ -1,5 +1,6 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,9 +8,9 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import spark.*;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
 
 /**
  * The unit test suite for the {@link PostSignInRoute} component.
@@ -42,6 +43,7 @@ public class PostSignOutRouteTest {
     private Session session;
     private Response response;
     private TemplateEngine templateEngine;
+    private GameManager gameManager;
 
     /**
      * Setup new mock objects for each test.
@@ -56,8 +58,8 @@ public class PostSignOutRouteTest {
 
         when(request.session()).thenReturn(session);
 
-        // create a unique for each test
-        SignOut = new PostSignOutRoute(templateEngine, playerLobby);
+        // create a unique for each test //TODO: check this
+        SignOut = new PostSignOutRoute(gameManager, templateEngine, playerLobby);
 
     }
 
