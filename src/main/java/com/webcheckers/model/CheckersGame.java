@@ -1,6 +1,7 @@
 package com.webcheckers.model;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -21,6 +22,8 @@ public class CheckersGame {
     private Player winner;
     // The loser of the game
     private Player loser;
+    // The resigned player of the game
+    private Player resignedPlayer;
 
     //possible moves to be made the current player
     //according to their apparent location on BoardView
@@ -30,7 +33,7 @@ public class CheckersGame {
     private ArrayList<Move> jumpWhiteMoves;
 
     //unique identifier for the game
-    private int gameID;
+    private int gameID = 0;
 
     //Dimensions for the board
     public final static int ROWS = 8;
@@ -45,8 +48,10 @@ public class CheckersGame {
     //The current turn being made
     private Turn currentTurn;
 
-    // Whether or not the game is over
-    private Boolean gameOver;
+    private Map<String, Object> modeOptionsAsJSON;
+
+
+
 
 
     /**
@@ -60,7 +65,7 @@ public class CheckersGame {
      *
      * @param gameID int, unique identifier for the game
      */
-    public CheckersGame(Player redPlayer, Player whitePlayer, int gameID){
+    public CheckersGame(Player redPlayer, Player whitePlayer, int gameID) {
         this.gameID = gameID;
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
@@ -72,17 +77,17 @@ public class CheckersGame {
         this.currentTurn = new Turn(activePlayer);
 
         board = new Space[ROWS][COLS];
-        for (int row=0; row < ROWS; row++){
-            for (int col=0; col < COLS; col ++){
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
                 //if both row and column are even or odd then it is white space
-                if ((col%2 == 0 && row%2 ==0) ||
-                        (col%2 != 0 && row%2 != 0)){
+                if ((col % 2 == 0 && row % 2 == 0) ||
+                        (col % 2 != 0 && row % 2 != 0)) {
                     board[row][col] = new Space(col, false);
                 }
                 //calling top of board row 0
                 else {
                     //putting white player at top of board
-                    if (row <= 2){
+                    if (row <= 2) {
                         Space newSpace = new Space(col, true);
                         newSpace.addPiece(new Piece(1));
                         board[row][col] = newSpace;
@@ -94,7 +99,7 @@ public class CheckersGame {
                         board[row][col] = newSpace;
                     }
                     //middle spaces empty black
-                    else{
+                    else {
                         board[row][col] = new Space(col, true);
                     }
                 }
@@ -114,7 +119,7 @@ public class CheckersGame {
      * @param row row of space
      * @return char symbol that represents space
      */
-    private Space getSpace(int row, int col){
+    private Space getSpace(int row, int col) {
         return board[row][col];
     }
 
@@ -179,7 +184,7 @@ public class CheckersGame {
      * @param player the player in the game to check
      * @return true for red player, false for white
      */
-    public boolean isRedPlayer(Player player){
+    public boolean isRedPlayer(Player player) {
         return player.equals(redPlayer);
     }
 
@@ -195,22 +200,22 @@ public class CheckersGame {
      * So instead of white at top it's red
      * @return the board, but reverse
      */
-    public Space[][] inverseBoard(){
+    public Space[][] inverseBoard() {
         Space[][] inverseBoard = new Space[ROWS][COLS];
         int rowOriginal = -1;
         for (int row = 7; row >= 0; row--) {
             rowOriginal++;
             int colOriginal = -1;
-           for (int col = 7; col >= 0; col--) {
-               colOriginal++;
-               inverseBoard[row][col] = board[rowOriginal][colOriginal];
+            for (int col = 7; col >= 0; col--) {
+                colOriginal++;
+                inverseBoard[row][col] = board[rowOriginal][colOriginal];
             }
 
         }
 
 
-      return inverseBoard;
-   }
+        return inverseBoard;
+    }
 
     /**
      * Returns the original not flipped board
@@ -229,7 +234,7 @@ public class CheckersGame {
     public Piece removePieceToMove(int row, int col){
         Space space = getSpace(row, col);
         Piece piece = null;
-        if (space.hasPiece()){
+        if (space.hasPiece()) {
             piece = space.getPiece();
             space.removePiece();
         }
@@ -244,7 +249,7 @@ public class CheckersGame {
      */
     public void addPiece(int row, int col, Piece piece){
         Space space = getSpace(row, col);
-        if (!space.hasPiece() && space.isValid()){
+        if (!space.hasPiece() && space.isValid()) {
             space.addPiece(piece);
         }
     }
@@ -271,7 +276,7 @@ public class CheckersGame {
      * Returns who the activePlayer is (whose turn)
      * @return either RedPlayer or WhitePlayer
      */
-    public Player getActivePlayer(){
+    public Player getActivePlayer() {
         return activePlayer;
     }
 
@@ -288,11 +293,10 @@ public class CheckersGame {
      * If player is currently red -> white,
      * otherwise -> red
      */
-    public void swapPlayers(){
+    public void swapPlayers() {
         activePlayer = activePlayer.equals(redPlayer) ? whitePlayer : redPlayer;
         currentTurn = new Turn(activePlayer);
     }
-
 
     /**
      * Iterates over the board in Checkers Game to
@@ -431,9 +435,9 @@ public class CheckersGame {
         //check next row closer to top
         int nextRow = row + 1;
         if (nextRow < 8) {
-                singleWhiteMoves.addAll(checkColumns(row, col, nextRow, Piece.color.WHITE));
-            }
+            singleWhiteMoves.addAll(checkColumns(row, col, nextRow, Piece.color.WHITE));
         }
+    }
 
     /**
      * Next step in looking for moves for red player.
@@ -477,17 +481,14 @@ public class CheckersGame {
      * @param move Move to see if is possible
      * @return true if in, false if not
      */
-    public boolean isInMoves(Move move){
+    public boolean isInMoves(Move move) {
         boolean isRed = activePlayer.equals(redPlayer);
         move = isRed ? move : moveConverter(move);
         ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
         ArrayList<Move> jumps = isRed ? jumpRedMoves : jumpWhiteMoves;
         for (Move possibleMove : moves){
             if (possibleMove.equals(move) && !currentTurn.isJumpPossible()){
-                if(jumps.size() != 0) {
-                    return false;
-                }
-                return true;
+                return jumps.size() == 0;
             }
         }
         for (Move possibleMove : jumps){
@@ -538,7 +539,7 @@ public class CheckersGame {
      * a game
      * @return a Move that shows the last move made
      */
-    public Move getLastMove(){
+    public Move getLastMove() {
         return currentTurn.lastMove();
     }
 
@@ -578,7 +579,7 @@ public class CheckersGame {
      * Makes a move and updates the board according
      * @param move the move to make
      */
-    public void makeMove(Move move){
+    public void makeMove(Move move) {
         move = (activePlayer.equals(redPlayer)) ? move : moveConverter(move);
         Position start = move.getStart();
         Piece piece = removePieceToMove(start.getRow(), start.getCol());
@@ -587,7 +588,7 @@ public class CheckersGame {
             if(piece.isRedPiece() && end.getRow() == 0){
                 piece.makePieceKing();
             }
-            if(!piece.isRedPiece() && end.getRow() == 7){
+            if (!piece.isRedPiece() && end.getRow() == 7) {
                 piece.makePieceKing();
             }
             addPiece(end.getRow(), end.getCol(), piece);
@@ -607,7 +608,7 @@ public class CheckersGame {
      * @return a new converted move, or the old move if
      * the active player is red (no conversion need)
      */
-    public Move moveConverter(Move move){
+    public Move moveConverter(Move move) {
         Position start = move.getStart();
         Position end = move.getEnd();
         if (!activePlayer.equals(redPlayer)) {
@@ -681,14 +682,9 @@ public class CheckersGame {
             this.loser = whitePlayer;
         }
     }
-    /**
-     * Gets the loser of the checkers game
-     *
-     * @return the losing player
-     */
-    public Player getLoser() {
-        return this.loser;
-    }
 
+    public boolean isGameOver() {
+        return (modeOptionsAsJSON.containsKey("isGameOver") && modeOptionsAsJSON.get("isGameOver").equals(true));
+    }
 
 }

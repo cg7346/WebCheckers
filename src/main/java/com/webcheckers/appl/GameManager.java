@@ -48,7 +48,8 @@ public class GameManager {
      * A POST method should define who is redPlayer (the clicker) and
      * whitePlayer (the player clicked on)
      *
-     * @param game
+     * @param redPlayer
+     * @param whitePlayer
      * @return
      */
     public CheckersGame removeGame(CheckersGame game) {

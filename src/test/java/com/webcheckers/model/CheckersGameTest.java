@@ -309,18 +309,18 @@ class CheckersGameTest {
         }
     }
 
-//    @Test
-//    void test_CompleteTurn(){
-//        RedCuT.completeTurn();
-//        assertFalse(RedCuT.isActivePlayerRed());
-//        assertTrue(RedCuT.getCurrentTurn().isEmpty());
-//    }
-//
-//    @Test
-//    void test_Turn(){
-//        assertNotNull(RedCuT.getCurrentTurn());
-//        assertNotNull(WhiteCuT.getCurrentTurn());
-//
-//    }
+    @Test
+    void test_CompleteTurn() {
+        RedCuT.completeTurn();
+        assertFalse(RedCuT.isActivePlayerRed());
+        assertTrue(RedCuT.getCurrentTurn().isEmpty());
+    }
+
+    @Test
+    void test_Turn() {
+        assertNotNull(RedCuT.getCurrentTurn());
+        assertNotNull(WhiteCuT.getCurrentTurn());
+
+    }
 
 }

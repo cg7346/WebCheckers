@@ -110,7 +110,7 @@ public class GetHomeRoute implements Route {
               ModelAndView mv = currentUser(vm, request);
               return templateEngine.render(mv);
           }
-          ModelAndView mv = playerActive(vm, request);
+          ModelAndView mv = playerActive(vm);
           return templateEngine.render(mv);
       }
 
@@ -128,10 +128,9 @@ public class GetHomeRoute implements Route {
     /**
      * active player of the model view
      * @param vm
-     * @param request
      * @return
      */
-    private ModelAndView playerActive(Map<String, Object> vm, Request request) {
+    private ModelAndView playerActive(Map<String, Object> vm) {
         vm.put(PLAYERS_ON, PLAYERS_ONLINE);
         Integer playerCount = playerLobby.getPlayers().size();
         if (playerCount == 0) {
