@@ -5,6 +5,7 @@ import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
+import com.webcheckers.model.MoveValidator;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.Request;
@@ -36,7 +37,7 @@ public class PostSubmitTurn implements Route {
         String gameIDString = request.queryParams("gameID");
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
         //System.out.println("ValidatorCreated");
-        //MoveValidator moveValidator = new MoveValidator(game);
+        MoveValidator moveValidator = new MoveValidator(game);
         Move lastMove = game.getLastMove();
         //System.out.println("LastMoveMade ->> " + lastMove);
         Message responseMessage = null;
