@@ -18,13 +18,6 @@ public class CheckersGame {
     //(the person clicked on by the other player)
     private Player whitePlayer;
 
-    //possible moves to be made the current player
-    //according to their apparent location on BoardView
-    private ArrayList<Move> singleRedMoves;
-    private ArrayList<Move> singleWhiteMoves;
-    private ArrayList<Move> jumpRedMoves;
-    private ArrayList<Move> jumpWhiteMoves;
-
     //unique identifier for the game
     private int gameID;
 
@@ -57,10 +50,6 @@ public class CheckersGame {
         this.gameID = gameID;
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
-        this.singleRedMoves = new ArrayList<>();
-        this.singleWhiteMoves = new ArrayList<>();
-        this.jumpRedMoves = new ArrayList<>();
-        this.jumpWhiteMoves = new ArrayList<>();
         activePlayer = redPlayer;
         this.currentTurn = new Turn(activePlayer);
 

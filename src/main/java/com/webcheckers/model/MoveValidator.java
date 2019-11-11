@@ -83,9 +83,11 @@ public class MoveValidator {
             checkSingleMovesRed(row, col);
         }
         if(!isRed && isKing){
+            System.out.println("Looking for kings White");
             checkKingMoves(row, col, false);
         }
         if(isRed && isKing){
+            System.out.println("Looking for Kings Red");
             checkKingMoves(row, col, true);
         }
 
