@@ -15,8 +15,8 @@ public class Move {
 
     /**
      * contructor for move
-     * @param start
-     * @param end
+     * @param start Position that started
+     * @param end Position that ended
      */
     public Move(Position start, Position end){
         this.start = start;
@@ -24,6 +24,12 @@ public class Move {
         jumpedPiece = null;
     }
 
+    /**
+     * antoher constructor for move
+     * @param start Position that started
+     * @param end Position to end at
+     * @param piece the Piece
+     */
     public Move(Position start, Position end, Piece piece) {
         this.start = start;
         this.end = end;
@@ -88,6 +94,10 @@ public class Move {
         return otherMove.start.equals(this.start) && otherMove.end.equals(this.end);
     }
 
+    /**
+     * to string override for toString
+     * @return String
+     */
     @Override
     public String toString(){
         String s = "Start: " + start + " End: " + end;

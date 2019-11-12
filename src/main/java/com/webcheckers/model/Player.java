@@ -25,10 +25,18 @@ public class Player {
         return this.name;
     }
 
+    /**
+     * this function checks if a player is in a game
+     * @return true or false
+     */
     public boolean isInGame(){
         return this.inGame;
     }
 
+    /**
+     * this function sets a player in the game
+     * @param inGame if the person is in a game
+     */
     public void setInGame(boolean inGame){
         this.inGame = inGame;
     }

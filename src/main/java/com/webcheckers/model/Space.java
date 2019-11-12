@@ -105,7 +105,7 @@ public class Space {
     /**
      * If there is a piece in the space,
      * if it a king piece? Use wit
-     * @return
+     * @return true or false
      */
     public boolean isKingPiece(){
         if (hasPiece()){
