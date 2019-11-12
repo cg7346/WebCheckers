@@ -56,6 +56,11 @@ public class GameManager {
         return  null;
     }
 
+    /**
+     * this function returns a game given a gameID
+     * @param gameID integer of the game id
+     * @return a CheckersGame
+     */
     public CheckersGame getGame(int gameID){
         for (CheckersGame game : games){
             if (game.getGameID() == gameID){
