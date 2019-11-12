@@ -194,15 +194,61 @@ class CheckersGameTest {
         assertEquals(move, RedCuT.moveConverter(move));
         WhiteCuT.swapPlayers();
         assertEquals(convertedMove, WhiteCuT.moveConverter(move));
+        move.addPiece(redP);
+        convertedMove.addPiece(redP);
+        assertEquals(move, RedCuT.moveConverter(move));
+        assertEquals(convertedMove, WhiteCuT.moveConverter(move));
     }
+
+    @Test
+    void test_keepLastMove(){
+        removeAllPiece();
+        RedCuT.addPiece(4, 1, whiteP);
+        Position p1 = new Position(5, 2);
+        Position p2 = new Position(4, 1);
+        Position p3 = new Position(3, 0);
+        Move rMove = new Move (p1, p2);
+        Move rMove2 = new Move (p1, p3);
+        Move rMove2WithPiece = new Move (p1, p3, whiteP);
+        RedCuT.keepLastMove(rMove);
+        assertEquals(rMove, RedCuT.getLastMove());
+        RedCuT.keepLastMove(rMove2);
+        assertEquals(rMove2WithPiece, RedCuT.getLastMove());
+    }
+
+    @Test
+    void regularRedMove(){
+        removeAllPiece();
+        RedCuT.addPiece(6, 3, redP);
+        Position redStart = new Position(6, 3);
+        Move upLeft = new Move(redStart, new Position(5, 2));
+        RedCuT.makeMove(upLeft);
+        assertTrue(RedCuT.doesSpaceHavePiece(5, 2) &&
+                RedCuT.isSpaceRedPiece(5, 2));
+        assertFalse(RedCuT.doesSpaceHavePiece(6, 3));
+    }
+
+    @Test
+    void regularWhiteMove(){
+        removeAllPiece();
+        RedCuT.swapPlayers();
+        RedCuT.addPiece(1, 3, whiteP);
+        Position redStart = new Position(6, 3);
+        Move downRight = new Move(redStart, new Position(5, 2));
+        RedCuT.keepLastMove(downRight);
+        RedCuT.completeMove();
+        System.out.println(RedCuT.isActivePlayerRed());
+        //assertTrue(RedCuT.doesSpaceHavePiece(2, 2));
+        assertTrue(!RedCuT.isSpaceRedPiece(2, 2));
+        assertFalse(RedCuT.doesSpaceHavePiece(1, 3));
+    }
+
 
 //    @Test
 //    void test_simpleMove(){
-//        removeAllPiece();
-//        RedCuT.addPiece(6, 3, redP);
+
 //        RedCuT.lookForMoves();
-//        Position redStart = new Position(6, 3);
-//        Move upLeft = new Move(redStart, new Position(5, 2));
+
 //        Move upRight = new Move(redStart, new Position(5, 4));
 //        Move backLeft = new Move(redStart, new Position(7, 2));
 //        Move backRight = new Move(redStart, new Position(7, 4));
@@ -314,14 +360,14 @@ class CheckersGameTest {
 //        assertTrue(WhiteCuT.isSpaceValid(5, 4));
 //    }
 //
-//    public void removeAllPiece(){
-//        for (int r = 0; r < 8; r++){
-//            for (int c = 0; c < 8; c ++){
-//                RedCuT.removePieceToMove(r, c);
-//                WhiteCuT.removePieceToMove(r, c);
-//            }
-//        }
-//    }
+    public void removeAllPiece(){
+        for (int r = 0; r < 8; r++){
+            for (int c = 0; c < 8; c ++){
+                RedCuT.removePieceToMove(r, c);
+                WhiteCuT.removePieceToMove(r, c);
+            }
+        }
+    }
 //
 //    @Test
 //    void test_CompleteTurn(){
