@@ -38,11 +38,11 @@ public class PostValidateMove implements Route {
         CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
         MoveValidator moveValidator = new MoveValidator(game);
         //System.out.println("Move Validator made");
-        boolean isPossibleMove = moveValidator.isInMoves(move);
-        System.out.println(isPossibleMove);
+        String moveResponse = moveValidator.isInMoves(move);
+        System.out.println(moveResponse);
         Message responseMessage = null;
-        if(isPossibleMove){
-            responseMessage = Message.info("Valid Move!");
+        if(moveResponse.equals(moveValidator.validMove)){
+            responseMessage = Message.info(moveResponse);
             game.keepLastMove(move);
             game.completeMove();
             if(move.hasPiece()) {
@@ -52,7 +52,7 @@ public class PostValidateMove implements Route {
             }
             //game.checkForDoubleJump(move);
         }else {
-            responseMessage = Message.error("Invalid MMMOOOOVEEE!");
+            responseMessage = Message.error(moveResponse);
         }
         response.body(gson.toJson(responseMessage));
         return gson.toJson(responseMessage);

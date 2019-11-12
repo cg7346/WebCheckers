@@ -342,6 +342,10 @@ public class CheckersGame {
         return currentTurn.lastMove();
     }
 
+    public boolean hasValidMoveBeenMade(){
+        return currentTurn.hasSimpleMoveBeenMade();
+    }
+
     public Piece backupLastMove(){
         return currentTurn.backupLastMove();
     }

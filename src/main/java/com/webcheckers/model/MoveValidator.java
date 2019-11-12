@@ -30,6 +30,9 @@ public class MoveValidator {
     //Jump moves Red can make;
     private ArrayList<Move> jumpWhiteMoves;
 
+    public final String jumpAvail = "A jump is available";
+    public final String invalidMove = "INVALID MOOOVE";
+    public final String validMove = "Valid Move!";
     /**
      * Construct a move validator for the game to use
      * for the current turn;
@@ -246,34 +249,38 @@ public class MoveValidator {
      * @param move Move to see if possible
      * @return true if in the list of moves, false if not
      */
-    public boolean isInMoves(Move move){
+    public String isInMoves(Move move) {
         boolean isRed = game.isActivePlayerRed();
         move = isRed ? move : game.moveConverter(move);
         ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
         ArrayList<Move> jumps = isRed ? jumpRedMoves : jumpWhiteMoves;
-        for (Move possibleMove : moves){
-            System.out.println(possibleMove);
-            //TODO force jump before submit turn >:)
-            if (possibleMove.equals(move) && !game.isJumpPossible()){
-                // forces jump moves
-                //System.out.println(!areThereJumpMoves());
-                if(areThereJumpMoves()) {
-                    System.out.println("There are jump moves");
-                    return false;
+        if (!game.hasValidMoveBeenMade()) {
+            for (Move possibleMove : moves) {
+
+                System.out.println(possibleMove);
+                //TODO force jump before submit turn >:)
+                if (possibleMove.equals(move) && !game.isJumpPossible()) {
+                    // forces jump moves
+                    //System.out.println(!areThereJumpMoves());
+                    if (areThereJumpMoves()) {
+                        System.out.println("There are jump moves");
+                        return jumpAvail;
+                    }
+                    return validMove;
                 }
-                return true;
+            }
+
+            for (Move possibleMove : jumps) {
+                System.out.println(possibleMove);
+                //if we see there is anything in the list of moves,
+                //mark it in our turn
+                game.jumpIsPossible();
+                if (possibleMove.equals(move)) {
+                    return validMove;
+                }
             }
         }
-        for (Move possibleMove : jumps){
-            System.out.println(possibleMove);
-            //if we see there is anything in the list of moves,
-            //mark it in our turn
-            game.jumpIsPossible();
-            if (possibleMove.equals(move)){
-                return true;
-            }
-        }
-        return false;
+        return invalidMove;
     }
 
     /**
@@ -283,33 +290,6 @@ public class MoveValidator {
     public Move getLastMove(){
         return game.getLastMove();
     }
-
-
-//    public void makeMove(Move move){
-//        //converts the move, if need be
-//        System.out.println("Making move");
-//        move = moveConverter(move);
-//        Position start = move.getStart();
-//        System.out.println("Removing piece at " + start);
-//        Piece piece = game.removePieceToMove(start.getRow(), start.getCol());
-//        Position end = move.getEnd();
-//        System.out.println("Placing piece at " + end);
-//        //just guarding to make sure we moved a piece
-//        if (piece != null){
-//            //KING ME
-//            if(piece.isRedPiece() && end.getRow() == 0){
-//                piece.makePieceKing();
-//            }
-//            if(!piece.isRedPiece() && end.getRow() == 7){
-//                piece.makePieceKing();
-//            }
-//            //and place the piece down in it's new home
-//            game.addPiece(end.getRow(), end.getCol(), piece);
-//        }if(move.hasPiece()) {
-//            Position piecePos = getPiecePosition(move);
-//            game.removePieceToMove(piecePos.getRow(), piecePos.getCol());
-//        }
-//    }
 
     /**
      * Backs up the turn made by the last player
