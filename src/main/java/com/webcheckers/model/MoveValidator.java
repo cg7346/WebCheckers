@@ -377,8 +377,11 @@ public class MoveValidator {
      */
     public final List<Move> getMovesForRed() {
         java.util.List<Move> moves = new ArrayList<>();
-        moves.addAll(singleRedMoves);
-        moves.addAll(jumpRedMoves);
+        if (jumpRedMoves.isEmpty()) {
+            moves.addAll(singleRedMoves);
+        } else {
+            moves.addAll(jumpRedMoves);
+        }
         return moves;
     }
 
@@ -387,8 +390,11 @@ public class MoveValidator {
      */
     public final List<Move> getMovesForWhite() {
         java.util.List<Move> moves = new ArrayList<>();
-        moves.addAll(singleWhiteMoves);
-        moves.addAll(jumpWhiteMoves);
+        if (jumpWhiteMoves.isEmpty()) {
+            moves.addAll(singleWhiteMoves);
+        } else {
+            moves.addAll(jumpWhiteMoves);
+        }
         return moves;
     }
 

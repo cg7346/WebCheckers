@@ -133,8 +133,8 @@ public class Tree {
                     node.nodeList.add(newNode);
                 }
                 for (Node newNode : node.nodeList) {
-                    if ((!node.game.isActivePlayerRed() && parentValue >= node.score) ||
-                            (node.game.isActivePlayerRed()&& parentValue <= node.score)) {
+                    if ((!node.game.isActivePlayerRed() && parentValue >= node.score)
+                            || (node.game.isActivePlayerRed()&& parentValue <= node.score)) {
                         makeTree(layersDeep - 1, newNode, node.score);
                     }
 
