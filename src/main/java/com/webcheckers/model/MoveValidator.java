@@ -28,6 +28,9 @@ public class MoveValidator {
     //Jump moves Red can make;
     private ArrayList<Move> jumpWhiteMoves;
 
+    public static Integer whiteCount = 0;
+    public static Integer redCount = 0;
+
     public final String jumpAvail = "A jump is available";
     public final String invalidMove = "INVALID MOOOVE";
     public final String validMove = "Valid Move!";
@@ -79,15 +82,19 @@ public class MoveValidator {
         boolean isKing = game.isSpaceKingPiece(row, col);
         if(!isRed && !isKing){
             checkSingleMovesWhite(row, col);
+            whiteCount++;
         }
         if(isRed && !isKing){
             checkSingleMovesRed(row, col);
+            redCount++;
         }
         if(!isRed && isKing){
             checkKingMoves(row, col, false);
+            whiteCount++;
         }
         if(isRed && isKing){
             checkKingMoves(row, col, true);
+            redCount++;
         }
 
     }
@@ -313,8 +320,14 @@ public class MoveValidator {
         singleWhiteMoves = new ArrayList<>();
         jumpRedMoves = new ArrayList<>();
         jumpWhiteMoves = new ArrayList<>();
+        redCount = 0;
+        whiteCount = 0;
     }
 
+    /**
+     * checks if the red is out of moves
+     * @return true or false
+     */
     public Boolean isRedOut(){
         if (jumpRedMoves.isEmpty() && singleRedMoves.isEmpty()) {
             return true;
@@ -322,6 +335,10 @@ public class MoveValidator {
         return false;
     }
 
+    /**
+     * checks if white is out of moves
+     * @return
+     */
     public Boolean isWhiteOut(){
         if (jumpWhiteMoves.isEmpty() && singleWhiteMoves.isEmpty()) {
             return true;
@@ -329,6 +346,11 @@ public class MoveValidator {
         return false;
     }
 
+    public Integer getWhiteCount(){
+        return this.whiteCount;
+    }
 
-
+    public Integer getRedCount(){
+        return this.redCount;
+    }
 }

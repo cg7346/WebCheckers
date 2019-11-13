@@ -5,6 +5,7 @@ import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
+import com.webcheckers.model.MoveValidator;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.Request;
@@ -56,10 +57,10 @@ public class PostCheckTurn implements Route {
     }
 
     /**
-     *
+     *this function handles the post check turn
      * @param request
      * @param response
-     * @return
+     * @return Message
      * @throws Exception
      */
     @Override
@@ -77,7 +78,7 @@ public class PostCheckTurn implements Route {
 
         if (game != null) {
             if (game.getResignedPlayer() != null) {
-                String message = "Opponent has resigned. You have won!";
+                String message = "Opponent has resigned. You won!";
                 GameOver(request, response, game, message);
                 return gson.toJson(Message.info("true"));
             } else if (game.isTie()) {
@@ -85,7 +86,21 @@ public class PostCheckTurn implements Route {
                 GameOver(request, response, game, message);
                 return gson.toJson(Message.info("true"));
             } else if (game.isGameOver()) {
-                String message = game.getWinner().getName() + " has captured all pieces, you lost.";
+                String endGame;
+                if (game.getWinner() == game.getWhitePlayer()) {
+                    if (MoveValidator.redCount > 0) {
+                        endGame = " has blocked all pieces, you lost.";
+                    } else {
+                        endGame = " has captured all pieces, you lost.";
+                    }
+                } else {
+                    if (MoveValidator.whiteCount > 0) {
+                        endGame = " has blocked all pieces, you lost.";
+                    } else {
+                        endGame = " has captured all pieces, you lost.";
+                    }
+                }
+                String message = game.getWinner().getName() + endGame;
                 GameOver(request, response, game, message);
                 return gson.toJson(Message.info("true"));
             } else if (game.getActivePlayer().equals(currentPlayer)) {

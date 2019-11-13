@@ -461,18 +461,33 @@ public class CheckersGame {
         }
     }
 
+    /**
+     * checks if game is over
+     * @return true or false
+     */
     public boolean isGameOver() {
         return this.winner != null;
     }
 
+    /**
+     * this sets a resigned player
+     * @param player Player you want to resign
+     */
     public void setResignedPlayer(Player player){
         this.resignedPlayer = player;
     }
 
+    /**
+     * Return the resigned player
+     * @return The player you want to resign
+     */
     public Player getResignedPlayer() {
         return this.resignedPlayer;
     }
 
+    /**
+     * Check for kings on the board
+     */
     public void checkForKings() {
         for(int i = 0; i < board[0].length; i++)
         {
@@ -492,10 +507,18 @@ public class CheckersGame {
     }
 
 
+    /**
+     * sets a tie if it is true or not
+     * @param tie boolean of the tie
+     */
     public void setTie(Boolean tie){
         this.tie = tie;
     }
 
+    /**
+     * checks if there is a tie or not
+     * @return true or false
+     */
     public Boolean isTie(){
         return this.tie;
     }

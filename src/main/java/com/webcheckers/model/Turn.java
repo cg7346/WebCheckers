@@ -73,6 +73,10 @@ public class Turn {
         return null;
     }
 
+    /**
+     * checks if a simple move has been made or not
+     * @return true or false of the simple move
+     */
     public boolean hasSimpleMoveBeenMade(){
         return hasSimpleMove;
     }

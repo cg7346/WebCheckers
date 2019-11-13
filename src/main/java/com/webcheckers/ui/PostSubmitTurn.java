@@ -32,7 +32,13 @@ public class PostSubmitTurn implements Route {
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
-
+    /**
+     * this handles the post submit turn
+     * @param request
+     * @param response
+     * @return message
+     * @throws Exception
+     */
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String gameIDString = request.queryParams("gameID");
@@ -44,18 +50,29 @@ public class PostSubmitTurn implements Route {
         Message responseMessage = null;
         moveValidator.lookForMoves();
         if (moveValidator.isRedOut() && moveValidator.isWhiteOut()) {
-            System.out.println("Tie");
             game.setTie(true);
             responseMessage = Message.info("The game has ended in a tie.");
         } else if (moveValidator.isRedOut() && !moveValidator.isWhiteOut()) {
             game.setWinner(game.getWhitePlayer());
-            String message = game.getWhitePlayer().getName() + " have captured all pieces, you won!";
+            String endGame;
+            if (moveValidator.getRedCount() > 0) {
+                endGame = " has blocked all pieces, you won!";
+            } else {
+                endGame = " has captured all pieces, you won!";
+            }
+            String message = game.getWhitePlayer().getName() + endGame;
             responseMessage = Message.info(message);
             GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
             GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", message);
         } else if (!moveValidator.isRedOut() && moveValidator.isWhiteOut()) {
             game.setWinner(game.getRedPlayer());
-            String message = game.getRedPlayer().getName() + " have captured all pieces, you won!";
+            String endGame;
+            if (moveValidator.getWhiteCount() > 0) {
+                endGame = " has blocked all pieces, you won!";
+            } else {
+                endGame = " has captured all pieces, you won!";
+            }
+            String message = game.getRedPlayer().getName() + endGame;
             responseMessage = Message.info(message);
             GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
             GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", message);
