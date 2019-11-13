@@ -88,13 +88,13 @@ public class PostCheckTurn implements Route {
             } else if (game.isGameOver()) {
                 String endGame;
                 if (game.getWinner() == game.getWhitePlayer()) {
-                    if (MoveValidator.whiteCount > 0) {
+                    if (MoveValidator.redCount > 0) {
                         endGame = " has blocked all pieces, you lost.";
                     } else {
                         endGame = " has captured all pieces, you lost.";
                     }
                 } else {
-                    if (MoveValidator.redCount > 0) {
+                    if (MoveValidator.whiteCount > 0) {
                         endGame = " has blocked all pieces, you lost.";
                     } else {
                         endGame = " has captured all pieces, you lost.";
