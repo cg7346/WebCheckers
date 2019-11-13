@@ -12,17 +12,33 @@ import spark.Route;
 
 import java.util.Objects;
 
+/**
+ * this class is the post backup route
+ */
+
 public class PostBackupRoute implements Route {
 
     private GameManager gameManager;
     private final Gson gson;
 
+    /**
+     * the constructor the the route
+     * @param gameManager a Game Manager
+     * @param gson the GSON
+     */
     public PostBackupRoute(GameManager gameManager, Gson gson)
     {
         this.gameManager = Objects.requireNonNull(gameManager, "game manager is required");
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
+    /**
+     * this function handles the call
+     * @param request request
+     * @param response response
+     * @return Response Message
+     * @throws Exception
+     */
     @Override
     public Object handle(Request request, Response response) throws Exception
     {
