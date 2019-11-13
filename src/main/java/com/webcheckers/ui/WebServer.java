@@ -202,7 +202,7 @@ public class WebServer {
     post(RESIGN_URL, new PostResignGame(gameManager, gson));
 
     // Checks to see if the game is ready for next turn
-    post(CHECKTURN_URL, new PostCheckTurn(playerLobby, gameManager, gson));
+    post(CHECKTURN_URL, new PostCheckTurn(gameManager, gson));
 
     //
     LOG.config("WebServer is initialized.");

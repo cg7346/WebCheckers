@@ -47,15 +47,23 @@ public class GetGameRoute implements Route {
     private final Gson gson;
     private Boolean gameOver = false;
     private Integer visited = 0;
+    private activeColor activeTurnColor;
+    public enum activeColor {RED, WHITE}
     static Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
-
+    enum viewMode {PLAY, SPECTATOR, REPLAY}
     private final TemplateEngine templateEngine;
 
+    /**
+     * this handles a new game
+     * @param request
+     * @param response
+     * @param currentPlayer
+     * @return a Checkers game
+     */
     private CheckersGame handleNewGame(Request request, Response response, Player currentPlayer) {
         CheckersGame game = null;
         Session session = request.session();
         modeOptionsAsJSON = new HashMap<>(2);
-        PostResignGame.called = false;
         if (!request.queryParams().isEmpty()) {
             String opponentName = request.queryParams(OPP_USER);
             Player chosenOpponent = playerLobby.findPlayer(opponentName);
@@ -77,7 +85,7 @@ public class GetGameRoute implements Route {
         }
         return game;
     }
-    private activeColor activeTurnColor;
+
 
     /**
      * The constructor for the {@code GET /game} route handler.
@@ -95,10 +103,8 @@ public class GetGameRoute implements Route {
         this.activeTurnColor = activeColor.RED;
     }
 
-    enum viewMode {PLAY, SPECTATOR}
-
-
     /**
+     * this function handles the get game route
      * {@inheritDoc}
      */
     @Override
@@ -107,16 +113,14 @@ public class GetGameRoute implements Route {
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
         Map<String, Object> vm = new HashMap<>();
-        if (game == null){
+        if (game == null) {
             game = handleNewGame(request, response, currentPlayer);
-        }
-        if (PostResignGame.called || game == null) {
-            modeOptionsAsJSON.put("isGameOver", true);
-            modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
-            response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
-            gameManager.removeGame(game);
-            response.redirect(WebServer.HOME_URL);
-            return gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer));
+        } else {
+            if (game.getResignedPlayer() != null) {
+                modeOptionsAsJSON.put("isGameOver", true);
+                modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
+                response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
+            }
         }
         int gameID = game.getGameID();
         Player redPlayer = game.getRedPlayer();
@@ -143,7 +147,5 @@ public class GetGameRoute implements Route {
         vm.put(BOARD_ATTR, board);
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
-
-    public enum activeColor {RED, WHITE}
 }
 

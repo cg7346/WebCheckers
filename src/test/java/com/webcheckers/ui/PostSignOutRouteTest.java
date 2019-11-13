@@ -55,6 +55,7 @@ public class PostSignOutRouteTest {
         this.templateEngine = mock(TemplateEngine.class);
         this.playerLobby = mock(PlayerLobby.class);
         this.response = mock(Response.class);
+        this.gameManager = mock(GameManager.class);
 
         when(request.session()).thenReturn(session);
 

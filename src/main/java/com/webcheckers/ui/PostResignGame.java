@@ -25,8 +25,7 @@ public class PostResignGame implements Route {
     //
 
     static Player resignPlayer;
-    static Player winningPlayer;
-    static Boolean called = false;
+    private static Player winningPlayer;
 
     // Values used in the mode options for JSON after the resign button is clicked
     private static final String RESIGN = "%s has resigned.";
@@ -72,6 +71,7 @@ public class PostResignGame implements Route {
     /**
      * {@inheritDoc}
      *
+     * this handles the post resign game
      * @param request the HTTP request
      * @param response the HTTP response
      * @return templateEngine to render a view or null
@@ -79,20 +79,26 @@ public class PostResignGame implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
-//        String gameIDAsString = request.queryParams("gameID");
-//        Integer gameID = Integer.parseInt(gameIDAsString);
         Session session = request.session();
         resignPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(resignPlayer);
-        if (resignPlayer.getName().equals(game.getRedPlayer().getName())) {
-            winningPlayer = game.getWhitePlayer();
+        if (!resignPlayer.getName().equals(game.getActivePlayer().getName())) {
+            game.setResignedPlayer(null);
+            game.setWinner(null);
+            response.body(gson.toJson(Message.error("Please wait for you turn to resign.")));
+            return gson.toJson(Message.error("Please wait for you turn to resign."));
         } else {
-            winningPlayer = game.getRedPlayer();
+            if (resignPlayer.getName().equals(game.getRedPlayer().getName())) {
+                winningPlayer = game.getWhitePlayer();
+            } else {
+                winningPlayer = game.getRedPlayer();
+            }
+            game.setResignedPlayer(resignPlayer);
+            game.setWinner(winningPlayer);
+            GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
+            GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", resignPlayer.getName() + " has resigned.");
+            response.body(gson.toJson(resignMessage(resignPlayer)));
+            return gson.toJson(resignMessage(resignPlayer));
         }
-        GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
-        GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", resignPlayer.getName() + " has resigned.");
-        response.body(gson.toJson(resignMessage(resignPlayer)));
-        called = true;
-        return gson.toJson(resignMessage(resignPlayer));
     }
 }

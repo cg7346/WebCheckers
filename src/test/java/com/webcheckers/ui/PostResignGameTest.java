@@ -8,13 +8,15 @@ import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import spark.*;
+import spark.Request;
+import spark.Response;
+import spark.Session;
+import spark.TemplateEngine;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,7 +32,7 @@ public class PostResignGameTest {
     private static final String NAME = "User";
     private static final String PLAYER = "tester";
     private static Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
-
+    private static Player winningPlayer;
 
     /**
      * The component-under-test (CuT).
@@ -50,7 +52,6 @@ public class PostResignGameTest {
     private int ID = 2;
     private GameManager manager;
     private CheckersGame game;
-    private Player winningPlayer;
     private GetGameRoute gameRoute;
 
     // attributes holding mock objects
@@ -65,10 +66,9 @@ public class PostResignGameTest {
      */
     @BeforeEach
     public void setup() {
-        request = mock(Request.class);
-        session = mock(Session.class);
-        when(request.session()).thenReturn(session);
-        response = mock(Response.class);
+        this.request = mock(Request.class);
+        this.session = mock(Session.class);
+        this.response = mock(Response.class);
         templateEngine = mock(TemplateEngine.class);
         playerLobby = mock(PlayerLobby.class);
         game = mock(CheckersGame.class);
@@ -77,9 +77,10 @@ public class PostResignGameTest {
         gson = new Gson();
         gameRoute = mock(GetGameRoute.class);
 
-        String gameIdString = "3";
+        String gameIdString = "1";
         player = new Player("p1");
 
+        when(request.session()).thenReturn(session);
         when(request.queryParams("gameID")).thenReturn(gameIdString);
         when(request.queryParams("Player")).thenReturn(player.getName());
         when(manager.getGame(player)).thenReturn(game);
@@ -114,14 +115,13 @@ public class PostResignGameTest {
 
     @Test
     public void winning_player() {
-        Player player1 = new Player("p1");
         Player player2 = new Player("p2");
-
         GameManager gameManager1 = new GameManager();
-        game = gameManager1.makeGame(player1, player2);
+
+        game = gameManager1.makeGame(player, player2);
         game.setWinner(player2);
         winningPlayer = game.getWinner();
-        when(resignPlayer.getName().equals(game.getRedPlayer().getName()));
+//        when(resignPlayer.getName().equals(game.getRedPlayer().getName()));
 
     }
 
@@ -130,95 +130,26 @@ public class PostResignGameTest {
      */
     @Test
     public void resign_game_handle() {
-        Player player1 = new Player("p1");
+
         Player player2 = new Player("p2");
 
         GameManager gameManager1 = new GameManager();
-        game = gameManager1.makeGame(player1, player2);
+        game = gameManager1.makeGame(player, player2);
+        resignPlayer = player;
         assertNotNull(game, "an error occurred when creating a game");
 
-        Boolean playerOne = manager.isPlayerInGame(this.game, player1);
+        assertEquals(resignPlayer.getName(), game.getActivePlayer().getName());
 
-//        assertTrue(playerOne);
+        assertEquals(resignPlayer.getName(), game.getRedPlayer().getName());
 
-        assertEquals("p1", request.queryParams("Player"));
-        assertTrue(gameManager1.isPlayerInGame(game, player1));
-//
-//        // Arrange the test scenario: The session holds a new game.
-//        when(request.queryParams(eq("Player"))).thenReturn(player1.getName());
-//        when(manager.getGame(resignPlayer)).thenReturn(game);
+        winningPlayer = game.getWhitePlayer();
+        game.setResignedPlayer(player);
+        assertEquals(winningPlayer.getName(), "p2");
+        assertEquals(game.getResignedPlayer().getName(), "p1");
 
-        // To analyze what the Route created in the View-Model map you need
-        // to be able to extract the argument to the TemplateEngine.render method.
-        // Mock up the 'render' method by supplying a Mockito 'Answer' object
-        // that captures the ModelAndView data passed to the template engine
-        final TemplateEngineTester testHelper = new TemplateEngineTester();
-        when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
-        when(request.queryParams("Player")).thenReturn(player1.getName());
-
-        resignPlayer = player1;
-        assertEquals(game.getRedPlayer().getName(), resignPlayer.getName());
-
-        assertNull(modeOptionsAsJSON.get("isGameOver"));
+        assertTrue(modeOptionsAsJSON.isEmpty());
         modeOptionsAsJSON.put("isGameOver", true);
-        assertEquals(true, modeOptionsAsJSON.get("isGameOver"));
-
-        modeOptionsAsJSON.put("gameOverMessage", resignPlayer.getName() + " has resigned.");
-        assertEquals("p1 has resigned.", modeOptionsAsJSON.get("gameOverMessage"));
-
-        response.body(gson.toJson(PostResignGame.resignMessage(resignPlayer)));
-        assertNotNull(gson);
-        //        JASONassert.assertEquals(expectedJson, response.getBody(), false);
-
-//        when(modeOptionsAsJSON.get("isGameOver")).thenReturn(true);
-//        when(modeOptionsAsJSON.put("isGameOver", true)).thenReturn(true);
-//        assertEquals(((boolean) modeOptionsAsJSON.get("isGameOver")),
-//                ((boolean) gson.fromJson((String) CuT.get("modeOptionsAsJSON"), Map.class).get("isGameOver")));
-        assertTrue(modeOptionsAsJSON.containsKey("isGameOver") && modeOptionsAsJSON.get("isGameOver") != null);
-
-//        assertEquals(true, modeOptionsAsJSON.put("isGameOver", true));
-//        assertEquals(true, modeOptionsAsJSON.put("isGameOver", true));
-//        when(modeOptionsAsJSON.put("isGameOver", true)).thenReturn(true);
-//        doReturn(true).when(modeOptionsAsJSON.put("isGameOver", true));
-//        doReturn("gameOverMessage", resignPlayer.getName() + " has resigned.");
-//        doReturn(modeOptionsAsJSON.put("gameOverMessage", resignPlayer.getName() + " has resigned."));
-
-        String expected = "{\"text\":\"p1 has resigned.\",\"type\":\"INFO\"}";
-        // Invoke the test
-        try {
-            Object o = CuT.handle(request, response);
-            assertEquals(expected, o.toString());
-        } catch (Exception e) {
-            //squash
-        }
     }
-
-    /**
-     * Test that the "resignGame" action that is handled when the player is null
-     */
-//    @Test
-//    public void resign_game_null_player() {
-//        this.player = new Player(null);
-//        final TemplateEngineTester testHelper = new TemplateEngineTester();
-//        when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
-//
-//        // Invoke the test
-//        SignOut.handle(request, response);
-//
-//        // Analyze the results:
-//        //   * model is a non-null Map
-//        testHelper.assertViewModelExists();
-//        testHelper.assertViewModelIsaMap();
-//        //   * model contains all necessary View-Model data
-//        testHelper.assertViewModelAttribute(
-//                GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
-//        testHelper.assertViewModelAttribute(
-//                GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
-//        testHelper.assertViewModelAttribute(
-//                GetHomeRoute.CURRENT_USER, null);
-//        //   * test view name
-//        testHelper.assertViewName(GetHomeRoute.VIEW_NAME);
-//    }
 }
 
 

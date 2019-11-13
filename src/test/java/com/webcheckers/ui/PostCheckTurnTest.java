@@ -47,7 +47,7 @@ public class PostCheckTurnTest {
         p2 = mock(Player.class);
         gson = new Gson();
 
-        CuT = new PostCheckTurn(lobby, gameManager, gson);
+        CuT = new PostCheckTurn(gameManager, gson);
         String gameIdString = "3";
         when(request.queryParams("gameID")).thenReturn(gameIdString);
         // TODO: check why this error is occuring now

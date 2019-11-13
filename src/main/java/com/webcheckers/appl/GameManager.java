@@ -22,14 +22,14 @@ public class GameManager {
      *
      * A POST method should define who is redPlayer (the clicker) and
      * whitePlayer (the player clicked on)
-     * @param redPlayer
-     * @param whitePlayer
-     * @return
+     * @param redPlayer the red player
+     * @param whitePlayer the white player
+     * @return Checkers Game
      */
     public CheckersGame makeGame(Player redPlayer, Player whitePlayer){
 
         synchronized (this){
-            totalGames++;
+            totalGames ++;
             if (!redPlayer.isInGame() && !whitePlayer.isInGame()){
                 CheckersGame game = new CheckersGame(redPlayer, whitePlayer, totalGames);
                 redPlayer.setInGame(true);
@@ -48,9 +48,8 @@ public class GameManager {
      * A POST method should define who is redPlayer (the clicker) and
      * whitePlayer (the player clicked on)
      *
-     * @param redPlayer
-     * @param whitePlayer
-     * @return
+     * @param game is the Checkers game
+     * @return Checkers game that was removed
      */
     public CheckersGame removeGame(CheckersGame game) {
 
@@ -80,6 +79,20 @@ public class GameManager {
             }
         }
         return  null;
+    }
+
+    /**
+     * This gets the game given a game id
+     * @param gameID the id of the game you want
+     * @return Checkers Game
+     */
+    public CheckersGame getGame(int gameID){
+        for (CheckersGame game : games){
+            if (game.getGameID() == gameID){
+                return game;
+            }
+        }
+        return null;
     }
 
 

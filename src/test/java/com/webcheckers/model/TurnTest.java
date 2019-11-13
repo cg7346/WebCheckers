@@ -38,7 +38,6 @@ public class TurnTest {
         assertNull(turn.lastMove(), "Something wrong with last move function");
         Position start = new Position(1,2);
         Position end = new Position(2, 4);
-        Move m = new Move(start, end);
         Move move = mock(Move.class);
         turn.addMove(move);
         assertNotNull(turn.lastMove(), "Something wrong with last move function");
