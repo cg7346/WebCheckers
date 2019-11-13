@@ -1,7 +1,6 @@
 package com.webcheckers.model;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 /**
  * Class to help validate the moves made
