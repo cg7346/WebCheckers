@@ -35,33 +35,28 @@ public class PostSubmitTurn implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String gameIDString = request.queryParams("gameID");
-        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
-        //System.out.println("ValidatorCreated");
+        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));;
         MoveValidator moveValidator = new MoveValidator(game);
         Move lastMove = game.getLastMove();
-        Boolean isJumpPossible = moveValidator.areThereJumpMoves();
-        System.out.println(isJumpPossible);
-        //System.out.println("LastMoveMade ->> " + lastMove);
         Message responseMessage = null;
-//        if (isJumpPossible) {
-//            responseMessage = Message.error(moveValidator.jumpAvail);
-//        } else
-        if (lastMove != null){
-            if(lastMove.hasPiece()) {
-                System.out.println("AAAAAAHHHHHHHHH");
+        if (lastMove == null){
+            responseMessage = Message.error("Make move first");
+        }else{
+            if (lastMove.hasPiece()){
                 lastMove = game.moveConverter(lastMove);
                 moveValidator.lookInSpace(lastMove.getEnd().getRow(), lastMove.getEnd().getCol());
-//                if (moveValidator.areThereJumpMoves()){
-//                    response = Message.error()
-//                }
-            }
+                if (moveValidator.areThereJumpMoves()) {
+                    responseMessage = Message.error(moveValidator.jumpAvail);
+                }else{
+                    game.completeTurn();
+                    responseMessage = Message.info(moveValidator.validMove);
+                }
+            }else{
                 game.completeTurn();
                 responseMessage = Message.info(moveValidator.validMove);
-        }else{
-            responseMessage = Message.error("Make move first");
+            }
         }
         response.body(gson.toJson(responseMessage));
-
         return gson.toJson(responseMessage);
     }
 }

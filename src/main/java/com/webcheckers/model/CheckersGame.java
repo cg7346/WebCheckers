@@ -210,7 +210,6 @@ public class CheckersGame {
         Piece piece = null;
         if (space.hasPiece()){
             piece = space.getPiece();
-            //System.out.println("Piece to remove at" + "(" + row + ", " + col +")");
             space.removePiece();
         }
         return piece;

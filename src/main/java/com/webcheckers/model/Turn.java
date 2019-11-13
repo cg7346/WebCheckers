@@ -65,7 +65,6 @@ public class Turn {
             moves.pop();
             hasSimpleMove = false;
             if(!removedPieces.empty()) {
-                System.out.println("Setting isJumpPossible to false");
                 isJumpPossible = false;
                 return removedPieces.pop();
             }
@@ -84,7 +83,6 @@ public class Turn {
      */
     public void jumpIsPossible()
     {
-        System.out.println("Setting isJumpPossible to True");
         isJumpPossible = true;
     }
 

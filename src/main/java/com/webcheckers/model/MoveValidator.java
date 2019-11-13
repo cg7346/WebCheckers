@@ -57,7 +57,6 @@ public class MoveValidator {
      */
     public void lookForMoves(){
         clearArrays();
-        //System.out.println("Looking for Moves");
         for (int row = 0; row < game.ROWS; row++) {
             for (int col = 0; col < game.COLS; col++) {
                 if (game.doesSpaceHavePiece(row, col)) {
@@ -78,7 +77,6 @@ public class MoveValidator {
      * @param col the column to look for the space
      */
     public void lookInSpace(int row, int col){
-        //System.out.println("Looking in " + row + " " + col);
         boolean isRed = game.isSpaceRedPiece(row, col);
         boolean isKing = game.isSpaceKingPiece(row, col);
         if(!isRed && !isKing){
@@ -178,13 +176,8 @@ public class MoveValidator {
                               ArrayList<Move> jumpMoves){
         if(move != null) {
             if (move.hasPiece()) {
-                System.out.println("Adding to jumps " + move);
-//                if (!game.hasValidMoveBeenMade()) {
-//                    game.jumpIsPossible();
-//                }
                 jumpMoves.add(move);
             } else {
-                //System.out.println("Adding to moves " + move);
                 singleMoves.add(move);
             }
         }
@@ -255,11 +248,8 @@ public class MoveValidator {
         move = isRed ? move : game.moveConverter(move);
         ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
         ArrayList<Move> jumps = isRed ? jumpRedMoves : jumpWhiteMoves;
-        System.out.println("ARE THERE JUMPS AVAILABLE: " + areThereJumpMoves());
         if (!game.hasValidMoveBeenMade()) {
             for (Move possibleMove : moves) {
-                //System.out.println(possibleMove);
-                //TODO force jump before submit turn >:)
                 if (possibleMove.equals(move)) {
                     if (!areThereJumpMoves()) {
                         return validMove;
@@ -270,7 +260,6 @@ public class MoveValidator {
             }
             for (Move possibleMove : jumps) {
                 game.jumpIsPossible();
-                //System.out.println(possibleMove);
                 if (possibleMove.equals(move)) {
                     return validMove;
                 }
