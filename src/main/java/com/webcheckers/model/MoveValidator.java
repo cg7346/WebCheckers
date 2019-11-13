@@ -31,9 +31,12 @@ public class MoveValidator {
     //Jump moves Red can make;
     private ArrayList<Move> jumpWhiteMoves;
 
+    // The number of white pieces on the board
     public static Integer whiteCount = 0;
+    // The number of red pieces on the board
     public static Integer redCount = 0;
 
+    // Constants
     public final String jumpAvail = "A jump is available";
     public final String invalidMove = "INVALID MOOOVE";
     public final String validMove = "Valid Move!";
@@ -331,7 +334,7 @@ public class MoveValidator {
 
     /**
      * checks if the red is out of moves
-     * @return true or false
+     * @return whether or not the red player is out of moves
      */
     public Boolean isRedOut(){
         if (jumpRedMoves.isEmpty() && singleRedMoves.isEmpty()) {
@@ -342,7 +345,7 @@ public class MoveValidator {
 
     /**
      * checks if white is out of moves
-     * @return
+     * @return whether or not the white player is out of moves
      */
     public Boolean isWhiteOut(){
         if (jumpWhiteMoves.isEmpty() && singleWhiteMoves.isEmpty()) {
@@ -351,10 +354,18 @@ public class MoveValidator {
         return false;
     }
 
+    /**
+     * Gets the number of white pieces on the board
+     * @return the number of white pieces on the board
+     */
     public Integer getWhiteCount(){
         return this.whiteCount;
     }
 
+    /**
+     * Gets the number of red pieces on the board
+     * @return the number of red pieces on the board
+     */
     public Integer getRedCount(){
         return this.redCount;
     }
