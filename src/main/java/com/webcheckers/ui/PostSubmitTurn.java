@@ -53,6 +53,7 @@ public class PostSubmitTurn implements Route {
                 }
             }else{
                 game.completeTurn();
+                game.checkForKings();
                 responseMessage = Message.info(moveValidator.validMove);
             }
         }

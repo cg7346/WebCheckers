@@ -316,12 +316,6 @@ public class CheckersGame {
         Piece piece = removePieceToMove(start.getRow(), start.getCol());
         Position end = move.getEnd();
         if (piece != null) {
-            if (piece.isRedPiece() && end.getRow() == 0) {
-                piece.makePieceKing();
-            }
-            if (!piece.isRedPiece() && end.getRow() == 7) {
-                piece.makePieceKing();
-            }
             addPiece(end.getRow(), end.getCol(), piece);
         }
         if (move.hasPiece()) {
@@ -432,6 +426,24 @@ public class CheckersGame {
             makeMove(moves.pop());
         }
         swapPlayers();
+    }
+
+    public void checkForKings() {
+        for(int i = 0; i < board[0].length; i++)
+        {
+            Piece piece = board[0][i].getPiece();
+            if(piece != null && piece.getColor() == Piece.color.RED) {
+                piece.makePieceKing();
+            }
+        }
+        int last = board.length - 1;
+        for(int i = 0; i < board[last].length; i++)
+        {
+            Piece piece = board[last][i].getPiece();
+            if(piece != null && piece.getColor() == Piece.color.WHITE) {
+                piece.makePieceKing();
+            }
+        }
     }
 
 
