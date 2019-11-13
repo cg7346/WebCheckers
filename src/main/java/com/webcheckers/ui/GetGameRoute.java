@@ -3,7 +3,7 @@ package com.webcheckers.ui;
 import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.BoardView;
+import com.webcheckers.ui.BoardView;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
@@ -64,7 +64,10 @@ public class GetGameRoute implements Route {
     }
 
     /**
-     * {@inheritDoc}
+     * this function handles the game route
+     * @param request a Request
+     * @param response a Response
+     * @return a String
      */
     @Override
     public String handle(Request request, Response response) {
@@ -97,6 +100,13 @@ public class GetGameRoute implements Route {
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
 
+    /**
+     * this function handles a new game
+     * @param request a Request
+     * @param response a Response
+     * @param currentPlayer a Current Player
+     * @return a new Checkers Game
+     */
     private CheckersGame handleNewGame(Request request, Response response, Player currentPlayer){
         CheckersGame game = null;
         Session session = request.session();
