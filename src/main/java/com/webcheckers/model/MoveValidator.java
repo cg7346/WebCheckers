@@ -29,7 +29,6 @@ public class MoveValidator {
     //Jump moves Red can make;
     private ArrayList<Move> jumpWhiteMoves;
 
-    private Tree.Heuristic heuristic;
     public static final int KING_WORTH = 5;
     public static final int WINNING_VALUE = 1000000;
     public static final int PIECE_WORTH = 1;
