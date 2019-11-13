@@ -47,10 +47,19 @@ public class GetGameRoute implements Route {
     private final Gson gson;
     private Boolean gameOver = false;
     private Integer visited = 0;
+    private activeColor activeTurnColor;
+    public enum activeColor {RED, WHITE}
     static Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
-
+    enum viewMode {PLAY, SPECTATOR, REPLAY}
     private final TemplateEngine templateEngine;
 
+    /**
+     * this handles a new game
+     * @param request
+     * @param response
+     * @param currentPlayer
+     * @return a Checkers game
+     */
     private CheckersGame handleNewGame(Request request, Response response, Player currentPlayer) {
         CheckersGame game = null;
         Session session = request.session();
@@ -76,7 +85,7 @@ public class GetGameRoute implements Route {
         }
         return game;
     }
-    private activeColor activeTurnColor;
+
 
     /**
      * The constructor for the {@code GET /game} route handler.
@@ -94,10 +103,8 @@ public class GetGameRoute implements Route {
         this.activeTurnColor = activeColor.RED;
     }
 
-    enum viewMode {PLAY, SPECTATOR, REPLAY}
-
-
     /**
+     * this function handles the get game route
      * {@inheritDoc}
      */
     @Override
@@ -140,7 +147,5 @@ public class GetGameRoute implements Route {
         vm.put(BOARD_ATTR, board);
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
-
-    public enum activeColor {RED, WHITE}
 }
 

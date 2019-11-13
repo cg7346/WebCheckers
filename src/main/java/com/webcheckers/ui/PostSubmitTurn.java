@@ -32,7 +32,13 @@ public class PostSubmitTurn implements Route {
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
-
+    /**
+     * this handles the post submit turn
+     * @param request
+     * @param response
+     * @return message
+     * @throws Exception
+     */
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String gameIDString = request.queryParams("gameID");

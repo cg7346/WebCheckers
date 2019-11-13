@@ -56,10 +56,10 @@ public class PostCheckTurn implements Route {
     }
 
     /**
-     *
+     *this function handles the post check turn
      * @param request
      * @param response
-     * @return
+     * @return Message
      * @throws Exception
      */
     @Override

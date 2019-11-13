@@ -320,6 +320,10 @@ public class MoveValidator {
         jumpWhiteMoves = new ArrayList<>();
     }
 
+    /**
+     * checks if the red is out of moves
+     * @return true or false
+     */
     public Boolean isRedOut(){
         if (jumpRedMoves.isEmpty() && singleRedMoves.isEmpty()) {
             return true;
@@ -327,13 +331,15 @@ public class MoveValidator {
         return false;
     }
 
+    /**
+     * checks if white is out of moves
+     * @return
+     */
     public Boolean isWhiteOut(){
         if (jumpWhiteMoves.isEmpty() && singleWhiteMoves.isEmpty()) {
             return true;
         }
         return false;
     }
-
-
 
 }

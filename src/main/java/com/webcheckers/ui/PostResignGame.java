@@ -71,7 +71,7 @@ public class PostResignGame implements Route {
     /**
      * {@inheritDoc}
      *
-     * 
+     * this handles the post resign game
      * @param request the HTTP request
      * @param response the HTTP response
      * @return templateEngine to render a view or null

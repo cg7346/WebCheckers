@@ -114,8 +114,6 @@ public class GetHomeRoute implements Route {
           return templateEngine.render(mv);
       }
 
-
-
     // render the View
     return templateEngine.render(new ModelAndView(vm , VIEW_NAME));
   }

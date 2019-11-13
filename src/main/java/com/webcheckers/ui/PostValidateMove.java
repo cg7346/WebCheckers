@@ -25,14 +25,25 @@ public class PostValidateMove implements Route {
     private final GameManager gameManager;
     private final Gson gson;
 
-
+    /**
+     * the constructor for post validate move
+     * @param playerLobby
+     * @param gameManager
+     * @param gson
+     */
     public PostValidateMove(PlayerLobby playerLobby, GameManager gameManager, Gson gson){
         this.playerLobby = Objects.requireNonNull(playerLobby, "player lobby is required");
         this.gameManager = Objects.requireNonNull(gameManager, "game manager is required");
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
-
+    /**
+     * the handle for post validate move
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String moveString = request.queryParams("actionData");
