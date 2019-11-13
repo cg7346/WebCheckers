@@ -78,7 +78,7 @@ public class PostCheckTurn implements Route {
 
         if (game != null) {
             if (game.getResignedPlayer() != null) {
-                String message = "Opponent has resigned. You have won!";
+                String message = "Opponent has resigned. You won!";
                 GameOver(request, response, game, message);
                 return gson.toJson(Message.info("true"));
             } else if (game.isTie()) {
