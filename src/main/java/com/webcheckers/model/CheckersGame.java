@@ -17,6 +17,19 @@ public class CheckersGame {
     private Player redPlayer;
     //(the person clicked on by the other player)
     private Player whitePlayer;
+    // The winner of the game
+    private Player winner;
+    // The loser of the game
+    private Player loser;
+    // The resigned player of the game
+    private Player resignedPlayer;
+    // Whether or not the game end in tie
+    private Boolean tie = false;
+
+    // Number of white pieces
+    private Integer whiteCount = 12;
+    // Number of red pieces
+    private Integer redCount = 12;
 
     //unique identifier for the game
     private int gameID;
@@ -306,16 +319,18 @@ public class CheckersGame {
         }
     }
 
-    /**
-     * this function is called to make a move
-     * @param move a move to make
-     */
     public void makeMove(Move move) {
         move = moveConverter(move);
         Position start = move.getStart();
         Piece piece = removePieceToMove(start.getRow(), start.getCol());
         Position end = move.getEnd();
         if (piece != null) {
+            if (piece.isRedPiece() && end.getRow() == 0) {
+                piece.makePieceKing();
+            }
+            if (!piece.isRedPiece() && end.getRow() == 7) {
+                piece.makePieceKing();
+            }
             addPiece(end.getRow(), end.getCol(), piece);
         }
         if (move.hasPiece()) {
@@ -427,6 +442,41 @@ public class CheckersGame {
         }
         swapPlayers();
     }
+    /**
+     * Gets the winner of the checkers game
+     *
+     * @return the winning player
+     */
+    public Player getWinner() {
+        return this.winner;
+    }
+    /**
+     * Sets the winner of the checkers game
+     *
+     * @param winPlayer the winner player
+     */
+    public void setWinner(Player winPlayer) {
+        // Sets the winner player
+        this.winner = winPlayer;
+        // Sets the loser player
+        if (winPlayer != redPlayer) {
+            this.loser = redPlayer;
+        } else if (winPlayer != whitePlayer) {
+            this.loser = whitePlayer;
+        }
+    }
+
+    public boolean isGameOver() {
+        return this.winner != null;
+    }
+
+    public void setResignedPlayer(Player player){
+        this.resignedPlayer = player;
+    }
+
+    public Player getResignedPlayer() {
+        return this.resignedPlayer;
+    }
 
     public void checkForKings() {
         for(int i = 0; i < board[0].length; i++)
@@ -447,5 +497,12 @@ public class CheckersGame {
     }
 
 
+    public void setTie(Boolean tie){
+        this.tie = tie;
+    }
+
+    public Boolean isTie(){
+        return this.tie;
+    }
 
 }

@@ -11,6 +11,7 @@ public class Player {
     private String name;
     private boolean inGame;
 
+
     public Player(String name) {
         this.name = name;
     }
@@ -40,4 +41,5 @@ public class Player {
     public void setInGame(boolean inGame){
         this.inGame = inGame;
     }
+
 }

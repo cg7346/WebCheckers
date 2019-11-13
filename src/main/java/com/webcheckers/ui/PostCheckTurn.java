@@ -12,31 +12,61 @@ import spark.Response;
 import spark.Route;
 import spark.Session;
 
+import java.nio.file.WatchEvent;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
+import static spark.Spark.halt;
+
 /**
+ * The {@code POST /checkTurn} route handler
  * this checks for the turn of the user
  * @author jil4009
+ * @author Kelly Vo kdv6978
  */
 public class PostCheckTurn implements Route {
-    private CheckersGame game;
-    private Move move;
-    private final PlayerLobby playerLobby;
+
+    // Constants
+    static final String MESSAGE_ERR = "message error";
+
+    // Attributes
     private final GameManager gameManager;
     private final Gson gson;
 
-    public PostCheckTurn(PlayerLobby playerLobby, GameManager gameManager,Gson gson){
-        this.playerLobby = Objects.requireNonNull(playerLobby, "player lobby is required");
+    /**
+     * The constructor for the {@code POST /checkTurn} route handler.
+     *
+     * @param gameManager
+     * @param gson
+     * @throws NoSuchElementException when the {@code gameManager} or {@code gson} parameter is null
+     */
+    public PostCheckTurn(GameManager gameManager,Gson gson){
         this.gameManager = Objects.requireNonNull(gameManager, "game manager is required");
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
+    public void GameOver(Request request, Response response, CheckersGame game, String message) {
+        Session session = request.session();
+        GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
+        GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", message);
+        response.body(gson.toJson(message));
+        gameManager.removeGame(game);
+        Message er = Message.error(message);
+        session.attribute(MESSAGE_ERR, er);
+    }
+
+    /**
+     *
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @Override
     public Object handle(Request request, Response response) throws Exception {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
-        String gameIdString = request.queryParams("gameID");
-        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
+        CheckersGame game = gameManager.getGame(currentPlayer);
         //sometimes having the game undefined breaks the builder
 //        if(game == null){
 //            GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
@@ -46,12 +76,27 @@ public class PostCheckTurn implements Route {
 //        }
 
         if (game != null) {
-            if (game.getActivePlayer().equals(currentPlayer)) {
+            if (game.getResignedPlayer() != null) {
+                String message = "Opponent has resigned. You have won!";
+                GameOver(request, response, game, message);
+                return gson.toJson(Message.info("true"));
+            } else if (game.isTie()) {
+                String message = "The game has ended in a tie.";
+                GameOver(request, response, game, message);
+                return gson.toJson(Message.info("true"));
+            } else if (game.isGameOver()) {
+                String message = game.getWinner().getName() + " has captured all pieces, you lost.";
+                GameOver(request, response, game, message);
+                return gson.toJson(Message.info("true"));
+            } else if (game.getActivePlayer().equals(currentPlayer)) {
+                return gson.toJson(Message.info("true"));
+            } else if (GetGameRoute.modeOptionsAsJSON != null) {
                 return gson.toJson(Message.info("true"));
             } else {
                 return gson.toJson(Message.info("false"));
             }
+
         }
-        return null;
+        return gson.toJson(Message.info("true"));
     }
 }

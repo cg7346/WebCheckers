@@ -6,14 +6,19 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.MoveValidator;
+import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.Session;
 
 import java.util.Objects;
 
 public class PostValidateMove implements Route {
+
+    static final String MESSAGE_ERR = "message error";
+
     private CheckersGame game;
     private Move move;
     private final PlayerLobby playerLobby;
@@ -33,9 +38,9 @@ public class PostValidateMove implements Route {
         String moveString = request.queryParams("actionData");
         String gameIdString = request.queryParams("gameID");
         Move move = gson.fromJson(moveString, Move.class);
-        //System.out.println("------Checking for THIS move!!");
-        System.out.println(move);
-        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIdString));
+        Session session = request.session();
+        Player player = session.attribute("Player");
+        CheckersGame game = gameManager.getGame(player);
         MoveValidator moveValidator = new MoveValidator(game);
         //System.out.println("Move Validator made");
         String moveResponse = moveValidator.isInMoves(move);

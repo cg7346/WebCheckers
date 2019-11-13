@@ -5,10 +5,12 @@ import com.webcheckers.appl.GameManager;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.MoveValidator;
+import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.Session;
 
 import java.util.Objects;
 
@@ -43,7 +45,9 @@ public class PostBackupRoute implements Route {
     public Object handle(Request request, Response response) throws Exception
     {
         String gameIDString = request.queryParams("gameID");
-        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));
+        Session session = request.session();
+        Player player = session.attribute("Player");
+        CheckersGame game = gameManager.getGame(player);
         MoveValidator moveValidator = new MoveValidator(game);
         moveValidator.backUpMove();
 

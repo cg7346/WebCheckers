@@ -35,29 +35,52 @@ public class PostSubmitTurn implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String gameIDString = request.queryParams("gameID");
-        CheckersGame game = gameManager.getGame(Integer.parseInt(gameIDString));;
+        Session session = request.session();
+        Player player = session.attribute("Player");
+        CheckersGame game = gameManager.getGame(player);
         MoveValidator moveValidator = new MoveValidator(game);
-        Move lastMove = game.getLastMove();
+        //System.out.println("LastMoveMade ->> " + lastMove);
         Message responseMessage = null;
-        if (lastMove == null){
-            responseMessage = Message.error("Make move first");
-        }else{
-            if (lastMove.hasPiece()){
-                lastMove = game.moveConverter(lastMove);
-                moveValidator.lookInSpace(lastMove.getEnd().getRow(), lastMove.getEnd().getCol());
-                if (moveValidator.areThereJumpMoves()) {
-                    responseMessage = Message.error(moveValidator.jumpAvail);
+        moveValidator.lookForMoves();
+        if (moveValidator.isRedOut() && moveValidator.isWhiteOut()) {
+            System.out.println("Tie");
+            game.setTie(true);
+            responseMessage = Message.info("The game has ended in a tie.");
+        } else if (moveValidator.isRedOut() && !moveValidator.isWhiteOut()) {
+            game.setWinner(game.getWhitePlayer());
+            String message = game.getWhitePlayer().getName() + " have captured all pieces, you won!";
+            responseMessage = Message.info(message);
+            GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
+            GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", message);
+        } else if (!moveValidator.isRedOut() && moveValidator.isWhiteOut()) {
+            game.setWinner(game.getRedPlayer());
+            String message = game.getRedPlayer().getName() + " have captured all pieces, you won!";
+            responseMessage = Message.info(message);
+            GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
+            GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", message);
+        } else {
+            Move lastMove = game.getLastMove();
+            if (lastMove == null){
+                responseMessage = Message.error("Make move first");
+            }else{
+                if (lastMove.hasPiece()){
+                    lastMove = game.moveConverter(lastMove);
+                    moveValidator.lookInSpace(lastMove.getEnd().getRow(), lastMove.getEnd().getCol());
+                    if (moveValidator.areThereJumpMoves()) {
+                        responseMessage = Message.error(moveValidator.jumpAvail);
+                    }else{
+                        game.completeTurn();
+                        responseMessage = Message.info(moveValidator.validMove);
+                    }
                 }else{
                     game.completeTurn();
+                    game.checkForKings();
                     responseMessage = Message.info(moveValidator.validMove);
                 }
-            }else{
-                game.completeTurn();
-                game.checkForKings();
-                responseMessage = Message.info(moveValidator.validMove);
             }
         }
         response.body(gson.toJson(responseMessage));
+
         return gson.toJson(responseMessage);
     }
 }

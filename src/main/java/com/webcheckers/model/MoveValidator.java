@@ -12,6 +12,7 @@ import java.util.Stack;
  * @author Mallory Bridge mmb2582
  * @author Anthony Ferraioli amf7619
  * @author Jacquelyn Leung jil4009
+ * @author Kelly Vo kdv6978
  */
 public class MoveValidator {
 
@@ -57,6 +58,7 @@ public class MoveValidator {
      */
     public void lookForMoves(){
         clearArrays();
+        //System.out.println("Looking for Moves");
         for (int row = 0; row < game.ROWS; row++) {
             for (int col = 0; col < game.COLS; col++) {
                 if (game.doesSpaceHavePiece(row, col)) {
@@ -77,6 +79,7 @@ public class MoveValidator {
      * @param col the column to look for the space
      */
     public void lookInSpace(int row, int col){
+        //System.out.println("Looking in " + row + " " + col);
         boolean isRed = game.isSpaceRedPiece(row, col);
         boolean isKing = game.isSpaceKingPiece(row, col);
         if(!isRed && !isKing){
@@ -176,6 +179,7 @@ public class MoveValidator {
                               ArrayList<Move> jumpMoves){
         if(move != null) {
             if (move.hasPiece()) {
+
                 jumpMoves.add(move);
             } else {
                 singleMoves.add(move);
@@ -314,6 +318,20 @@ public class MoveValidator {
         singleWhiteMoves = new ArrayList<>();
         jumpRedMoves = new ArrayList<>();
         jumpWhiteMoves = new ArrayList<>();
+    }
+
+    public Boolean isRedOut(){
+        if (jumpRedMoves.isEmpty() && singleRedMoves.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean isWhiteOut(){
+        if (jumpWhiteMoves.isEmpty() && singleWhiteMoves.isEmpty()) {
+            return true;
+        }
+        return false;
     }
 
 

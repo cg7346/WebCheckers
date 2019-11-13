@@ -43,6 +43,31 @@ public class GameManager {
     }
 
     /**
+     * Removes game ID for players to end game
+     * <p>
+     * A POST method should define who is redPlayer (the clicker) and
+     * whitePlayer (the player clicked on)
+     *
+     * @param game is the Checkers game
+     * @return
+     */
+    public CheckersGame removeGame(CheckersGame game) {
+
+        synchronized (this) {
+            totalGames--;
+            try {
+                games.remove(game);
+            } catch (IndexOutOfBoundsException err) {
+                System.err.println(err);
+            }
+            game.getRedPlayer().setInGame(false);
+            game.getWhitePlayer().setInGame(false);
+            return null;
+        }
+    }
+
+
+    /**
      * Gets a game that the sessionPlayer is in
      * @param sessionPlayer the Player looking at the screen
      * @return the game if the player has one, null if not
@@ -56,11 +81,6 @@ public class GameManager {
         return  null;
     }
 
-    /**
-     * this function returns a game given a gameID
-     * @param gameID integer of the game id
-     * @return a CheckersGame
-     */
     public CheckersGame getGame(int gameID){
         for (CheckersGame game : games){
             if (game.getGameID() == gameID){
@@ -78,7 +98,8 @@ public class GameManager {
      * @param player the player to look for
      * @return true if in, false if not
      */
-    public boolean isPlayerInGame(CheckersGame game, Player player){
+    public synchronized boolean isPlayerInGame(CheckersGame game, Player player) {
         return player.equals(game.getRedPlayer()) || player.equals(game.getWhitePlayer());
     }
+
 }

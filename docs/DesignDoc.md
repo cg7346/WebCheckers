@@ -238,7 +238,7 @@ This section describes the web interface flow; this is how the user views and in
 > For the model tier we aimed for 95% code coverage and for the UI Tier we aimed for 85% code coverage.
 > The figures shown below are the Jacoco analysis from the tests. 
 
-![The WebCheckers Unit Testing]()
+![The WebCheckers Unit Testing](overall-code-coverage.png)
 >
 >
 ![The WebCheckers Unit Testing](code-coverage-appl.png)
@@ -247,6 +247,6 @@ This section describes the web interface flow; this is how the user views and in
 ![The WebCheckers Unit Testing](model-code-coverage.png)
 >
 >
-![The WebCheckers Unit Testing]()
+![The WebCheckers Unit Testing](ui-code-coverage.png)
 >
 >
