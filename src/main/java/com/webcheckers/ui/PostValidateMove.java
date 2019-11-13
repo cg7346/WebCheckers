@@ -53,9 +53,7 @@ public class PostValidateMove implements Route {
         Player player = session.attribute("Player");
         CheckersGame game = gameManager.getGame(player);
         MoveValidator moveValidator = new MoveValidator(game);
-        //System.out.println("Move Validator made");
         String moveResponse = moveValidator.isInMoves(move);
-        System.out.println("Move response" + moveResponse);
         Message responseMessage = null;
         if(moveResponse.equals(moveValidator.validMove)){
             responseMessage = Message.info(moveResponse);

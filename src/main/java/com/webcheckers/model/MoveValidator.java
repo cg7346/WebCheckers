@@ -18,9 +18,6 @@ public class MoveValidator {
 
     //The game we are playing
     private CheckersGame game;
-    //The current turn to add moves to
-    //private Turn currentTurn;
-    //The current player for the Turn
 
     //Non jump moves that Red can Make
     private ArrayList<Move> singleRedMoves;
@@ -40,8 +37,6 @@ public class MoveValidator {
     public final String jumpAvail = "A jump is available";
     public final String invalidMove = "INVALID MOOOVE";
     public final String validMove = "Valid Move!";
-    public final String kingMove = "A king move has happened, " +
-            "either back up or submit turn";
     /**
      * Construct a move validator for the game to use
      * for the current turn;

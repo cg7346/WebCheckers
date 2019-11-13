@@ -82,6 +82,7 @@ public class PostSubmitTurn implements Route {
                 responseMessage = Message.error("Make move first");
             }else{
                 if (lastMove.hasPiece()){
+                    moveValidator.clearArrays();
                     lastMove = game.moveConverter(lastMove);
                     moveValidator.lookInSpace(lastMove.getEnd().getRow(), lastMove.getEnd().getCol());
                     if (moveValidator.areThereJumpMoves()) {
