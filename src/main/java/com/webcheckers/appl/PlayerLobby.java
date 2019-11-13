@@ -122,6 +122,11 @@ public class PlayerLobby {
         }
         return null;
     }
+
+    /**
+     * this function gets a player
+     * @return Player
+     */
     public Player getPlayer(){
         return this.player;
     }

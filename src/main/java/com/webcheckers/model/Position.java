@@ -36,7 +36,7 @@ public class Position {
 
     /**
      * getter for cell
-     * @return
+     * @return integer of column
      */
     public int getCol(){
         return this.cell;
@@ -65,6 +65,10 @@ public class Position {
         return Objects.hash(row, cell);
     }
 
+    /**
+     * this function overrised the toString method to return a wanted string
+     * @return String
+     */
     @Override
     public String toString(){
         return "(" + row + ", " + cell + ")";

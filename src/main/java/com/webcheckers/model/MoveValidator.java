@@ -88,11 +88,9 @@ public class MoveValidator {
             checkSingleMovesRed(row, col);
         }
         if(!isRed && isKing){
-            System.out.println("Looking for kings White");
             checkKingMoves(row, col, false);
         }
         if(isRed && isKing){
-            System.out.println("Looking for Kings Red");
             checkKingMoves(row, col, true);
         }
 
@@ -257,9 +255,10 @@ public class MoveValidator {
         move = isRed ? move : game.moveConverter(move);
         ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
         ArrayList<Move> jumps = isRed ? jumpRedMoves : jumpWhiteMoves;
+        System.out.println("ARE THERE JUMPS AVAILABLE: " + areThereJumpMoves());
         if (!game.hasValidMoveBeenMade()) {
             for (Move possibleMove : moves) {
-                System.out.println(possibleMove);
+                //System.out.println(possibleMove);
                 //TODO force jump before submit turn >:)
                 if (possibleMove.equals(move)) {
                     if (!areThereJumpMoves()) {
@@ -271,7 +270,7 @@ public class MoveValidator {
             }
             for (Move possibleMove : jumps) {
                 game.jumpIsPossible();
-                System.out.println(possibleMove);
+                //System.out.println(possibleMove);
                 if (possibleMove.equals(move)) {
                     return validMove;
                 }

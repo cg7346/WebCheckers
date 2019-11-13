@@ -39,7 +39,7 @@ public class PostSubmitTurn implements Route {
         //System.out.println("ValidatorCreated");
         MoveValidator moveValidator = new MoveValidator(game);
         Move lastMove = game.getLastMove();
-        Boolean isJumpPossible = game.isJumpPossible();
+        Boolean isJumpPossible = moveValidator.areThereJumpMoves();
         System.out.println(isJumpPossible);
         //System.out.println("LastMoveMade ->> " + lastMove);
         Message responseMessage = null;
@@ -47,6 +47,14 @@ public class PostSubmitTurn implements Route {
 //            responseMessage = Message.error(moveValidator.jumpAvail);
 //        } else
         if (lastMove != null){
+            if(lastMove.hasPiece()) {
+                System.out.println("AAAAAAHHHHHHHHH");
+                lastMove = game.moveConverter(lastMove);
+                moveValidator.lookInSpace(lastMove.getEnd().getRow(), lastMove.getEnd().getCol());
+//                if (moveValidator.areThereJumpMoves()){
+//                    response = Message.error()
+//                }
+            }
                 game.completeTurn();
                 responseMessage = Message.info(moveValidator.validMove);
         }else{

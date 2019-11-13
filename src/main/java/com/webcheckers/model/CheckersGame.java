@@ -307,6 +307,10 @@ public class CheckersGame {
         }
     }
 
+    /**
+     * this function is called to make a move
+     * @param move a move to make
+     */
     public void makeMove(Move move) {
         move = moveConverter(move);
         Position start = move.getStart();
@@ -338,19 +342,34 @@ public class CheckersGame {
     }
 
 
+    /**
+     * this function gets the latest move
+     * @return
+     */
     public Move getLastMove(){
         return currentTurn.lastMove();
     }
 
+    /**
+     * this function checks if a valid move has been made
+     * @return
+     */
     public boolean hasValidMoveBeenMade(){
         return currentTurn.hasSimpleMoveBeenMade();
     }
 
-
+    /**
+     * this function backs up a move
+     * @return
+     */
     public Piece backupLastMove(){
         return currentTurn.backupLastMove();
     }
 
+    /**
+     * this function checks if the turn is empty
+     * @return
+     */
     public boolean isTurnEmpty(){
         return currentTurn.isEmpty();
     }
@@ -367,7 +386,6 @@ public class CheckersGame {
      * @return
      */
     public boolean isJumpPossible(){
-        System.out.println("Is Jump Possible: Game " + currentTurn.isJumpPossible());
         return currentTurn.isJumpPossible();
     }
 

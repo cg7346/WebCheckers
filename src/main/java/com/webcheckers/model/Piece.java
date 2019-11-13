@@ -43,6 +43,10 @@ public class Piece {
         return pieceColor;
     }
 
+    /**
+     * this function checks if it is a red piece
+     * @return true or false
+     */
     public boolean isRedPiece(){
         return pieceColor == color.RED;
     }
