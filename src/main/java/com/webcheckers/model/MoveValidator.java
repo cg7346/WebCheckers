@@ -357,6 +357,7 @@ public class MoveValidator {
         return this.whiteCount;
     }
 
+
     /**
      * Gets the number of red pieces on the board
      * @return the number of red pieces on the board
