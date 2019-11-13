@@ -11,6 +11,7 @@ import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.Session;
 
 import java.util.Objects;
 
@@ -74,7 +75,6 @@ public class PostSubmitTurn implements Route {
                     }
                 }else{
                     game.completeTurn();
-                    game.checkForKings();
                     responseMessage = Message.info(moveValidator.validMove);
                 }
             }
