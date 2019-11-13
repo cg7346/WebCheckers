@@ -33,6 +33,7 @@ public class MoveValidator {
 
     public static Integer whiteCount = 0;
     public static Integer redCount = 0;
+
     public final String jumpAvail = "A jump is available";
     public final String invalidMove = "INVALID MOOOVE";
     public final String validMove = "Valid Move!";
@@ -350,4 +351,11 @@ public class MoveValidator {
         return false;
     }
 
+    public Integer getWhiteCount(){
+        return this.whiteCount;
+    }
+
+    public Integer getRedCount(){
+        return this.redCount;
+    }
 }

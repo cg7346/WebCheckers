@@ -55,7 +55,7 @@ public class PostSubmitTurn implements Route {
         } else if (moveValidator.isRedOut() && !moveValidator.isWhiteOut()) {
             game.setWinner(game.getWhitePlayer());
             String endGame;
-            if (moveValidator.redCount > 0) {
+            if (moveValidator.getRedCount() > 0) {
                 endGame = " has blocked all pieces, you won!";
             } else {
                 endGame = " has captured all pieces, you won!";
@@ -67,7 +67,7 @@ public class PostSubmitTurn implements Route {
         } else if (!moveValidator.isRedOut() && moveValidator.isWhiteOut()) {
             game.setWinner(game.getRedPlayer());
             String endGame;
-            if (moveValidator.whiteCount > 0) {
+            if (moveValidator.getWhiteCount() > 0) {
                 endGame = " has blocked all pieces, you won!";
             } else {
                 endGame = " has captured all pieces, you won!";
