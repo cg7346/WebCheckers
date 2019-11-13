@@ -346,6 +346,7 @@ public class CheckersGame {
         return currentTurn.hasSimpleMoveBeenMade();
     }
 
+
     public Piece backupLastMove(){
         return currentTurn.backupLastMove();
     }
@@ -366,6 +367,7 @@ public class CheckersGame {
      * @return
      */
     public boolean isJumpPossible(){
+        System.out.println("Is Jump Possible: Game " + currentTurn.isJumpPossible());
         return currentTurn.isJumpPossible();
     }
 

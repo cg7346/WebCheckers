@@ -22,7 +22,7 @@ public class Turn {
         moves = new Stack<>();
         removedPieces = new Stack<>();
         isJumpPossible = false;
-        this.hasSimpleMove = false;
+        hasSimpleMove = false;
     }
 
     public Move lastMove() {
@@ -41,6 +41,7 @@ public class Turn {
     public void addMove(Move m, Piece p)
     {
         moves.push(m.addPiece(p));
+        isJumpPossible = true;
         removedPieces.push(p);
     }
 
@@ -60,26 +61,30 @@ public class Turn {
      */
     public Piece backupLastMove()
     {
-        if(!moves.empty())
-        {
+        if(!moves.empty()) {
             moves.pop();
             hasSimpleMove = false;
             if(!removedPieces.empty()) {
+                System.out.println("Setting isJumpPossible to false");
+                isJumpPossible = false;
                 return removedPieces.pop();
             }
         }
+
         return null;
     }
 
     public boolean hasSimpleMoveBeenMade(){
         return hasSimpleMove;
     }
+
     /**
      * Sets to true when called, meaning
      * we found a jump on this turn and we need to do it
      */
     public void jumpIsPossible()
     {
+        System.out.println("Setting isJumpPossible to True");
         isJumpPossible = true;
     }
 
@@ -105,8 +110,7 @@ public class Turn {
      * Checks if the stack of moves is empty
      * @return true if empty, false if not
      */
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return moves.isEmpty();
     }
 }

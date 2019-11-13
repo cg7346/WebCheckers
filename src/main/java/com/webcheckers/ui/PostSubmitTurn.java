@@ -39,11 +39,16 @@ public class PostSubmitTurn implements Route {
         //System.out.println("ValidatorCreated");
         MoveValidator moveValidator = new MoveValidator(game);
         Move lastMove = game.getLastMove();
+        Boolean isJumpPossible = game.isJumpPossible();
+        System.out.println(isJumpPossible);
         //System.out.println("LastMoveMade ->> " + lastMove);
         Message responseMessage = null;
+//        if (isJumpPossible) {
+//            responseMessage = Message.error(moveValidator.jumpAvail);
+//        } else
         if (lastMove != null){
                 game.completeTurn();
-                responseMessage = Message.info("Valid Move!");
+                responseMessage = Message.info(moveValidator.validMove);
         }else{
             responseMessage = Message.error("Make move first");
         }

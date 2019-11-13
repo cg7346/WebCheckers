@@ -45,11 +45,11 @@ public class PostValidateMove implements Route {
             responseMessage = Message.info(moveResponse);
             game.keepLastMove(move);
             game.completeMove();
-            if(move.hasPiece()) {
-                //System.out.println("AAAAAAHHHHHHHHH");
-                move = game.moveConverter(move);
-                moveValidator.lookInSpace(move.getEnd().getRow(), move.getEnd().getCol());
-            }
+//            if(move.hasPiece()) {
+//                //System.out.println("AAAAAAHHHHHHHHH");
+//                move = game.moveConverter(move);
+//                moveValidator.lookInSpace(move.getEnd().getRow(), move.getEnd().getCol());
+//            }
             //game.checkForDoubleJump(move);
         }else {
             responseMessage = Message.error(moveResponse);

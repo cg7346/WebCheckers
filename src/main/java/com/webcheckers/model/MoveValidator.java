@@ -33,6 +33,8 @@ public class MoveValidator {
     public final String jumpAvail = "A jump is available";
     public final String invalidMove = "INVALID MOOOVE";
     public final String validMove = "Valid Move!";
+    public final String kingMove = "A king move has happened, " +
+            "either back up or submit turn";
     /**
      * Construct a move validator for the game to use
      * for the current turn;
@@ -55,7 +57,7 @@ public class MoveValidator {
      */
     public void lookForMoves(){
         clearArrays();
-        System.out.println("Looking for Moves");
+        //System.out.println("Looking for Moves");
         for (int row = 0; row < game.ROWS; row++) {
             for (int col = 0; col < game.COLS; col++) {
                 if (game.doesSpaceHavePiece(row, col)) {
@@ -76,7 +78,7 @@ public class MoveValidator {
      * @param col the column to look for the space
      */
     public void lookInSpace(int row, int col){
-        System.out.println("Looking in " + row + " " + col);
+        //System.out.println("Looking in " + row + " " + col);
         boolean isRed = game.isSpaceRedPiece(row, col);
         boolean isKing = game.isSpaceKingPiece(row, col);
         if(!isRed && !isKing){
@@ -134,7 +136,7 @@ public class MoveValidator {
      */
     public void checkKingMoves(int row, int col,  boolean isRed) {
         int rowUp = row - 1;
-        if (rowUp >= 8) {
+        if (rowUp >= 0) {
             checkColumns(row, col, rowUp, isRed);
         }
         int rowDown = row + 1;
@@ -179,9 +181,12 @@ public class MoveValidator {
         if(move != null) {
             if (move.hasPiece()) {
                 System.out.println("Adding to jumps " + move);
+//                if (!game.hasValidMoveBeenMade()) {
+//                    game.jumpIsPossible();
+//                }
                 jumpMoves.add(move);
             } else {
-                System.out.println("Adding to moves " + move);
+                //System.out.println("Adding to moves " + move);
                 singleMoves.add(move);
             }
         }
@@ -210,8 +215,6 @@ public class MoveValidator {
                 !isRed && game.isSpaceRedPiece(endRow, endCol)){
             isPieceOppositeColor = true;
         }
-        System.out.println("\t IS PIECE OPPOSITE COLOR" + isPieceOppositeColor);
-
         //case for when the the piece moves over one diagnol to empty space
         if (isEndValid){
             return  new Move(new Position(startRow, startCol), new Position(endRow, endCol));
@@ -256,25 +259,19 @@ public class MoveValidator {
         ArrayList<Move> jumps = isRed ? jumpRedMoves : jumpWhiteMoves;
         if (!game.hasValidMoveBeenMade()) {
             for (Move possibleMove : moves) {
-
                 System.out.println(possibleMove);
                 //TODO force jump before submit turn >:)
-                if (possibleMove.equals(move) && !game.isJumpPossible()) {
-                    // forces jump moves
-                    //System.out.println(!areThereJumpMoves());
-                    if (areThereJumpMoves()) {
-                        System.out.println("There are jump moves");
+                if (possibleMove.equals(move)) {
+                    if (!areThereJumpMoves()) {
+                        return validMove;
+                    } else {
                         return jumpAvail;
                     }
-                    return validMove;
                 }
             }
-
             for (Move possibleMove : jumps) {
-                System.out.println(possibleMove);
-                //if we see there is anything in the list of moves,
-                //mark it in our turn
                 game.jumpIsPossible();
+                System.out.println(possibleMove);
                 if (possibleMove.equals(move)) {
                     return validMove;
                 }
@@ -319,18 +316,6 @@ public class MoveValidator {
             lookInSpace(lastMove.getStart().getRow(), lastMove.getStart().getCol());
         }
     }
-
-//    /**
-//     * Checks to see if a double jump can be made from
-//     * a move
-//     * @param move the move to examine
-//     */
-//    public void checkForDoubleJump(Move move){
-//        if (move.hasPiece()){
-//            move = moveConverter(move);
-//            lookInSpace(move.getEnd().getRow(), move.getStart().getCol());
-//        }
-//    }
 
     /**
      * Creates new arrays for all moves to
