@@ -44,6 +44,7 @@ public class PostSubmitTurn implements Route {
             Message responseMessage = null;
             if (lastMove != null) {
                 game.completeTurn();
+                game.checkForKings();
                 responseMessage = Message.info("Valid Move!");
             } else {
                 responseMessage = Message.error("Make move first");

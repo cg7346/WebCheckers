@@ -95,7 +95,7 @@ public class GetGameRoute implements Route {
         this.activeTurnColor = activeColor.RED;
     }
 
-    enum viewMode {PLAY, SPECTATOR, REPLAY}
+    enum viewMode {PLAY, SPECTATOR}
 
 
     /**

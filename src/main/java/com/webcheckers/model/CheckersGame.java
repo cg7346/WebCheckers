@@ -584,15 +584,11 @@ public class CheckersGame {
         Position start = move.getStart();
         Piece piece = removePieceToMove(start.getRow(), start.getCol());
         Position end = move.getEnd();
+
         if (piece != null){
-            if(piece.isRedPiece() && end.getRow() == 0){
-                piece.makePieceKing();
-            }
-            if (!piece.isRedPiece() && end.getRow() == 7) {
-                piece.makePieceKing();
-            }
             addPiece(end.getRow(), end.getCol(), piece);
         }
+
         if(move.hasPiece()) {
             Position piecePos = new Position(move.getStart().getRow() + ((move.getEnd().getRow() - move.getStart().getRow()) / 2),
                     move.getStart().getCol() + ((move.getEnd().getCol() - move.getStart().getCol()) / 2));
@@ -685,6 +681,24 @@ public class CheckersGame {
 
     public boolean isGameOver() {
         return (modeOptionsAsJSON.containsKey("isGameOver") && modeOptionsAsJSON.get("isGameOver").equals(true));
+    }
+
+    public void checkForKings() {
+        for(int i = 0; i < board[0].length; i++)
+        {
+            Piece piece = board[0][i].getPiece();
+            if(piece != null && piece.getColor() == Piece.color.RED) {
+                piece.makePieceKing();
+            }
+        }
+        int last = board.length - 1;
+        for(int i = 0; i < board[last].length; i++)
+        {
+            Piece piece = board[last][i].getPiece();
+            if(piece != null && piece.getColor() == Piece.color.WHITE) {
+                piece.makePieceKing();
+            }
+        }
     }
 
 }
