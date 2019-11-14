@@ -38,7 +38,6 @@ public class Tree {
         Runnable makeTree = () -> {
             thinking = true;
             makeTree(TREE_DEPTH, root, root.game.isActivePlayerRed() ? Integer.MAX_VALUE : Integer.MIN_VALUE);
-            System.out.println("Game Tree done building");
             thinking = false;
         };
         new Thread(makeTree).start();
