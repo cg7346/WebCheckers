@@ -1,8 +1,9 @@
 package com.webcheckers.model;
-import java.util.List;
 
 /**
  * Player that uses the Tree to figure out what move to make.
+ *
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</>
  */
 public class AI {
 
@@ -19,7 +20,7 @@ public class AI {
 
     public Move makeTurn() {
         Tree tree = new Tree(game, moveValidator);
-        while (tree.isThinking()) {
+        while (tree.isCalculating()) {
             tree.addInLastMove(game);
         }
         return tree.bestMove();

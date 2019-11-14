@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 /**
  * Creates a game state tree and uses the minmax algo with AB pruning
+ *
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</>
  */
 public class Tree {
 
     private Node root;
 
-    private boolean thinking;
+    private boolean calculating;
 
     public enum Heuristic {
         A("A"), B("B");
@@ -25,6 +27,43 @@ public class Tree {
         }
     }
 
+    /**
+     * Node contains a board, the move used to get there, and the list of moves coming after.
+     */
+    private class Node {
+
+        final ArrayList<Node> nodeList;
+
+        final CheckersGame game;
+
+        final MoveValidator moveValidator;
+
+        final Move moveUsed;
+
+        int score;
+
+        /**
+         * @param game builds a node around the board
+         */
+        Node(CheckersGame game, MoveValidator moveValidator) {
+            this(game, moveValidator, null);
+        }
+
+        /**
+         * @param game game state to live at node
+         * @param move move used to get to this game state
+         */
+        Node(CheckersGame game, MoveValidator moveValidator, Move move) {
+            this.game = game;
+            this.moveValidator = moveValidator;
+            nodeList = new ArrayList<>();
+            moveUsed = move;
+            score = game.isActivePlayerRed() ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+
+        }
+
+    }
+
     public Heuristic heuristic;
 
     public static final int TREE_DEPTH = 3;
@@ -35,9 +74,9 @@ public class Tree {
      */
     public Tree(CheckersGame game, MoveValidator moveValidator) {
         root = new Node(game, moveValidator);
-        thinking = true;
+        calculating = true;
         makeTree(TREE_DEPTH, root, root.game.isActivePlayerRed() ? Integer.MAX_VALUE : Integer.MIN_VALUE);
-        thinking = false;
+        calculating = false;
     }
 
     /**
@@ -146,48 +185,8 @@ public class Tree {
         }
     }
 
-    public boolean isThinking() {
-        return thinking;
-    }
-
-    /**
-     * Node contains a board, the move used to get there, and the list of moves coming after.
-     */
-    private class Node {
-
-        final ArrayList<Node> nodeList;
-
-        final CheckersGame game;
-
-        final MoveValidator moveValidator;
-
-        final Move moveUsed;
-
-        int score;
-
-        /**
-         * @param game
-         *         builds a node around the board
-         */
-        Node(CheckersGame game, MoveValidator moveValidator) {
-            this(game, moveValidator, null);
-        }
-
-        /**
-         * @param game
-         *         game state to live at node
-         * @param move
-         *         move used to get to this game state
-         */
-        Node(CheckersGame game, MoveValidator moveValidator, Move move) {
-            this.game = game;
-            this.moveValidator = moveValidator;
-            nodeList = new ArrayList<>();
-            moveUsed = move;
-            score = game.isActivePlayerRed() ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-
-        }
-
+    public boolean isCalculating() {
+        return calculating;
     }
 }
 
