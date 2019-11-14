@@ -2,13 +2,9 @@ package com.webcheckers.model;
 import java.util.List;
 
 /**
- * Player that uses the GameTree to figure out what move to make.
+ * Player that uses the Tree to figure out what move to make.
  */
 public class AI {
-
-    private Tree tree;
-
-    private Tree.Heuristic heuristic;
 
     private CheckersGame game;
     private MoveValidator moveValidator;
@@ -21,16 +17,16 @@ public class AI {
         this.moveValidator = moveValidator;
     }
 
-    /**
-     * @param heuristic
-     *         heuristic to use for this AI
-     */
-    public AI(Tree.Heuristic heuristic) {
-        this.heuristic = heuristic;
-    }
+//    /**
+//     * @param heuristic
+//     *         heuristic to use for this AI
+//     */
+//    public AI(Tree.Heuristic heuristic) {
+//        this.heuristic = heuristic;
+//    }
 
     public Move makeTurn(final List<Move> availableMoves) {
-        tree = new Tree(game, moveValidator);
+        Tree tree = new Tree(game, moveValidator);
         while (tree.isThinking()) {
             //turns the board string into only the last move
             tree.addInLastMove(game);

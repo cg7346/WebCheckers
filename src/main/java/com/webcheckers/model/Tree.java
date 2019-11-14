@@ -3,13 +3,13 @@ package com.webcheckers.model;
 import java.util.ArrayList;
 
 /**
- * MiniMax Tree with Alpha Beta Pruning
+ * Creates a game state tree and uses the minmax algo with AB pruning
  */
 public class Tree {
 
     private Node root;
 
-    private boolean thinking = true;
+    private boolean thinking;
 
     public enum Heuristic {
         A("A"), B("B");
@@ -35,12 +35,12 @@ public class Tree {
      */
     public Tree(CheckersGame game, MoveValidator moveValidator) {
         root = new Node(game, moveValidator);
-        Runnable makeTree = () -> {
-            thinking = true;
-            makeTree(TREE_DEPTH, root, root.game.isActivePlayerRed() ? Integer.MAX_VALUE : Integer.MIN_VALUE);
-            thinking = false;
-        };
-        new Thread(makeTree).start();
+        //Runnable makeTree = () -> {
+        thinking = true;
+        makeTree(TREE_DEPTH, root, root.game.isActivePlayerRed() ? Integer.MAX_VALUE : Integer.MIN_VALUE);
+        thinking = false;
+       // };
+//        new Thread(makeTree).start();
     }
 
     /**
@@ -195,12 +195,12 @@ public class Tree {
 
         }
 
-        /**
-         * @return the move used to get there as the identifying feature.
-         */
-        public final String toString() {
-            return moveUsed == null ? "no move" : moveUsed.toString() + ", score " + score;
-        }
+//        /**
+//         * @return the move used to get there as the identifying feature.
+//         */
+//        public final String toString() {
+//            return moveUsed == null ? "no move" : moveUsed.toString() + ", score " + score;
+//        }
     }
 }
 
