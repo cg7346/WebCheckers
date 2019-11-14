@@ -14,9 +14,12 @@ import java.util.Objects;
 
 public class PostSubmitTurn implements Route {
 
-    private PlayerLobby playerLobby;
     private GameManager gameManager;
     private final Gson gson;
+
+    public static Boolean AI = false;
+    static final String MESSAGE_ERR = "message error";
+
 
     /**
      * Construct a Post Submit Turn
@@ -24,7 +27,6 @@ public class PostSubmitTurn implements Route {
      * @param gameManager GameManager of the session
      */
     public PostSubmitTurn(PlayerLobby playerLobby, GameManager gameManager, Gson gson){
-        this.playerLobby = Objects.requireNonNull(playerLobby, "player lobby is required");
         this.gameManager = Objects.requireNonNull(gameManager, "game manager is required");
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
@@ -43,12 +45,18 @@ public class PostSubmitTurn implements Route {
         Player player = session.attribute("Player");
         CheckersGame game = gameManager.getGame(player);
         MoveValidator moveValidator = new MoveValidator(game);
+        if (game.getWhitePlayer().getName().equals("AI")) {
+            AI = true;
+        }
         //System.out.println("LastMoveMade ->> " + lastMove);
         Message responseMessage = null;
         moveValidator.lookForMoves();
         if (moveValidator.isRedOut() && moveValidator.isWhiteOut()) {
             game.setTie(true);
             responseMessage = Message.info("The game has ended in a tie.");
+            if (AI) {
+                gameManager.removeGame(game);
+            }
         } else if (moveValidator.isRedOut() && !moveValidator.isWhiteOut()) {
             game.setWinner(game.getWhitePlayer());
             String endGame;
@@ -61,6 +69,9 @@ public class PostSubmitTurn implements Route {
             responseMessage = Message.info(message);
             GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
             GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", message);
+            if (AI) {
+                gameManager.removeGame(game);
+            }
         } else if (!moveValidator.isRedOut() && moveValidator.isWhiteOut()) {
             game.setWinner(game.getRedPlayer());
             String endGame;
@@ -73,6 +84,9 @@ public class PostSubmitTurn implements Route {
             responseMessage = Message.info(message);
             GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
             GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", message);
+            if (AI) {
+                gameManager.removeGame(game);
+            }
         } else {
             Move lastMove = game.getLastMove();
             if (lastMove == null){
@@ -92,9 +106,9 @@ public class PostSubmitTurn implements Route {
                     game.completeTurn();
                     responseMessage = Message.info(moveValidator.validMove);
                 }
-                if (game.getWhitePlayer().getName().equals("AI")) {
+                if (AI) {
                     AI ai = new AI(game, moveValidator);
-                    Move aiMove = ai.makeTurn(moveValidator.getMovesForWhite());
+                    Move aiMove = ai.makeTurn();
                     System.out.println(aiMove);
                     game.makeMove(aiMove);
                     game.completeTurn();

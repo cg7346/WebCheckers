@@ -35,12 +35,9 @@ public class Tree {
      */
     public Tree(CheckersGame game, MoveValidator moveValidator) {
         root = new Node(game, moveValidator);
-        //Runnable makeTree = () -> {
         thinking = true;
         makeTree(TREE_DEPTH, root, root.game.isActivePlayerRed() ? Integer.MAX_VALUE : Integer.MIN_VALUE);
         thinking = false;
-       // };
-//        new Thread(makeTree).start();
     }
 
     /**
@@ -63,13 +60,11 @@ public class Tree {
     }
 
     /**
-     * takes in a string representing the last move and makes the change to the set of boards in memory
-     *
-     * @param game
+     * takes in the game and makes the change to the set of game states
+     * @param game the webcheckers game
      */
     public final void addInLastMove(CheckersGame game) {
 
-        //update the tree
         Move move = game.getLastMove();
         for (Node node : root.nodeList) {
             if (node.moveUsed.equals(move)) {
@@ -80,8 +75,6 @@ public class Tree {
         }
         Node node = new Node(root.game, root.moveValidator, move);
         node.score = score(node.moveValidator, heuristic);
-
-        //garbage collection here if possible?
 
         root = node;
 
@@ -96,7 +89,7 @@ public class Tree {
             return null;
         }
         Node max = root.nodeList.get(0);
-        if (root.game.isActivePlayerRed()) {
+        if (!root.game.isActivePlayerRed()) {
             for (Node node : root.nodeList) {
                 if (max.score < node.score) {
                     max = node;
@@ -110,13 +103,13 @@ public class Tree {
             }
         }
         root = max;
-        makeTree(TREE_DEPTH, root, root.game.isActivePlayerRed() ? Integer.MAX_VALUE : Integer.MIN_VALUE);
+        makeTree(TREE_DEPTH, root, !root.game.isActivePlayerRed() ? Integer.MAX_VALUE : Integer.MIN_VALUE);
         return max.moveUsed;
     }
 
     /**
      * @param layersDeep
-     *         number of layers to check (-1 will fully populate tree)
+     *         number of layers to check (-1 will fully make the tree)
      * @param node
      *         node being looked at right now
      */
@@ -195,12 +188,6 @@ public class Tree {
 
         }
 
-//        /**
-//         * @return the move used to get there as the identifying feature.
-//         */
-//        public final String toString() {
-//            return moveUsed == null ? "no move" : moveUsed.toString() + ", score " + score;
-//        }
     }
 }
 

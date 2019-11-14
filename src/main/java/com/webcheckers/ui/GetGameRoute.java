@@ -117,8 +117,12 @@ public class GetGameRoute implements Route {
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
         Map<String, Object> vm = new HashMap<>();
-        if (game == null) {
+        if (game == null && !PostSubmitTurn.AI) {
             game = handleNewGame(request, response, currentPlayer);
+        } else if (game == null && PostSubmitTurn.AI) {
+            response.redirect(WebServer.HOME_URL);
+            halt();
+            return null;
         } else {
             if (game.getResignedPlayer() != null) {
                 modeOptionsAsJSON.put("isGameOver", true);

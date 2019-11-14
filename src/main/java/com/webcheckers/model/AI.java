@@ -17,18 +17,9 @@ public class AI {
         this.moveValidator = moveValidator;
     }
 
-//    /**
-//     * @param heuristic
-//     *         heuristic to use for this AI
-//     */
-//    public AI(Tree.Heuristic heuristic) {
-//        this.heuristic = heuristic;
-//    }
-
-    public Move makeTurn(final List<Move> availableMoves) {
+    public Move makeTurn() {
         Tree tree = new Tree(game, moveValidator);
         while (tree.isThinking()) {
-            //turns the board string into only the last move
             tree.addInLastMove(game);
         }
         return tree.bestMove();
