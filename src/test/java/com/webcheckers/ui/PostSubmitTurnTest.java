@@ -74,4 +74,12 @@ public class PostSubmitTurnTest {
             //squahs
         }
     }
+
+    @Test
+    void test_TwoValidJumps(){
+        when(mockGame.getLastMove()).thenReturn(mock(Move.class));
+        when(mock(Move.class).hasPiece()).thenReturn(true);
+
+
+    }
 }
