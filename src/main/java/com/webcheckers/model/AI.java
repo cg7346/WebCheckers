@@ -20,9 +20,8 @@ public class AI {
 
     public Move makeTurn() {
         Tree tree = new Tree(game, moveValidator);
-        while (tree.isCalculating()) {
-            tree.addInLastMove(game);
-        }
+        tree.addInLastMove(game);
+
         return tree.bestMove();
     }
 
