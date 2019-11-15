@@ -67,20 +67,24 @@ public class GetGameRoute implements Route {
         if (!request.queryParams().isEmpty()) {
             String opponentName = request.queryParams(OPP_USER);
             Player chosenOpponent = playerLobby.findPlayer(opponentName);
-            if (chosenOpponent == null) {
-                response.redirect(WebServer.HOME_URL);
-                halt();
-                return null;
-            }
-            if (playerLobby.isInGame(chosenOpponent)) {
-                //we will send an error
-                Message er = Message.error(PLAYER_IN_GAME);
-                session.attribute(MESSAGE_ERR, er);
-                response.redirect(WebServer.HOME_URL);
-                halt();
-                return null;
+            if (opponentName.equals("AI")) {
+                game = gameManager.makeGame(currentPlayer, new Player("AI"));
             } else {
-                game = gameManager.makeGame(currentPlayer, chosenOpponent);
+                if (chosenOpponent == null) {
+                    response.redirect(WebServer.HOME_URL);
+                    halt();
+                    return null;
+                }
+                if (playerLobby.isInGame(chosenOpponent)) {
+                    //we will send an error
+                    Message er = Message.error(PLAYER_IN_GAME);
+                    session.attribute(MESSAGE_ERR, er);
+                    response.redirect(WebServer.HOME_URL);
+                    halt();
+                    return null;
+                } else {
+                    game = gameManager.makeGame(currentPlayer, chosenOpponent);
+                }
             }
         }
         return game;
@@ -113,8 +117,12 @@ public class GetGameRoute implements Route {
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
         Map<String, Object> vm = new HashMap<>();
-        if (game == null) {
+        if (game == null && !PostSubmitTurn.AI) {
             game = handleNewGame(request, response, currentPlayer);
+        } else if (game == null && PostSubmitTurn.AI) {
+            response.redirect(WebServer.HOME_URL);
+            halt();
+            return null;
         } else {
             if (game.getResignedPlayer() != null) {
                 modeOptionsAsJSON.put("isGameOver", true);

@@ -17,13 +17,17 @@ import static org.testng.AssertJUnit.assertFalse;
 @Tag("Model-Tier")
 public class TurnTest {
     private Player activePlayer;
-    private Turn CuT;
-
+    private Turn turn;
+    public Stack<Move> moves;
+    public Stack<Move> testingMoves;
+    public Stack<Move> emptyMoves;
+    private Stack<Piece> removedPieces;
+    private boolean isJumpPossible;
 
     @BeforeEach
     void setup(){
         this.activePlayer = mock(Player.class);
-        this.CuT = new Turn(activePlayer);
+        this.turn = new Turn(activePlayer);
     }
 
     /**
@@ -31,12 +35,12 @@ public class TurnTest {
      */
     @Test
     void test_last_move(){
-        assertNull(CuT.lastMove(), "Something wrong with last move function");
+        assertNull(turn.lastMove(), "Something wrong with last move function");
         Position start = new Position(1,2);
         Position end = new Position(2, 4);
         Move move = mock(Move.class);
-        CuT.addMove(move);
-        assertNotNull(CuT.lastMove(), "Something wrong with last move function");
+        turn.addMove(move);
+        assertNotNull(turn.lastMove(), "Something wrong with last move function");
 
     }
 
@@ -50,9 +54,9 @@ public class TurnTest {
         Position end = new Position(2, 4);
         Piece piece = new Piece(1);
         Move m = new Move(start, end);
-        CuT.addMove(m, piece);
+        turn.addMove(m, piece);
 
-        assertNotNull(CuT.getMoves(), "adding moves not working");
+        assertNotNull(turn.getMoves(), "adding moves not working");
 
 
     }
@@ -66,9 +70,9 @@ public class TurnTest {
         Position end = new Position(2, 4);
         Piece piece = new Piece(1);
         Move m = new Move(start, end);
-        CuT.addMove(m, piece);
-        assertEquals(piece, CuT.backupLastMove(), "backup not working");
-        assertNull(CuT.backupLastMove());
+        turn.addMove(m, piece);
+        assertEquals(piece, turn.backupLastMove(), "backup not working");
+        assertNull(turn.backupLastMove());
 
     }
 
@@ -77,9 +81,9 @@ public class TurnTest {
      */
     @Test
     void test_is_jump_possible(){
-        assertFalse(CuT.isJumpPossible());
-        CuT.jumpIsPossible();
-        assertTrue(CuT.isJumpPossible());
+        assertFalse(turn.isJumpPossible());
+        turn.jumpIsPossible();
+        assertTrue(turn.isJumpPossible());
     }
 
     /**
@@ -87,22 +91,12 @@ public class TurnTest {
      */
     @Test
     void test_is_empty(){
-        assertTrue(CuT.isEmpty());
+        assertTrue(turn.isEmpty());
         Position start = new Position(1,2);
         Position end = new Position(2, 4);
         Piece piece = new Piece(1);
         Move m = new Move(start, end);
-        CuT.addMove(m, piece);
-        assertFalse(CuT.isEmpty());
-    }
-
-    @Test
-    void test_hasSimpleMoveBeenMade(){
-        assertFalse(CuT.hasSimpleMoveBeenMade());
-        Move m = mock(Move.class);
-        CuT.addMove(m);
-        assertTrue(CuT.hasSimpleMoveBeenMade());
-        CuT.backupLastMove();
-        assertFalse(CuT.hasSimpleMoveBeenMade());
+        turn.addMove(m, piece);
+        assertFalse(turn.isEmpty());
     }
 }

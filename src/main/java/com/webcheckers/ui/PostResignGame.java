@@ -98,6 +98,9 @@ public class PostResignGame implements Route {
             GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
             GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", resignPlayer.getName() + " has resigned.");
             response.body(gson.toJson(resignMessage(resignPlayer)));
+            if (game.getWhitePlayer().getName().equals("AI")) {
+                gameManager.removeGame(game);
+            }
             return gson.toJson(resignMessage(resignPlayer));
         }
     }

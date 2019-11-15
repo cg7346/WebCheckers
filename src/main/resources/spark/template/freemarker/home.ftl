@@ -24,7 +24,7 @@
         <h2>${playersOnline}</h2>
         <form action="./game">
         <ol>
-
+            <button name = "opp_user" type="submit" value="AI">AI</button>
             <#list userList as user>
                 <#if user == current>
 <#--                    <button name = "name" type="submit" disabled="true" value=${user}>${user}</button>-->
