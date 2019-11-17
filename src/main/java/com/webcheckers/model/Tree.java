@@ -11,8 +11,6 @@ public class Tree {
 
     private Node root;
 
-    private boolean calculating;
-
     public enum Heuristic {
         A("A"), B("B");
 
@@ -74,9 +72,7 @@ public class Tree {
      */
     public Tree(CheckersGame game, MoveValidator moveValidator) {
         root = new Node(game, moveValidator);
-        calculating = true;
         makeTree(TREE_DEPTH, root, root.game.isActivePlayerRed() ? Integer.MAX_VALUE : Integer.MIN_VALUE);
-        calculating = false;
     }
 
     /**
@@ -185,8 +181,5 @@ public class Tree {
         }
     }
 
-    public boolean isCalculating() {
-        return calculating;
-    }
 }
 
