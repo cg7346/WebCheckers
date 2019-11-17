@@ -115,6 +115,9 @@ public class PostSignInRoute implements Route {
             } else if (!playerLobby.isNewPlayer(player)) {
                 // error checking for taken username
                 mv = error(vm, makeTakenUsrMessage());
+            } else if (player.getName().equals("AI")) {
+                // error checking for taken username
+                mv = error(vm, makeTakenUsrMessage());
             } else {
                 // Adds the player to the playerLobby and redirects them to
                 // home, signed in
