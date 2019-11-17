@@ -66,10 +66,12 @@ public class GetGameRoute implements Route {
         modeOptionsAsJSON = new HashMap<>(2);
         if (!request.queryParams().isEmpty()) {
             String opponentName = request.queryParams(OPP_USER);
-            Player chosenOpponent = playerLobby.findPlayer(opponentName);
-            if (opponentName.equals("AI")) {
-                game = gameManager.makeGame(currentPlayer, new Player("AI"));
-            } else {
+            Player chosenOpponent = opponentName.equals("AI") ?
+                    new Player("AI") : playerLobby.findPlayer(opponentName);
+            System.out.println(chosenOpponent);
+//            if (opponentName.equals("AI")) {
+//                game = gameManager.makeGame(currentPlayer, new Player("AI"));
+//            } else {
                 if (chosenOpponent == null) {
                     response.redirect(WebServer.HOME_URL);
                     halt();
@@ -86,7 +88,7 @@ public class GetGameRoute implements Route {
                     game = gameManager.makeGame(currentPlayer, chosenOpponent);
                 }
             }
-        }
+//        }
         return game;
     }
 
