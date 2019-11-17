@@ -286,7 +286,7 @@ public class CheckersGame {
     public Move moveConverter (Move oldMove){
         Position start = oldMove.getStart();
         Position end = oldMove.getEnd();
-        if (!isActivePlayerRed()){
+        if (!isActivePlayerRed() && !whitePlayer.getName().equals("AI")){
             Position convertedStart = new Position(
                     ROWS - start.getRow() - 1,
                     start.getCol());
@@ -320,6 +320,7 @@ public class CheckersGame {
     }
 
     public void makeMove(Move move) {
+        System.out.println(activePlayer.getName() + " made " + move);
         move = moveConverter(move);
         Position start = move.getStart();
         Piece piece = removePieceToMove(start.getRow(), start.getCol());
