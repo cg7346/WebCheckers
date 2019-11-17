@@ -152,9 +152,10 @@ public class Tree {
         if (!node.game.isGameOver() && layersDeep != 0) {
             if (node.nodeList.isEmpty()) {
                 for (Move move : node.moveValidator.getMovesForWhite()) {
+                    System.out.println("Tree Move " + move);
                     CheckersGame game = node.game;
                     MoveValidator moveValidator = node.moveValidator;
-                    game.makeMove(move);
+                    //game.makeMove(move);
 
                     Node newNode = new Node(game, moveValidator, move);
                     node.nodeList.add(newNode);

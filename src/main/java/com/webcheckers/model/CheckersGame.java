@@ -284,20 +284,22 @@ public class CheckersGame {
      * the active player is red (no conversion need)
      */
     public Move moveConverter (Move oldMove){
-        Position start = oldMove.getStart();
-        Position end = oldMove.getEnd();
-        if (!isActivePlayerRed() && !whitePlayer.getName().equals("AI")){
-            Position convertedStart = new Position(
-                    ROWS - start.getRow() - 1,
-                    start.getCol());
-            Position convertedEnd = new Position(
-                    ROWS - end.getRow() - 1,
-                    end.getCol());
-            Move convertedMove = new Move(convertedStart, convertedEnd);
-            if (oldMove.hasPiece()) {
-                convertedMove.addPiece(oldMove.getPiece());
+        if(!whitePlayer.getName().equals("AI")) {
+            Position start = oldMove.getStart();
+            Position end = oldMove.getEnd();
+            if (!isActivePlayerRed()) {
+                Position convertedStart = new Position(
+                        ROWS - start.getRow() - 1,
+                        start.getCol());
+                Position convertedEnd = new Position(
+                        ROWS - end.getRow() - 1,
+                        end.getCol());
+                Move convertedMove = new Move(convertedStart, convertedEnd);
+                if (oldMove.hasPiece()) {
+                    convertedMove.addPiece(oldMove.getPiece());
+                }
+                return convertedMove;
             }
-            return convertedMove;
         }
         return oldMove;
     }
@@ -320,7 +322,7 @@ public class CheckersGame {
     }
 
     public void makeMove(Move move) {
-        System.out.println(activePlayer.getName() + " made " + move);
+        //System.out.println(activePlayer.getName() + " made " + move);
         move = moveConverter(move);
         Position start = move.getStart();
         Piece piece = removePieceToMove(start.getRow(), start.getCol());
