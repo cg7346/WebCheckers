@@ -2,9 +2,7 @@ package com.webcheckers.ui;
 
 import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
-import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
-import com.webcheckers.model.Move;
 import com.webcheckers.model.MoveValidator;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
@@ -13,11 +11,8 @@ import spark.Response;
 import spark.Route;
 import spark.Session;
 
-import java.nio.file.WatchEvent;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-
-import static spark.Spark.halt;
 
 /**
  * The {@code POST /checkTurn} route handler

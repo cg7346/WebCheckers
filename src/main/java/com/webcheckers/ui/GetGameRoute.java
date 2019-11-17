@@ -66,6 +66,11 @@ public class GetGameRoute implements Route {
         modeOptionsAsJSON = new HashMap<>(2);
         if (!request.queryParams().isEmpty()) {
             String opponentName = request.queryParams(OPP_USER);
+            if (opponentName == null) {
+                response.redirect(WebServer.HOME_URL);
+                halt();
+                return null;
+            }
             Player chosenOpponent = opponentName.equals("AI") ?
                     new Player("AI") : playerLobby.findPlayer(opponentName);
             System.out.println(chosenOpponent);
@@ -119,12 +124,8 @@ public class GetGameRoute implements Route {
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
         Map<String, Object> vm = new HashMap<>();
-        if (game == null && !PostSubmitTurn.AI) {
+        if (game == null) {
             game = handleNewGame(request, response, currentPlayer);
-        } else if (game == null && PostSubmitTurn.AI) {
-            response.redirect(WebServer.HOME_URL);
-            halt();
-            return null;
         } else {
             if (game.getResignedPlayer() != null) {
                 modeOptionsAsJSON.put("isGameOver", true);

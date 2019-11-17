@@ -29,6 +29,7 @@ public class PostResignGame implements Route {
 
     // Values used in the mode options for JSON after the resign button is clicked
     private static final String RESIGN = "%s has resigned.";
+    private static final String MESSAGE_ERR = "message error";
 
     //
     // Constructor
@@ -100,6 +101,8 @@ public class PostResignGame implements Route {
             response.body(gson.toJson(resignMessage(resignPlayer)));
             if (game.getWhitePlayer().getName().equals("AI")) {
                 gameManager.removeGame(game);
+                Message er = Message.error(String.format(RESIGN, resignPlayer.getName()));
+                session.attribute(MESSAGE_ERR, er);
             }
             return gson.toJson(resignMessage(resignPlayer));
         }
