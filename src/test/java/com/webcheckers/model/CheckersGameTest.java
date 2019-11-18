@@ -237,12 +237,73 @@ class CheckersGameTest {
         Move downRight = new Move(redStart, new Position(5, 2));
         RedCuT.keepLastMove(downRight);
         RedCuT.completeMove();
-        System.out.println(RedCuT.isActivePlayerRed());
-        //assertTrue(RedCuT.doesSpaceHavePiece(2, 2));
+        //System.out.println(RedCuT.isActivePlayerRed());
+        assertFalse(RedCuT.doesSpaceHavePiece(2, 2));
         assertTrue(!RedCuT.isSpaceRedPiece(2, 2));
         assertFalse(RedCuT.doesSpaceHavePiece(1, 3));
     }
 
+    @Test
+    void jumpMove(){
+        removeAllPiece();
+        RedCuT.addPiece(1, 4, whiteP);
+        RedCuT.addPiece(2, 5, redP);
+        Position rStart = new Position(2, 5);
+        Move upLeft = new Move(rStart, new Position(0, 3));
+        RedCuT.keepLastMove(upLeft);
+        RedCuT.completeMove();
+        assertFalse(RedCuT.doesSpaceHavePiece(1, 4));
+        assertFalse(RedCuT.doesSpaceHavePiece(2, 5));
+        assertTrue(RedCuT.isSpaceRedPiece(0, 3));
+    }
+
+    @Test
+    void completeTurnRedKing(){
+        removeAllPiece();
+        RedCuT.addPiece(1, 2, redP);
+        Position rStart = new Position(1, 2);
+        Move toKing = new Move(rStart, new Position(0, 1));
+        RedCuT.keepLastMove(toKing);
+        RedCuT.completeTurn();
+        assertFalse(RedCuT.doesSpaceHavePiece(1, 2));
+        assertTrue(RedCuT.isSpaceRedPiece(0, 1));
+        assertTrue(RedCuT.isSpaceKingPiece(0, 1));
+    }
+
+    @Test
+    void completeTurnWhiteKing(){
+        removeAllPiece();
+        RedCuT.addPiece(6, 1, whiteP);
+        Position wStart = new Position(6, 1);
+        Move toKing = new Move(wStart, new Position(7, 0));
+        RedCuT.keepLastMove(toKing);
+        RedCuT.completeTurn();
+        RedCuT.checkForKings();
+        assertFalse(RedCuT.doesSpaceHavePiece(6, 7));
+        assertFalse(RedCuT.isSpaceRedPiece(7, 6));
+        assertTrue(RedCuT.isSpaceKingPiece(7, 0));
+
+    }
+
+    @Test
+    void startGameBooleans(){
+        assertFalse(RedCuT.isTie());
+        assertFalse(RedCuT.isGameOver());
+        assertNull(RedCuT.getWinner());
+    }
+
+    @Test
+    void tieGame(){
+        RedCuT.setTie(true);
+        assertTrue(RedCuT.isTie());
+    }
+
+    @Test
+    void setWinner(){
+        RedCuT.setWinner(p1);
+        assertTrue(RedCuT.isGameOver());
+        assertEquals(p1, RedCuT.getWinner());
+    }
 
 //    @Test
 //    void test_simpleMove(){
