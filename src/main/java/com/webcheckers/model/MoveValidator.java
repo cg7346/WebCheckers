@@ -65,7 +65,6 @@ public class MoveValidator {
      */
     public void lookForMoves(){
         clearArrays();
-        //System.out.println("Looking for Moves");
         for (int row = 0; row < game.ROWS; row++) {
             for (int col = 0; col < game.COLS; col++) {
                 if (game.doesSpaceHavePiece(row, col)) {
@@ -86,7 +85,6 @@ public class MoveValidator {
      * @param col the column to look for the space
      */
     public void lookInSpace(int row, int col){
-        //System.out.println("Looking in " + row + " " + col);
         boolean isRed = game.isSpaceRedPiece(row, col);
         boolean isKing = game.isSpaceKingPiece(row, col);
         if(!isRed && !isKing){
@@ -147,14 +145,11 @@ public class MoveValidator {
     public void checkKingMoves(int row, int col,  boolean isRed) {
         int rowUp = row - 1;
         if (rowUp >= 0) {
-            checkColumns(row, col, rowUp, isRed);
-        }
+            checkColumns(row, col, rowUp, isRed); }
         int rowDown = row + 1;
         if (rowDown < 8) {
-            checkColumns(row, col, rowDown, isRed);
-        }
+            checkColumns(row, col, rowDown, isRed); }
     }
-
 
     /**
      * Checks both side the columns to the left and right of a piece
@@ -190,7 +185,6 @@ public class MoveValidator {
                               ArrayList<Move> jumpMoves){
         if(move != null) {
             if (move.hasPiece()) {
-
                 jumpMoves.add(move);
             } else {
                 singleMoves.add(move);
@@ -270,8 +264,7 @@ public class MoveValidator {
                         return validMove;
                     } else {
                         return jumpAvail;
-                    }
-                }
+                    } }
             }
             for (Move possibleMove : jumps) {
                 game.jumpIsPossible();
@@ -377,7 +370,7 @@ public class MoveValidator {
      */
     public final List<Move> getMovesForRed() {
         lookForMoves();
-        java.util.List<Move> moves = new ArrayList<>();
+        List<Move> moves = new ArrayList<>();
         if (jumpRedMoves.isEmpty()) {
             moves.addAll(singleRedMoves);
         } else {
@@ -391,7 +384,7 @@ public class MoveValidator {
      */
     public final List<Move> getMovesForWhite() {
         lookForMoves();
-        java.util.List<Move> moves = new ArrayList<>();
+        List<Move> moves = new ArrayList<>();
         if (jumpWhiteMoves.isEmpty()) {
             moves.addAll(singleWhiteMoves);
         } else {
