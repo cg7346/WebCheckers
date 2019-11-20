@@ -215,7 +215,7 @@ public class MoveValidatorTest {
 //    @Test
 //    void singleBackup(){
 //        //pretend we already moved the piece up 1 diagnol and
-//        // we want to back up 
+//        // we want to back up
 //        setActivePlayer(true);
 //        makePiece(5, 6, true, false);
 //        makeValid(6, 5);
@@ -233,65 +233,104 @@ public class MoveValidatorTest {
 //        assertEquals(CuT.validMove, CuT.isInMoves(otherMove));
 //    }
 
-    @Test
-    void outNoPiecesR() {
-        //No White Pieces
-        makePiece(7, 6, true, true);
-        makeValid(6, 5);
-        makeValid(6, 7);
-        CuT.lookForMoves();
-        assertFalse(CuT.isRedOut(),
-                "Red has a piece with moves, should not be out");
-        assertTrue(CuT.isWhiteOut(),
-                "White has no pieces, should be out");
-    }
-    @Test
-    void outNoPiecesW(){
-        //No Red Pieces
-        allInvalid();
-        makePiece(0, 1, false, false);
-        makeValid(1, 0);
-        makeValid(1, 2);
-        CuT.lookForMoves();
-        assertFalse(CuT.isWhiteOut(),
-                "White has a piece with moves, should not be out");
-        assertTrue(CuT.isRedOut(),
-                "Red has no pieces, should be out");
-    }
+//    @Test
+//    void outNoPiecesR() {
+//        //No White Pieces
+//        makePiece(7, 6, true, true);
+//        makeValid(6, 5);
+//        makeValid(6, 7);
+//        CuT.lookForMoves();
+//        assertFalse(CuT.isRedOut(),
+//                "Red has a piece with moves, should not be out");
+//        assertTrue(CuT.isWhiteOut(),
+//                "White has no pieces, should be out");
+//    }
+//    @Test
+//    void outNoPiecesW(){
+//        //No Red Pieces
+//        allInvalid();
+//        makePiece(0, 1, false, false);
+//        makeValid(1, 0);
+//        makeValid(1, 2);
+//        CuT.lookForMoves();
+//        assertFalse(CuT.isWhiteOut(),
+//                "White has a piece with moves, should not be out");
+//        assertTrue(CuT.isRedOut(),
+//                "Red has no pieces, should be out");
+//    }
+//
+//    @Test
+//    void Counts(){
+//        //No pieces
+//        assertSame(0, CuT.getWhiteCount(),
+//                "There are no white pieces yet");
+//        assertSame(0, CuT.getRedCount(),
+//                "There are no red pieces yet");
+//
+//        //1 Piece
+//        makePiece(0, 1, false, false);
+//        makePiece(7, 6, true, false);
+//        CuT.lookForMoves();
+//        assertSame(1, CuT.getWhiteCount(),
+//                "There is 1 white Piece");
+//        assertSame(1, CuT.getRedCount(),
+//                "There is 1 red Piece");
+//
+//        //King Piece
+//        makePiece(0, 3, true, true);
+//        makePiece(7, 4, false, false);
+//        CuT.lookForMoves();
+//        assertSame(2, CuT.getWhiteCount(),
+//                "White should count King Piece");
+//        assertSame(2, CuT.getRedCount(),
+//                "Red should count King Piece");
+//
+//        //Uneven amount of Pieces
+//        makePiece(0, 5, false, false);
+//        CuT.lookForMoves();
+//        assertSame(3, CuT.getWhiteCount(),
+//                "There are 3 White Pieces");
+//        assertSame(2, CuT.getRedCount(),
+//                "There is 1 red Piece");
+//
+//    }
 
     @Test
-    void Counts(){
-        //No pieces
-        assertSame(0, CuT.getWhiteCount(),
-                "There are no white pieces yet");
-        assertSame(0, CuT.getRedCount(),
-                "There are no red pieces yet");
+    void doubleJumpBug(){
+        setActivePlayer(true);
+        checkersValid();
+        //All the white Pieces
+        makePiece(0, 7, false, false);
+        makePiece(1, 4, false, false);
+        makePiece(1, 6, false, false);
+        makePiece(2, 3, false, false);
+        makePiece(2, 7, false, false);
+        makePiece(3, 0, false, false);
+        makePiece(3, 2, false, false);
+        makePiece(3, 4, false, true);
+        makePiece(7, 0, false, true);
 
-        //1 Piece
-        makePiece(0, 1, false, false);
-        makePiece(7, 6, true, false);
-        CuT.lookForMoves();
-        assertSame(1, CuT.getWhiteCount(),
-                "There is 1 white Piece");
-        assertSame(1, CuT.getRedCount(),
-                "There is 1 red Piece");
-
-        //King Piece
+        //All the redPieces
         makePiece(0, 3, true, true);
-        makePiece(7, 4, false, false);
-        CuT.lookForMoves();
-        assertSame(2, CuT.getWhiteCount(),
-                "White should count King Piece");
-        assertSame(2, CuT.getRedCount(),
-                "Red should count King Piece");
+        makePiece(5, 0, true, false);
+        makePiece(5,4, true, false);
+        makePiece(5, 6, true, false);
+        makePiece(6, 3, true, false);
 
-        //Uneven amount of Pieces
-        makePiece(0, 5, false, false);
+        //First part of the double jump
+        Move mpt1 = new Move (new Position(0, 3),
+                new Position(2, 5),whiteP);
         CuT.lookForMoves();
-        assertSame(3, CuT.getWhiteCount(),
-                "There are 3 White Pieces");
-        assertSame(2, CuT.getRedCount(),
-                "There is 1 red Piece");
+        assertEquals(CuT.validMove, CuT.isInMoves(mpt1));
+        //Fake completeMove
+        makeEmpty(0, 3);
+        makeEmpty(1, 4);
+        makePiece(2, 5, true, true);
+        Move mpt2 = new Move (new Position(2, 5),
+                new Position(4, 3), whiteP);
+        CuT.lookForMoves();
+        assertEquals(CuT.validMove, CuT.isInMoves(mpt2));
+
     }
 
 
@@ -300,6 +339,7 @@ public class MoveValidatorTest {
         when(game.isSpaceKingPiece(row, col)).thenReturn(isKing);
         when(game.doesSpaceHavePiece(row, col)).thenReturn(true);
         when(game.tossThatPiece(row, col)).thenReturn(isRed ? redP : whiteP);
+        when(game.isSpaceValid(row, col)).thenReturn(false);
     }
 
     private void makeEmpty(int row, int col){
@@ -327,4 +367,16 @@ public class MoveValidatorTest {
             }
         }
     }
+
+    private void checkersValid(){
+        for (int r = 0; r < 8; r ++){
+            for (int c = 0; c < 8; c++){
+                if( r%2 != 0 && c%2 == 0 ||
+                    r%2 == 0 && c%2 != 0) {
+                    makeValid(r, c);
+                }
+            }
+        }
+    }
+
 }

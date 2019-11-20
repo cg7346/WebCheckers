@@ -188,9 +188,9 @@ public class MoveValidator {
      */
     public void addToMoveArray(Move move, ArrayList<Move> singleMoves,
                               ArrayList<Move> jumpMoves){
+        System.out.println("Move to add " + move);
         if(move != null) {
             if (move.hasPiece()) {
-
                 jumpMoves.add(move);
             } else {
                 singleMoves.add(move);
@@ -259,12 +259,14 @@ public class MoveValidator {
      * @return true if in the list of moves, false if not
      */
     public String isInMoves(Move move) {
+        System.out.println("Looking for " + move);
         boolean isRed = game.isActivePlayerRed();
         move = isRed ? move : game.moveConverter(move);
         ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
         ArrayList<Move> jumps = isRed ? jumpRedMoves : jumpWhiteMoves;
         if (!game.hasValidMoveBeenMade()) {
             for (Move possibleMove : moves) {
+                System.out.println("Single Moves" + possibleMove);
                 if (possibleMove.equals(move)) {
                     if (!areThereJumpMoves()) {
                         return validMove;
@@ -274,6 +276,7 @@ public class MoveValidator {
                 }
             }
             for (Move possibleMove : jumps) {
+                System.out.println("IN jumps " + possibleMove);
                 game.jumpIsPossible();
                 if (possibleMove.equals(move)) {
                     return validMove;
