@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <head>
+  <#if viewMode == "SPECTATOR">
+    <meta http-equiv="refresh" content="10">
+  </#if>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
   <title>${title} | Web Checkers</title>
   <link rel="stylesheet" href="/css/style.css">
@@ -10,7 +13,6 @@
     "gameID" : ${gameID!'null'},
     "currentUser" : "${currentUser.name}",
     "viewMode" : "${viewMode}",
-    <!--Don't for get to add this back in!'-->
     "modeOptions" : ${modeOptionsAsJSON!'{}'},
     "redPlayer" : "${redPlayer.name}",
     "whitePlayer" : "${whitePlayer.name}",

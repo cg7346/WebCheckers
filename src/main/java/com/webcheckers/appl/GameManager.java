@@ -5,6 +5,7 @@ import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -16,6 +17,7 @@ public class GameManager {
     //total games (will be the game id)
     int totalGames = 0;
     private final List<CheckersGame> games = new ArrayList<>();
+    private HashMap<Player, Player> spectators;
 
     /**
      * Makes a new game for players to play
@@ -27,6 +29,8 @@ public class GameManager {
      * @return Checkers Game
      */
     public CheckersGame makeGame(Player redPlayer, Player whitePlayer){
+
+        spectators = new HashMap<>();
 
         synchronized (this){
             totalGames ++;
@@ -106,5 +110,36 @@ public class GameManager {
     public synchronized boolean isPlayerInGame(CheckersGame game, Player player) {
         return player.equals(game.getRedPlayer()) || player.equals(game.getWhitePlayer());
     }
+
+
+    /**
+     * checks if a player is a spectator in the game
+     *
+     * @param player the player to look for
+     * @return true if they are a spectator, false if not
+     */
+    public boolean isPlayerASpectator(Player player) {
+        return spectators.containsKey(player);
+    }
+
+
+    /**
+     * Adds a spectator to a game
+     *
+     * @param spectator a player that is the spectator
+     * @param player    a player that is in the game
+     */
+    public void addSpectator(Player spectator, Player player) {
+        spectators.put(spectator, player);
+    }
+
+    public void removeSpectator(Player player) {
+        spectators.remove(player);
+    }
+
+    public CheckersGame getSpectatorGame(Player player) {
+        return this.getGame(spectators.get(player));
+    }
+
 
 }

@@ -40,7 +40,19 @@
         <blockquote>
             <li> ${playerActive}</li>
         </blockquote>
+    <#else>
     </#if>
+      <h2>Spectate A Game</h2>
+      <#if gameList?has_content>
+          <#list game_list as id, game>
+              <form action="/spectator/game" method="GET">
+                  <input type="hidden" value="${id}" name="gameID">
+                  <input type="submit" value="${game.redPlayer.name} vs ${game.whitePlayer.name}">
+              </form>
+          </#list>
+      <#else>
+          <body>No games are currently active.</body>
+      </#if>
     <!-- TODO: future content on the Home:
             to start games,
             spectating active games,
