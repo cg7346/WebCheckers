@@ -240,9 +240,9 @@ public class MoveValidatorTest {
         makeValid(6, 5);
         makeValid(6, 7);
         CuT.lookForMoves();
-        assertFalse(CuT.isRedOut(),
+        assertFalse(CuT.isOut(game.getRedPlayer()),
                 "Red has a piece with moves, should not be out");
-        assertTrue(CuT.isWhiteOut(),
+        assertTrue(CuT.isOut(game.getWhitePlayer()),
                 "White has no pieces, should be out");
     }
     @Test
@@ -253,44 +253,44 @@ public class MoveValidatorTest {
         makeValid(1, 0);
         makeValid(1, 2);
         CuT.lookForMoves();
-        assertFalse(CuT.isWhiteOut(),
+        assertFalse(CuT.isOut(game.getWhitePlayer()),
                 "White has a piece with moves, should not be out");
-        assertTrue(CuT.isRedOut(),
+        assertTrue(CuT.isOut(game.getRedPlayer()),
                 "Red has no pieces, should be out");
     }
 
     @Test
     void Counts(){
         //No pieces
-        assertSame(0, CuT.getWhiteCount(),
+        assertSame(0, CuT.getCount(game.getWhitePlayer()),
                 "There are no white pieces yet");
-        assertSame(0, CuT.getRedCount(),
+        assertSame(0, CuT.getCount(game.getRedPlayer()),
                 "There are no red pieces yet");
 
         //1 Piece
         makePiece(0, 1, false, false);
         makePiece(7, 6, true, false);
         CuT.lookForMoves();
-        assertSame(1, CuT.getWhiteCount(),
+        assertSame(1, CuT.getCount(game.getWhitePlayer()),
                 "There is 1 white Piece");
-        assertSame(1, CuT.getRedCount(),
+        assertSame(1, CuT.getCount(game.getRedPlayer()),
                 "There is 1 red Piece");
 
         //King Piece
         makePiece(0, 3, true, true);
         makePiece(7, 4, false, false);
         CuT.lookForMoves();
-        assertSame(2, CuT.getWhiteCount(),
+        assertSame(2, CuT.getCount(game.getWhitePlayer()),
                 "White should count King Piece");
-        assertSame(2, CuT.getRedCount(),
+        assertSame(2, CuT.getCount(game.getRedPlayer()),
                 "Red should count King Piece");
 
         //Uneven amount of Pieces
         makePiece(0, 5, false, false);
         CuT.lookForMoves();
-        assertSame(3, CuT.getWhiteCount(),
+        assertSame(3, CuT.getCount(game.getWhitePlayer()),
                 "There are 3 White Pieces");
-        assertSame(2, CuT.getRedCount(),
+        assertSame(2, CuT.getCount(game.getRedPlayer()),
                 "There is 1 red Piece");
     }
 
