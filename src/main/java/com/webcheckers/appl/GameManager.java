@@ -137,9 +137,23 @@ public class GameManager {
         spectators.remove(player);
     }
 
+    /**
+     * Adds access to get the number of people in a spectator game.
+     *
+     * @param player
+     * @return
+     */
     public CheckersGame getSpectatorGame(Player player) {
         return this.getGame(spectators.get(player));
     }
 
+    /**
+     * This allows us to access the list of accessed games.
+     *
+     * @return games - List<CheckerGame>
+     */
+    public List<CheckersGame> activeGames() {
+        return games;
+    }
 
 }
