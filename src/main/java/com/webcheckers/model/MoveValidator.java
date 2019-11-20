@@ -29,11 +29,6 @@ public class MoveValidator {
     //Jump moves Red can make;
     private ArrayList<Move> jumpWhiteMoves;
 
-    private Tree.Heuristic heuristic;
-    public static final int KING_WORTH = 5;
-    public static final int WINNING_VALUE = 1000000;
-    public static final int PIECE_WORTH = 1;
-
     // The number of white pieces on the board
     public static Integer whiteCount = 0;
     // The number of red pieces on the board
@@ -403,82 +398,6 @@ public class MoveValidator {
         } else {
             return jumpRedMoves;
         }
-    }
-
-
-    /**
-     * @return the score using the appropriate heuristic method
-     */
-    public final int score() {
-        if (Tree.Heuristic.A == heuristic || heuristic == null) {
-            return scoreA();
-        } else if (Tree.Heuristic.B == heuristic) {
-            return scoreB();
-        } else {
-            return scoreC();
-        }
-    }
-
-    public final int scoreA() {
-        int score = 0;
-        if (game.isGameOver()) {
-            score = WINNING_VALUE;
-        } else {
-            for (int row = 0; row < game.ROWS; row++) {
-                for (int col = 0; col < game.COLS; col++) {
-                    if (game.doesSpaceHavePiece(row, col)) {
-                        boolean isKing = game.isSpaceKingPiece(row, col);
-                        boolean isRed = game.isSpaceRedPiece(row, col);
-                        score += !isRed && isKing ? KING_WORTH : PIECE_WORTH;
-                    }
-                }
-            }
-            for (int row = 0; row < game.ROWS; row++) {
-                for (int col = 0; col < game.COLS; col++) {
-                    if (game.doesSpaceHavePiece(row, col)) {
-                        boolean isKing = game.isSpaceKingPiece(row, col);
-                        boolean isRed = game.isSpaceRedPiece(row, col);
-                        score -= isRed && isKing ? KING_WORTH : PIECE_WORTH;
-                    }
-                }
-            }
-        }
-        return score;
-    }
-
-    public int scoreB() {
-        int redScore = 0;
-        for (int row = 0; row < game.ROWS; row++) {
-            for (int col = 0; col < game.COLS; col++) {
-                if (game.doesSpaceHavePiece(row, col)) {
-                    boolean isKing = game.isSpaceKingPiece(row, col);
-                    boolean isRed = game.isSpaceRedPiece(row, col);
-                    redScore += isRed && isKing ? KING_WORTH : PIECE_WORTH;
-                }
-            }
-        }
-        List<Move> redMoves = getMoves(game.getRedPlayer());
-
-        redScore /= (redMoves.size() == 0 ? 1 : redMoves.size());
-
-        int whiteScore = 0;
-        for (int row = 0; row < game.ROWS; row++) {
-            for (int col = 0; col < game.COLS; col++) {
-                if (game.doesSpaceHavePiece(row, col)) {
-                    boolean isKing = game.isSpaceKingPiece(row, col);
-                    boolean isRed = game.isSpaceRedPiece(row, col);
-                    whiteScore += !isRed && isKing ? KING_WORTH : PIECE_WORTH;
-                }
-            }
-        }
-        List<Move> whiteMoves = getMoves(game.getWhitePlayer());
-        whiteScore /= (whiteMoves.size() == 0 ? 1 : whiteMoves.size());
-
-        return redScore - whiteScore;
-    }
-
-    public int scoreC() {
-        return scoreA() + getMoves(game.getRedPlayer()).size() - getMoves(game.getWhitePlayer()).size();
     }
 
 }

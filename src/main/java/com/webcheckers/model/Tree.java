@@ -10,20 +10,11 @@ import java.util.ArrayList;
 public class Tree {
 
     private Node root;
-
-    public enum Heuristic {
-        A("A"), B("B");
-
-        private final String letter;
-
-        Heuristic(String letter) {
-            this.letter = letter;
-        }
-
-        public String toString() {
-            return letter;
-        }
-    }
+    private static final int KING_WORTH = 5;
+    private static final int WINNING_VALUE = 1000000;
+    private static final int PIECE_WORTH = 1;
+    private static final int TREE_DEPTH = 3;
+    private CheckersGame game;
 
     /**
      * Node contains a board, the move used to get there, and the list of moves coming after.
@@ -62,12 +53,6 @@ public class Tree {
 
     }
 
-    public Heuristic heuristic;
-
-    public static final int TREE_DEPTH = 3;
-
-    private CheckersGame game;
-
     /**
      * @param game
      *         the game to build the tree out of
@@ -79,22 +64,26 @@ public class Tree {
     }
 
     /**
-     * @param moveValidator
-     *         board to score
-     * @param heuristic
-     *         heuristic to use
+     * @param game
+     *         the checkers game
      * @return score of that game
      */
-    private static int score(MoveValidator moveValidator, Heuristic heuristic) {
-        if (heuristic == null) {
-            return moveValidator.score();
-        } else if (heuristic == Heuristic.A) {
-            return moveValidator.scoreA();
-        } else if (heuristic == Heuristic.B) {
-            return moveValidator.scoreB();
+    private static int score(CheckersGame game) {
+        int score = 0;
+        if (game.isGameOver()) {
+            score = WINNING_VALUE;
         } else {
-            return moveValidator.scoreC();
+            for (int row = 0; row < game.ROWS; row++) {
+                for (int col = 0; col < game.COLS; col++) {
+                    if (game.doesSpaceHavePiece(row, col)) {
+                        boolean isKing = game.isSpaceKingPiece(row, col);
+                        boolean isRed = game.isSpaceRedPiece(row, col);
+                        score += !isRed && isKing ? KING_WORTH : PIECE_WORTH;
+                    }
+                }
+            }
         }
+        return score;
     }
 
     /**
@@ -102,7 +91,6 @@ public class Tree {
      * @param game the webcheckers game
      */
     public final void addInLastMove(CheckersGame game) {
-
         Move move = game.getLastMove();
         for (Node node : root.nodeList) {
             if (node.moveUsed.equals(move)) {
@@ -112,10 +100,8 @@ public class Tree {
             }
         }
         Node node = new Node(root.game, root.moveValidator, move);
-        node.score = score(node.moveValidator, heuristic);
-
+        node.score = score(game);
         root = node;
-
         makeTree(TREE_DEPTH, root, Integer.MIN_VALUE);
     }
 
@@ -158,15 +144,13 @@ public class Tree {
                     if (parentValue >= node.score) {
                         makeTree(layersDeep - 1, newNode, node.score);
                     }
-
                     if (node.score < newNode.score) {
                         node.score = newNode.score;
                     }
-
                 }
             }
         } else {
-            node.score = score(node.moveValidator, heuristic);
+            node.score = score(game);
         }
     }
 
