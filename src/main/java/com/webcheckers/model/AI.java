@@ -21,7 +21,6 @@ public class AI {
     public Move makeTurn() {
         Tree tree = new Tree(game, moveValidator);
         tree.addInLastMove(game);
-
         return tree.bestMove();
     }
 
