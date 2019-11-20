@@ -334,71 +334,74 @@ public class MoveValidator {
     }
 
     /**
-     * checks if the red is out of moves
+     * checks if the player is out of moves
+     * @param player is the player that needs to be checked for moves
      * @return whether or not the red player is out of moves
      */
-    public Boolean isRedOut(){
-        if (jumpRedMoves.isEmpty() && singleRedMoves.isEmpty()) {
-            return true;
+    public Boolean isOut(Player player){
+        if (player == game.getRedPlayer()) {
+            if (jumpRedMoves.isEmpty() && singleRedMoves.isEmpty()) {
+                return true;
+            }
+            return false;
+        } else {
+            if (jumpWhiteMoves.isEmpty() && singleWhiteMoves.isEmpty()) {
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 
     /**
-     * checks if white is out of moves
-     * @return whether or not the white player is out of moves
-     */
-    public Boolean isWhiteOut(){
-        if (jumpWhiteMoves.isEmpty() && singleWhiteMoves.isEmpty()) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Gets the number of white pieces on the board
+     * Gets the number of pieces on the board.
+     * @param player is the player to the number of pieces for
      * @return the number of white pieces on the board
      */
-    public Integer getWhiteCount(){
-        return this.whiteCount;
-    }
-
-
-    /**
-     * Gets the number of red pieces on the board
-     * @return the number of red pieces on the board
-     */
-    public Integer getRedCount(){
-        return this.redCount;
+    public Integer getCount(Player player){
+        if (player == game.getWhitePlayer()) {
+            return this.whiteCount;
+        } else {
+            return this.redCount;
+        }
     }
 
     /**
      * @return list of available moves
      */
-    public final List<Move> getMovesForRed() {
+    public final List<Move> getMoves(Player player) {
         lookForMoves();
         java.util.List<Move> moves = new ArrayList<>();
-        if (jumpRedMoves.isEmpty()) {
-            moves.addAll(singleRedMoves);
+        if (player == game.getWhitePlayer()) {
+            if (jumpWhiteMoves.isEmpty()) {
+                moves.addAll(singleWhiteMoves);
+            } else {
+                moves.addAll(jumpWhiteMoves);
+            }
+            return moves;
         } else {
-            moves.addAll(jumpRedMoves);
+            if (jumpRedMoves.isEmpty()) {
+                moves.addAll(singleRedMoves);
+            } else {
+                moves.addAll(jumpRedMoves);
+            }
+            return moves;
         }
-        return moves;
     }
 
     /**
-     * @return list of available moves
+     * Gets a list of jump moves
+     * @param player is the player to get jump moves for
+     * @return list of jump moves
      */
-    public final List<Move> getMovesForWhite() {
+    public final List<Move> getJumpMoves(Player player) {
         lookForMoves();
-        java.util.List<Move> moves = new ArrayList<>();
-        if (jumpWhiteMoves.isEmpty()) {
-            moves.addAll(singleWhiteMoves);
+        if(player == game.getWhitePlayer()) {
+            return jumpWhiteMoves;
         } else {
-            moves.addAll(jumpWhiteMoves);
+            return jumpRedMoves;
         }
-        return moves;
     }
+
 
     /**
      * @return the score using the appropriate heuristic method
@@ -423,7 +426,7 @@ public class MoveValidator {
                     if (game.doesSpaceHavePiece(row, col)) {
                         boolean isKing = game.isSpaceKingPiece(row, col);
                         boolean isRed = game.isSpaceRedPiece(row, col);
-                        score += isRed && isKing ? KING_WORTH : PIECE_WORTH;
+                        score += !isRed && isKing ? KING_WORTH : PIECE_WORTH;
                     }
                 }
             }
@@ -432,7 +435,7 @@ public class MoveValidator {
                     if (game.doesSpaceHavePiece(row, col)) {
                         boolean isKing = game.isSpaceKingPiece(row, col);
                         boolean isRed = game.isSpaceRedPiece(row, col);
-                        score -= !isRed && isKing ? KING_WORTH : PIECE_WORTH;
+                        score -= isRed && isKing ? KING_WORTH : PIECE_WORTH;
                     }
                 }
             }
@@ -451,7 +454,7 @@ public class MoveValidator {
                 }
             }
         }
-        List<Move> redMoves = getMovesForRed();
+        List<Move> redMoves = getMoves(game.getRedPlayer());
 
         redScore /= (redMoves.size() == 0 ? 1 : redMoves.size());
 
@@ -465,14 +468,14 @@ public class MoveValidator {
                 }
             }
         }
-        List<Move> whiteMoves = getMovesForWhite();
+        List<Move> whiteMoves = getMoves(game.getWhitePlayer());
         whiteScore /= (whiteMoves.size() == 0 ? 1 : whiteMoves.size());
 
         return redScore - whiteScore;
     }
 
     public int scoreC() {
-        return scoreA() + getMovesForRed().size() - getMovesForWhite().size();
+        return scoreA() + getMoves(game.getRedPlayer()).size() - getMoves(game.getWhitePlayer()).size();
     }
 
 }

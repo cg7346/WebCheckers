@@ -56,7 +56,7 @@ public class Tree {
             this.moveValidator = moveValidator;
             nodeList = new ArrayList<>();
             moveUsed = move;
-            score = game.isActivePlayerRed() ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+            score = Integer.MAX_VALUE;
 
         }
 
@@ -66,13 +66,16 @@ public class Tree {
 
     public static final int TREE_DEPTH = 3;
 
+    private CheckersGame game;
+
     /**
      * @param game
      *         the game to build the tree out of
      */
     public Tree(CheckersGame game, MoveValidator moveValidator) {
+        this.game = game;
         root = new Node(game, moveValidator);
-        makeTree(TREE_DEPTH, root, root.game.isActivePlayerRed() ? Integer.MAX_VALUE : Integer.MIN_VALUE);
+        makeTree(TREE_DEPTH, root, Integer.MIN_VALUE);
     }
 
     /**
@@ -104,7 +107,7 @@ public class Tree {
         for (Node node : root.nodeList) {
             if (node.moveUsed.equals(move)) {
                 root = node;
-                makeTree(TREE_DEPTH, root, root.game.isActivePlayerRed() ? Integer.MAX_VALUE : Integer.MIN_VALUE);
+                makeTree(TREE_DEPTH, root, Integer.MIN_VALUE);
                 return;
             }
         }
@@ -113,7 +116,7 @@ public class Tree {
 
         root = node;
 
-        makeTree(TREE_DEPTH, root, root.game.isActivePlayerRed() ? Integer.MAX_VALUE : Integer.MIN_VALUE);
+        makeTree(TREE_DEPTH, root, Integer.MIN_VALUE);
     }
 
     /**
@@ -124,21 +127,14 @@ public class Tree {
             return null;
         }
         Node max = root.nodeList.get(0);
-        if (!root.game.isActivePlayerRed()) {
-            for (Node node : root.nodeList) {
-                if (max.score < node.score) {
-                    max = node;
-                }
-            }
-        } else {
-            for (Node node : root.nodeList) {
-                if (max.score > node.score) {
-                    max = node;
-                }
+        for (Node node : root.nodeList) {
+            if (max.score < node.score) {
+                max = node;
             }
         }
+
         root = max;
-        makeTree(TREE_DEPTH, root, !root.game.isActivePlayerRed() ? Integer.MAX_VALUE : Integer.MIN_VALUE);
+        makeTree(TREE_DEPTH, root, Integer.MAX_VALUE);
         return max.moveUsed;
     }
 
@@ -151,7 +147,7 @@ public class Tree {
     public final void makeTree(int layersDeep, Node node, int parentValue) {
         if (!node.game.isGameOver() && layersDeep != 0) {
             if (node.nodeList.isEmpty()) {
-                for (Move move : node.moveValidator.getMovesForWhite()) {
+                for (Move move : node.moveValidator.getMoves(game.getWhitePlayer())) {
                     CheckersGame game = node.game;
                     MoveValidator moveValidator = node.moveValidator;
 
@@ -159,20 +155,14 @@ public class Tree {
                     node.nodeList.add(newNode);
                 }
                 for (Node newNode : node.nodeList) {
-                    if ((!node.game.isActivePlayerRed() && parentValue >= node.score)
-                            || (node.game.isActivePlayerRed()&& parentValue <= node.score)) {
+                    if (parentValue >= node.score) {
                         makeTree(layersDeep - 1, newNode, node.score);
                     }
 
-                    if (!node.game.isActivePlayerRed()) {
-                        if (node.score < newNode.score) {
-                            node.score = newNode.score;
-                        }
-                    } else {
-                        if (node.score > newNode.score) {
-                            node.score = newNode.score;
-                        }
+                    if (node.score < newNode.score) {
+                        node.score = newNode.score;
                     }
+
                 }
             }
         } else {
