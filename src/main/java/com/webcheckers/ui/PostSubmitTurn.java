@@ -151,14 +151,14 @@ public class PostSubmitTurn implements Route {
                             break;
                         }
                     }
-                }
                     game.completeTurn();
                     moveValidator.lookForMoves();
-                    if (gameOver(moveValidator, game, session, false) != null){
+                    if (gameOver(moveValidator, game, session, false) != null) {
                         responseMessage = gameOver(moveValidator, game, session, false);
                     }
                 }
             }
+        }
             //       }
         AI = false;
         response.body(gson.toJson(responseMessage));

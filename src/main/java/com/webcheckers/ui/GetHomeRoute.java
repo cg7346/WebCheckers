@@ -163,8 +163,8 @@ public class GetHomeRoute implements Route {
         HashMap<CheckersGame, String> gameList = gameManager.activeGames();
         Player player = session.attribute("Player");
         // Displays the welcome message
-        vm.put(WELCOME_ATTR, WELCOME_ATTR_MSG);
-        vm.put(MESSAGE, WELCOME_MSG);
+//        vm.put(WELCOME_ATTR, WELCOME_ATTR_MSG);
+//        vm.put(MESSAGE, WELCOME_MSG);
 
         // Sets the current user to the current player
         vm.put(GAME_LIST, gameManager.activeGames());
