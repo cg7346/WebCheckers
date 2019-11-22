@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 public class GetSpectatorRoute implements Route {
 
-    private static final Message GAME_MSG = Message.info("This is not a game");
+    private static final Message GAME_MSG = Message.info("You're a spectator!");
 
 
     //    private final TemplateEngine templateEngine;
@@ -61,8 +61,6 @@ public class GetSpectatorRoute implements Route {
         // start building the view-model
         Map<String, Object> vm = new HashMap<>();
         vm.put("viewMode", GetGameRoute.viewMode.SPECTATOR);
-        String opponent = request.queryParams(GetGameRoute.OPP_USER);
-        System.out.println(opponent);
 
         // retrieve the Player from the session
         Player spectator = request.session().attribute("Player");
@@ -75,11 +73,13 @@ public class GetSpectatorRoute implements Route {
             response.redirect(WebServer.HOME_URL);
             return templateEngine.render(new ModelAndView(vm, "home.ftl"));
         } else if (gameManager.getGame(spectator) == null) {
+
             session.attribute("Spectator", null);
             spectator.setSpectating(true);
             mv = spectator(gameManager.activeGames(), vm, spectator);
             response.redirect(WebServer.HOME_URL);
             return templateEngine.render(mv);
+
         }
         return null;
     }
@@ -109,5 +109,3 @@ public class GetSpectatorRoute implements Route {
     }
 
 }
-
-

@@ -15,7 +15,7 @@ public class GameManager {
     //total games (will be the game id)
     int totalGames = 0;
     private final HashMap<CheckersGame, Integer> games = new HashMap<>();
-    private HashMap<Player, Player> spectators;
+    private HashMap<CheckersGame, Player> spectators;
 
     /**
      * Makes a new game for players to play
@@ -111,28 +111,34 @@ public class GameManager {
 
 
     /**
-     * checks if a player is a spectator in the game
+     * Checks there are spectators in a game
      *
-     * @param player the player to look for
+     * @param game the game to look for
      * @return true if they are a spectator, false if not
      */
-    public boolean isPlayerASpectator(Player player) {
-        return spectators.containsKey(player);
+    public boolean isPlayerASpectator(CheckersGame game) {
+        return spectators.containsKey(game);
     }
 
 
     /**
      * Adds a spectator to a game
      *
+     * @param game  the game the spectator is in
      * @param spectator a player that is the spectator
-     * @param player    a player that is in the game
      */
-    public void addSpectator(Player spectator, Player player) {
-        spectators.put(spectator, player);
+    public void addSpectator(CheckersGame game, Player spectator) {
+        spectators.put(game, spectator);
     }
 
-    public void removeSpectator(Player player) {
-        spectators.remove(player);
+    /**
+     * This will remove a spectator from the Checkers Game
+     *
+     * @param game      the Checkers Game the spectator is in
+     * @param spectator a player that is the spectator
+     */
+    public void removeSpectator(CheckersGame game, Player spectator) {
+        spectators.remove(game, spectator);
     }
 
     /**
