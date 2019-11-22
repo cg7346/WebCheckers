@@ -51,13 +51,16 @@ public class GetSpectatorStopWatching implements Route {
         Player spectator = request.session().attribute("Player");
         Map<String, Object> vm = new HashMap<>();
 
-        System.out.println("I'm in!!!!!!!!!!!!!!");
-        spectator.setInGame(false);
+        //        spectator.setInGame(false);
         gameManager.removeSpectator(gameManager.getGame(spectator), spectator);
         vm.put("message", "Spectating mode has ended.");
+
         response.redirect(WebServer.HOME_URL);
         halt();
-        request.session().attribute("message", Message.info("Spectating mode has ended."));
+
+//        Message er = Message.error(message);
+//        session.attribute(MESSAGE_ERR, er);
+        request.session().attribute("message", Message.error("Spectating mode has ended."));
         return null;
     }
 }

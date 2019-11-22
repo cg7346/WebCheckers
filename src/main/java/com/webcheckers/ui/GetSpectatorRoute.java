@@ -76,7 +76,6 @@ public class GetSpectatorRoute implements Route {
         ModelAndView mv;
         //If the player enters this page without being signed in or in a valid game,
         if (spectator == null) {
-            System.out.println("nulllllllllllllll");
             vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
             //redirect back to home page
             response.redirect(WebServer.HOME_URL);
@@ -85,11 +84,17 @@ public class GetSpectatorRoute implements Route {
         } else {
 //        } else if (gameManager.getGame(spectator) != null) {
 //            session.attribute("Spectator", null);
-            System.out.println("ahhhhhhhhhhhhhhhh");
-            spectator.setSpectating(true);
+//            spectator.setSpectating(true);
             mv = spectator(gameManager.activeGames(), vm, spectator, request, response);
             //response.redirect(WebServer.HOME_URL);
-            return templateEngine.render(mv);
+            if (mv == null) {
+//                response.redirect(WebServer.HOME_URL);
+//                halt();
+                return null;
+//                return templateEngine.render(GetHomeRoute.mv);
+            } else {
+                return templateEngine.render(mv);
+            }
 
 //        Player spectator = request.session().attribute("Player");
 //        CheckersGame game = gameManager.getGame(spectator);
@@ -113,6 +118,7 @@ public class GetSpectatorRoute implements Route {
     public ModelAndView spectator(HashMap<CheckersGame, String> gameList, Map<String, Object> vm,
                                   final Player player, Request request, Response response) {
 
+//        TODO: remove response
         // Displays the welcome message
         vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
         vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
@@ -138,7 +144,7 @@ public class GetSpectatorRoute implements Route {
         // retrieve request parameter
         final String gameNum = request.queryParams(SPECTATOR);
         CheckersGame game = gameManager.getGame(gameNum);
-        System.out.println("GAME::: " + game);
+//   TODO get rid of     System.out.println("GAME::: " + game);
         if (game != null) {
             String gameID = game.getGameID();
             Player redPlayer = game.getRedPlayer();
@@ -163,9 +169,8 @@ public class GetSpectatorRoute implements Route {
             // Returns new model and view
             return new ModelAndView(vm, VIEW_NAME);
         }
-        response.redirect(WebServer.HOME_URL);
-        halt();
+//        response.redirect(WebServer.HOME_URL);
+//        halt();
         return null;
     }
-
 }

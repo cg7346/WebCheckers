@@ -40,6 +40,7 @@ public class GetHomeRoute implements Route {
     static final String PLAYERS_ON = "playersOnline";
     static final String PLAYERS_ONLINE = "Players Online";
     static final String SPECTATOR = "spectator";
+    static ModelAndView mv;
 //    static final String GAMES_ON = "gamesOnline";
 //    static final String GAMES_ONLINE = "Spectator";
 
@@ -115,10 +116,10 @@ public class GetHomeRoute implements Route {
                   halt();
                   return null;
               }
-              ModelAndView mv = currentUser(vm, request);
+              mv = currentUser(vm, request);
               return templateEngine.render(mv);
           }
-          ModelAndView mv = playerActive(vm);
+          mv = playerActive(vm);
           return templateEngine.render(mv);
       }
 

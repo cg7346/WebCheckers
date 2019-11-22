@@ -4,10 +4,7 @@ package com.webcheckers.ui;
 import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.util.Message;
-import spark.Request;
-import spark.Response;
-import spark.Route;
-import spark.TemplateEngine;
+import spark.*;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -48,11 +45,16 @@ public class PostSpectatorCheckTurn implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
-        if (PostCheckTurn.timer == null) {
+        if (PostCheckTurn.timer != null) {
             long passedTimeInSeconds = PostCheckTurn.timer.time(TimeUnit.SECONDS);
 
-            System.out.println(String.format("Last turn was about %d seconds ago.", passedTimeInSeconds));
-            response.body((String.format("Last turn was about %d seconds ago.", passedTimeInSeconds)));
+            Session session = request.session();
+//            System.out.println(String.format("Last turn was about %d seconds ago.", passedTimeInSeconds));
+//            response.body((String.format("Last turn was about %d seconds ago.", passedTimeInSeconds)));
+            String message = String.format("Last turn was about %d seconds ago.", passedTimeInSeconds);
+            response.body(gson.toJson(message));
+            Message er = Message.error(message);
+            session.attribute(GetGameRoute.MESSAGE_ERR, er);
             return gson.toJson(Message.info("true"));
         }
         return gson.toJson(Message.info("false"));
