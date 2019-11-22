@@ -141,6 +141,7 @@ public class PostSubmitTurn implements Route {
                             if (jump.getStart().toString().equals(aiMove.getEnd().toString())) {
                                 System.out.println(jump.getStart() + " equals " + aiMove.getEnd());
                                 game.makeMove(jump);
+                                aiMove = jump;
                                 visited = true;
                                 break;
                             }

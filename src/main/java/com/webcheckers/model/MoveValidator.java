@@ -191,6 +191,7 @@ public class MoveValidator {
 
         if(move != null) {
             if (move.hasPiece()) {
+                System.out.println("ADDING " + move);
                 jumpMoves.add(move);
             } else {
                 singleMoves.add(move);
