@@ -60,7 +60,7 @@ public class Tree {
     public Tree(CheckersGame game, MoveValidator moveValidator) {
         this.game = game;
         root = new Node(game, moveValidator);
-        makeTree(TREE_DEPTH, root, Integer.MIN_VALUE);
+        makeTree(TREE_DEPTH, root, Integer.MIN_VALUE, false);
     }
 
     /**
@@ -95,14 +95,14 @@ public class Tree {
         for (Node node : root.nodeList) {
             if (node.moveUsed.equals(move)) {
                 root = node;
-                makeTree(TREE_DEPTH, root, Integer.MIN_VALUE);
+                makeTree(TREE_DEPTH, root, Integer.MIN_VALUE, false);
                 return;
             }
         }
         Node node = new Node(root.game, root.moveValidator, move);
         node.score = score(game);
         root = node;
-        makeTree(TREE_DEPTH, root, Integer.MIN_VALUE);
+        makeTree(TREE_DEPTH, root, Integer.MIN_VALUE, false);
     }
 
     /**
@@ -120,7 +120,7 @@ public class Tree {
         }
 
         root = max;
-        makeTree(TREE_DEPTH, root, Integer.MAX_VALUE);
+        makeTree(TREE_DEPTH, root, Integer.MAX_VALUE, true);
         return max.moveUsed;
     }
 
@@ -130,7 +130,7 @@ public class Tree {
      * @param node
      *         node being looked at right now
      */
-    public final void makeTree(int layersDeep, Node node, int parentValue) {
+    public final void makeTree(int layersDeep, Node node, int parentValue, Boolean max) {
         if (!node.game.isGameOver() && layersDeep != 0) {
             if (node.nodeList.isEmpty()) {
                 for (Move move : node.moveValidator.getMoves(node.moveValidator.WHITEPLAYER)) {
@@ -141,18 +141,25 @@ public class Tree {
                     node.nodeList.add(newNode);
                 }
                 for (Node newNode : node.nodeList) {
-                    if (parentValue >= node.score) {
-                        makeTree(layersDeep - 1, newNode, node.score);
+                    if (max && parentValue >= node.score) {
+                        makeTree(layersDeep - 1, newNode, node.score, false );
+                    } else if (!max && parentValue <= node.score){
+                        makeTree(layersDeep - 1, newNode, node.score, true );
                     }
-                    if (node.score < newNode.score) {
-                        node.score = newNode.score;
+                    if (max) {
+                        if (node.score < newNode.score) {
+                            node.score = newNode.score;
+                        }
+                    } else {
+                        if (node.score > newNode.score) {
+                            node.score = newNode.score;
+                        }
                     }
                 }
+            } else {
+                node.score = score(node.game);
             }
-        } else {
-            node.score = score(game);
         }
     }
-
 }
 
