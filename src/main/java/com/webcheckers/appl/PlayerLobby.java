@@ -19,6 +19,9 @@ public class PlayerLobby {
     private final List<Player> players = new ArrayList<>();
 
 
+
+    //TODO see if we can remove this?
+    //only used in tests
     /**
      * Create a PlayerLobby.
      *
@@ -123,6 +126,8 @@ public class PlayerLobby {
         return null;
     }
 
+    //TODO see if we can remove this
+    //only used in tests
     /**
      * this function gets a player
      * @return Player

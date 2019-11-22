@@ -42,18 +42,29 @@ public class PostBackupRoute implements Route {
      * @throws Exception
      */
     @Override
-    public Object handle(Request request, Response response) throws Exception
+    public Object handle(Request request, Response response)
     {
-        String gameIDString = request.queryParams("gameID");
         Session session = request.session();
         Player player = session.attribute("Player");
         CheckersGame game = gameManager.getGame(player);
-        MoveValidator moveValidator = new MoveValidator(game);
+        MoveValidator moveValidator = mvMaker(game);
+        System.out.println("IN HERE");
         moveValidator.backUpMove();
 
         Message responseMessage = Message.info("BACK IT UP!");
         response.body(gson.toJson(responseMessage));
 
         return gson.toJson(responseMessage);
+    }
+
+    /**
+     * Factory for making that moveValidator
+     * It makes testing a lot easier and replaces
+     * the new statement that used to be in the handle
+     * @param game game to make MoveValidator with
+     * @return a brand new MoveValidator
+     */
+    public MoveValidator mvMaker(CheckersGame game){
+        return new MoveValidator(game);
     }
 }

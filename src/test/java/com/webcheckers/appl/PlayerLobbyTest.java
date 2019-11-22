@@ -109,6 +109,8 @@ public class PlayerLobbyTest {
         assertNotNull(game, "an error occurred when creating a game");
         assertTrue(CuT.isInGame(player1));
         assertTrue(CuT.isInGame(player2));
+
+        assertFalse(CuT.isInGame(null));
     }
 
     /**
@@ -130,6 +132,8 @@ public class PlayerLobbyTest {
         assertFalse(CuT.isValidPlayer(player3));
         assertTrue(CuT.isValidPlayer(player4));
         assertFalse(CuT.isValidPlayer(player6));
+
+        assertFalse(CuT.isValidPlayer(null));
     }
 
     /*    *//**
@@ -171,5 +175,17 @@ public class PlayerLobbyTest {
         CuT.addPlayer(player2);
         assertEquals(CuT.findPlayer(PLAYER1), player1);
         assertEquals(CuT.findPlayer(PLAYER2), player2);
+    }
+
+    @Test
+    public void test_get_player(){
+        assertNull(CuT.getPlayer());
+        PlayerLobby p2 = new PlayerLobby(player1);
+        assertEquals(player1, p2.getPlayer());
+    }
+
+    @Test
+    public void test_is_game_over(){
+        assertNull(CuT.isGameOver());
     }
 }

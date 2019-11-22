@@ -55,11 +55,16 @@ public class GameManager {
 
         synchronized (this) {
             totalGames--;
-            try {
-                games.remove(game);
-            } catch (IndexOutOfBoundsException err) {
-                System.err.println(err);
-            }
+
+            //TODO see if we can remove that catch,
+            //when you remove something from a list
+            //that isn't there, it does not throw an error
+            games.remove(game);
+//            try {
+//                games.remove(game);
+//            } catch (IndexOutOfBoundsException err) {
+//                System.err.println(err);
+//            }
             game.getRedPlayer().setInGame(false);
             game.getWhitePlayer().setInGame(false);
             return null;

@@ -38,6 +38,11 @@ public class MoveValidator {
     public final String jumpAvail = "A jump is available";
     public final String invalidMove = "INVALID MOOOVE";
     public final String validMove = "Valid Move!";
+
+    // Text for isRed b/c I don't want them tossing players around
+    public final String REDPLAYER= "RED";
+    public final String WHITEPLAYER= "WHITE";
+
     /**
      * Construct a move validator for the game to use
      * for the current turn;
@@ -183,7 +188,7 @@ public class MoveValidator {
      */
     public void addToMoveArray(Move move, ArrayList<Move> singleMoves,
                               ArrayList<Move> jumpMoves){
-        System.out.println("Move to add " + move);
+
         if(move != null) {
             if (move.hasPiece()) {
                 jumpMoves.add(move);
@@ -254,14 +259,12 @@ public class MoveValidator {
      * @return true if in the list of moves, false if not
      */
     public String isInMoves(Move move) {
-        System.out.println("Looking for " + move);
         boolean isRed = game.isActivePlayerRed();
         move = isRed ? move : game.moveConverter(move);
         ArrayList<Move> moves = isRed ? singleRedMoves : singleWhiteMoves;
         ArrayList<Move> jumps = isRed ? jumpRedMoves : jumpWhiteMoves;
         if (!game.hasValidMoveBeenMade()) {
             for (Move possibleMove : moves) {
-                System.out.println("Single Moves" + possibleMove);
                 if (possibleMove.equals(move)) {
                     if (!areThereJumpMoves()) {
                         return validMove;
@@ -271,7 +274,6 @@ public class MoveValidator {
                 }
             }
             for (Move possibleMove : jumps) {
-                System.out.println("IN jumps " + possibleMove);
                 game.jumpIsPossible();
                 if (possibleMove.equals(move)) {
                     return validMove;
@@ -300,6 +302,7 @@ public class MoveValidator {
 
         Piece p = game.backupLastMove();
         if (p != null){
+            System.out.println("Piece is not null...");
             //even if the move is made by the red person, the original
             //will be returned
             Move convertedMove = game.moveConverter(lastMove);
@@ -313,6 +316,7 @@ public class MoveValidator {
         //else, look for moves only at that last move, so the jump
         //in the middle of the last double jump
         } else {
+            System.out.println("We got another one");
             lastMove = game.moveConverter(lastMove);
             lookInSpace(lastMove.getStart().getRow(), lastMove.getStart().getCol());
         }
@@ -333,11 +337,11 @@ public class MoveValidator {
 
     /**
      * checks if the player is out of moves
-     * @param player is the player that needs to be checked for moves
+     * @param playerColor is the player that needs to be checked for moves
      * @return whether or not the red player is out of moves
      */
-    public Boolean isOut(Player player){
-        if (player == game.getRedPlayer()) {
+    public Boolean isOut(String playerColor){
+        if (playerColor.equals(REDPLAYER) ) {
             if (jumpRedMoves.isEmpty() && singleRedMoves.isEmpty()) {
                 return true;
             }
@@ -352,11 +356,11 @@ public class MoveValidator {
 
     /**
      * Gets the number of pieces on the board.
-     * @param player is the player to the number of pieces for
+     * @param playerColor is the player to the number of pieces for
      * @return the number of white pieces on the board
      */
-    public Integer getCount(Player player){
-        if (player == game.getWhitePlayer()) {
+    public Integer getCount(String playerColor){
+        if (playerColor.equals(WHITEPLAYER)) {
             return this.whiteCount;
         } else {
             return this.redCount;
@@ -366,10 +370,10 @@ public class MoveValidator {
     /**
      * @return list of available moves
      */
-    public final List<Move> getMoves(Player player) {
+    public final List<Move> getMoves(String playerColor) {
         lookForMoves();
-        java.util.List<Move> moves = new ArrayList<>();
-        if (player == game.getWhitePlayer()) {
+        List<Move> moves = new ArrayList<>();
+        if (playerColor.equals(WHITEPLAYER)) {
             if (jumpWhiteMoves.isEmpty()) {
                 moves.addAll(singleWhiteMoves);
             } else {
@@ -388,16 +392,15 @@ public class MoveValidator {
 
     /**
      * Gets a list of jump moves
-     * @param player is the player to get jump moves for
+     * @param playerColor is the player to get jump moves for
      * @return list of jump moves
      */
-    public final List<Move> getJumpMoves(Player player) {
+    public final List<Move> getJumpMoves(String playerColor) {
         lookForMoves();
-        if(player == game.getWhitePlayer()) {
+        if(playerColor.equals(WHITEPLAYER)) {
             return jumpWhiteMoves;
         } else {
             return jumpRedMoves;
         }
     }
-
 }

@@ -58,22 +58,28 @@ public class PostSubmitTurn implements Route {
         } else {
             end = "you lost.";
         }
-
-        if (moveValidator.isOut(game.getRedPlayer()) && moveValidator.isOut(game.getWhitePlayer())) {
+        //Tie Condition
+        if (moveValidator.isOut(moveValidator.REDPLAYER) &&
+                moveValidator.isOut(moveValidator.WHITEPLAYER)){
             game.setTie(true);
             responseMessage = Message.info("The game has ended in a tie.");
             AIEndGame(game, "The game has ended in a tie.", session);
-        } else if (moveValidator.isOut(game.getRedPlayer()) && !moveValidator.isOut(game.getWhitePlayer())) {
+        //White Wins
+        } else if (moveValidator.isOut(moveValidator.REDPLAYER) &&
+                !moveValidator.isOut(moveValidator.WHITEPLAYER)) {
             game.setWinner(game.getWhitePlayer());
-            String endGame = BlockedOrCaptured(moveValidator.getCount(game.getRedPlayer()), end);
+            String endGame = BlockedOrCaptured(moveValidator.getCount(moveValidator.REDPLAYER), end);
             String message = game.getWhitePlayer().getName() + endGame;
             responseMessage = Message.info(message);
             GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
             GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", message);
             AIEndGame(game, message, session);
-        } else if (!moveValidator.isOut(game.getRedPlayer()) && moveValidator.isOut(game.getWhitePlayer())) {
+
+        //Red Wins
+        } else if (!moveValidator.isOut(moveValidator.REDPLAYER)
+                && moveValidator.isOut(moveValidator.WHITEPLAYER)) {
             game.setWinner(game.getRedPlayer());
-            String endGame = BlockedOrCaptured(moveValidator.getCount(game.getWhitePlayer()), end);
+            String endGame = BlockedOrCaptured(moveValidator.getCount(moveValidator.WHITEPLAYER), end);
             String message = game.getRedPlayer().getName() + endGame;
             responseMessage = Message.info(message);
             GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
@@ -170,7 +176,7 @@ public class PostSubmitTurn implements Route {
                     game.makeMove(aiMove);
                     if (moveValidator.areThereJumpMoves()) {
                         moveValidator.lookForMoves();
-                        for (Move jump : moveValidator.getJumpMoves(game.getWhitePlayer())) {
+                        for (Move jump : moveValidator.getJumpMoves(moveValidator.WHITEPLAYER)) {
                             if (jump.getStart().toString().equals(aiMove.getEnd().toString())) {
                                 System.out.println(jump.getStart() + " equals " + aiMove.getEnd());
                                 game.makeMove(jump);

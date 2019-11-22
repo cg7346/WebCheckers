@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Repeatable;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -212,26 +214,52 @@ public class MoveValidatorTest {
         assertEquals(CuT.validMove, CuT.isInMoves(jump2));
     }
 
+    @Test
+    void singleBackup(){
+        //pretend we already moved the piece up 1 diagnol and
+        // we want to back up
+        setActivePlayer(true);
+        makePiece(5, 6, true, false);
+        makeValid(6, 5);
+        makeValid(5, 4);
+        when(game.getLastMove()).thenReturn(new Move (
+                new Position(6, 5),
+                new Position(5, 6)));
+        when(game.backupLastMove()).thenReturn(null);
+        when(game.isTurnEmpty()).thenReturn(true);
+        //mock moving back piece
+        makePiece(6, 5, true, false);
+        makeValid(5, 6);
+        CuT.backUpMove();
+        Move otherMove = new Move (new Position(6, 5),
+                new Position(5, 4));
+        assertEquals(CuT.validMove, CuT.isInMoves(otherMove));
+    }
+
 //    @Test
-//    void singleBackup(){
-//        //pretend we already moved the piece up 1 diagnol and
-//        // we want to back up 
+//    void doubleBackup(){
+//        //Pretend we already moved the peice to a complete
+//        //double jump
 //        setActivePlayer(true);
-//        makePiece(5, 6, true, false);
-//        makeValid(6, 5);
-//        makeValid(5, 4);
-//        when(game.getLastMove()).thenReturn(new Move (
-//                new Position(6, 5),
-//                new Position(5, 6)));
-//        when(game.backupLastMove()).thenReturn(null);
-//        when(game.isTurnEmpty()).thenReturn(true);
-//        //mock moving back piece
-//        makePiece(6, 5, true, false);
-//        makeValid(5, 6);
-//        Move otherMove = new Move (new Position(6, 5),
-//                new Position(5, 4));
-//        assertEquals(CuT.validMove, CuT.isInMoves(otherMove));
+//        checkersValid();
+//        makePiece(2, 5, true, false);
+//        Move mpt1 = moveMaker(4, 3, 2, 5);
+//        when(game.getLastMove()).thenReturn(mpt1);
+//        when(game.backupLastMove()).thenReturn(whiteP);
+//
+//        //add piece back like it would in working CheckersGame
+//        checkersValid();
+//        makePiece(4, 3, true, false);
+//        makePiece(3, 4, false, false);
+//        when(game.isTurnEmpty()).thenReturn(false);
+//
+//        CuT.backUpMove();
+//        //Single move next to jump
+//        Move invalid = moveMaker(4,3, 3, 2);
+//        assertEquals(CuT.validMove, CuT.isInMoves(mpt1));
+//        assertEquals(CuT.jumpAvail, CuT.isInMoves(invalid));
 //    }
+
 
     @Test
     void outNoPiecesR() {
@@ -240,9 +268,9 @@ public class MoveValidatorTest {
         makeValid(6, 5);
         makeValid(6, 7);
         CuT.lookForMoves();
-        assertFalse(CuT.isOut(game.getRedPlayer()),
+        assertFalse(CuT.isOut(CuT.REDPLAYER),
                 "Red has a piece with moves, should not be out");
-        assertTrue(CuT.isOut(game.getWhitePlayer()),
+        assertTrue(CuT.isOut(CuT.WHITEPLAYER),
                 "White has no pieces, should be out");
     }
     @Test
@@ -253,47 +281,131 @@ public class MoveValidatorTest {
         makeValid(1, 0);
         makeValid(1, 2);
         CuT.lookForMoves();
-        assertFalse(CuT.isOut(game.getWhitePlayer()),
+        assertFalse(CuT.isOut(CuT.WHITEPLAYER),
                 "White has a piece with moves, should not be out");
-        assertTrue(CuT.isOut(game.getRedPlayer()),
+        assertTrue(CuT.isOut(CuT.REDPLAYER),
                 "Red has no pieces, should be out");
     }
 
     @Test
     void Counts(){
         //No pieces
-        assertSame(0, CuT.getCount(game.getWhitePlayer()),
+        assertSame(0, CuT.getCount(CuT.WHITEPLAYER),
                 "There are no white pieces yet");
-        assertSame(0, CuT.getCount(game.getRedPlayer()),
+        assertSame(0, CuT.getCount(CuT.REDPLAYER),
                 "There are no red pieces yet");
 
         //1 Piece
         makePiece(0, 1, false, false);
         makePiece(7, 6, true, false);
         CuT.lookForMoves();
-        assertSame(1, CuT.getCount(game.getWhitePlayer()),
+        assertSame(1, CuT.getCount(CuT.WHITEPLAYER),
                 "There is 1 white Piece");
-        assertSame(1, CuT.getCount(game.getRedPlayer()),
+        assertSame(1, CuT.getCount(CuT.REDPLAYER),
                 "There is 1 red Piece");
 
         //King Piece
         makePiece(0, 3, true, true);
         makePiece(7, 4, false, false);
         CuT.lookForMoves();
-        assertSame(2, CuT.getCount(game.getWhitePlayer()),
+        assertSame(2, CuT.getCount(CuT.WHITEPLAYER),
                 "White should count King Piece");
-        assertSame(2, CuT.getCount(game.getRedPlayer()),
+        assertSame(2, CuT.getCount(CuT.REDPLAYER),
                 "Red should count King Piece");
 
         //Uneven amount of Pieces
         makePiece(0, 5, false, false);
         CuT.lookForMoves();
-        assertSame(3, CuT.getCount(game.getWhitePlayer()),
+        assertSame(3, CuT.getCount(CuT.WHITEPLAYER),
                 "There are 3 White Pieces");
-        assertSame(2, CuT.getCount(game.getRedPlayer()),
-                "There is 1 red Piece");
+        assertSame(2, CuT.getCount(CuT.REDPLAYER),
+                "There is 1 red Piece, actual ");
+    }
+    @Test
+    void test_getMoves_getJumpMoves(){
+        //no moves
+        List<Move> expectedR = new ArrayList<>();
+        List<Move> expectedW = new ArrayList<>();
+        assertEquals(expectedR, CuT.getMoves(CuT.REDPLAYER));
+        assertEquals(expectedW, CuT.getMoves(CuT.WHITEPLAYER));
+        assertEquals(expectedR, CuT.getJumpMoves(CuT.REDPLAYER));
+        assertEquals(expectedW, CuT.getJumpMoves(CuT.WHITEPLAYER));
+
+        //one move each
+        makePiece(0, 1, false, false);
+        makeValid(1, 0);
+
+        makePiece(7, 6, true, false);
+        makeValid(6, 7);
+        Move white1 = new Move(new Position(0, 1),
+                new Position(1, 0));
+        Move red1 = new Move(new Position(7, 6),
+                new Position(6, 7));
+        expectedR.add(red1);
+        expectedW.add(white1);
+        assertEquals(expectedR, CuT.getMoves(CuT.REDPLAYER));
+        assertEquals(expectedW, CuT.getMoves(CuT.WHITEPLAYER));
+
+        //set up for look for moves
+        expectedR.clear();
+        expectedW.clear();
+        makePiece(1, 2, true, false);
+        makePiece(6, 5, false, false);
+        makeValid(2, 3);
+        makeValid(5, 4);
+
+        //jump moves
+        Move jumpW = new Move(new Position(0, 1),
+                new Position(2, 3), redP);
+        Move jumpR = new Move(new Position(7, 6),
+                new Position(5, 4), whiteP);
+        expectedR.add(jumpR);
+        expectedW.add(jumpW);
+        assertEquals(expectedR, CuT.getMoves(CuT.REDPLAYER));
+        assertEquals(expectedW, CuT.getMoves(CuT.WHITEPLAYER));
+        assertEquals(expectedR, CuT.getJumpMoves(CuT.REDPLAYER));
+        assertEquals(expectedW, CuT.getJumpMoves(CuT.WHITEPLAYER));
+
+
+
     }
 
+    @Test
+    void doubleJumpBug(){
+        setActivePlayer(true);
+        checkersValid();
+        //All the white Pieces
+        makePiece(0, 7, false, false);
+        makePiece(1, 4, false, false);
+        makePiece(1, 6, false, false);
+        makePiece(2, 3, false, false);
+        makePiece(2, 7, false, false);
+        makePiece(3, 0, false, false);
+        makePiece(3, 2, false, false);
+        makePiece(3, 4, false, true);
+        makePiece(7, 0, false, true);
+
+        //All the redPieces
+        makePiece(0, 3, true, true);
+        makePiece(5, 0, true, false);
+        makePiece(5,4, true, false);
+        makePiece(5, 6, true, false);
+        makePiece(6, 3, true, false);
+
+        //First part of the double jump
+        Move mpt1 = new Move (new Position(0, 3),
+                new Position(2, 5),whiteP);
+        CuT.lookForMoves();
+        assertEquals(CuT.validMove, CuT.isInMoves(mpt1));
+        //Fake completeMove
+        makeEmpty(0, 3);
+        makeEmpty(1, 4);
+        makePiece(2, 5, true, true);
+        Move mpt2 = new Move (new Position(2, 5),
+                new Position(4, 3), whiteP);
+        CuT.lookForMoves();
+        assertEquals(CuT.validMove, CuT.isInMoves(mpt2));
+    }
 
     private void makePiece(int row, int col, boolean isRed, boolean isKing){
         when(game.isSpaceRedPiece(row, col)).thenReturn(isRed);
@@ -338,6 +450,18 @@ public class MoveValidatorTest {
                 }
             }
         }
+    }
+
+    private Move moveMaker(int startR, int startC,
+                           int endR, int endC){
+        return new Move(new Position(startR, startC),
+                new Position(endR, endC));
+    }
+
+    private Move moveMaker(int startR, int startC,
+                           int endR, int endC, Piece p){
+        return new Move(new Position(startR, startC),
+                new Position(endR, endC), p);
     }
 
 }

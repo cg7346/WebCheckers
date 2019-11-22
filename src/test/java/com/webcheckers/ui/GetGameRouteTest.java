@@ -1,4 +1,5 @@
 package com.webcheckers.ui;
+import spark.*;
 
 import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
@@ -10,10 +11,12 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import spark.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @Tag("UI-tier")
 class GetGameRouteTest {
@@ -37,23 +40,29 @@ class GetGameRouteTest {
     /**
      * Setting up the mock objects for testing
      */
-    @Test
+    @BeforeEach
     public void CreateGetGameRoute(){
         request = mock(Request.class);
         session = mock(Session.class);
-        when(request.session()).thenReturn(session);
+        when(request.session()).thenReturn(session);;
         response = mock(Response.class);
         engine = mock(TemplateEngine.class);
 
-        p1 = new Player("p1");
-        p2 = new Player("p2");
-        gameManager = new GameManager();
-        gameManager.makeGame(p1, p2);
+        p1 = mock(Player.class);
+        p2 = mock(Player.class);
+        gameManager = mock(GameManager.class);
         gson = new Gson();
         lobby = new PlayerLobby();
         CuT = new GetGameRoute(engine, lobby, gameManager, gson);
     }
 
+    @Test
+    void test_handNewGame_nullOpponent(){
+        System.out.println();
+//        when((request.queryParams().isEmpty())).thenReturn(false);
+        when(request.queryParams("opp_user")).thenReturn(null);
+        assertNull(CuT.handle(request, response));
+    }
     /*
     @Test
     void test_Game_Started()

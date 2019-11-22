@@ -133,7 +133,7 @@ public class Tree {
     public final void makeTree(int layersDeep, Node node, int parentValue) {
         if (!node.game.isGameOver() && layersDeep != 0) {
             if (node.nodeList.isEmpty()) {
-                for (Move move : node.moveValidator.getMoves(game.getWhitePlayer())) {
+                for (Move move : node.moveValidator.getMoves(node.moveValidator.WHITEPLAYER)) {
                     CheckersGame game = node.game;
                     MoveValidator moveValidator = node.moveValidator;
 
