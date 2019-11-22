@@ -70,7 +70,6 @@ public class GetSpectatorRoute implements Route {
 
         // retrieve the Player from the session
         Player spectator = session.attribute("Player");
-        System.out.println(spectator);
 
 //        CheckersGame checkersGame = new CheckersGame(redPlayer, whitePlayer, gameID)
         ModelAndView mv;

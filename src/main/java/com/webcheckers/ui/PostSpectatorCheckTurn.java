@@ -48,6 +48,7 @@ public class PostSpectatorCheckTurn implements Route {
         if (PostCheckTurn.timer != null) {
             long passedTimeInSeconds = PostCheckTurn.timer.time(TimeUnit.SECONDS);
 
+//            System.out.println("Time::: " + passedTimeInSeconds);
             Session session = request.session();
 //            System.out.println(String.format("Last turn was about %d seconds ago.", passedTimeInSeconds));
 //            response.body((String.format("Last turn was about %d seconds ago.", passedTimeInSeconds)));
@@ -57,6 +58,8 @@ public class PostSpectatorCheckTurn implements Route {
             session.attribute(GetGameRoute.MESSAGE_ERR, er);
             return gson.toJson(Message.info("true"));
         }
+//        System.out.println("Not getting time passed");
+//        TODO: reset time when game is over
         return gson.toJson(Message.info("false"));
     }
 }

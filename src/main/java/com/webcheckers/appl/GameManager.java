@@ -159,4 +159,11 @@ public class GameManager {
     public HashMap<CheckersGame, String> activeGames() {
         return games;
     }
+
+//    public String spectatorNum() {
+//        Collection<String> spectators = games.values();
+//        for (String spectator : spectators) {
+//            if
+//        }
+//    }
 }
