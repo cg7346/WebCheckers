@@ -135,6 +135,13 @@ public class GetSpectatorRoute implements Route {
         final String gameNum = request.queryParams(SPECTATOR);
         CheckersGame game = gameManager.getGame(gameNum);
         System.out.println("GAME::: " + game);
+
+        for (CheckersGame games : gameList.keySet()) {
+            if (games.getGameID().equals(gameNum)) {
+                gameList.values();
+            }
+
+        }
         // Returns new model and view
 
         String gameID = game.getGameID();
