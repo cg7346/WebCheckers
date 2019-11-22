@@ -14,7 +14,7 @@ public class GameManager {
 
     //total games (will be the game id)
     int totalGames = 0;
-    private final HashMap<CheckersGame, Integer> games = new HashMap<>();
+    private final HashMap<CheckersGame, String> games = new HashMap<>();
     private HashMap<CheckersGame, Player> spectators;
 
     /**
@@ -33,10 +33,10 @@ public class GameManager {
         synchronized (this){
             totalGames ++;
             if (!redPlayer.isInGame() && !whitePlayer.isInGame()){
-                CheckersGame game = new CheckersGame(redPlayer, whitePlayer, totalGames);
+                CheckersGame game = new CheckersGame(redPlayer, whitePlayer, Integer.toString(totalGames));
                 redPlayer.setInGame(true);
                 whitePlayer.setInGame(true);
-                games.put(game, totalGames);
+                games.put(game, Integer.toString(totalGames));
 
                 return game;
             }
@@ -88,9 +88,9 @@ public class GameManager {
      * @param gameID the id of the game you want
      * @return Checkers Game
      */
-    public CheckersGame getGame(int gameID){
+    public CheckersGame getGame(String gameID) {
         for (CheckersGame game : games.keySet()) {
-            if (game.getGameID() == gameID){
+            if (game.getGameID().equals(gameID)) {
                 return game;
             }
         }
@@ -156,7 +156,7 @@ public class GameManager {
      *
      * @return games - List<CheckerGame>
      */
-    public HashMap<CheckersGame, Integer> activeGames() {
+    public HashMap<CheckersGame, String> activeGames() {
         return games;
     }
 }

@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static spark.Spark.halt;
+
 /**
  * The UI controller to GET the Spectator page
  *
@@ -31,7 +33,7 @@ public class GetSpectatorRoute implements Route {
     static final String SPECTATOR = "spec_user";
 
     // View name
-    static final String VIEW_NAME = "home.ftl";
+    static final String VIEW_NAME = "game.ftl";
     private final Gson gson;
 
     /**
@@ -76,39 +78,14 @@ public class GetSpectatorRoute implements Route {
             vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
             //redirect back to home page
             response.redirect(WebServer.HOME_URL);
-            return templateEngine.render(new ModelAndView(vm, "home.ftl"));
-        } else if (gameManager.getGame(spectator) == null) {
-
-
-//            String opponent = request.queryParams(GetGameRoute.OPP_USER);
-//            PlayerServices opponentPlayer = gameCenter.getPlayerById(opponent);
-//            if (opponentPlayer == null || opponentPlayer.getCurrentGame() == null) {
-//                vm.put("title", "Welcome!");
-//                //redirect back to home page
-//                response.redirect(WebServer.HOME_URL);
-//                return templateEngine.render(new ModelAndView(vm, "home.ftl"));
-//            }
-//            else {
-//                current.addGame(opponentPlayer.getCurrentGame());
-//                current.toggleSpectate();
-//            }
-//        }
-//        // retrieve the game this player is entering
-//        Game game = current.getCurrentGame();
-//        current.setLastKnownColor(game.getActiveColor());
-//
-//        // get required JS attributes from Game and add them to
-//        Map attributes = game.getAttributes(current);
-//        vm.putAll(attributes);
-
-            // render the View
-            // Adds the player to the playerLobby and redirects them to
-            // home, signed in
-//            playerLobby.addPlayer(player);
-            session.attribute("Spectator", null);
+            halt();
+            return null;
+        } else {
+//        } else if (gameManager.getGame(spectator) != null) {
+//            session.attribute("Spectator", null);
             spectator.setSpectating(true);
             mv = spectator(gameManager.activeGames(), vm, spectator, request);
-            response.redirect(WebServer.HOME_URL);
+            //response.redirect(WebServer.HOME_URL);
             return templateEngine.render(mv);
 
 //        Player spectator = request.session().attribute("Player");
@@ -120,7 +97,6 @@ public class GetSpectatorRoute implements Route {
 //
 //            return null;
         }
-        return null;
     }
 
     /**
@@ -131,7 +107,7 @@ public class GetSpectatorRoute implements Route {
      * @param player   is the current player
      * @return new model and view
      */
-    public ModelAndView spectator(HashMap<CheckersGame, Integer> gameList, Map<String, Object> vm,
+    public ModelAndView spectator(HashMap<CheckersGame, String> gameList, Map<String, Object> vm,
                                   final Player player, Request request) {
         // Displays the welcome message
         vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
@@ -157,32 +133,30 @@ public class GetSpectatorRoute implements Route {
         vm.put(GetHomeRoute.SPECTATOR, player.isSpectating());
         // retrieve request parameter
         final String gameNum = request.queryParams(SPECTATOR);
-        CheckersGame game = gameManager.getGame(Integer.parseInt(gameNum));
+        CheckersGame game = gameManager.getGame(gameNum);
+        System.out.println("GAME::: " + game);
         // Returns new model and view
 
-        int gameID = game.getGameID();
+        String gameID = game.getGameID();
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
         BoardView board = new BoardView(player, game);
         vm.put(GetGameRoute.TITLE_ATTR, GetGameRoute.TITLE_ATTR_MSG);
         vm.put(GetGameRoute.GAME_ID_ATTR, gameID);
-        vm.put(GetGameRoute.CURRENT_USER_ATTR, player);
-        vm.put("viewMode", GetGameRoute.viewMode.PLAY);
-        if (GetGameRoute.modeOptionsAsJSON == null) {
-            Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
-            modeOptionsAsJSON.put("isGameOver", false);
-            modeOptionsAsJSON.put(GetGameRoute.GAME_OVER_ATTR, GetGameRoute.GAME_OVER_ATTR_MSG);
-            vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
-            vm.put(GetGameRoute.START_ATTR, GetGameRoute.START_ATTR_MSG);
-        } else {
-            vm.put("modeOptionsAsJSON", gson.toJson(GetGameRoute.modeOptionsAsJSON));
-        }
+        vm.put(GetGameRoute.CURRENT_USER_ATTR, game.getActivePlayer());
+        vm.put("viewMode", GetGameRoute.viewMode.SPECTATOR);
+//        Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
+//        modeOptionsAsJSON.put("isGameOver", false);
+//        modeOptionsAsJSON.put(GetGameRoute.GAME_OVER_ATTR, GetGameRoute.GAME_OVER_ATTR_MSG);
+//        vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
+        vm.put(GetGameRoute.START_ATTR, GetGameRoute.START_ATTR_MSG);
         vm.put(GetGameRoute.RED_PLAYER_ATTR, redPlayer);
         vm.put(GetGameRoute.WHITE_PLAYER_ATTR, whitePlayer);
         GetGameRoute.activeColor color = (game.getActivePlayer().equals(redPlayer))
                 ? GetGameRoute.activeColor.RED : GetGameRoute.activeColor.WHITE;
         vm.put(GetGameRoute.COLOR_ATTR, color);
         vm.put(GetGameRoute.BOARD_ATTR, board);
+        gameManager.addSpectator(game, player);
 
         return new ModelAndView(vm, VIEW_NAME);
     }

@@ -1,6 +1,9 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.model.*;
+import com.webcheckers.model.CheckersGame;
+import com.webcheckers.model.Player;
+import com.webcheckers.model.Row;
+import com.webcheckers.model.Space;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -25,7 +28,7 @@ public class BoardViewTest {
         this.red = Mockito.mock(Player.class);
         this.white = Mockito.mock(Player.class);
 
-        this.checkersGame = new CheckersGame(this.red, this.white, 0);
+        this.checkersGame = new CheckersGame(this.red, this.white, "0");
 
         if(!isRedPlayer){
             this.CuT = new BoardView(this.white, this.checkersGame);

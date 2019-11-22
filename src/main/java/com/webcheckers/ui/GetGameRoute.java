@@ -122,7 +122,7 @@ public class GetGameRoute implements Route {
                 response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
             }
         }
-        int gameID = game.getGameID();
+        String gameID = game.getGameID();
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
         BoardView board = new BoardView(currentPlayer, game);

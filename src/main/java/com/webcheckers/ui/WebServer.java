@@ -215,11 +215,11 @@ public class WebServer {
     post(CHECKTURN_URL, new PostCheckTurn(gameManager, gson));
 
     // Shows the Checkers game as a Spectator
-      get(SPECTATOR_URL, new GetSpectatorRoute(templateEngine, playerLobby, gameManager, gson));
+    get(SPECTATOR_URL, new GetSpectatorRoute(templateEngine, playerLobby, gameManager, gson));
 
-      // Posts the Checkers game when there isn't a spectator in a game
-//    post(END_SPECTATOR_URL, new PostEndSpectatorRoute());
-    //
+    // Posts the Checkers game when there isn't a spectator in a game
+    get(END_SPECTATOR_URL, new PostSpectatorCheckTurn(gameManager, templateEngine));
+
     LOG.config("WebServer is initialized.");
   }
 

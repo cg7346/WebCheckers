@@ -24,8 +24,8 @@ class CheckersGameTest {
     void CreateCheckersGame() {
         p1 = new Player("A");
         p2 = new Player("B");
-        RedCuT = new CheckersGame(p1, p2, ID);
-        WhiteCuT = new CheckersGame(p2, p1, ID);
+        RedCuT = new CheckersGame(p1, p2, Integer.toString(ID));
+        WhiteCuT = new CheckersGame(p2, p1, Integer.toString(ID));
         redP = new Piece(0);
         whiteP = new Piece(1);
         redKing = new Piece(0);

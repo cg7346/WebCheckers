@@ -160,7 +160,7 @@ public class GetHomeRoute implements Route {
     public ModelAndView currentUser(Map<String, Object> vm, Request request) {
         final Session session = request.session();
         List<String> userList = playerLobby.getUsernames();
-        HashMap<CheckersGame, Integer> gameList = gameManager.activeGames();
+        HashMap<CheckersGame, String> gameList = gameManager.activeGames();
         Player player = session.attribute("Player");
         // Displays the welcome message
         vm.put(WELCOME_ATTR, WELCOME_ATTR_MSG);

@@ -2,13 +2,17 @@ package com.webcheckers.ui;
 
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.model.Player;
+import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import spark.TemplateEngine;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import static spark.Spark.halt;
 
 /**
  * The UI controller to POST the Spectator page
@@ -19,6 +23,7 @@ import java.util.Objects;
 public class PostSpectatorCheckTurn implements Route {
 
     private final GameManager gameManager;
+    private final TemplateEngine templateEngine;
 
 
     /**
@@ -28,8 +33,10 @@ public class PostSpectatorCheckTurn implements Route {
      *
      * @param gameManager how to access a game
      */
-    public PostSpectatorCheckTurn(final GameManager gameManager) {
+    public PostSpectatorCheckTurn(final GameManager gameManager, final TemplateEngine templateEngine) {
         this.gameManager = Objects.requireNonNull(gameManager, "Game Manager must not be null.");
+        // Sets and validates the templateEngine attribute to not be null
+        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
     }
 
 
@@ -45,11 +52,15 @@ public class PostSpectatorCheckTurn implements Route {
         Player spectator = request.session().attribute("Player");
         Map<String, Object> vm = new HashMap<>();
 
-//        gameManager.removeSpectator(spectator);
-//        request.session().attribute("message", new Message(String.format("Spectating mode has ended."),
-//                                                                    Message.Type.INFO));
+        System.out.println("I'm in!!!!!!!!!!!!!!");
+        spectator.setInGame(false);
+        gameManager.removeSpectator(gameManager.getGame(spectator), spectator);
         vm.put("message", "Spectating mode has ended.");
         response.redirect(WebServer.HOME_URL);
+        halt();
+        request.session().attribute("message", Message.info("Spectating mode has ended."));
+        // Renders home
+//        return templateEngine.render(new ModelAndView(vm, GetHomeRoute.VIEW_NAME));
         return null;
     }
 }
