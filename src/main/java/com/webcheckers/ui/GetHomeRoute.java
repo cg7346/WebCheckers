@@ -199,4 +199,5 @@ public class GetHomeRoute implements Route {
         vm.put(MESSAGE, message);
         return new ModelAndView(vm, VIEW_NAME);
     }
+
 }

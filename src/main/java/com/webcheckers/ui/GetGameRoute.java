@@ -72,7 +72,7 @@ public class GetGameRoute implements Route {
                 halt();
                 return null;
             }
-            if (playerLobby.isInGame(chosenOpponent)) {
+            if (playerLobby.isInGame(chosenOpponent) && !chosenOpponent.isSpectating()) {
                 //we will send an error
                 Message er = Message.error(PLAYER_IN_GAME);
                 session.attribute(MESSAGE_ERR, er);
