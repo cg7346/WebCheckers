@@ -97,7 +97,6 @@ public class GameManager {
         return null;
     }
 
-
     /**
      * Just checking to see if the Player is in a particular
      * game of checkers
@@ -108,18 +107,6 @@ public class GameManager {
     public synchronized boolean isPlayerInGame(CheckersGame game, Player player) {
         return player.equals(game.getRedPlayer()) || player.equals(game.getWhitePlayer());
     }
-
-
-    /**
-     * Checks there are spectators in a game
-     *
-     * @param game the game to look for
-     * @return true if they are a spectator, false if not
-     */
-    public boolean isPlayerASpectator(CheckersGame game) {
-        return spectators.containsKey(game);
-    }
-
 
     /**
      * Adds a spectator to a game
@@ -142,16 +129,6 @@ public class GameManager {
     }
 
     /**
-     * Adds access to get the number of people in a spectator game.
-     *
-     * @param player
-     * @return
-     */
-    public CheckersGame getSpectatorGame(Player player) {
-        return this.getGame(spectators.get(player));
-    }
-
-    /**
      * This allows us to access the list of accessed games.
      *
      * @return games - List<CheckerGame>
@@ -159,11 +136,4 @@ public class GameManager {
     public HashMap<CheckersGame, String> activeGames() {
         return games;
     }
-
-//    public String spectatorNum() {
-//        Collection<String> spectators = games.values();
-//        for (String spectator : spectators) {
-//            if
-//        }
-//    }
 }

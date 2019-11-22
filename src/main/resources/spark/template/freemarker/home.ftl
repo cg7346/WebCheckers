@@ -46,26 +46,15 @@
           <form action="./spectator/game">
               <blockquote>
                   <#list gameList?values as v>
-                  <#--          <#if spectator??>-->
-                  <#--              <form action="/spectator/game" method="GET">-->
-                  <#--                  <input type="hidden" value="${id}" name="gameID">-->
-                  <#--                  <input type="submit" value="${game.redPlayer.name} vs ${game.whitePlayer.name}">-->
-                  <#--              </form>-->
-                  <#--          <#else>-->
                       <button name="spec_user" type="submit" value=${v}>Game ${v}</button>
-                  <#--          </#if>-->
                   </#list>
               </blockquote>
           </form>
       <#else>
-          <body>No games are currently active.</body>
+          <blockquote>
+            <body>No games are currently active.</body>
+          </blockquote>
       </#if>
-
-      <!-- TODO: future content on the Home:
-              to start games,
-              spectating active games,
-              or replay archived games
-      -->
 
     </p>
   </div>

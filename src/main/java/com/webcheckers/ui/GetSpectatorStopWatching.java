@@ -2,7 +2,10 @@ package com.webcheckers.ui;
 
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.model.Player;
-import spark.*;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+import spark.TemplateEngine;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +17,7 @@ import static spark.Spark.halt;
  * The UI controller to POST the Spectator page
  *
  * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella<a/>
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo<a/>
  */
 public class GetSpectatorStopWatching implements Route {
 
@@ -50,11 +54,8 @@ public class GetSpectatorStopWatching implements Route {
         visited = true;
         Player spectator = request.session().attribute("Player");
         Map<String, Object> vm = new HashMap<>();
-        Session session = request.session();
 
-        //        spectator.setInGame(false);
         gameManager.removeSpectator(gameManager.getGame(spectator), spectator);
-//        vm.put("message", "Spectating mode has ended.");
 
         response.redirect(WebServer.HOME_URL);
         halt();
