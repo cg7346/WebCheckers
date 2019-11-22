@@ -24,15 +24,15 @@ public class Piece {
         pieceColor = color.values()[colorNum];
         canMove = true;
     }
-//
-//    /**
-//     * Gets the type of the Piece
-//     * @return type.SINGLE or type.KING
-//     */
-//    public type getType()
-//    {
-//        return pieceType;
-//    }
+
+    /**
+     * Gets the type of the Piece
+     * @return type.SINGLE or type.KING
+     */
+    public type getType()
+    {
+        return pieceType;
+    }
 
     /**
      * Returns the color of the Piece
