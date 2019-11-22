@@ -75,6 +75,7 @@ public class GetSpectatorRoute implements Route {
         ModelAndView mv;
         //If the player enters this page without being signed in or in a valid game,
         if (spectator == null) {
+            System.out.println("rvfffdijnnnnnnn");
             vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
             //redirect back to home page
             response.redirect(WebServer.HOME_URL);
@@ -136,12 +137,12 @@ public class GetSpectatorRoute implements Route {
         CheckersGame game = gameManager.getGame(gameNum);
         System.out.println("GAME::: " + game);
 
-        for (CheckersGame games : gameList.keySet()) {
-            if (games.getGameID().equals(gameNum)) {
-                gameList.values();
-            }
-
-        }
+//        for (CheckersGame games : gameList.keySet()) {
+//            if (games.getGameID().equals(g)) {
+//
+//            }
+//
+//        }
         // Returns new model and view
 
         String gameID = game.getGameID();

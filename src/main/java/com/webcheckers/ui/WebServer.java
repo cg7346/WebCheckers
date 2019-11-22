@@ -223,7 +223,7 @@ public class WebServer {
     post(SPECTATOR_CHECKTURN, new PostSpectatorCheckTurn(gameManager, templateEngine));
 
     // Shows the checkers game when there isn't a spectator in a game
-    get(END_SPECTATOR_URL, new GetSpectatorStopWatching(gameManager, templateEngine));
+    get(END_SPECTATOR_URL, new GetSpectatorRoute(templateEngine, playerLobby, gameManager, gson));
 
     LOG.config("WebServer is initialized.");
   }

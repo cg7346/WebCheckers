@@ -58,8 +58,6 @@ public class GetSpectatorStopWatching implements Route {
         response.redirect(WebServer.HOME_URL);
         halt();
         request.session().attribute("message", Message.info("Spectating mode has ended."));
-        // Renders home
-//        return templateEngine.render(new ModelAndView(vm, GetHomeRoute.VIEW_NAME));
         return null;
     }
 }
