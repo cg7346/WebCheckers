@@ -31,6 +31,7 @@ public class GetSpectatorRoute implements Route {
     private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
     static final String SPECTATOR = "spec_user";
+    static Boolean specEndGame;
 
     // View name
     static final String VIEW_NAME = "game.ftl";
@@ -81,28 +82,12 @@ public class GetSpectatorRoute implements Route {
             halt();
             return null;
         } else {
-//        } else if (gameManager.getGame(spectator) != null) {
-//            session.attribute("Spectator", null);
-//            spectator.setSpectating(true);
             mv = spectator(gameManager.activeGames(), vm, spectator, request, response);
-            //response.redirect(WebServer.HOME_URL);
             if (mv == null) {
-//                response.redirect(WebServer.HOME_URL);
-//                halt();
                 return null;
-//                return templateEngine.render(GetHomeRoute.mv);
             } else {
                 return templateEngine.render(mv);
             }
-
-//        Player spectator = request.session().attribute("Player");
-//        CheckersGame game = gameManager.getGame(spectator);
-//        Player gPlayer = game.getRedPlayer();
-//
-//        gameManager.addSpectator(spectator, gPlayer);
-//        response.redirect(WebServer.GAME_URL);
-//
-//            return null;
         }
     }
 
@@ -117,13 +102,11 @@ public class GetSpectatorRoute implements Route {
     public ModelAndView spectator(HashMap<CheckersGame, String> gameList, Map<String, Object> vm,
                                   final Player player, Request request, Response response) {
 
-//        TODO: remove response
+        Session session = request.session();
         // Displays the welcome message
         vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
         vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
 
-//        // Sets the current user to the current player
-//        vm.put(GetHomeRoute.CURRENT_USER, player);
         // Displays the players online title
         vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
 
@@ -143,7 +126,6 @@ public class GetSpectatorRoute implements Route {
         // retrieve request parameter
         final String gameNum = request.queryParams(SPECTATOR);
         CheckersGame game = gameManager.getGame(gameNum);
-//   TODO get rid of     System.out.println("GAME::: " + game);
         if (game != null) {
             String gameID = game.getGameID();
             Player redPlayer = game.getRedPlayer();
@@ -172,8 +154,9 @@ public class GetSpectatorRoute implements Route {
             // Returns new model and view
             return new ModelAndView(vm, VIEW_NAME);
         }
-//        response.redirect(WebServer.HOME_URL);
-//        halt();
+        specEndGame = true;
+        response.redirect(WebServer.HOME_URL);
+        halt();
         return null;
     }
 }

@@ -65,13 +65,6 @@ public class PostCheckTurn implements Route {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
-        //sometimes having the game undefined breaks the builder
-//        if(game == null){
-//            GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
-//            GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", game.getWinner().getName() + " has won!");
-//            response.body(gson.toJson(Message.info(game.getWinner().getName() + " has won!")));
-//            gameManager.removeGame(game);
-//        }
 
         if (game != null) {
             if (game.getResignedPlayer() != null) {

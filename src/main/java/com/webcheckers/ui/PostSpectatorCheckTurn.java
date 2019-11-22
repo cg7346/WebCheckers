@@ -4,7 +4,10 @@ package com.webcheckers.ui;
 import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.util.Message;
-import spark.*;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+import spark.TemplateEngine;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -51,19 +54,11 @@ public class PostSpectatorCheckTurn implements Route {
         if (PostCheckTurn.timer != null) {
             long passedTimeInSeconds = PostCheckTurn.timer.time(TimeUnit.SECONDS);
 
-//            System.out.println("Time::: " + passedTimeInSeconds);
-            Session session = request.session();
-//            System.out.println(String.format("Last turn was about %d seconds ago.", passedTimeInSeconds));
-//            response.body((String.format("Last turn was about %d seconds ago.", passedTimeInSeconds)));
             SPECTATOR_TIME = String.format("Last turn was about %d seconds ago.", passedTimeInSeconds); /* Get the game over message */
-//            String message = String.format("Last turn was about %d seconds ago.", passedTimeInSeconds);
             response.body(gson.toJson(SPECTATOR_TIME));
-//            Message er = Message.info(SPECTATOR_TIME);
-//            session.attribute(GetGameRoute.MESSAGE_ERR, er);
             return gson.toJson(Message.info(SPECTATOR_TIME));
         }
-//        System.out.println("Not getting time passed");
-//        TODO: reset time when game is over
+
         return gson.toJson(Message.info("false"));
     }
 }

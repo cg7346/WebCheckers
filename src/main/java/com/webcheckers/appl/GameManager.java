@@ -15,7 +15,7 @@ public class GameManager {
     //total games (will be the game id)
     int totalGames = 0;
     private final HashMap<CheckersGame, String> games = new HashMap<>();
-    private HashMap<CheckersGame, Player> spectators;
+    public HashMap<CheckersGame, Player> spectators;
 
     /**
      * Makes a new game for players to play

@@ -164,8 +164,17 @@ public class GetHomeRoute implements Route {
         HashMap<CheckersGame, String> gameList = gameManager.activeGames();
         Player player = session.attribute("Player");
         // Displays the welcome message
-        vm.put(WELCOME_ATTR, WELCOME_ATTR_MSG);
-        vm.put(MESSAGE, WELCOME_MSG);
+
+        if (gameManager.spectators != null && GetSpectatorRoute.specEndGame != null) {
+            if (GetSpectatorStopWatching.visited) {
+                GetSpectatorStopWatching.visited = false;
+                vm.put(MESSAGE, Message.info(GetSpectatorStopWatching.SPECTATOR_END));
+            }
+            if (GetSpectatorRoute.specEndGame) {
+                GetSpectatorRoute.specEndGame = false;
+                vm.put(MESSAGE, Message.info("The game has ended."));
+            }
+        }
 
         // Sets the current user to the current player
         vm.put(GAME_LIST, gameManager.activeGames());
