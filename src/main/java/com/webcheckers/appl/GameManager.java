@@ -4,8 +4,7 @@ package com.webcheckers.appl;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * Class to handle all the checker games
@@ -15,7 +14,8 @@ public class GameManager {
 
     //total games (will be the game id)
     int totalGames = 0;
-    private final List<CheckersGame> games = new ArrayList<>();
+    private final HashMap<CheckersGame, String> games = new HashMap<>();
+    private HashMap<CheckersGame, Player> spectators;
 
     /**
      * Makes a new game for players to play
@@ -28,13 +28,16 @@ public class GameManager {
      */
     public CheckersGame makeGame(Player redPlayer, Player whitePlayer){
 
+        spectators = new HashMap<>();
+
         synchronized (this){
             totalGames ++;
             if (!redPlayer.isInGame() && !whitePlayer.isInGame()){
-                CheckersGame game = new CheckersGame(redPlayer, whitePlayer, totalGames);
+                CheckersGame game = new CheckersGame(redPlayer, whitePlayer, Integer.toString(totalGames));
                 redPlayer.setInGame(true);
                 whitePlayer.setInGame(true);
-                games.add(game);
+                games.put(game, Integer.toString(totalGames));
+
                 return game;
             }
             else
@@ -54,17 +57,11 @@ public class GameManager {
     public CheckersGame removeGame(CheckersGame game) {
 
         synchronized (this) {
-            totalGames--;
-
-            //TODO see if we can remove that catch,
-            //when you remove something from a list
-            //that isn't there, it does not throw an error
-            games.remove(game);
-//            try {
-//                games.remove(game);
-//            } catch (IndexOutOfBoundsException err) {
-//                System.err.println(err);
-//            }
+            try {
+                games.remove(game);
+            } catch (IndexOutOfBoundsException err) {
+                System.err.println(err);
+            }
             game.getRedPlayer().setInGame(false);
             game.getWhitePlayer().setInGame(false);
             return null;
@@ -78,7 +75,7 @@ public class GameManager {
      * @return the game if the player has one, null if not
      */
     public CheckersGame getGame(Player sessionPlayer){
-        for (CheckersGame game : games){
+        for (CheckersGame game : games.keySet()) {
             if (isPlayerInGame(game, sessionPlayer)){
                 return game;
             }
@@ -91,9 +88,9 @@ public class GameManager {
      * @param gameID the id of the game you want
      * @return Checkers Game
      */
-    public CheckersGame getGame(int gameID){
-        for (CheckersGame game : games){
-            if (game.getGameID() == gameID){
+    public CheckersGame getGame(String gameID) {
+        for (CheckersGame game : games.keySet()) {
+            if (game.getGameID().equals(gameID)) {
                 return game;
             }
         }
@@ -112,4 +109,54 @@ public class GameManager {
         return player.equals(game.getRedPlayer()) || player.equals(game.getWhitePlayer());
     }
 
+
+    /**
+     * Checks there are spectators in a game
+     *
+     * @param game the game to look for
+     * @return true if they are a spectator, false if not
+     */
+    public boolean isPlayerASpectator(CheckersGame game) {
+        return spectators.containsKey(game);
+    }
+
+
+    /**
+     * Adds a spectator to a game
+     *
+     * @param game  the game the spectator is in
+     * @param spectator a player that is the spectator
+     */
+    public void addSpectator(CheckersGame game, Player spectator) {
+        spectators.put(game, spectator);
+    }
+
+    /**
+     * This will remove a spectator from the Checkers Game
+     *
+     * @param game      the Checkers Game the spectator is in
+     * @param spectator a player that is the spectator
+     */
+    public void removeSpectator(CheckersGame game, Player spectator) {
+        spectators.remove(game, spectator);
+    }
+
+    /**
+     * Adds access to get the number of people in a spectator game.
+     *
+     * @param player
+     * @return
+     */
+    public CheckersGame getSpectatorGame(Player player) {
+        return this.getGame(spectators.get(player));
+    }
+
+    /**
+     * This allows us to access the list of accessed games.
+     *
+     * @return games - List<CheckerGame>
+     */
+    public HashMap<CheckersGame, String> activeGames() {
+        return games;
+    }
 }

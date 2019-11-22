@@ -10,6 +10,8 @@ import java.util.logging.Logger;
 
 import static spark.Spark.*;
 
+//import com.webcheckers.model.CheckersGame;
+
 
 /**
  * The server that initializes the set of HTTP request handlers.
@@ -86,6 +88,18 @@ public class WebServer {
    * the URL pattern to resign game
    */
   public static final String RESIGN_URL = "/resignGame";
+  /**
+   * the URL pattern to spectate the a game
+   */
+  public static final String SPECTATOR_URL = "/spectator/game";
+  /**
+   * the URL pattern to check if any moves are made for spectator
+   */
+  public static final String SPECTATOR_CHECKTURN = "/spectator/checkTurn";
+  /**
+   * the URL pattern to end spectator mode
+   */
+  public static final String END_SPECTATOR_URL = "/spectator/stopWatching";
 
   //
   // Attributes
@@ -95,7 +109,6 @@ public class WebServer {
   private final Gson gson;
   private final GameManager gameManager;
   private final PlayerLobby playerLobby;
-
   //
   // Constructor
   //
@@ -204,7 +217,15 @@ public class WebServer {
     // Checks to see if the game is ready for next turn
     post(CHECKTURN_URL, new PostCheckTurn(gameManager, gson));
 
-    //
+    // Shows the Checkers game as a Spectator
+    get(SPECTATOR_URL, new GetSpectatorRoute(templateEngine, playerLobby, gameManager, gson));
+
+    // Posts the turn of players for the spectator to see
+    post(SPECTATOR_CHECKTURN, new PostSpectatorCheckTurn(gameManager, templateEngine, gson));
+
+    // Shows the checkers game when there isn't a spectator in a game
+    get(END_SPECTATOR_URL, new GetSpectatorStopWatching(gameManager, templateEngine));
+
     LOG.config("WebServer is initialized.");
   }
 

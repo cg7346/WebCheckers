@@ -17,7 +17,6 @@
 
   <div class="body">
 
-    <!-- Provide a message to the user, if supplied. -->
     <#include "message.ftl" />
 
     <#if currentUser??>
@@ -35,17 +34,59 @@
             </#list>
         </ol>
         </form>
+
+        <h2>Spectate A Game</h2>
+        <#if gameList?has_content>
+            <form action="./spectator/game">
+                <blockquote>
+                    <#list gameList?values as v>
+                    <#--          <#if spectator??>-->
+                    <#--              <form action="/spectator/game" method="GET">-->
+                    <#--                  <input type="hidden" value="${id}" name="gameID">-->
+                    <#--                  <input type="submit" value="${game.redPlayer.name} vs ${game.whitePlayer.name}">-->
+                    <#--              </form>-->
+                    <#--          <#else>-->
+                        <button name="spec_user" type="submit" value=${v}>Game ${v}</button>
+                    <#--          </#if>-->
+                    </#list>
+                </blockquote>
+            </form>
+        <#else>
+            <body>No games are currently active.</body>
+        </#if>
+
     <#else>
         <h2>${playersOnline}</h2>
         <blockquote>
             <li> ${playerActive}</li>
         </blockquote>
     </#if>
-    <!-- TODO: future content on the Home:
-            to start games,
-            spectating active games,
-            or replay archived games
-    -->
+
+      <#--<h2>Spectate A Game</h2>-->
+      <#--<#if gameList?has_content>-->
+          <#--<form action="./spectator/game">-->
+              <#--<blockquote>-->
+                  <#--<#list gameList?values as v>-->
+                  <#--&lt;#&ndash;          <#if spectator??>&ndash;&gt;-->
+                  <#--&lt;#&ndash;              <form action="/spectator/game" method="GET">&ndash;&gt;-->
+                  <#--&lt;#&ndash;                  <input type="hidden" value="${id}" name="gameID">&ndash;&gt;-->
+                  <#--&lt;#&ndash;                  <input type="submit" value="${game.redPlayer.name} vs ${game.whitePlayer.name}">&ndash;&gt;-->
+                  <#--&lt;#&ndash;              </form>&ndash;&gt;-->
+                  <#--&lt;#&ndash;          <#else>&ndash;&gt;-->
+                      <#--<button name="spec_user" type="submit" value=${v}>Game ${v}</button>-->
+                  <#--&lt;#&ndash;          </#if>&ndash;&gt;-->
+                  <#--</#list>-->
+              <#--</blockquote>-->
+          <#--</form>-->
+      <#--<#else>-->
+          <#--<body>No games are currently active.</body>-->
+      <#--</#if>-->
+
+      <!-- TODO: future content on the Home:
+              to start games,
+              spectating active games,
+              or replay archived games
+      -->
 
     </p>
   </div>

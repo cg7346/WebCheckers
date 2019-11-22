@@ -83,7 +83,7 @@ public class PostCheckTurnTest {
     void test_isNotActivePlayer(){
         when(mockGame.getActivePlayer()).thenReturn(mock(Player.class));
         when(session.attribute("Player")).thenReturn(mock(Player.class));
-        String expected = "{\"text\":\"false\",\"type\":\"INFO\"}";
+        String expected = "{\"text\":\"true\",\"type\":\"INFO\"}";
         try {
             Object o = CuT.handle(request, response);
             assertEquals(expected, o.toString());

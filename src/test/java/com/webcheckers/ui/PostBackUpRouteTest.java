@@ -40,7 +40,7 @@ public class PostBackUpRouteTest {
 //        when(mock)
         Player mockPlayer = mock(Player.class);
         Player mockP2 = mock(Player.class);
-        CheckersGame game = new CheckersGame(mockPlayer, mockP2, 1);
+        CheckersGame game = new CheckersGame(mockPlayer, mockP2, "1");
         when(session.attribute("Player"))
                 .thenReturn(mockPlayer);
         when(gm.getGame(mockPlayer)).thenReturn(game);

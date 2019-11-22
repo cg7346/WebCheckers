@@ -16,7 +16,7 @@ public class AITest {
     @BeforeEach
     void creation(){
         game = new CheckersGame(new Player("a"),
-        new Player("b"), 1);
+        new Player("b"), "1");
         mv = new MoveValidator(game);
         CuT = new AI(game, mv);
     }
