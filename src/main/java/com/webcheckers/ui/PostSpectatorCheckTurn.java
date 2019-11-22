@@ -20,6 +20,9 @@ public class PostSpectatorCheckTurn implements Route {
     private final TemplateEngine templateEngine;
     private final Gson gson;
 
+    static String SPECTATOR_TIME;
+
+
 
     /**
      * Create the UI controller to handle all {@code GET /spectator/stopWatching} HTTP requests.
@@ -52,11 +55,12 @@ public class PostSpectatorCheckTurn implements Route {
             Session session = request.session();
 //            System.out.println(String.format("Last turn was about %d seconds ago.", passedTimeInSeconds));
 //            response.body((String.format("Last turn was about %d seconds ago.", passedTimeInSeconds)));
-            String message = String.format("Last turn was about %d seconds ago.", passedTimeInSeconds);
-            response.body(gson.toJson(message));
-            Message er = Message.error(message);
-            session.attribute(GetGameRoute.MESSAGE_ERR, er);
-            return gson.toJson(Message.info("true"));
+            SPECTATOR_TIME = String.format("Last turn was about %d seconds ago.", passedTimeInSeconds); /* Get the game over message */
+//            String message = String.format("Last turn was about %d seconds ago.", passedTimeInSeconds);
+            response.body(gson.toJson(SPECTATOR_TIME));
+//            Message er = Message.info(SPECTATOR_TIME);
+//            session.attribute(GetGameRoute.MESSAGE_ERR, er);
+            return gson.toJson(Message.info(SPECTATOR_TIME));
         }
 //        System.out.println("Not getting time passed");
 //        TODO: reset time when game is over

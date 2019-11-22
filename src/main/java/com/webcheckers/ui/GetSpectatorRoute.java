@@ -157,7 +157,11 @@ public class GetSpectatorRoute implements Route {
 //        modeOptionsAsJSON.put("isGameOver", false);
 //        modeOptionsAsJSON.put(GetGameRoute.GAME_OVER_ATTR, GetGameRoute.GAME_OVER_ATTR_MSG);
 //        vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
-            vm.put(GetGameRoute.START_ATTR, GetGameRoute.START_ATTR_MSG);
+            if (PostSpectatorCheckTurn.SPECTATOR_TIME == null) {
+                vm.put(GetGameRoute.START_ATTR, GetGameRoute.START_ATTR_MSG);
+            } else {
+                vm.put(GetGameRoute.START_ATTR, Message.info(PostSpectatorCheckTurn.SPECTATOR_TIME));
+            }
             vm.put(GetGameRoute.RED_PLAYER_ATTR, redPlayer);
             vm.put(GetGameRoute.WHITE_PLAYER_ATTR, whitePlayer);
             GetGameRoute.activeColor color = (game.getActivePlayer().equals(redPlayer))
