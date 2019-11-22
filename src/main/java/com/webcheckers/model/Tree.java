@@ -143,8 +143,8 @@ public class Tree {
                 for (Node newNode : node.nodeList) {
                     if (max && parentValue >= node.score) {
                         makeTree(layersDeep - 1, newNode, node.score, false );
-                    } else if (!max && parentValue <= node.score){
-                        makeTree(layersDeep - 1, newNode, node.score, true );
+                    } else if (!max && parentValue <= node.score) {
+                        makeTree(layersDeep - 1, newNode, node.score, true);
                     }
                     if (max) {
                         if (node.score < newNode.score) {

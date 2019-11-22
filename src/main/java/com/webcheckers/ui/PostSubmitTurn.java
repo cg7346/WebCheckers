@@ -110,47 +110,6 @@ public class PostSubmitTurn implements Route {
         moveValidator.lookForMoves();
         Message responseMessage = gameOver(moveValidator, game, session, true);
         if( responseMessage == null) {
-//        if (moveValidator.isRedOut() && moveValidator.isWhiteOut()) {
-//            game.setTie(true);
-//            responseMessage = Message.info("The game has ended in a tie.");
-//            if (AI) {
-//                gameManager.removeGame(game);
-//                Message er = Message.error("The game has ended in a tie.");
-//                session.attribute(MESSAGE_ERR, er);
-//            }
-//        } else if (moveValidator.isRedOut() && !moveValidator.isWhiteOut()) {
-//            game.setWinner(game.getWhitePlayer());
-//            String endGame;
-//            if (moveValidator.getRedCount() > 0) {
-//                endGame = " has blocked all pieces, you won!";
-//            } else {
-//                endGame = " has captured all pieces, you won!";
-//            }
-//            String message = game.getWhitePlayer().getName() + endGame;
-//            responseMessage = Message.info(message);
-//            GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
-//            GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", message);
-//            if (AI) {
-//                gameManager.removeGame(game);
-//            }
-//        } else if (!moveValidator.isRedOut() && moveValidator.isWhiteOut()) {
-//            game.setWinner(game.getRedPlayer());
-//            String endGame;
-//            if (moveValidator.getWhiteCount() > 0) {
-//                endGame = " has blocked all pieces, you won!";
-//            } else {
-//                endGame = " has captured all pieces, you won!";
-//            }
-//            String message = game.getRedPlayer().getName() + endGame;
-//            responseMessage = Message.info(message);
-//            GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
-//            GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", message);
-//            if (AI) {
-//                gameManager.removeGame(game);
-//                Message er = Message.error(message);
-//                session.attribute(MESSAGE_ERR, er);
-//            }
-//        } else {
             Move lastMove = game.getLastMove();
             if (lastMove == null) {
                 responseMessage = Message.error("Make move first");
@@ -172,18 +131,26 @@ public class PostSubmitTurn implements Route {
                 if (AI) {
                     AI ai = new AI(game, moveValidator);
                     Move aiMove = ai.makeTurn();
-                    System.out.println(aiMove);
                     game.makeMove(aiMove);
-                    if (moveValidator.areThereJumpMoves()) {
+                    Boolean jumpMoves = moveValidator.areThereJumpMoves();
+                    while (jumpMoves) {
+                        Boolean visited = false;
                         moveValidator.lookForMoves();
+                        System.out.println(moveValidator.getJumpMoves(moveValidator.WHITEPLAYER));
                         for (Move jump : moveValidator.getJumpMoves(moveValidator.WHITEPLAYER)) {
                             if (jump.getStart().toString().equals(aiMove.getEnd().toString())) {
                                 System.out.println(jump.getStart() + " equals " + aiMove.getEnd());
                                 game.makeMove(jump);
+                                visited = true;
                                 break;
                             }
                         }
+                        if (!visited) {
+                            jumpMoves = false;
+                            break;
+                        }
                     }
+                }
                     game.completeTurn();
                     moveValidator.lookForMoves();
                     if (gameOver(moveValidator, game, session, false) != null){
@@ -192,7 +159,6 @@ public class PostSubmitTurn implements Route {
                 }
             }
             //       }
-        }
         AI = false;
         response.body(gson.toJson(responseMessage));
         return gson.toJson(responseMessage);
