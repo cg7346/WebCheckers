@@ -73,13 +73,45 @@ public class GetSpectatorRoute implements Route {
             response.redirect(WebServer.HOME_URL);
             return templateEngine.render(new ModelAndView(vm, "home.ftl"));
         } else if (gameManager.getGame(spectator) == null) {
+//            String opponent = request.queryParams(GetGameRoute.OPP_USER);
+//            PlayerServices opponentPlayer = gameCenter.getPlayerById(opponent);
+//            if (opponentPlayer == null || opponentPlayer.getCurrentGame() == null) {
+//                vm.put("title", "Welcome!");
+//                //redirect back to home page
+//                response.redirect(WebServer.HOME_URL);
+//                return templateEngine.render(new ModelAndView(vm, "home.ftl"));
+//            }
+//            else {
+//                current.addGame(opponentPlayer.getCurrentGame());
+//                current.toggleSpectate();
+//            }
+//        }
+//        // retrieve the game this player is entering
+//        Game game = current.getCurrentGame();
+//        current.setLastKnownColor(game.getActiveColor());
+//
+//        // get required JS attributes from Game and add them to
+//        Map attributes = game.getAttributes(current);
+//        vm.putAll(attributes);
 
+            // render the View
+            // Adds the player to the playerLobby and redirects them to
+            // home, signed in
+//            playerLobby.addPlayer(player);
             session.attribute("Spectator", null);
             spectator.setSpectating(true);
             mv = spectator(gameManager.activeGames(), vm, spectator);
             response.redirect(WebServer.HOME_URL);
             return templateEngine.render(mv);
 
+//        Player spectator = request.session().attribute("Player");
+//        CheckersGame game = gameManager.getGame(spectator);
+//        Player gPlayer = game.getRedPlayer();
+//
+//        gameManager.addSpectator(spectator, gPlayer);
+//        response.redirect(WebServer.GAME_URL);
+//
+//            return null;
         }
         return null;
     }

@@ -45,7 +45,7 @@ public class PostSpectatorCheckTurn implements Route {
         Player spectator = request.session().attribute("Player");
         Map<String, Object> vm = new HashMap<>();
 
-        gameManager.removeSpectator(spectator);
+//        gameManager.removeSpectator(spectator);
 //        request.session().attribute("message", new Message(String.format("Spectating mode has ended."),
 //                                                                    Message.Type.INFO));
         vm.put("message", "Spectating mode has ended.");
