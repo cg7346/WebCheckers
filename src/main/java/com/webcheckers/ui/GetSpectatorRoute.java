@@ -69,13 +69,14 @@ public class GetSpectatorRoute implements Route {
         vm.put("viewMode", GetGameRoute.viewMode.SPECTATOR);
 
         // retrieve the Player from the session
-        Player spectator = request.session().attribute("Player");
+        Player spectator = session.attribute("Player");
+        System.out.println(spectator);
 
 //        CheckersGame checkersGame = new CheckersGame(redPlayer, whitePlayer, gameID)
         ModelAndView mv;
         //If the player enters this page without being signed in or in a valid game,
         if (spectator == null) {
-            System.out.println("rvfffdijnnnnnnn");
+            System.out.println("nulllllllllllllll");
             vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
             //redirect back to home page
             response.redirect(WebServer.HOME_URL);
@@ -84,8 +85,9 @@ public class GetSpectatorRoute implements Route {
         } else {
 //        } else if (gameManager.getGame(spectator) != null) {
 //            session.attribute("Spectator", null);
+            System.out.println("ahhhhhhhhhhhhhhhh");
             spectator.setSpectating(true);
-            mv = spectator(gameManager.activeGames(), vm, spectator, request);
+            mv = spectator(gameManager.activeGames(), vm, spectator, request, response);
             //response.redirect(WebServer.HOME_URL);
             return templateEngine.render(mv);
 
@@ -109,7 +111,8 @@ public class GetSpectatorRoute implements Route {
      * @return new model and view
      */
     public ModelAndView spectator(HashMap<CheckersGame, String> gameList, Map<String, Object> vm,
-                                  final Player player, Request request) {
+                                  final Player player, Request request, Response response) {
+
         // Displays the welcome message
         vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
         vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
@@ -136,37 +139,33 @@ public class GetSpectatorRoute implements Route {
         final String gameNum = request.queryParams(SPECTATOR);
         CheckersGame game = gameManager.getGame(gameNum);
         System.out.println("GAME::: " + game);
-
-//        for (CheckersGame games : gameList.keySet()) {
-//            if (games.getGameID().equals(g)) {
-//
-//            }
-//
-//        }
-        // Returns new model and view
-
-        String gameID = game.getGameID();
-        Player redPlayer = game.getRedPlayer();
-        Player whitePlayer = game.getWhitePlayer();
-        BoardView board = new BoardView(player, game);
-        vm.put(GetGameRoute.TITLE_ATTR, GetGameRoute.TITLE_ATTR_MSG);
-        vm.put(GetGameRoute.GAME_ID_ATTR, gameID);
-        vm.put(GetGameRoute.CURRENT_USER_ATTR, game.getActivePlayer());
-        vm.put("viewMode", GetGameRoute.viewMode.SPECTATOR);
+        if (game != null) {
+            String gameID = game.getGameID();
+            Player redPlayer = game.getRedPlayer();
+            Player whitePlayer = game.getWhitePlayer();
+            BoardView board = new BoardView(player, game);
+            vm.put(GetGameRoute.TITLE_ATTR, GetGameRoute.TITLE_ATTR_MSG);
+            vm.put(GetGameRoute.GAME_ID_ATTR, gameID);
+            vm.put(GetGameRoute.CURRENT_USER_ATTR, game.getActivePlayer());
+            vm.put("viewMode", GetGameRoute.viewMode.SPECTATOR);
 //        Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
 //        modeOptionsAsJSON.put("isGameOver", false);
 //        modeOptionsAsJSON.put(GetGameRoute.GAME_OVER_ATTR, GetGameRoute.GAME_OVER_ATTR_MSG);
 //        vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
-        vm.put(GetGameRoute.START_ATTR, GetGameRoute.START_ATTR_MSG);
-        vm.put(GetGameRoute.RED_PLAYER_ATTR, redPlayer);
-        vm.put(GetGameRoute.WHITE_PLAYER_ATTR, whitePlayer);
-        GetGameRoute.activeColor color = (game.getActivePlayer().equals(redPlayer))
-                ? GetGameRoute.activeColor.RED : GetGameRoute.activeColor.WHITE;
-        vm.put(GetGameRoute.COLOR_ATTR, color);
-        vm.put(GetGameRoute.BOARD_ATTR, board);
-        gameManager.addSpectator(game, player);
-
-        return new ModelAndView(vm, VIEW_NAME);
+            vm.put(GetGameRoute.START_ATTR, GetGameRoute.START_ATTR_MSG);
+            vm.put(GetGameRoute.RED_PLAYER_ATTR, redPlayer);
+            vm.put(GetGameRoute.WHITE_PLAYER_ATTR, whitePlayer);
+            GetGameRoute.activeColor color = (game.getActivePlayer().equals(redPlayer))
+                    ? GetGameRoute.activeColor.RED : GetGameRoute.activeColor.WHITE;
+            vm.put(GetGameRoute.COLOR_ATTR, color);
+            vm.put(GetGameRoute.BOARD_ATTR, board);
+            gameManager.addSpectator(game, player);
+            // Returns new model and view
+            return new ModelAndView(vm, VIEW_NAME);
+        }
+        response.redirect(WebServer.HOME_URL);
+        halt();
+        return null;
     }
 
 }

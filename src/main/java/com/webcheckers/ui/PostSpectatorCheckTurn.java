@@ -1,13 +1,16 @@
 package com.webcheckers.ui;
 
 
+import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
+import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.TemplateEngine;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The UI controller to POST the Spectator page
@@ -18,6 +21,7 @@ public class PostSpectatorCheckTurn implements Route {
 
     private final GameManager gameManager;
     private final TemplateEngine templateEngine;
+    private final Gson gson;
 
 
     /**
@@ -27,15 +31,16 @@ public class PostSpectatorCheckTurn implements Route {
      *
      * @param gameManager how to access a game
      */
-    public PostSpectatorCheckTurn(final GameManager gameManager, final TemplateEngine templateEngine) {
+    public PostSpectatorCheckTurn(final GameManager gameManager, final TemplateEngine templateEngine, final Gson gson) {
         this.gameManager = Objects.requireNonNull(gameManager, "Game Manager must not be null.");
         // Sets and validates the templateEngine attribute to not be null
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+        this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
 
     /**
-     * Render the WebCheckers Home page for a spectator
+     * Render an updated checker game for spectator
      *
      * @param request  the HTTP request
      * @param response the HTTP response
@@ -43,6 +48,13 @@ public class PostSpectatorCheckTurn implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
-        return null;
+        if (PostCheckTurn.timer == null) {
+            long passedTimeInSeconds = PostCheckTurn.timer.time(TimeUnit.SECONDS);
+
+            System.out.println(String.format("Last turn was about %d seconds ago.", passedTimeInSeconds));
+            response.body((String.format("Last turn was about %d seconds ago.", passedTimeInSeconds)));
+            return gson.toJson(Message.info("true"));
+        }
+        return gson.toJson(Message.info("false"));
     }
 }

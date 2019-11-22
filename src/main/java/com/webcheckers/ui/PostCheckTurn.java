@@ -2,22 +2,18 @@ package com.webcheckers.ui;
 
 import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
-import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
-import com.webcheckers.model.Move;
 import com.webcheckers.model.MoveValidator;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.TimeWatch;
 import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import spark.Session;
 
-import java.nio.file.WatchEvent;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-
-import static spark.Spark.halt;
 
 /**
  * The {@code POST /checkTurn} route handler
@@ -29,6 +25,7 @@ public class PostCheckTurn implements Route {
 
     // Constants
     static final String MESSAGE_ERR = "message error";
+    static TimeWatch timer;
 
     // Attributes
     private final GameManager gameManager;
@@ -104,6 +101,8 @@ public class PostCheckTurn implements Route {
                 GameOver(request, response, game, message);
                 return gson.toJson(Message.info("true"));
             } else if (game.getActivePlayer().equals(currentPlayer)) {
+                timer = TimeWatch.start();
+
                 return gson.toJson(Message.info("true"));
             } else if (GetGameRoute.modeOptionsAsJSON != null) {
                 return gson.toJson(Message.info("true"));

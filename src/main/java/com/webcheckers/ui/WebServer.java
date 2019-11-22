@@ -95,11 +95,12 @@ public class WebServer {
   /**
    * the URL pattern to check if any moves are made for spectator
    */
-  public static final String SPECTATOR_CHECKTURN = "/spectator/game/checkTurn";
+  public static final String SPECTATOR_CHECKTURN = "/spectator/checkTurn";
   /**
    * the URL pattern to end spectator mode
    */
   public static final String END_SPECTATOR_URL = "/spectator/stopWatching";
+
   //
   // Attributes
   //
@@ -220,10 +221,10 @@ public class WebServer {
     get(SPECTATOR_URL, new GetSpectatorRoute(templateEngine, playerLobby, gameManager, gson));
 
     // Posts the turn of players for the spectator to see
-    post(SPECTATOR_CHECKTURN, new PostSpectatorCheckTurn(gameManager, templateEngine));
+    post(SPECTATOR_CHECKTURN, new PostSpectatorCheckTurn(gameManager, templateEngine, gson));
 
     // Shows the checkers game when there isn't a spectator in a game
-    get(END_SPECTATOR_URL, new GetSpectatorRoute(templateEngine, playerLobby, gameManager, gson));
+    get(END_SPECTATOR_URL, new GetSpectatorStopWatching(gameManager, templateEngine));
 
     LOG.config("WebServer is initialized.");
   }
