@@ -4,9 +4,7 @@ package com.webcheckers.appl;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Class to handle all the checker games
@@ -16,7 +14,7 @@ public class GameManager {
 
     //total games (will be the game id)
     int totalGames = 0;
-    private final List<CheckersGame> games = new ArrayList<>();
+    private final HashMap<CheckersGame, Integer> games = new HashMap<>();
     private HashMap<Player, Player> spectators;
 
     /**
@@ -38,7 +36,8 @@ public class GameManager {
                 CheckersGame game = new CheckersGame(redPlayer, whitePlayer, totalGames);
                 redPlayer.setInGame(true);
                 whitePlayer.setInGame(true);
-                games.add(game);
+                games.put(game, totalGames);
+
                 return game;
             }
             else
@@ -58,7 +57,6 @@ public class GameManager {
     public CheckersGame removeGame(CheckersGame game) {
 
         synchronized (this) {
-            totalGames--;
             try {
                 games.remove(game);
             } catch (IndexOutOfBoundsException err) {
@@ -77,7 +75,7 @@ public class GameManager {
      * @return the game if the player has one, null if not
      */
     public CheckersGame getGame(Player sessionPlayer){
-        for (CheckersGame game : games){
+        for (CheckersGame game : games.keySet()) {
             if (isPlayerInGame(game, sessionPlayer)){
                 return game;
             }
@@ -91,7 +89,7 @@ public class GameManager {
      * @return Checkers Game
      */
     public CheckersGame getGame(int gameID){
-        for (CheckersGame game : games){
+        for (CheckersGame game : games.keySet()) {
             if (game.getGameID() == gameID){
                 return game;
             }
@@ -152,8 +150,7 @@ public class GameManager {
      *
      * @return games - List<CheckerGame>
      */
-    public List<CheckersGame> activeGames() {
+    public HashMap<CheckersGame, Integer> activeGames() {
         return games;
     }
-
 }

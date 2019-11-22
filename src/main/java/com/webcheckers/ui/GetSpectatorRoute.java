@@ -8,7 +8,6 @@ import com.webcheckers.util.Message;
 import spark.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -61,57 +60,26 @@ public class GetSpectatorRoute implements Route {
 
         // start building the view-model
         Map<String, Object> vm = new HashMap<>();
-        vm.put("title", "Game");
+        vm.put("viewMode", GetGameRoute.viewMode.SPECTATOR);
+        String opponent = request.queryParams(GetGameRoute.OPP_USER);
+        System.out.println(opponent);
 
-        // retrieve the PlayerServices from the session
-        Player current = request.session().attribute("Player");
+        // retrieve the Player from the session
+        Player spectator = request.session().attribute("Player");
+
         ModelAndView mv;
         //If the player enters this page without being signed in or in a valid game,
-        if (current == null) {
+        if (spectator == null) {
             vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
             //redirect back to home page
             response.redirect(WebServer.HOME_URL);
             return templateEngine.render(new ModelAndView(vm, "home.ftl"));
-        } else if (gameManager.getGame(current) == null) {
-            String opponent = request.queryParams(GetGameRoute.OPP_USER);
-//            PlayerServices opponentPlayer = gameCenter.getPlayerById(opponent);
-//            if (opponentPlayer == null || opponentPlayer.getCurrentGame() == null) {
-//                vm.put("title", "Welcome!");
-//                //redirect back to home page
-//                response.redirect(WebServer.HOME_URL);
-//                return templateEngine.render(new ModelAndView(vm, "home.ftl"));
-//            }
-//            else {
-//                current.addGame(opponentPlayer.getCurrentGame());
-//                current.toggleSpectate();
-//            }
-//        }
-//        // retrieve the game this player is entering
-//        Game game = current.getCurrentGame();
-//        current.setLastKnownColor(game.getActiveColor());
-//
-//        // get required JS attributes from Game and add them to
-//        Map attributes = game.getAttributes(current);
-//        vm.putAll(attributes);
-
-            // render the View
-            // Adds the player to the playerLobby and redirects them to
-            // home, signed in
-//            playerLobby.addPlayer(player);
-            session.attribute("Spectator", current);
-            current.setSpectating(false);
-            mv = spectator(gameManager.activeGames(), vm, current);
+        } else if (gameManager.getGame(spectator) == null) {
+            session.attribute("Spectator", null);
+            spectator.setSpectating(true);
+            mv = spectator(gameManager.activeGames(), vm, spectator);
             response.redirect(WebServer.HOME_URL);
             return templateEngine.render(mv);
-
-//        Player spectator = request.session().attribute("Player");
-//        CheckersGame game = gameManager.getGame(spectator);
-//        Player gPlayer = game.getRedPlayer();
-//
-//        gameManager.addSpectator(spectator, gPlayer);
-//        response.redirect(WebServer.GAME_URL);
-//
-//            return null;
         }
         return null;
     }
@@ -124,10 +92,11 @@ public class GetSpectatorRoute implements Route {
      * @param player   is the current player
      * @return new model and view
      */
-    public ModelAndView spectator(List<CheckersGame> gameList, Map<String, Object> vm, final Player player) {
+    public ModelAndView spectator(HashMap<CheckersGame, Integer> gameList, Map<String, Object> vm, final Player player) {
         // Displays the welcome message
         vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
         vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
+
 
         // Sets the current user to the current player
         vm.put(GetHomeRoute.GAME_LIST, gameList);

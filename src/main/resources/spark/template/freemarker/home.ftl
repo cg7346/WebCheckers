@@ -17,7 +17,6 @@
 
   <div class="body">
 
-    <!-- Provide a message to the user, if supplied. -->
     <#include "message.ftl" />
 
     <#if currentUser??>
@@ -44,24 +43,29 @@
 
       <h2>Spectate A Game</h2>
       <#if gameList?has_content>
-          <#if spectator??>
-              <form action="/spectator/game" method="GET">
-                  <input type="hidden" value="${id}" name="gameID">
-                  <input type="submit" value="${game.redPlayer.name} vs ${game.whitePlayer.name}">
-              </form>
-          <#else>
-              <#list game_list as id>
-                  <button name="spec_user" type="submit" value=${id}>${id}</button>
-              </#list>
-          </#if>
+          <form action="./spectator/game">
+              <blockquote>
+                  <#list gameList?values as v>
+                  <#--          <#if spectator??>-->
+                  <#--              <form action="/spectator/game" method="GET">-->
+                  <#--                  <input type="hidden" value="${id}" name="gameID">-->
+                  <#--                  <input type="submit" value="${game.redPlayer.name} vs ${game.whitePlayer.name}">-->
+                  <#--              </form>-->
+                  <#--          <#else>-->
+                      <button name="spec_user" type="submit" value=${v}>Game ${v}</button>
+                  <#--          </#if>-->
+                  </#list>
+              </blockquote>
+          </form>
       <#else>
           <body>No games are currently active.</body>
       </#if>
-    <!-- TODO: future content on the Home:
-            to start games,
-            spectating active games,
-            or replay archived games
-    -->
+
+      <!-- TODO: future content on the Home:
+              to start games,
+              spectating active games,
+              or replay archived games
+      -->
 
     </p>
   </div>

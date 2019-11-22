@@ -110,8 +110,7 @@ public class GetHomeRoute implements Route {
                   response.redirect(WebServer.GAME_URL);
                   halt();
                   return null;
-              }
-              if (currentPlayer.isSpectating()) {
+              } else if (currentPlayer.isSpectating()) {
                   response.redirect((WebServer.SPECTATOR_URL));
                   halt();
                   return null;
@@ -161,7 +160,7 @@ public class GetHomeRoute implements Route {
     public ModelAndView currentUser(Map<String, Object> vm, Request request) {
         final Session session = request.session();
         List<String> userList = playerLobby.getUsernames();
-        List<CheckersGame> gameList = gameManager.activeGames();
+        HashMap<CheckersGame, Integer> gameList = gameManager.activeGames();
         Player player = session.attribute("Player");
         // Displays the welcome message
         vm.put(WELCOME_ATTR, WELCOME_ATTR_MSG);

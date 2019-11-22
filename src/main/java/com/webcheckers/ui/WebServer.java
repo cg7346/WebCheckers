@@ -214,8 +214,8 @@ public class WebServer {
     // Checks to see if the game is ready for next turn
     post(CHECKTURN_URL, new PostCheckTurn(gameManager, gson));
 
-      // Shows the Checkers game as a Spectator
-      post(SPECTATOR_URL, new GetSpectatorRoute(templateEngine, playerLobby, gameManager));
+    // Shows the Checkers game as a Spectator
+    get(SPECTATOR_URL, new GetSpectatorRoute(templateEngine, playerLobby, gameManager));
 
       // Posts the Checkers game when there isn't a spectator in a game
 //    post(END_SPECTATOR_URL, new PostEndSpectatorRoute());
