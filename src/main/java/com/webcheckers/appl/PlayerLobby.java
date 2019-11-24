@@ -13,15 +13,22 @@ import java.util.List;
  */
 public class PlayerLobby {
 
-    // The player of the webcheckers game
-    private Player player;
-    // The list of players playing the webcheckers game
+    //
+    // Attributes
+    //
+
+    // The list of players playing the WebCheckers game
     private final List<Player> players = new ArrayList<>();
+    // The player of the WebCheckers game
+    private Player player;
 
 
+    //
+    // Constructor
+    //
 
-    //TODO see if we can remove this?
-    //only used in tests
+    // TODO: see if we can remove this?
+    //  only used in tests
     /**
      * Create a PlayerLobby.
      *
@@ -126,8 +133,8 @@ public class PlayerLobby {
         return null;
     }
 
-    //TODO see if we can remove this
-    //only used in tests
+    //TODO: see if we can remove this
+    // only used in tests
     /**
      * this function gets a player
      * @return Player
@@ -135,13 +142,6 @@ public class PlayerLobby {
     public Player getPlayer(){
         return this.player;
     }
-
-//    /**
-//     * Cleanup the @Linkplain{PlayerLobby} object when the session expires.
-//     * The only cleanup will be to remove the player.
-//     */
-//    public void endSession() { player = null; }
-    //TODO: implement these
 
     /**
      * A boolean value
@@ -153,17 +153,6 @@ public class PlayerLobby {
     public Boolean isGameOver() {
         return null;
     }
-
-//    public void setPlayer(Player player){
-//        this.player = player;
-//    }
-//    /**
-//     * Cleanup the @Linkplain{PlayerLobby} object when the session expires.
-//     * The only cleanup will be to remove the game.
-//     * TODO: game = null;
-//     */
-//    public void endSession() {
-//    }
 }
 
 

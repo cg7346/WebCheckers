@@ -1,15 +1,25 @@
 package com.webcheckers.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * creates a row
- * @author Jacquelyn Leung
+ *
+ * @author <a href='mailto:jil4009@rit.edu'>Jackie Leung</a>
  */
-
 public class Row {
+
+    //
+    // Attributes
+    //
+
     private int index;
     private ArrayList<Space> spaceList;
+
+    //
+    // Constructor
+    //
 
     /**
      * initialize row

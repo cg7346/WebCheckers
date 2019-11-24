@@ -9,13 +9,29 @@ import java.util.HashMap;
 /**
  * Class to handle all the checker games
  * It makes checkers games and assigns players to them
+ *
+ * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella</>
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</>
+ * @author <a href='mailto:mmb2582@rit.edu'>Mallory Bridge</a>
+ * @author <a href='mailto:jil4009@rit.edu'>Jackie Leung</a>
+ * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
  */
 public class GameManager {
 
-    //total games (will be the game id)
-    int totalGames = 0;
+    //
+    // Attributes
+    //
+
+    // storing the checkers game is being stored with the game id
     private final HashMap<CheckersGame, String> games = new HashMap<>();
+    // storing the spectators by active games
     public HashMap<CheckersGame, Player> spectators;
+    // total games (will be the game id)
+    int totalGames = 0;
+
+    //
+    // Constructor
+    //
 
     /**
      * Makes a new game for players to play

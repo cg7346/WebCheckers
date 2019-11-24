@@ -1,6 +1,5 @@
 package com.webcheckers.model;
 
-
 /**
  * Represents a Piece in the game, to be controlled by either player
  * Holds the information responsible for the color and type of piece
@@ -8,12 +7,22 @@ package com.webcheckers.model;
  * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
  */
 public class Piece {
+    //
+    // Constants
+    //
     private enum type {SINGLE, KING}
     enum color {RED, WHITE}
 
+    //
+    // Attributes
+    //
+
     private type pieceType;
     private color pieceColor;
-    private boolean canMove;
+
+    //
+    // Constructor
+    //
 
     /**
      * The constructor for a Piece. Takes an integer for the color
@@ -22,7 +31,6 @@ public class Piece {
     public Piece(int colorNum) {
         pieceType = type.SINGLE;
         pieceColor = color.values()[colorNum];
-        canMove = true;
     }
 
     /**
@@ -65,6 +73,4 @@ public class Piece {
     public void makePieceKing(){
         pieceType = type.KING;
     }
-
-
 }

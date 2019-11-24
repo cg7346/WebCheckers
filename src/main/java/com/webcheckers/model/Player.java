@@ -3,16 +3,27 @@ package com.webcheckers.model;
 /**
  * A single "Player".
  *
+ * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella</>
  * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</a>
  */
 public class Player {
 
     // name is the name of the Player
     private String name;
+    // whether a player is in a game
     private boolean inGame;
+    // whether a player is spectating a game
     private boolean isSpectating;
 
+    //
+    // Constructor
+    //
 
+    /**
+     * The constructor for the Player class
+     *
+     * @param name players username
+     */
     public Player(String name) {
         this.name = name;
     }
@@ -20,8 +31,7 @@ public class Player {
     /**
      * Gets the Player's name
      *
-     * @return
-     *      the name of the Player as a String
+     * @return the name of the Player as a String
      */
     public String getName(){
         return this.name;
@@ -51,14 +61,4 @@ public class Player {
     public boolean isSpectating() {
         return isSpectating;
     }
-
-    /**
-     * Setter for spectating
-     *
-     * @param bool boolean value to set isSpectating to
-     */
-    public void setSpectating(boolean bool) {
-        this.isSpectating = bool;
-    }
-
 }

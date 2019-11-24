@@ -1,8 +1,6 @@
 package com.webcheckers.ui;
 
-import org.testng.annotations.Test;
-
-import static org.testng.Assert.*;
+import org.junit.jupiter.api.Test;
 
 public class GetSpectatorStopWatchingTest {
 

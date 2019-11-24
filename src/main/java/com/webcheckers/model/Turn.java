@@ -5,8 +5,17 @@ import java.util.Stack;
 /**
  * Class to represent a turn being made in the game
  * Holds the logic to store the moves being made and to undo them
+ *
+ * @author <a href='mailto:mmb2582@rit.edu'>Mallory Bridge</a>
+ * @author <a href='mailto:jil4009@rit.edu'>Jackie Leung</a>
+ * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
+
  */
 public class Turn {
+
+    //
+    // Attributes
+    //
 
     private Stack<Move> moves;
     private Stack<Piece> removedPieces;
@@ -106,7 +115,7 @@ public class Turn {
      */
     public Stack<Move> getMoves(){
         return this.moves;
-    };
+    }
 
     /**
      * Checks if the stack of moves is empty

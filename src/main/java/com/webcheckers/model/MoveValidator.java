@@ -2,7 +2,6 @@ package com.webcheckers.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * Class to help validate the moves made
@@ -10,12 +9,16 @@ import java.util.Stack;
  * Manipulates the currentTurn in Checkers Game
  * based on moves the players made
  *
- * @author Mallory Bridge mmb2582
- * @author Anthony Ferraioli amf7619
- * @author Jacquelyn Leung jil4009
- * @author Kelly Vo kdv6978
+ * @author <a href='mailto:mmb2582@rit.edu'>Mallory Bridge</a>
+ * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
+ * @author <a href='mailto:jil4009@rit.edu'>Jackie Leung</a>
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</>
  */
 public class MoveValidator {
+
+    //
+    // Attributes
+    //
 
     //The game we are playing
     private CheckersGame game;
@@ -34,7 +37,10 @@ public class MoveValidator {
     // The number of red pieces on the board
     public static Integer redCount = 0;
 
+    //
     // Constants
+    //
+
     public final String jumpAvail = "A jump is available";
     public final String invalidMove = "INVALID MOOOVE";
     public final String validMove = "Valid Move!";
@@ -42,6 +48,10 @@ public class MoveValidator {
     // Text for isRed b/c I don't want them tossing players around
     public final String REDPLAYER= "RED";
     public final String WHITEPLAYER= "WHITE";
+
+    //
+    // Constructor
+    //
 
     /**
      * Construct a move validator for the game to use
@@ -66,8 +76,8 @@ public class MoveValidator {
     public void lookForMoves(){
         clearArrays();
         //System.out.println("Looking for Moves");
-        for (int row = 0; row < game.ROWS; row++) {
-            for (int col = 0; col < game.COLS; col++) {
+        for (int row = 0; row < CheckersGame.ROWS; row++) {
+            for (int col = 0; col < CheckersGame.COLS; col++) {
                 if (game.doesSpaceHavePiece(row, col)) {
                     lookInSpace(row, col);
                 }
@@ -213,7 +223,9 @@ public class MoveValidator {
      */
     public Move checkMove(int startRow, int startCol, int endRow, int endCol, boolean isRed){
         //make sure the move is on the board
-        if(endCol >= game.COLS || endCol < 0 || endRow >= game.ROWS || endRow < 0) {return null;}
+        if (endCol >= CheckersGame.COLS || endCol < 0 || endRow >= CheckersGame.ROWS || endRow < 0) {
+            return null;
+        }
         boolean isEndValid = game.isSpaceValid(endRow, endCol);
         boolean spaceHasPiece = game.doesSpaceHavePiece(endRow, endCol);
         //either the player is red or the piece is red NOT BOTH
@@ -230,8 +242,10 @@ public class MoveValidator {
             int newEndRow = startRow + ((endRow - startRow) * 2);
             int newEndCol = startCol + ((endCol - startCol) * 2);
             //make sure that new move is on the board
-            if(newEndCol >= game.COLS || newEndCol < 0 ||
-                    newEndRow >= game.ROWS || newEndRow < 0) {return null;}
+            if (newEndCol >= CheckersGame.COLS || newEndCol < 0 ||
+                    newEndRow >= CheckersGame.ROWS || newEndRow < 0) {
+                return null;
+            }
             if(game.isSpaceValid(newEndRow, newEndCol)){
                 return new Move(new Position(startRow, startCol),
                         new Position(newEndRow, newEndCol), piece);
@@ -343,15 +357,9 @@ public class MoveValidator {
      */
     public Boolean isOut(String playerColor){
         if (playerColor.equals(REDPLAYER) ) {
-            if (jumpRedMoves.isEmpty() && singleRedMoves.isEmpty()) {
-                return true;
-            }
-            return false;
+            return jumpRedMoves.isEmpty() && singleRedMoves.isEmpty();
         } else {
-            if (jumpWhiteMoves.isEmpty() && singleWhiteMoves.isEmpty()) {
-                return true;
-            }
-            return false;
+            return jumpWhiteMoves.isEmpty() && singleWhiteMoves.isEmpty();
         }
     }
 
@@ -362,13 +370,15 @@ public class MoveValidator {
      */
     public Integer getCount(String playerColor){
         if (playerColor.equals(WHITEPLAYER)) {
-            return this.whiteCount;
+            return whiteCount;
         } else {
-            return this.redCount;
+            return redCount;
         }
     }
 
     /**
+     * Enables us to gather a of the moves by there type
+     *
      * @return list of available moves
      */
     public final List<Move> getMoves(String playerColor) {
@@ -393,6 +403,7 @@ public class MoveValidator {
 
     /**
      * Gets a list of jump moves
+     *
      * @param playerColor is the player to get jump moves for
      * @return list of jump moves
      */

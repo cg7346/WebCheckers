@@ -6,7 +6,7 @@ import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 import spark.Request;
 import spark.Response;
 import spark.Session;
@@ -14,7 +14,6 @@ import spark.TemplateEngine;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.testng.Assert.*;
 
 public class GetSpectatorRouteTest {
 
