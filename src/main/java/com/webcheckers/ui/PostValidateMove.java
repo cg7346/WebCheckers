@@ -17,19 +17,24 @@ import java.util.Objects;
 
 public class PostValidateMove implements Route {
 
-    static final String MESSAGE_ERR = "message error";
+    //
+    // Attributes
+    //
 
-    private CheckersGame game;
-    private Move move;
+    // TODO: check if this is needed
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
     private final Gson gson;
 
+    //
+    // Constructor
+    //
+
     /**
      * the constructor for post validate move
-     * @param playerLobby
-     * @param gameManager
-     * @param gson
+     * @param playerLobby   the list of players playing the WebCheckers game
+     * @param gameManager   handles all the checker games
+     * @param gson  is the JSON
      */
     public PostValidateMove(PlayerLobby playerLobby, GameManager gameManager, Gson gson){
         this.playerLobby = Objects.requireNonNull(playerLobby, "player lobby is required");
@@ -40,12 +45,14 @@ public class PostValidateMove implements Route {
     /**
      * the handle for post validate move
      * @param request
+     *   the HTTP request
      * @param response
+     *   the HTTP response
      * @return
-     * @throws Exception
+     *   gson message for the move is valid
      */
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(Request request, Response response) {
         String moveString = request.queryParams("actionData");
         String gameIdString = request.queryParams("gameID");
         Move move = gson.fromJson(moveString, Move.class);
@@ -59,8 +66,6 @@ public class PostValidateMove implements Route {
             responseMessage = Message.info(moveResponse);
             game.keepLastMove(move);
             game.completeMove();
-
-            //game.checkForDoubleJump(move);
         }else {
             responseMessage = Message.error(moveResponse);
         }
