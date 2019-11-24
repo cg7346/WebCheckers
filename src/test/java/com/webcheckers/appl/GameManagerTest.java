@@ -166,7 +166,7 @@ public class GameManagerTest {
         gm.removeSpectator(g1 ,p4);
 
         HashMap<CheckersGame, Player> expected = new HashMap<>();
-        expected.put(g1, p3);
-//        assertEquals(expected, gm.spectators);
+        //expected.put(g1, p3);
+        assertEquals(expected, gm.spectators);
     }
 }
