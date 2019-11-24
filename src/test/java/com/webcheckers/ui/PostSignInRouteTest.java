@@ -267,5 +267,13 @@ public class PostSignInRouteTest {
         verify(response).redirect(WebServer.HOME_URL);
     }
 
+    @Test
+    void notNewPlayer(){
+        when(request.queryParams("myUsername")).thenReturn(player1.getName());
+        when(playerLobby.isValidPlayer(any(Player.class))).thenReturn(true);
+        when(playerLobby.isNewPlayer(any(Player.class))).thenReturn(false);
+
+    }
+
 
 }
