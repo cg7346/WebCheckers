@@ -35,34 +35,35 @@ public class GetGameRoute implements Route {
     static final String COLOR_ATTR = "activeColor";
     static final String RED_PLAYER_ATTR = "redPlayer";
     static final String WHITE_PLAYER_ATTR = "whitePlayer";
-    static final String GAME_OVER_ATTR = "gameOverMessage";
-    static final Message GAME_OVER_ATTR_MSG = Message.info("The game is over"); /* Get the game over message */
     static final String VIEW_NAME = "game.ftl";
-    static final String PLAYER_IN_GAME = "Chosen player is already in a game.";
-    static final String PLAYER_IN_SPEC = "Chosen player is spectating a game.";
-    static final String MESSAGE_ATTR = "message";
     static final String MESSAGE_ERR = "message error";
-    static final String OPP_USER = "opp_user";
+    public enum activeColor {RED, WHITE}
+    static Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
+    enum viewMode {PLAY, SPECTATOR}
+
+
+    private static final String GAME_OVER_ATTR = "gameOverMessage";
+    private static final Message GAME_OVER_ATTR_MSG = Message.info("The game is over");
+    private static final String PLAYER_IN_GAME = "Chosen player is already in a game.";
+    private static final String PLAYER_IN_SPEC = "Chosen player is spectating a game.";
+    private static final String OPP_USER = "opp_user";
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
     private final Gson gson;
-    private activeColor activeTurnColor;
-    public enum activeColor {RED, WHITE}
-    static Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
-    enum viewMode {PLAY, SPECTATOR, REPLAY}
     private final TemplateEngine templateEngine;
 
     /**
      * this handles a new game
-     * @param request
-     * @param response
-     * @param currentPlayer
+     * @param request is the HTTP request
+     * @param response is the HTTP response
+     * @param currentPlayer is the current player
      * @return a Checkers game
      */
     private CheckersGame handleNewGame(Request request, Response response, Player currentPlayer) {
         CheckersGame game = null;
         Session session = request.session();
         modeOptionsAsJSON = new HashMap<>(2);
+        // If the query param are not empty, get the opponent name
         if (!request.queryParams().isEmpty()) {
             String opponentName = request.queryParams(OPP_USER);
             if (opponentName == null) {
@@ -70,14 +71,17 @@ public class GetGameRoute implements Route {
                 halt();
                 return null;
             }
+            // If opponent is AI, then make a new player named AI
             Player chosenOpponent = opponentName.equals("AI") ?
                     new Player("AI") : playerLobby.findPlayer(opponentName);
+            // If opponent is null, then redirect home
             if (chosenOpponent == null) {
                 response.redirect(WebServer.HOME_URL);
                 halt();
                 return null;
             }
 
+            // Handles error if opponent chosen is spectating a game
             if (gameManager.spectators != null && gameManager.spectators.containsValue(chosenOpponent)) {
                 //we will send an error
                 Message er = Message.error(PLAYER_IN_SPEC);
@@ -86,7 +90,7 @@ public class GetGameRoute implements Route {
                 halt();
                 return null;
             }
-
+            // Handles error if opponent chosen is in a game
             if (playerLobby.isInGame(chosenOpponent)) {
                 //we will send an error
                 Message er = Message.error(PLAYER_IN_GAME);
@@ -115,12 +119,18 @@ public class GetGameRoute implements Route {
      */
     public GetGameRoute(final TemplateEngine templateEngine, PlayerLobby playerLobby,
                         GameManager gameManager, Gson gson) {
-        // validation
-        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
-        this.playerLobby = Objects.requireNonNull(playerLobby, "playerLobby must not be null");
-        this.gameManager = Objects.requireNonNull(gameManager, "gameManager must not be null");
-        this.gson = gson;
-        this.activeTurnColor = activeColor.RED;
+        // Sets and validates the templateEngine attribute to not be null
+        this.templateEngine = Objects.requireNonNull(templateEngine,
+                "templateEngine must not be null");
+        // Sets and validates the playerLobby attribute to not be null
+        this.playerLobby = Objects.requireNonNull(playerLobby,
+                "playerLobby must not be null");
+        // Sets and validates the gameManager attribute to not be null
+        this.gameManager = Objects.requireNonNull(gameManager,
+                "gameManager must not be null");
+        // Sets and validates the gson attribute to not be null
+        this.gson = Objects.requireNonNull(gson,
+                "gson must not be null");
     }
 
     /**
@@ -135,29 +145,36 @@ public class GetGameRoute implements Route {
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
         Map<String, Object> vm = new HashMap<>();
+        // If game is null, then handle a new game
         if (game == null) {
             game = handleNewGame(request, response, currentPlayer);
         } else {
+            // Handles resign game
             if (game.getResignedPlayer() != null) {
                 modeOptionsAsJSON.put("isGameOver", true);
-                modeOptionsAsJSON.put("gameOverMessage", PostResignGame.resignPlayer.getName() + " has resigned.");
-                response.body(gson.toJson(PostResignGame.resignMessage(PostResignGame.resignPlayer)));
+                modeOptionsAsJSON.put("gameOverMessage",
+                        PostResignGame.resignPlayer.getName() + " has resigned.");
+                response.body(gson.toJson(PostResignGame.resignMessage(
+                        PostResignGame.resignPlayer)));
             }
         }
         String gameID = game.getGameID();
         Player redPlayer = game.getRedPlayer();
         Player whitePlayer = game.getWhitePlayer();
         BoardView board = new BoardView(currentPlayer, game);
+        // Bulids view model
         vm.put(TITLE_ATTR, TITLE_ATTR_MSG);
         vm.put(GAME_ID_ATTR, gameID);
         vm.put(CURRENT_USER_ATTR, currentPlayer);
         vm.put("viewMode", viewMode.PLAY);
+        // If mode option is null, then game is not over
         if (modeOptionsAsJSON == null) {
             Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
             modeOptionsAsJSON.put("isGameOver", false);
             modeOptionsAsJSON.put(GAME_OVER_ATTR, GAME_OVER_ATTR_MSG);
             vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
             vm.put(START_ATTR, START_ATTR_MSG);
+        // Otherwise, game is over
         } else {
             vm.put("modeOptionsAsJSON", gson.toJson(modeOptionsAsJSON));
         }
@@ -167,6 +184,7 @@ public class GetGameRoute implements Route {
                 ? activeColor.RED : activeColor.WHITE;
         vm.put(COLOR_ATTR, color);
         vm.put(BOARD_ATTR, board);
+        // Return template engine
         return templateEngine.render(new ModelAndView(vm, VIEW_NAME));
     }
 }

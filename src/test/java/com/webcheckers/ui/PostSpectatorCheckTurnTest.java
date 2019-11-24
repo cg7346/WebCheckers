@@ -49,7 +49,7 @@ public class PostSpectatorCheckTurnTest
         gson = new Gson();
         engine = mock(TemplateEngine.class);
 
-        CuT = new PostSpectatorCheckTurn(gameManager, engine, gson);
+        CuT = new PostSpectatorCheckTurn(gson);
         String gameIdString = "3";
         when(request.queryParams("gameID")).thenReturn(gameIdString);
     }
