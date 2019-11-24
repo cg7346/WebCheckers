@@ -117,17 +117,7 @@ public class GetSpectatorRoute implements Route {
 
         // Displays the players online title
         vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
-
-//        int playerCount = playerLobby.getPlayers().size();
-//        if (playerCount == 0) {
-//            vm.put(GetHomeRoute.PLAYERS_COUNT, GetHomeRoute.NO_PLAYERS);
-//        } else if (playerCount == 1) {
-//            String count = String.format(GetHomeRoute.PLAYER, playerCount);
-//            vm.put(GetHomeRoute.PLAYERS_COUNT, count);
-//        } else {
-//            String count = String.format(GetHomeRoute.PLAYERS, playerCount);
-//            vm.put(GetHomeRoute.PLAYERS_COUNT, count);
-//        }
+        // Updates the players online count
         GetHomeRoute.playerActive(vm, playerLobby.getPlayers().size());
 
         vm.put(GetHomeRoute.GAME_LIST, gameList);
