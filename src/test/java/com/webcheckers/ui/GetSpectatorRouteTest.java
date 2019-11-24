@@ -16,9 +16,21 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * The unit test suite for the {@link GetSpectatorRoute} component.
+ *
+ * @author <a href='mailto:mmb2582@rit.edu'>Mallory Bridge</a>
+ * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
+ */
 public class GetSpectatorRouteTest {
 
-    //CuT
+    /**
+     * The component-under-test (CuT).
+     * <p>
+     * This is a stateless component so we only need one.
+     * The {@link GetSpectatorRoute} component is thoroughly tested so
+     * we can use it safely as a "friendly" dependency.
+     */
     private GetSpectatorRoute CuT;
 
     //Mock Object
@@ -37,7 +49,7 @@ public class GetSpectatorRouteTest {
     private TemplateEngineTester helper;
 
     @BeforeEach
-    void construct() {
+    void setup() {
         request = mock(Request.class);
         session = mock(Session.class);
         when(request.session()).thenReturn(session);
@@ -63,6 +75,7 @@ public class GetSpectatorRouteTest {
         when(session.attribute("Player")).thenReturn(null);
         assertThrows(spark.HaltException.class, () -> CuT.handle(request, response));
     }
+
     @Test
     void nullGame(){
         List<Player> fakeList = new ArrayList<>();
