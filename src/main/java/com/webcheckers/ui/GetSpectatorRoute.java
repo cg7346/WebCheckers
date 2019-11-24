@@ -21,7 +21,9 @@ import static spark.Spark.halt;
  */
 public class GetSpectatorRoute implements Route {
 
-    private static final Message GAME_MSG = Message.info("You're a spectator!");
+    //
+    // Attributes
+    //
 
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
@@ -29,8 +31,16 @@ public class GetSpectatorRoute implements Route {
     static final String SPECTATOR = "spec_user";
     static Boolean specEndGame;
 
+    //
+    // Constants
+    //
+
     // View name
     static final String VIEW_NAME = "game.ftl";
+
+    //
+    // Constructor
+    //
 
     /**
      * Create the UI controller to handle all {@code GET /spectator/game} HTTP requests.

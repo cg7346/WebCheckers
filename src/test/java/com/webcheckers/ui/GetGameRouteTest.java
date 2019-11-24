@@ -1,22 +1,19 @@
 package com.webcheckers.ui;
-import spark.*;
-
 import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import spark.*;
+import spark.Request;
+import spark.Response;
+import spark.Session;
+import spark.TemplateEngine;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @Tag("UI-tier")
 class GetGameRouteTest {
@@ -44,7 +41,7 @@ class GetGameRouteTest {
     public void CreateGetGameRoute(){
         request = mock(Request.class);
         session = mock(Session.class);
-        when(request.session()).thenReturn(session);;
+        when(request.session()).thenReturn(session);
         response = mock(Response.class);
         engine = mock(TemplateEngine.class);
 
@@ -58,7 +55,6 @@ class GetGameRouteTest {
 
     @Test
     void test_handNewGame_nullOpponent(){
-        System.out.println();
 //        when((request.queryParams().isEmpty())).thenReturn(false);
         when(request.queryParams("opp_user")).thenReturn(null);
         assertNull(CuT.handle(request, response));

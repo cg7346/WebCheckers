@@ -25,9 +25,6 @@
     <h1>Web Checkers | Game View</h1>
 
     <div class="body">
-        <#--      <div class="spectator">-->
-        <#--        <label for="spectators"><b>There are ${spec_num} watching the game.</b></label>-->
-        <#--      </div>-->
       <div id="help_text" class="INFO"></div>
 
       <div>

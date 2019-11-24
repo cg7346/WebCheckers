@@ -75,7 +75,6 @@ public class MoveValidator {
      */
     public void lookForMoves(){
         clearArrays();
-        //System.out.println("Looking for Moves");
         for (int row = 0; row < CheckersGame.ROWS; row++) {
             for (int col = 0; col < CheckersGame.COLS; col++) {
                 if (game.doesSpaceHavePiece(row, col)) {
@@ -96,7 +95,6 @@ public class MoveValidator {
      * @param col the column to look for the space
      */
     public void lookInSpace(int row, int col){
-        //System.out.println("Looking in " + row + " " + col);
         boolean isRed = game.isSpaceRedPiece(row, col);
         boolean isKing = game.isSpaceKingPiece(row, col);
         if(!isRed && !isKing){
@@ -201,7 +199,6 @@ public class MoveValidator {
 
         if(move != null) {
             if (move.hasPiece()) {
-                System.out.println("ADDING " + move);
                 jumpMoves.add(move);
             } else {
                 singleMoves.add(move);
@@ -317,7 +314,6 @@ public class MoveValidator {
 
         Piece p = game.backupLastMove();
         if (p != null){
-            System.out.println("Piece is not null...");
             //even if the move is made by the red person, the original
             //will be returned
             Move convertedMove = game.moveConverter(lastMove);
@@ -331,7 +327,6 @@ public class MoveValidator {
         //else, look for moves only at that last move, so the jump
         //in the middle of the last double jump
         } else {
-            System.out.println("We got another one");
             lastMove = game.moveConverter(lastMove);
             lookInSpace(lastMove.getStart().getRow(), lastMove.getStart().getCol());
         }

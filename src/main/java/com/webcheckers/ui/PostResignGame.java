@@ -21,7 +21,7 @@ import java.util.Objects;
 public class PostResignGame implements Route {
 
     //
-    // Constants
+    // Static Variables
     //
 
     static Player resignPlayer;

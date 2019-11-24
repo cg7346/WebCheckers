@@ -50,7 +50,6 @@ public class PlayerLobby {
         try {
             this.players.add(player);
         } catch (Error e) {
-            System.out.println("Cannot add player.");
         }
     }
 

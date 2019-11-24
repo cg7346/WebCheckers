@@ -21,12 +21,28 @@ import static spark.Spark.halt;
  */
 public class GetSpectatorStopWatching implements Route {
 
+    //
+    // Attributes
+    //
+
     private final GameManager gameManager;
     private final TemplateEngine templateEngine;
 
+    //
+    // Constants
+    //
+
     static final String SPECTATOR_END = "Spectating mode has ended.";
 
+    //
+    // Static Variables
+    //
+
     static Boolean visited = false;
+
+    //
+    // Constructor
+    //
 
     /**
      * Create the UI controller to handle all {@code GET /spectator/stopWatching} HTTP requests.

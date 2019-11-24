@@ -14,7 +14,6 @@ import java.util.Iterator;
  *
  * @author <a href='mailto:jil4009@rit.edu'>Jackie Leung</a>
  * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
-
  */
 public class BoardView {
 

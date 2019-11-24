@@ -10,7 +10,6 @@ import spark.Response;
 import spark.Route;
 import spark.Session;
 
-import java.util.List;
 import java.util.Objects;
 
 public class PostSubmitTurn implements Route {
@@ -106,7 +105,6 @@ public class PostSubmitTurn implements Route {
         if (game.getWhitePlayer().getName().equals("AI")) {
             AI = true;
         }
-        //System.out.println("LastMoveMade ->> " + lastMove);
         moveValidator.lookForMoves();
         Message responseMessage = gameOver(moveValidator, game, session, true);
         if( responseMessage == null) {
@@ -136,10 +134,8 @@ public class PostSubmitTurn implements Route {
                     while (jumpMoves) {
                         Boolean visited = false;
                         moveValidator.lookForMoves();
-                        System.out.println(moveValidator.getJumpMoves(moveValidator.WHITEPLAYER));
                         for (Move jump : moveValidator.getJumpMoves(moveValidator.WHITEPLAYER)) {
                             if (jump.getStart().toString().equals(aiMove.getEnd().toString())) {
-                                System.out.println(jump.getStart() + " equals " + aiMove.getEnd());
                                 game.makeMove(jump);
                                 aiMove = jump;
                                 visited = true;
@@ -152,6 +148,7 @@ public class PostSubmitTurn implements Route {
                         }
                     }
                     game.completeTurn();
+                    PostCheckTurn.timer = TimeWatch.start();
                     moveValidator.lookForMoves();
                     if (gameOver(moveValidator, game, session, false) != null) {
                         responseMessage = gameOver(moveValidator, game, session, false);

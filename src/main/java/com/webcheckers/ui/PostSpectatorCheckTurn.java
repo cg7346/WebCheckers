@@ -59,7 +59,6 @@ public class PostSpectatorCheckTurn implements Route {
             response.body(gson.toJson(SPECTATOR_TIME));
             return gson.toJson(Message.info(SPECTATOR_TIME));
         }
-
         return gson.toJson(Message.info("false"));
     }
 }
