@@ -2,7 +2,6 @@ package com.webcheckers.ui;
 
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
-import com.webcheckers.util.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -14,9 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.webcheckers.ui.PostSignInRoute.CURRENT;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -126,11 +123,6 @@ public class PostSignInRouteTest {
         when(request.queryParams("myUsername")).thenReturn((PLAYER4));
         when(!playerLobby.isNewPlayer(player4)).thenReturn(false);
 
-        when(session.attribute("Player")).thenReturn(player4);
-        when(request.queryParams("myUsername")).thenReturn((AI_PLAYER));
-        when(!playerLobby.isNewPlayer(player4)).thenReturn(false);
-
-
         final TemplateEngineTester testHelper = new TemplateEngineTester();
         when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
@@ -161,7 +153,6 @@ public class PostSignInRouteTest {
         when(session.attribute("Player")).thenReturn(AI_PLAYER);
         when(request.queryParams("myUsername")).thenReturn((AI_PLAYER));
         assertFalse(playerLobby.isNewPlayer(AIplayer));
-
 
         final TemplateEngineTester testHelper = new TemplateEngineTester();
         when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
@@ -208,7 +199,6 @@ public class PostSignInRouteTest {
 
         when(session.attribute("Player")).thenReturn(player1);
         when(playerLobby.isInGame(player1)).thenReturn(true);
-
 
         when(session.attribute("Player")).thenReturn(player3);
         when(request.queryParams("myUsername")).thenReturn((PLAYER3));

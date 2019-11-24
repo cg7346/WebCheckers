@@ -23,6 +23,7 @@ public class GetSpectatorStopWatchingTest {
     private Request request;
     private Response response;
     private Session session;
+
     /**
      * The component-under-test (CuT).
      * <p>

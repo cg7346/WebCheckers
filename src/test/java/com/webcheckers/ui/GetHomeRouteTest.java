@@ -26,7 +26,13 @@ public class GetHomeRouteTest {
 
     //attributes for testing
 
-    //CuT
+    /**
+     * The component-under-test (CuT).
+     * <p>
+     * This is a stateless component so we only need one.
+     * The {@link GetHomeRoute} component is thoroughly tested so
+     * we can use it safely as a "friendly" dependency.
+     */
     private GetHomeRoute CuT;
 
     //Mock Objects
