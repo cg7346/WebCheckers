@@ -10,9 +10,6 @@ import java.util.logging.Logger;
 
 import static spark.Spark.*;
 
-//import com.webcheckers.model.CheckersGame;
-
-
 /**
  * The server that initializes the set of HTTP request handlers.
  * This defines the <em>web application interface</em> for this

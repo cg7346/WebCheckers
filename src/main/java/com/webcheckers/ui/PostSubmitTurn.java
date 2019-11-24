@@ -12,25 +12,56 @@ import spark.Session;
 
 import java.util.Objects;
 
+/**
+ * The (@code POST /submitTurn) route handler.
+ *
+ * @author <a href='mailto:mmb2582@rit.edu'>Mallory Bridge</a>
+ * @author <a href='mailto:jil4009@rit.edu'>Jackie Leung</a>
+ */
 public class PostSubmitTurn implements Route {
+
+    //
+    // Attributes
+    //
 
     private GameManager gameManager;
     private final Gson gson;
 
+    //
+    // Static Variables
+    //
+
     public static Boolean AI = false;
+
+    //
+    // Constants
+    //
+
     static final String MESSAGE_ERR = "message error";
 
 
+    //
+    // Constructor
+    //
+
     /**
-     * Construct a Post Submit Turn
-     * @param playerLobby PlayerLobby of the session
-     * @param gameManager GameManager of the session
+     * Create the UI controller to handle all {@code POST /submitTurn} HTTP requests.
+     *
+     * @param playerLobby   the list of players playing the WebCheckers game
+     * @param gameManager   handles all the checker games
      */
     public PostSubmitTurn(PlayerLobby playerLobby, GameManager gameManager, Gson gson){
         this.gameManager = Objects.requireNonNull(gameManager, "game manager is required");
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
+    /**
+     * Checks to see if all the pieces are blocked or captured
+     *
+     * @param count     the number of pieces left on the board for a player
+     * @param winOrlose whether they have either won or lost
+     * @return an end of game message
+     */
     public String BlockedOrCaptured(Integer count, String winOrlose){
         String endGame = null;
         if (count > 0) {
@@ -41,6 +72,12 @@ public class PostSubmitTurn implements Route {
         return endGame;
     }
 
+    /**
+     *
+     * @param game
+     * @param message
+     * @param session
+     */
     public void AIEndGame(CheckersGame game, String message, Session session){
         if (AI) {
             gameManager.removeGame(game);
@@ -49,6 +86,15 @@ public class PostSubmitTurn implements Route {
         }
     }
 
+    /**
+     * Where the game over message is constructed
+     *
+     * @param moveValidator the moves possible array
+     * @param game the game the players in
+     * @param session
+     * @param win
+     * @return
+     */
     public Message gameOver(MoveValidator moveValidator, CheckersGame game, Session session, Boolean win){
         Message responseMessage = null;
         String end;
@@ -63,7 +109,7 @@ public class PostSubmitTurn implements Route {
             game.setTie(true);
             responseMessage = Message.info("The game has ended in a tie.");
             AIEndGame(game, "The game has ended in a tie.", session);
-        //White Wins
+            //White Wins
         } else if (moveValidator.isOut(moveValidator.REDPLAYER) &&
                 !moveValidator.isOut(moveValidator.WHITEPLAYER)) {
             game.setWinner(game.getWhitePlayer());
@@ -74,7 +120,7 @@ public class PostSubmitTurn implements Route {
             GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", message);
             AIEndGame(game, message, session);
 
-        //Red Wins
+            //Red Wins
         } else if (!moveValidator.isOut(moveValidator.REDPLAYER)
                 && moveValidator.isOut(moveValidator.WHITEPLAYER)) {
             game.setWinner(game.getRedPlayer());
@@ -89,14 +135,20 @@ public class PostSubmitTurn implements Route {
     }
 
     /**
-     * this handles the post submit turn
+     * {@inheritDoc}
+     *
      * @param request
+     *   the HTTP request
      * @param response
-     * @return message
-     * @throws Exception
+     *   the HTTP response
+     * @return updates gson with message if you need to
+     *          make a move first
+     *          the game is over
+     *          jump available
+     *          valid move
      */
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(Request request, Response response) {
         String gameIDString = request.queryParams("gameID");
         Session session = request.session();
         Player player = session.attribute("Player");
@@ -156,7 +208,7 @@ public class PostSubmitTurn implements Route {
                 }
             }
         }
-            //       }
+        //       }
         AI = false;
         response.body(gson.toJson(responseMessage));
         return gson.toJson(responseMessage);
