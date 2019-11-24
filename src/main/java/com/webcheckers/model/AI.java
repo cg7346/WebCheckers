@@ -19,7 +19,7 @@ public class AI {
     //
 
     /**
-     * No heuristic demanded, just uses whichever the game has set to use.
+     * Constructs the AI player
      * @param game a checkers game
      * @param moveValidator the valid moves available for a player
      */
