@@ -199,6 +199,9 @@ public class GetHomeRoute implements Route {
      */
     private ModelAndView error(final Map<String, Object> vm, final Message message, final Player currentPlayer) {
         vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
+        //vm.put(GetHomeRoute.CURRENT_USER, playerLobby.getPlayers().get(playerLobby.getPlayers().size()-1));
+        //final Session session = request.session();
+        //Player currentPlayer = session.attribute("Player");
         vm.put(CURRENT_USER, currentPlayer);
         vm.put(PostSignInRoute.CURRENT, currentPlayer.getName());
         vm.put(PLAYERS_ON, PLAYERS_ONLINE);

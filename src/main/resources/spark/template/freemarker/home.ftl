@@ -56,6 +56,12 @@
           </blockquote>
       </#if>
 
+      <!-- TODO: future content on the Home:
+              to start games,
+              spectating active games,
+              or replay archived games
+      -->
+
     </p>
   </div>
 </div>
