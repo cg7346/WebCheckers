@@ -16,12 +16,16 @@ import java.util.concurrent.TimeUnit;
  * The UI controller to POST the Spectator page
  *
  * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella<a/>
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo<a/>
  */
 public class PostSpectatorCheckTurn implements Route {
 
     private final GameManager gameManager;
     private final TemplateEngine templateEngine;
     private final Gson gson;
+
+    static String SPECTATOR_TIME;
+
 
 
     /**
@@ -48,13 +52,14 @@ public class PostSpectatorCheckTurn implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
-        if (PostCheckTurn.timer == null) {
+        if (PostCheckTurn.timer != null) {
             long passedTimeInSeconds = PostCheckTurn.timer.time(TimeUnit.SECONDS);
 
-            System.out.println(String.format("Last turn was about %d seconds ago.", passedTimeInSeconds));
-            response.body((String.format("Last turn was about %d seconds ago.", passedTimeInSeconds)));
-            return gson.toJson(Message.info("true"));
+            SPECTATOR_TIME = String.format("Last turn was about %d seconds ago.", passedTimeInSeconds); /* Get the game over message */
+            response.body(gson.toJson(SPECTATOR_TIME));
+            return gson.toJson(Message.info(SPECTATOR_TIME));
         }
+
         return gson.toJson(Message.info("false"));
     }
 }

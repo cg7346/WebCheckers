@@ -23,7 +23,7 @@
         <h2>${playersOnline}</h2>
         <form action="./game">
         <ol>
-            <button name = "opp_user" type="submit" value="AI">AI</button>
+
             <#list userList as user>
                 <#if user == current>
 <#--                    <button name = "name" type="submit" disabled="true" value=${user}>${user}</button>-->
@@ -34,27 +34,6 @@
             </#list>
         </ol>
         </form>
-
-        <h2>Spectate A Game</h2>
-        <#if gameList?has_content>
-            <form action="./spectator/game">
-                <blockquote>
-                    <#list gameList?values as v>
-                    <#--          <#if spectator??>-->
-                    <#--              <form action="/spectator/game" method="GET">-->
-                    <#--                  <input type="hidden" value="${id}" name="gameID">-->
-                    <#--                  <input type="submit" value="${game.redPlayer.name} vs ${game.whitePlayer.name}">-->
-                    <#--              </form>-->
-                    <#--          <#else>-->
-                        <button name="spec_user" type="submit" value=${v}>Game ${v}</button>
-                    <#--          </#if>-->
-                    </#list>
-                </blockquote>
-            </form>
-        <#else>
-            <body>No games are currently active.</body>
-        </#if>
-
     <#else>
         <h2>${playersOnline}</h2>
         <blockquote>
@@ -62,25 +41,20 @@
         </blockquote>
     </#if>
 
-      <#--<h2>Spectate A Game</h2>-->
-      <#--<#if gameList?has_content>-->
-          <#--<form action="./spectator/game">-->
-              <#--<blockquote>-->
-                  <#--<#list gameList?values as v>-->
-                  <#--&lt;#&ndash;          <#if spectator??>&ndash;&gt;-->
-                  <#--&lt;#&ndash;              <form action="/spectator/game" method="GET">&ndash;&gt;-->
-                  <#--&lt;#&ndash;                  <input type="hidden" value="${id}" name="gameID">&ndash;&gt;-->
-                  <#--&lt;#&ndash;                  <input type="submit" value="${game.redPlayer.name} vs ${game.whitePlayer.name}">&ndash;&gt;-->
-                  <#--&lt;#&ndash;              </form>&ndash;&gt;-->
-                  <#--&lt;#&ndash;          <#else>&ndash;&gt;-->
-                      <#--<button name="spec_user" type="submit" value=${v}>Game ${v}</button>-->
-                  <#--&lt;#&ndash;          </#if>&ndash;&gt;-->
-                  <#--</#list>-->
-              <#--</blockquote>-->
-          <#--</form>-->
-      <#--<#else>-->
-          <#--<body>No games are currently active.</body>-->
-      <#--</#if>-->
+      <h2>Spectate A Game</h2>
+      <#if gameList?has_content>
+          <form action="./spectator/game">
+              <blockquote>
+                  <#list gameList?values as v>
+                      <button name="spec_user" type="submit" value=${v}>Game ${v}</button>
+                  </#list>
+              </blockquote>
+          </form>
+      <#else>
+          <blockquote>
+            <body>No games are currently active.</body>
+          </blockquote>
+      </#if>
 
       <!-- TODO: future content on the Home:
               to start games,

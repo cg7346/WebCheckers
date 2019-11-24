@@ -1,6 +1,5 @@
 package com.webcheckers.ui;
 
-import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
@@ -18,23 +17,20 @@ import static spark.Spark.halt;
  * The UI controller to GET the Spectator page
  *
  * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella<a/>
- * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</a>
  */
 public class GetSpectatorRoute implements Route {
 
     private static final Message GAME_MSG = Message.info("You're a spectator!");
 
-
-    //    private final TemplateEngine templateEngine;
-//    private final CheckersGame checkersGame;
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
     private final TemplateEngine templateEngine;
     static final String SPECTATOR = "spec_user";
+    static Boolean specEndGame;
 
     // View name
     static final String VIEW_NAME = "game.ftl";
-    private final Gson gson;
 
     /**
      * Create the UI controller to handle all {@code GET /spectator/game} HTTP requests.
@@ -45,12 +41,11 @@ public class GetSpectatorRoute implements Route {
      * @param gameManager how to access a game
      */
     public GetSpectatorRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby,
-                             final GameManager gameManager, Gson gson) {
+                             final GameManager gameManager) {
         // Sets and validate the templateEngine attribute to not be null
         this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
         this.playerLobby = Objects.requireNonNull(playerLobby, "Player Lobby must not be null.");
         this.gameManager = Objects.requireNonNull(gameManager, "Game Manager must not be null.");
-        this.gson = gson;
     }
 
     /**
@@ -70,35 +65,23 @@ public class GetSpectatorRoute implements Route {
 
         // retrieve the Player from the session
         Player spectator = session.attribute("Player");
-        System.out.println(spectator);
 
 //        CheckersGame checkersGame = new CheckersGame(redPlayer, whitePlayer, gameID)
         ModelAndView mv;
-        //If the player enters this page without being signed in or in a valid game,
+        // If the player enters this page without being signed in or in a valid game,
         if (spectator == null) {
-            System.out.println("nulllllllllllllll");
             vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
             //redirect back to home page
             response.redirect(WebServer.HOME_URL);
             halt();
             return null;
         } else {
-//        } else if (gameManager.getGame(spectator) != null) {
-//            session.attribute("Spectator", null);
-            System.out.println("ahhhhhhhhhhhhhhhh");
-            spectator.setSpectating(true);
             mv = spectator(gameManager.activeGames(), vm, spectator, request, response);
-            //response.redirect(WebServer.HOME_URL);
-            return templateEngine.render(mv);
-
-//        Player spectator = request.session().attribute("Player");
-//        CheckersGame game = gameManager.getGame(spectator);
-//        Player gPlayer = game.getRedPlayer();
-//
-//        gameManager.addSpectator(spectator, gPlayer);
-//        response.redirect(WebServer.GAME_URL);
-//
-//            return null;
+            if (mv == null) {
+                return null;
+            } else {
+                return templateEngine.render(mv);
+            }
         }
     }
 
@@ -113,12 +96,11 @@ public class GetSpectatorRoute implements Route {
     public ModelAndView spectator(HashMap<CheckersGame, String> gameList, Map<String, Object> vm,
                                   final Player player, Request request, Response response) {
 
+        Session session = request.session();
         // Displays the welcome message
         vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
         vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
 
-//        // Sets the current user to the current player
-//        vm.put(GetHomeRoute.CURRENT_USER, player);
         // Displays the players online title
         vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
 
@@ -138,7 +120,6 @@ public class GetSpectatorRoute implements Route {
         // retrieve request parameter
         final String gameNum = request.queryParams(SPECTATOR);
         CheckersGame game = gameManager.getGame(gameNum);
-        System.out.println("GAME::: " + game);
         if (game != null) {
             String gameID = game.getGameID();
             Player redPlayer = game.getRedPlayer();
@@ -148,11 +129,12 @@ public class GetSpectatorRoute implements Route {
             vm.put(GetGameRoute.GAME_ID_ATTR, gameID);
             vm.put(GetGameRoute.CURRENT_USER_ATTR, game.getActivePlayer());
             vm.put("viewMode", GetGameRoute.viewMode.SPECTATOR);
-//        Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
-//        modeOptionsAsJSON.put("isGameOver", false);
-//        modeOptionsAsJSON.put(GetGameRoute.GAME_OVER_ATTR, GetGameRoute.GAME_OVER_ATTR_MSG);
-//        vm.put("modeOptionsAsJSON", modeOptionsAsJSON);
-            vm.put(GetGameRoute.START_ATTR, GetGameRoute.START_ATTR_MSG);
+
+            if (PostSpectatorCheckTurn.SPECTATOR_TIME == null) {
+                vm.put(GetGameRoute.START_ATTR, GetGameRoute.START_ATTR_MSG);
+            } else {
+                vm.put(GetGameRoute.START_ATTR, Message.info(PostSpectatorCheckTurn.SPECTATOR_TIME));
+            }
             vm.put(GetGameRoute.RED_PLAYER_ATTR, redPlayer);
             vm.put(GetGameRoute.WHITE_PLAYER_ATTR, whitePlayer);
             GetGameRoute.activeColor color = (game.getActivePlayer().equals(redPlayer))
@@ -163,9 +145,9 @@ public class GetSpectatorRoute implements Route {
             // Returns new model and view
             return new ModelAndView(vm, VIEW_NAME);
         }
+        specEndGame = true;
         response.redirect(WebServer.HOME_URL);
         halt();
         return null;
     }
-
 }

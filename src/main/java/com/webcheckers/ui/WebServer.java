@@ -218,7 +218,7 @@ public class WebServer {
     post(CHECKTURN_URL, new PostCheckTurn(gameManager, gson));
 
     // Shows the Checkers game as a Spectator
-    get(SPECTATOR_URL, new GetSpectatorRoute(templateEngine, playerLobby, gameManager, gson));
+    get(SPECTATOR_URL, new GetSpectatorRoute(templateEngine, playerLobby, gameManager));
 
     // Posts the turn of players for the spectator to see
     post(SPECTATOR_CHECKTURN, new PostSpectatorCheckTurn(gameManager, templateEngine, gson));

@@ -53,16 +53,6 @@ public class PostCheckTurn implements Route {
         session.attribute(MESSAGE_ERR, er);
     }
 
-    public String BlockedOrCaptured(Integer count, String winOrlose){
-        String endGame = null;
-        if (count > 0) {
-            endGame = " has blocked all pieces, " + winOrlose;
-        } else {
-            endGame = " has captured all pieces, " + winOrlose;
-        }
-        return endGame;
-    }
-
     /**
      *this function handles the post check turn
      * @param request
@@ -75,24 +65,39 @@ public class PostCheckTurn implements Route {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
-        String message = null;
+        //sometimes having the game undefined breaks the builder
+//        if(game == null){
+//            GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
+//            GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", game.getWinner().getName() + " has won!");
+//            response.body(gson.toJson(Message.info(game.getWinner().getName() + " has won!")));
+//            gameManager.removeGame(game);
+//        }
+
         if (game != null) {
             if (game.getResignedPlayer() != null) {
-                message = "Opponent has resigned. You won!";
+                String message = "Opponent has resigned. You won!";
                 GameOver(request, response, game, message);
                 return gson.toJson(Message.info("true"));
             } else if (game.isTie()) {
-                message = "The game has ended in a tie.";
+                String message = "The game has ended in a tie.";
                 GameOver(request, response, game, message);
                 return gson.toJson(Message.info("true"));
             } else if (game.isGameOver()) {
                 String endGame;
                 if (game.getWinner() == game.getWhitePlayer()) {
-                    endGame = BlockedOrCaptured(MoveValidator.redCount, "you lost.");
+                    if (MoveValidator.redCount > 0) {
+                        endGame = " has blocked all pieces, you lost.";
+                    } else {
+                        endGame = " has captured all pieces, you lost.";
+                    }
                 } else {
-                    endGame = BlockedOrCaptured(MoveValidator.whiteCount, "you lost.");
+                    if (MoveValidator.whiteCount > 0) {
+                        endGame = " has blocked all pieces, you lost.";
+                    } else {
+                        endGame = " has captured all pieces, you lost.";
+                    }
                 }
-                message = game.getWinner().getName() + endGame;
+                String message = game.getWinner().getName() + endGame;
                 GameOver(request, response, game, message);
                 return gson.toJson(Message.info("true"));
             } else if (game.getActivePlayer().equals(currentPlayer)) {
@@ -106,10 +111,6 @@ public class PostCheckTurn implements Route {
             }
 
         }
-        message = "AI" + BlockedOrCaptured(MoveValidator.redCount, "you lost.");
-        System.out.println(message);
-        Message er = Message.error(message);
-        session.attribute(MESSAGE_ERR, er);
         return gson.toJson(Message.info("true"));
     }
 }

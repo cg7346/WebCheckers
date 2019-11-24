@@ -2,7 +2,6 @@ package com.webcheckers.ui;
 
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.model.Player;
-import com.webcheckers.util.Message;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -18,12 +17,16 @@ import static spark.Spark.halt;
  * The UI controller to POST the Spectator page
  *
  * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella<a/>
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo<a/>
  */
 public class GetSpectatorStopWatching implements Route {
 
     private final GameManager gameManager;
     private final TemplateEngine templateEngine;
 
+    static final String SPECTATOR_END = "Spectating mode has ended.";
+
+    static Boolean visited = false;
 
     /**
      * Create the UI controller to handle all {@code GET /spectator/stopWatching} HTTP requests.
@@ -48,16 +51,15 @@ public class GetSpectatorStopWatching implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
+        visited = true;
         Player spectator = request.session().attribute("Player");
         Map<String, Object> vm = new HashMap<>();
 
-        System.out.println("I'm in!!!!!!!!!!!!!!");
-        spectator.setInGame(false);
         gameManager.removeSpectator(gameManager.getGame(spectator), spectator);
-        vm.put("message", "Spectating mode has ended.");
+
         response.redirect(WebServer.HOME_URL);
         halt();
-        request.session().attribute("message", Message.info("Spectating mode has ended."));
+
         return null;
     }
 }
