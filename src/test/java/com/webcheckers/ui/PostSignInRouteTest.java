@@ -15,8 +15,7 @@ import java.util.Map;
 import static com.webcheckers.ui.PostSignInRoute.CURRENT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * The unit test suite for the {@link PostSignInRoute} component.
@@ -155,7 +154,6 @@ public class PostSignInRouteTest {
         when(request.queryParams("myUsername")).thenReturn((AI_PLAYER));
         assertFalse(playerLobby.isNewPlayer(AIplayer));
 
-
         final TemplateEngineTester testHelper = new TemplateEngineTester();
         when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
@@ -201,7 +199,6 @@ public class PostSignInRouteTest {
 
         when(session.attribute("Player")).thenReturn(player1);
         when(playerLobby.isInGame(player1)).thenReturn(true);
-
 
         when(session.attribute("Player")).thenReturn(player3);
         when(request.queryParams("myUsername")).thenReturn((PLAYER3));
