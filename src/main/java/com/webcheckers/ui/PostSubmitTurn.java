@@ -42,7 +42,7 @@ public class PostSubmitTurn implements Route {
         return endGame;
     }
 
-    private void AIEndGame(CheckersGame game, String message, Session session){
+    public void AIEndGame(CheckersGame game, String message, Session session){
         if (AI) {
             gameManager.removeGame(game);
             Message er = Message.error(message);
@@ -97,7 +97,7 @@ public class PostSubmitTurn implements Route {
      * @throws Exception
      */
     @Override
-    public Object handle(Request request, Response response){
+    public Object handle(Request request, Response response) throws Exception {
         String gameIDString = request.queryParams("gameID");
         Session session = request.session();
         Player player = session.attribute("Player");
@@ -106,6 +106,7 @@ public class PostSubmitTurn implements Route {
         if (game.getWhitePlayer().getName().equals("AI")) {
             AI = true;
         }
+        //System.out.println("LastMoveMade ->> " + lastMove);
         moveValidator.lookForMoves();
         Message responseMessage = gameOver(moveValidator, game, session, true);
         if( responseMessage == null) {
@@ -135,8 +136,10 @@ public class PostSubmitTurn implements Route {
                     while (jumpMoves) {
                         Boolean visited = false;
                         moveValidator.lookForMoves();
+                        System.out.println(moveValidator.getJumpMoves(moveValidator.WHITEPLAYER));
                         for (Move jump : moveValidator.getJumpMoves(moveValidator.WHITEPLAYER)) {
                             if (jump.getStart().toString().equals(aiMove.getEnd().toString())) {
+                                System.out.println(jump.getStart() + " equals " + aiMove.getEnd());
                                 game.makeMove(jump);
                                 aiMove = jump;
                                 visited = true;
@@ -148,14 +151,14 @@ public class PostSubmitTurn implements Route {
                             break;
                         }
                     }
-                }
                     game.completeTurn();
                     moveValidator.lookForMoves();
-                    if (gameOver(moveValidator, game, session, false) != null){
+                    if (gameOver(moveValidator, game, session, false) != null) {
                         responseMessage = gameOver(moveValidator, game, session, false);
                     }
                 }
             }
+        }
             //       }
         AI = false;
         response.body(gson.toJson(responseMessage));
