@@ -15,6 +15,7 @@ import java.util.Map;
 
 import static com.webcheckers.ui.PostSignInRoute.CURRENT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -212,7 +213,13 @@ public class PostSignInRouteTest {
         vm.put(CURRENT, player1.getName());
         ModelAndView mv = new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
         assertEquals(mv.getModel(), CuT.currentUser(fakeList, vm, player1).getModel());
+    }
 
+    @Test
+    void nullPlayerLobby(){
+        playerLobby = null;
+        CuT = new PostSignInRoute(templateEngine, playerLobby);
+        assertThrows(spark.HaltException.class, () -> CuT.handle(request, response));
 
     }
 }
