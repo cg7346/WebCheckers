@@ -40,7 +40,8 @@ public class GetSignInRoute implements Route {
      */
     public GetSignInRoute(final TemplateEngine templateEngine) {
         // Sets and validate the templateEngine attribute to not be null
-        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
+        this.templateEngine = Objects.requireNonNull(templateEngine,
+                "templateEngine is required");
     }
 
     /**
