@@ -25,6 +25,10 @@ import static spark.Spark.halt;
  */
 public class GetGameRoute implements Route {
 
+    //
+    // Constants
+    //
+
     static final String TITLE_ATTR = "title";
     static final String TITLE_ATTR_MSG = "Game Title";
     static final String GAME_ID_ATTR = "gameID";
