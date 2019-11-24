@@ -14,7 +14,7 @@ import spark.Session;
 import java.util.Objects;
 
 /**
- * this class is the post backup route
+ * The {@code POST /backupMove} route handler
  *
  * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
  * @author <a href='mailto:mmb2582@rit.edu'>Mallory Bridge</a>
@@ -34,7 +34,8 @@ public class PostBackupRoute implements Route {
     //
 
     /**
-     * the constructor the the route
+     * The constructor for the {@code POST /backupMove} route handler.
+     *
      * @param gameManager a Game Manager
      * @param gson the GSON
      */
@@ -45,11 +46,12 @@ public class PostBackupRoute implements Route {
     }
 
     /**
-     * this function handles the call
-     * @param request request
-     * @param response response
-     * @return Response Message
-     * @throws Exception
+     * {@inheritDoc}
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @return updates gson with if a response message
+     *          BACK IT UP!
      */
     @Override
     public Object handle(Request request, Response response)

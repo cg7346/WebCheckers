@@ -14,7 +14,7 @@ import java.util.Objects;
 import static spark.Spark.halt;
 
 /**
- * The UI controller to POST the Spectator page
+ * The {@code GET /spectator/stopWatching} route handler
  *
  * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella<a/>
  * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo<a/>
@@ -46,8 +46,6 @@ public class GetSpectatorStopWatching implements Route {
 
     /**
      * Create the UI controller to handle all {@code GET /spectator/stopWatching} HTTP requests.
-     * <p>
-     * //     * @param checkersGame holds all the information about players playing a game
      *
      * @param gameManager how to access a game
      */
@@ -59,7 +57,8 @@ public class GetSpectatorStopWatching implements Route {
 
 
     /**
-     * Render the WebCheckers Home page for a spectator
+     * {@inheritDoc}
+     * redirects back home
      *
      * @param request  the HTTP request
      * @param response the HTTP response
