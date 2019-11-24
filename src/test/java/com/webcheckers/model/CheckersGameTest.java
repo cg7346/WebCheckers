@@ -67,7 +67,7 @@ class CheckersGameTest {
 
     @Test
     void test_getGameID() {
-        assertEquals(ID, RedCuT.getGameID(), "Game ID is not equal to 0");
+        assertEquals(Integer.toString(ID), RedCuT.getGameID(), "Game ID is not equal to 0");
     }
 
 
