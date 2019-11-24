@@ -32,7 +32,7 @@ public class PostSignOutRouteTest {
      * The {@link PostSignInRoute} component is thoroughly tested so
      * we can use it safely as a "friendly" dependency.
      */
-    private PostSignOutRoute SignOut;
+    private PostSignOutRoute CuT;
 
     // friendly objects
     private PlayerLobby playerLobby;
@@ -60,7 +60,7 @@ public class PostSignOutRouteTest {
         when(request.session()).thenReturn(session);
 
         // create a unique for each test
-        SignOut = new PostSignOutRoute(gameManager, templateEngine, playerLobby);
+        CuT = new PostSignOutRoute(gameManager, templateEngine, playerLobby);
 
     }
 
@@ -75,7 +75,7 @@ public class PostSignOutRouteTest {
         when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
         // Invoke the test
-        SignOut.handle(request, response);
+        CuT.handle(request, response);
 
         // Analyze the results:
         //   * model is a non-null Map
@@ -102,7 +102,7 @@ public class PostSignOutRouteTest {
         when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
         // Invoke the test
-        SignOut.handle(request, response);
+        CuT.handle(request, response);
 
         // Analyze the results:
         //   * model is a non-null Map

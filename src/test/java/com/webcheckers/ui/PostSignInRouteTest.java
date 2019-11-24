@@ -2,6 +2,7 @@ package com.webcheckers.ui;
 
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
+import com.webcheckers.util.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import spark.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertEquals;
 
 /**
  * The unit test suite for the {@link PostSignInRoute} component.
@@ -24,6 +26,7 @@ public class PostSignInRouteTest {
     private static final String PLAYER2 = "Bruce";
     private static final String PLAYER3 = "    ";
     private static final String PLAYER4 = "Bobby";
+    private static final String AI_PLAYER = "AI";
 
     /**
      * The component-under-test (CuT).
@@ -113,6 +116,10 @@ public class PostSignInRouteTest {
         when(request.queryParams("myUsername")).thenReturn((PLAYER4));
         when(!playerLobby.isNewPlayer(player4)).thenReturn(false);
 
+        when(session.attribute("Player")).thenReturn(player4);
+        when(request.queryParams("myUsername")).thenReturn((AI_PLAYER));
+        when(!playerLobby.isNewPlayer(player4)).thenReturn(false);
+
 
         final TemplateEngineTester testHelper = new TemplateEngineTester();
         when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
@@ -132,6 +139,22 @@ public class PostSignInRouteTest {
         testHelper.assertViewModelAttributeIsAbsent(PostSignInRoute.TAKEN_USR);
         //   * test view name
         testHelper.assertViewName(PostSignInRoute.VIEW_NAME);
+    }
+
+    /**
+     * Test that the make Taken User Message is handled
+     */
+    @Test
+    public void taken_message() {
+        assertEquals(PostSignInRoute.makeTakenUsrMessage().getText(), PostSignInRoute.TAKEN_USR);
+    }
+
+    /**
+     * Test that the make Taken User Message is handled
+     */
+    @Test
+    public void invalid_message() {
+        assertEquals(PostSignInRoute.makeInvalidUsrMessage().getText(), PostSignInRoute.INVALID_USR);
     }
 
     /**
