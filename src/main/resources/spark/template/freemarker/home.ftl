@@ -34,6 +34,22 @@
             </#list>
         </ol>
         </form>
+
+        <h2>Spectate A Game</h2>
+        <#if gameList?has_content>
+            <form action="./spectator/game">
+                <blockquote>
+                    <#list gameList?values as v>
+                        <button name="spec_user" type="submit" value=${v}>Game ${v}</button>
+                    </#list>
+                </blockquote>
+            </form>
+        <#else>
+            <blockquote>
+                <body>No games are currently active.</body>
+            </blockquote>
+        </#if>
+
     <#else>
         <h2>${playersOnline}</h2>
         <blockquote>
@@ -41,20 +57,11 @@
         </blockquote>
     </#if>
 
-      <h2>Spectate A Game</h2>
-      <#if gameList?has_content>
-          <form action="./spectator/game">
-              <blockquote>
-                  <#list gameList?values as v>
-                      <button name="spec_user" type="submit" value=${v}>Game ${v}</button>
-                  </#list>
-              </blockquote>
-          </form>
-      <#else>
-          <blockquote>
-            <body>No games are currently active.</body>
-          </blockquote>
-      </#if>
+      <!-- TODO: future content on the Home:
+              to start games,
+              spectating active games,
+              or replay archived games
+      -->
 
     </p>
   </div>
