@@ -1,7 +1,7 @@
 package com.webcheckers.model;
 
 /**
- * Player that uses the Tree to figure out what move to make.
+ * AI player uses the Tree to figure out the best move to make.
  *
  * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</>
  */
@@ -19,7 +19,7 @@ public class AI {
     //
 
     /**
-     * No heuristic demanded, just uses whichever the game has set to use.
+     * Constructs the AI player
      * @param game a checkers game
      * @param moveValidator the valid moves available for a player
      */
@@ -35,8 +35,11 @@ public class AI {
      * @return the best move available for the AI to make
      */
     public Move makeTurn() {
+        // Makes a decision tree
         Tree tree = new Tree(game, moveValidator);
-        tree.addInLastMove(game);
+        // Updates the decision tree
+        tree.updateTree(game);
+        // Returns the best move
         return tree.bestMove();
     }
 }

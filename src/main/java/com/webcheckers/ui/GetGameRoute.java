@@ -46,8 +46,6 @@ public class GetGameRoute implements Route {
     private final GameManager gameManager;
     private final PlayerLobby playerLobby;
     private final Gson gson;
-    private Boolean gameOver = false;
-    private Integer visited = 0;
     private activeColor activeTurnColor;
     public enum activeColor {RED, WHITE}
     static Map<String, Object> modeOptionsAsJSON = new HashMap<>(2);
@@ -104,6 +102,10 @@ public class GetGameRoute implements Route {
         return game;
     }
 
+
+    //
+    // Constructor
+    //
 
     /**
      * The constructor for the {@code GET /game} route handler.

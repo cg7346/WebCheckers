@@ -240,7 +240,6 @@ class CheckersGameTest {
         RedCuT.keepLastMove(downRight);
         assertFalse(RedCuT.isTurnEmpty());
         RedCuT.completeMove();
-        //System.out.println(RedCuT.isActivePlayerRed());
         assertFalse(RedCuT.doesSpaceHavePiece(2, 2));
         assertTrue(!RedCuT.isSpaceRedPiece(2, 2));
         assertFalse(RedCuT.doesSpaceHavePiece(1, 3));
@@ -342,7 +341,6 @@ class CheckersGameTest {
         assertNotNull(RedCuT.backupLastMove());
         assertEquals(movePt1, RedCuT.getLastMove());
         RedCuT.completeTurn();
-        System.out.println(RedCuT);
     }
 
 //    @Test

@@ -41,18 +41,9 @@ public class GetHomeRoute implements Route {
     static final String PLAYERS_ONLINE = "Players Online";
     static final String SPECTATOR = "spectator";
     static ModelAndView mv;
-//    static final String GAMES_ON = "gamesOnline";
-//    static final String GAMES_ONLINE = "Spectator";
 
     // View name
     static final String VIEW_NAME = "home.ftl";
-
-    // Key in the session attribute map for the player who started the session
-    static final String PLAYERLOBBY_KEY = "playerLobby";
-    static final String TIMEOUT_SESSION_KEY = "timeoutWatchdog";
-
-    // The length of the session timeout in seconds
-    static final int SESSION_TIMEOUT_PERIOD = 120;
 
     static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
@@ -63,6 +54,10 @@ public class GetHomeRoute implements Route {
     private final TemplateEngine templateEngine;
     private final PlayerLobby playerLobby;
     private final GameManager gameManager;
+
+    //
+    // Constructor
+    //
 
     /**
      * Create the Spark Route (UI controller) to handle all {@code GET /} HTTP requests.
@@ -199,6 +194,9 @@ public class GetHomeRoute implements Route {
      */
     private ModelAndView error(final Map<String, Object> vm, final Message message, final Player currentPlayer) {
         vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
+        //vm.put(GetHomeRoute.CURRENT_USER, playerLobby.getPlayers().get(playerLobby.getPlayers().size()-1));
+        //final Session session = request.session();
+        //Player currentPlayer = session.attribute("Player");
         vm.put(CURRENT_USER, currentPlayer);
         vm.put(PostSignInRoute.CURRENT, currentPlayer.getName());
         vm.put(PLAYERS_ON, PLAYERS_ONLINE);

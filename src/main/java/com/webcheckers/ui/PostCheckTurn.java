@@ -18,8 +18,8 @@ import java.util.Objects;
 /**
  * The {@code POST /checkTurn} route handler
  * this checks for the turn of the user
- * @author jil4009
- * @author Kelly Vo kdv6978
+ * @author <a href='mailto:jil4009@rit.edu'>Jackie Leung</a>
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</>
  */
 public class PostCheckTurn implements Route {
 
@@ -30,6 +30,10 @@ public class PostCheckTurn implements Route {
     // Attributes
     private final GameManager gameManager;
     private final Gson gson;
+
+    //
+    // Constructor
+    //
 
     /**
      * The constructor for the {@code POST /checkTurn} route handler.
@@ -107,7 +111,6 @@ public class PostCheckTurn implements Route {
 
         }
         message = "AI" + BlockedOrCaptured(MoveValidator.redCount, "you lost.");
-        System.out.println(message);
         Message er = Message.error(message);
         session.attribute(MESSAGE_ERR, er);
         return gson.toJson(Message.info("true"));

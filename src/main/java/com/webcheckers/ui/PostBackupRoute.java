@@ -3,7 +3,6 @@ package com.webcheckers.ui;
 import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.model.CheckersGame;
-import com.webcheckers.model.Move;
 import com.webcheckers.model.MoveValidator;
 import com.webcheckers.model.Player;
 import com.webcheckers.util.Message;
@@ -16,12 +15,23 @@ import java.util.Objects;
 
 /**
  * this class is the post backup route
+ *
+ * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
+ * @author <a href='mailto:mmb2582@rit.edu'>Mallory Bridge</a>
  */
 
 public class PostBackupRoute implements Route {
 
+    //
+    // Attributes
+    //
+
     private GameManager gameManager;
     private final Gson gson;
+
+    //
+    // Constructor
+    //
 
     /**
      * the constructor the the route
@@ -48,7 +58,6 @@ public class PostBackupRoute implements Route {
         Player player = session.attribute("Player");
         CheckersGame game = gameManager.getGame(player);
         MoveValidator moveValidator = mvMaker(game);
-        System.out.println("IN HERE");
         moveValidator.backUpMove();
 
         Message responseMessage = Message.info("BACK IT UP!");

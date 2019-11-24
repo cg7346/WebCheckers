@@ -336,7 +336,6 @@ public class CheckersGame {
     }
 
     public void makeMove(Move move) {
-        //System.out.println(activePlayer.getName() + " made " + move);
         move = moveConverter(move);
         Position start = move.getStart();
         Piece piece = removePieceToMove(start.getRow(), start.getCol());
