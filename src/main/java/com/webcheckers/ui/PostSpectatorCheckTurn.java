@@ -24,8 +24,6 @@ public class PostSpectatorCheckTurn implements Route {
     // Attributes
     //
 
-    private final GameManager gameManager;
-    private final TemplateEngine templateEngine;
     private final Gson gson;
 
     //
@@ -39,14 +37,13 @@ public class PostSpectatorCheckTurn implements Route {
     //
 
     /**
-     * Create the UI controller to handle all {@code GET /spectator/stopWatching} HTTP requests.
+     * Create the UI controller to handle all
+     * {@code GET /spectator/stopWatching} HTTP requests.
      *
-     * @param gameManager how to access a game
+     * @param gson how to access a game
      */
-    public PostSpectatorCheckTurn(final GameManager gameManager, final TemplateEngine templateEngine, final Gson gson) {
-        this.gameManager = Objects.requireNonNull(gameManager, "Game Manager must not be null.");
-        // Sets and validates the templateEngine attribute to not be null
-        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+    public PostSpectatorCheckTurn(final Gson gson) {
+        // Sets and validates the gson attribute to not be null
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
@@ -63,12 +60,15 @@ public class PostSpectatorCheckTurn implements Route {
     @Override
     public Object handle(Request request, Response response) {
         if (PostCheckTurn.timer != null) {
+            // Gets the time
             long passedTimeInSeconds = PostCheckTurn.timer.time(TimeUnit.SECONDS);
-
-            SPECTATOR_TIME = String.format("Last turn was about %d seconds ago.", passedTimeInSeconds); /* Get the game over message */
+            // Displays timer message
+            SPECTATOR_TIME = String.format("Last turn was about %d seconds ago.",
+                    passedTimeInSeconds);
             response.body(gson.toJson(SPECTATOR_TIME));
             return gson.toJson(Message.info(SPECTATOR_TIME));
         }
+        // Return false
         return gson.toJson(Message.info("false"));
     }
 }
