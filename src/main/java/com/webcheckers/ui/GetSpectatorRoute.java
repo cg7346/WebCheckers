@@ -94,6 +94,7 @@ public class GetSpectatorRoute implements Route {
     }
 
     /**
+     * {@inheritDoc}
      * Sets the gameList variable to the spectator mode
      *
      * @param gameList is the list of games online

@@ -126,6 +126,8 @@ public class GetGameRoute implements Route {
     /**
      * this function handles the get game route
      * {@inheritDoc}
+     * @param request HTTP request
+     * @param response HTTP response
      */
     @Override
     public String handle(Request request, Response response) {

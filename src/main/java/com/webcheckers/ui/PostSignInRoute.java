@@ -82,8 +82,10 @@ public class PostSignInRoute implements Route {
     /**
      * {@inheritDoc}
      *      when an invalid username is returned
-     * @param request
      * @param response
+     *   the HTTP response
+     * @return
+     *   the rendered HTML for the Home page
      * @return templateEngine to render a view or null
      */
     @Override

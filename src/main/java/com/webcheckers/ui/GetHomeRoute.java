@@ -72,6 +72,7 @@ public class GetHomeRoute implements Route {
     }
 
   /**
+   * {@inheritDoc}
    * Render the WebCheckers Home page.
    *
    * @param request
