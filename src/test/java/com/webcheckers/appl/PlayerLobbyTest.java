@@ -81,13 +81,13 @@ public class PlayerLobbyTest {
 
     }
 
-    /**
-     * Test that you can construct a new Player Lobby.
-     */
-    @Test
-    public void create_player_lobby() {
-        new PlayerLobby(player);
-    }
+//    /**
+//     * Test that you can construct a new Player Lobby.
+//     */
+//    @Test
+//    public void create_player_lobby() {
+//        new PlayerLobby(player);
+//    }
 
     /**
      * Checks if you can get all the players in the game.
@@ -175,13 +175,6 @@ public class PlayerLobbyTest {
         CuT.addPlayer(player2);
         assertEquals(CuT.findPlayer(PLAYER1), player1);
         assertEquals(CuT.findPlayer(PLAYER2), player2);
-    }
-
-    @Test
-    public void test_get_player(){
-        assertNull(CuT.getPlayer());
-        PlayerLobby p2 = new PlayerLobby(player1);
-        assertEquals(player1, p2.getPlayer());
     }
 
     @Test

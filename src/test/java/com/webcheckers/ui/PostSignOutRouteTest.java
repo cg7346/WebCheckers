@@ -59,7 +59,7 @@ public class PostSignOutRouteTest {
 
         when(request.session()).thenReturn(session);
 
-        // create a unique for each test //TODO: check this
+        // create a unique for each test
         SignOut = new PostSignOutRoute(gameManager, templateEngine, playerLobby);
 
     }

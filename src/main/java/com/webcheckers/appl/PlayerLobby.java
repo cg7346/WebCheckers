@@ -27,18 +27,6 @@ public class PlayerLobby {
     // Constructor
     //
 
-    // TODO: see if we can remove this?
-    //  only used in tests
-    /**
-     * Create a PlayerLobby.
-     *
-     * @param player a player.
-     * @throws IllegalArgumentException when the {@code player} is already taken
-     */
-    public PlayerLobby(Player player) {
-        this.player = player;
-    }
-
     public PlayerLobby(){this.player = null;}
 
 
@@ -130,16 +118,6 @@ public class PlayerLobby {
             }
         }
         return null;
-    }
-
-    //TODO: see if we can remove this
-    // only used in tests
-    /**
-     * this function gets a player
-     * @return Player
-     */
-    public Player getPlayer(){
-        return this.player;
     }
 
     /**
