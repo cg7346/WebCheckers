@@ -8,10 +8,15 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import spark.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.webcheckers.ui.PostSignInRoute.CURRENT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 /**
  * The unit test suite for the {@link PostSignInRoute} component.
@@ -192,5 +197,22 @@ public class PostSignInRouteTest {
         testHelper.assertViewModelAttributeIsAbsent(PostSignInRoute.INVALID_USR);
         //   * test view name
         testHelper.assertViewName(PostSignInRoute.VIEW_NAME);
+    }
+
+    @Test
+    void currentUser(){
+        List<String> fakeList = new ArrayList<>();
+        fakeList.add(player1.getName());
+        Map<String, Object> vm = new HashMap<>();
+        vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
+        vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
+        vm.put(GetHomeRoute.CURRENT_USER, player1);
+        vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
+        vm.put(GetHomeRoute.USERS_LIST, fakeList);
+        vm.put(CURRENT, player1.getName());
+        ModelAndView mv = new ModelAndView(vm, GetHomeRoute.VIEW_NAME);
+        assertEquals(mv.getModel(), CuT.currentUser(fakeList, vm, player1).getModel());
+
+
     }
 }
