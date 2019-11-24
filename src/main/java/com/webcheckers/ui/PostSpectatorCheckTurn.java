@@ -20,13 +20,23 @@ import java.util.concurrent.TimeUnit;
  */
 public class PostSpectatorCheckTurn implements Route {
 
+    //
+    // Attributes
+    //
+
     private final GameManager gameManager;
     private final TemplateEngine templateEngine;
     private final Gson gson;
 
+    //
+    // Static Variable
+    //
+
     static String SPECTATOR_TIME;
 
-
+    //
+    // Constructor
+    //
 
     /**
      * Create the UI controller to handle all {@code GET /spectator/stopWatching} HTTP requests.
@@ -42,11 +52,13 @@ public class PostSpectatorCheckTurn implements Route {
 
 
     /**
-     * Render an updated checker game for spectator
+     * {@inheritDoc}
      *
-     * @param request  the HTTP request
-     * @param response the HTTP response
-     * @return null
+     * @param request
+     *   the HTTP request
+     * @param response
+     *   the HTTP response
+     * @return updates gson with if a message is needed or not true or false
      */
     @Override
     public Object handle(Request request, Response response) {
