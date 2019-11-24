@@ -13,7 +13,6 @@ import spark.Session;
 import spark.TemplateEngine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 //import static org.testng.Assert.*;
@@ -56,7 +55,7 @@ public class PostSpectatorCheckTurnTest
 
     @Test
     void test_nullGame(){
-        String expected = "{\"text\":\"Last turn was about 0 seconds ago.\",\"type\":\"INFO\"}";
+        String expected = "{\"text\":\"false\",\"type\":\"INFO\"}";
         try {
             Object o = CuT.handle(request, response);
             assertEquals(expected, o.toString());
@@ -69,7 +68,7 @@ public class PostSpectatorCheckTurnTest
     void test_isNotActivePlayer(){
         when(mockGame.getActivePlayer()).thenReturn(mock(Player.class));
         when(session.attribute("Player")).thenReturn(mock(Player.class));
-        String expected = "{\"text\":\"Last turn was about 0 seconds ago.\",\"type\":\"INFO\"}";
+        String expected = "{\"text\":\"false\",\"type\":\"INFO\"}";
         try {
             Object o = CuT.handle(request, response);
             assertEquals(expected, o.toString());
