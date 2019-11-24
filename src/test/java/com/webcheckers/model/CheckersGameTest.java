@@ -67,7 +67,7 @@ class CheckersGameTest {
 
     @Test
     void test_getGameID() {
-        assertEquals(ID, RedCuT.getGameID(), "Game ID is not equal to 0");
+        assertEquals("3", RedCuT.getGameID(), "Game ID is not equal to 0");
     }
 
 
@@ -343,122 +343,6 @@ class CheckersGameTest {
         RedCuT.completeTurn();
     }
 
-//    @Test
-//    void test_simpleMove(){
-
-//        RedCuT.lookForMoves();
-
-//        Move upRight = new Move(redStart, new Position(5, 4));
-//        Move backLeft = new Move(redStart, new Position(7, 2));
-//        Move backRight = new Move(redStart, new Position(7, 4));
-//        assertTrue(RedCuT.isInMoves(upLeft) &&
-//                RedCuT.isInMoves(upRight));
-//        assertFalse(RedCuT.isInMoves(backLeft));
-//        assertFalse(RedCuT.isInMoves(backRight));
-//    }
-
-//    @Test
-//    void test_enforceJump(){
-//        removeAllPiece();
-//        RedCuT.addPiece(6, 3, redP);
-//        RedCuT.addPiece(5, 2, whiteP);
-//        RedCuT.lookForMoves();
-//        Position redStart = new Position(6, 3);
-//        Move upLeft = new Move(redStart, new Position(4, 1), whiteP);
-//        Move upRight = new Move(redStart, new Position(5, 4));
-//        assertTrue(RedCuT.isInMoves(upLeft));
-//        assertFalse(RedCuT.isInMoves(upRight));
-//    }
-//
-//    @Test
-//    void test_doubleJump(){
-//        removeAllPiece();
-//        RedCuT.addPiece(6, 3, redP);
-//        RedCuT.addPiece(5, 4, whiteP);
-//        RedCuT.addPiece(3, 6, whiteP);
-//        RedCuT.lookForMoves();
-//        Position redStart = new Position(6, 3);
-//        Position redMiddle = new Position(4, 5);
-//        Position redEnd = new Position(2, 7);
-//        Move jump1 = new Move(redStart, redMiddle);
-//        Move jump2 = new Move(redMiddle, redEnd);
-//        assertTrue(RedCuT.isInMoves(jump1));
-//        RedCuT.keepLastMove(jump1);
-//        assertEquals(RedCuT.getLastMove(), jump1);
-//        RedCuT.completeMove();
-//        assertTrue(RedCuT.doesSpaceHavePiece(4, 5));
-//        RedCuT.backupMove();
-//        assertNull(RedCuT.getLastMove());
-//        assertTrue(RedCuT.doesSpaceHavePiece(6, 3));
-//        assertTrue(RedCuT.isInMoves(jump1));
-//        RedCuT.keepLastMove(jump1);
-//        RedCuT.completeMove();
-//        RedCuT.lookInSpace(jump1.getEnd().getRow(), jump1.getEnd().getCol());
-//        assertTrue(RedCuT.isInMoves(jump2));
-//        RedCuT.keepLastMove(jump2);
-//        assertEquals(RedCuT.getLastMove(), jump2);
-//        RedCuT.completeMove();
-//        assertTrue(RedCuT.doesSpaceHavePiece(2, 7));
-//        RedCuT.backupMove();
-//        assertEquals(RedCuT.getLastMove(), jump1);
-//        RedCuT.backupMove();
-//        assertNull(RedCuT.getLastMove());
-//        RedCuT.keepLastMove(jump1);
-//        RedCuT.completeMove();
-//        RedCuT.lookInSpace(jump1.getEnd().getRow(), jump1.getEnd().getCol());
-//        assertTrue(RedCuT.isInMoves(jump2));
-//        RedCuT.keepLastMove(jump2);
-//        assertEquals(RedCuT.getLastMove(), jump2);
-//        RedCuT.completeMove();
-//        RedCuT.completeTurn();
-//        assertFalse(RedCuT.doesSpaceHavePiece(5, 4));
-//        assertFalse(RedCuT.doesSpaceHavePiece(3, 6));
-//
-//
-//
-//    }
-//    @Test
-//    void test_kingSingleJump(){
-//        removeAllPiece();
-//        //Jumps in all 4 directions for Red King
-//        RedCuT.addPiece(4, 3, redKing);
-//        RedCuT.addPiece(3, 4, whiteP);
-//        RedCuT.addPiece(3, 2, whiteP);
-//        RedCuT.addPiece(5, 2, whiteP);
-//        RedCuT.addPiece(5, 4, whiteP);
-//        RedCuT.lookForMoves();
-//        Position redStart = new Position(4, 3);
-//        Move RUpLeft = new Move(redStart, new Position(2, 1), whiteP);
-//        Move RUpRight = new Move(redStart, new Position(2, 5), whiteP);
-//        Move RDownLeft = new Move(redStart, new Position(6, 1), whiteP);
-//        Move RDownRight = new Move(redStart, new Position(6, 5), whiteP);
-//        Move invalid = new Move(redStart, new Position(0, 0));
-//        assertTrue(RedCuT.isInMoves(RUpLeft) &&
-//                RedCuT.isInMoves(RUpRight) &&
-//                RedCuT.isInMoves(RDownLeft) &&
-//                RedCuT.isInMoves(RDownRight));
-//        assertFalse(RedCuT.isInMoves(invalid));
-//        RedCuT.makeMove(RUpLeft);
-//        assertTrue(RedCuT.doesSpaceHavePiece(2, 1));
-//        assertTrue(RedCuT.isSpaceKingPiece(2, 1) &&
-//                RedCuT.isSpaceRedPiece(2, 1));
-//        assertTrue(RedCuT.isSpaceValid(3, 2));
-//
-//        //Jumps in all 4 directions White King
-//        WhiteCuT.addPiece(4, 3, whiteKing);
-//        WhiteCuT.addPiece(3, 4, redP);
-//        WhiteCuT.addPiece(3, 2, redP);
-//        WhiteCuT.addPiece(5, 2, redP);
-//        WhiteCuT.addPiece(5, 4, redP);
-//        Move move2 = new Move(new Position(4, 3),
-//                new Position(6, 5), redP);
-//        WhiteCuT.makeMove(move2);
-//        assertTrue(WhiteCuT.doesSpaceHavePiece(6, 5) &&
-//                WhiteCuT.isSpaceKingPiece(6, 5) &&
-//                !WhiteCuT.isSpaceRedPiece(6, 5));
-//        assertTrue(WhiteCuT.isSpaceValid(5, 4));
-//    }
-//
     public void removeAllPiece(){
         for (int r = 0; r < 8; r++){
             for (int c = 0; c < 8; c ++){

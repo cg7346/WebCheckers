@@ -89,14 +89,14 @@ public class PostSubmitTurnTest {
         when(mock(Move.class).hasPiece()).thenReturn(true);
     }
 
-    @Test
-    void test_BlockedOrCaptured(){
-        String test = "test";
-        assertEquals(" has blocked all pieces, test",
-                CuT.BlockedOrCaptured(12, test));
-        assertEquals(" has captured all pieces, test",
-                CuT.BlockedOrCaptured(0, test));
-    }
+//    @Test
+//    void test_BlockedOrCaptured(){
+//        String test = "test";
+//        assertEquals(" has blocked all pieces, test",
+//                CuT.BlockedOrCaptured(12, test));
+//        assertEquals(" has captured all pieces, test",
+//                CuT.BlockedOrCaptured(0, test));
+//    }
 
     @Test
     void test_GameOverWinRed(){
