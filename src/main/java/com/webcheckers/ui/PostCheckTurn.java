@@ -45,6 +45,14 @@ public class PostCheckTurn implements Route {
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
+    /**
+     * Called when a game is over
+     *
+     * @param request  the HTTP request
+     * @param response the HTTP response
+     * @param game     the current checkers game to check
+     * @param message  displaying the game over message to the modeOptionsAsJason
+     */
     public void GameOver(Request request, Response response, CheckersGame game, String message) {
         Session session = request.session();
         GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
@@ -55,6 +63,14 @@ public class PostCheckTurn implements Route {
         session.attribute(MESSAGE_ERR, er);
     }
 
+    /**
+     * Checks to see if the pieces are blocked or all captured
+     * @param count the number of pieces left (array)
+     * @param winOrlose whether the a player either won or lost
+     * @return the end game message
+     *          {player} has blocked all pieces. You {Won/Lost}
+     *          {player} has captured all pieces. You {Won/Lost}
+     */
     public String BlockedOrCaptured(Integer count, String winOrlose){
         String endGame = null;
         if (count > 0) {
