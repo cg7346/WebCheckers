@@ -35,17 +35,16 @@ public class PostBackUpRouteTest {
 
     @Test
     void test_handle(){
-//      CheckersGame mockGame = mock(CheckersGame.class);
-//        MoveValidator mockMV = mock(MoveValidator.class);
-//        when(mock)
         Player mockPlayer = mock(Player.class);
+        when(mockPlayer.getName()).thenReturn("P1");
         Player mockP2 = mock(Player.class);
+        when(mockP2.getName()).thenReturn("P2");
         CheckersGame game = new CheckersGame(mockPlayer, mockP2, "1");
-        when(session.attribute("Player"))
-                .thenReturn(mockPlayer);
-        when(gm.getGame(mockPlayer)).thenReturn(game);
+        game.keepLastMove(new Move(new Position(2,1), new Position(3, 0)));
 
-        Message expected = Message.info("BACK IT UP!");
-        //assertEquals(expected, CuT.handle(request, response));
+        when(session.attribute("Player")).thenReturn(mockPlayer);
+        when(gm.getGame(mockPlayer)).thenReturn(game);
+        String expected = "{\"text\":\"BACK IT UP!\",\"type\":\"INFO\"}";
+        assertEquals(expected, CuT.handle(request, response));
     }
 }

@@ -35,29 +35,29 @@ public class PostBackupRoute implements Route {
 
     /**
      * the constructor the the route
+     *
      * @param gameManager a Game Manager
-     * @param gson the GSON
+     * @param gson        the GSON
      */
-    public PostBackupRoute(GameManager gameManager, Gson gson)
-    {
+    public PostBackupRoute(GameManager gameManager, Gson gson) {
         this.gameManager = Objects.requireNonNull(gameManager, "game manager is required");
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
 
     /**
      * this function handles the call
-     * @param request request
+     *
+     * @param request  request
      * @param response response
      * @return Response Message
      * @throws Exception
      */
     @Override
-    public Object handle(Request request, Response response)
-    {
+    public Object handle(Request request, Response response) {
         Session session = request.session();
         Player player = session.attribute("Player");
         CheckersGame game = gameManager.getGame(player);
-        MoveValidator moveValidator = mvMaker(game);
+        MoveValidator moveValidator = new MoveValidator(game);
         moveValidator.backUpMove();
 
         Message responseMessage = Message.info("BACK IT UP!");
@@ -66,14 +66,4 @@ public class PostBackupRoute implements Route {
         return gson.toJson(responseMessage);
     }
 
-    /**
-     * Factory for making that moveValidator
-     * It makes testing a lot easier and replaces
-     * the new statement that used to be in the handle
-     * @param game game to make MoveValidator with
-     * @return a brand new MoveValidator
-     */
-    public MoveValidator mvMaker(CheckersGame game){
-        return new MoveValidator(game);
-    }
 }
