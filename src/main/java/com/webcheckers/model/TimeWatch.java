@@ -23,7 +23,7 @@ public class TimeWatch {
     /**
      * A constructor for the timer that resets it
      */
-    private TimeWatch() {
+    TimeWatch() {
         reset();
     }
 

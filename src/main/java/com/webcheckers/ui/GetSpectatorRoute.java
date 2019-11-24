@@ -43,19 +43,24 @@ public class GetSpectatorRoute implements Route {
     //
 
     /**
-     * Create the UI controller to handle all {@code GET /spectator/game} HTTP requests.
-     * <p>
-     * //     * @param checkersGame holds all the information about players playing a game
+     * Create the UI controller to handle all {@code GET /spectator/game}
+     * HTTP requests.
      *
      * @param playerLobby holds all the information about players signed in
      * @param gameManager how to access a game
      */
-    public GetSpectatorRoute(final TemplateEngine templateEngine, final PlayerLobby playerLobby,
+    public GetSpectatorRoute(final TemplateEngine templateEngine,
+                             final PlayerLobby playerLobby,
                              final GameManager gameManager) {
         // Sets and validate the templateEngine attribute to not be null
-        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine is required");
-        this.playerLobby = Objects.requireNonNull(playerLobby, "Player Lobby must not be null.");
-        this.gameManager = Objects.requireNonNull(gameManager, "Game Manager must not be null.");
+        this.templateEngine = Objects.requireNonNull(templateEngine,
+                "templateEngine is required");
+        // Sets and validate the playerLobby attribute to not be null
+        this.playerLobby = Objects.requireNonNull(playerLobby,
+                "Player Lobby must not be null.");
+        // Sets and validate the gameManager attribute to not be null
+        this.gameManager = Objects.requireNonNull(gameManager,
+                "Game Manager must not be null.");
     }
 
     /**
@@ -76,26 +81,30 @@ public class GetSpectatorRoute implements Route {
         // retrieve the Player from the session
         Player spectator = session.attribute("Player");
 
-//        CheckersGame checkersGame = new CheckersGame(redPlayer, whitePlayer, gameID)
         ModelAndView mv;
         // If the player enters this page without being signed in or in a valid game,
         if (spectator == null) {
             vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
-            //redirect back to home page
+            // Redirect back to home page
             response.redirect(WebServer.HOME_URL);
             halt();
             return null;
         } else {
-            mv = spectator(gameManager.activeGames(), vm, spectator, request, response);
+            // Renders the spectator model view
+            mv = spectator(gameManager.activeGames(), vm, spectator,
+                    request, response);
             if (mv == null) {
+                // Returns null
                 return null;
             } else {
+                // Returns the template engine
                 return templateEngine.render(mv);
             }
         }
     }
 
     /**
+     * {@inheritDoc}
      * Sets the gameList variable to the spectator mode
      *
      * @param gameList is the list of games online
@@ -103,47 +112,46 @@ public class GetSpectatorRoute implements Route {
      * @param player   is the current player
      * @return new model and view
      */
-    public ModelAndView spectator(HashMap<CheckersGame, String> gameList, Map<String, Object> vm,
-                                  final Player player, Request request, Response response) {
+    public ModelAndView spectator(HashMap<CheckersGame, String> gameList,
+                                  Map<String, Object> vm, final Player player,
+                                  Request request, Response response) {
 
-        Session session = request.session();
         // Displays the welcome message
         vm.put(GetHomeRoute.WELCOME_ATTR, GetHomeRoute.WELCOME_ATTR_MSG);
         vm.put(GetHomeRoute.MESSAGE, GetHomeRoute.WELCOME_MSG);
 
         // Displays the players online title
         vm.put(GetHomeRoute.PLAYERS_ON, GetHomeRoute.PLAYERS_ONLINE);
-
-        int playerCount = playerLobby.getPlayers().size();
-        if (playerCount == 0) {
-            vm.put(GetHomeRoute.PLAYERS_COUNT, GetHomeRoute.NO_PLAYERS);
-        } else if (playerCount == 1) {
-            String count = String.format(GetHomeRoute.PLAYER, playerCount);
-            vm.put(GetHomeRoute.PLAYERS_COUNT, count);
-        } else {
-            String count = String.format(GetHomeRoute.PLAYERS, playerCount);
-            vm.put(GetHomeRoute.PLAYERS_COUNT, count);
-        }
+        // Updates the players online count
+        GetHomeRoute.playerActive(vm, playerLobby.getPlayers().size());
 
         vm.put(GetHomeRoute.GAME_LIST, gameList);
         vm.put(GetHomeRoute.SPECTATOR, player.isSpectating());
         // retrieve request parameter
         final String gameNum = request.queryParams(SPECTATOR);
         CheckersGame game = gameManager.getGame(gameNum);
+
+        // If game is not null, render the game view for the spectator
         if (game != null) {
+            // Gets the game ID
             String gameID = game.getGameID();
+            // Gets the red player
             Player redPlayer = game.getRedPlayer();
+            // Gets the white player
             Player whitePlayer = game.getWhitePlayer();
+            // Gets the board
             BoardView board = new BoardView(player, game);
+            // Bulids the view model
             vm.put(GetGameRoute.TITLE_ATTR, GetGameRoute.TITLE_ATTR_MSG);
             vm.put(GetGameRoute.GAME_ID_ATTR, gameID);
             vm.put(GetGameRoute.CURRENT_USER_ATTR, game.getActivePlayer());
             vm.put("viewMode", GetGameRoute.viewMode.SPECTATOR);
-
+            // Display the timer message
             if (PostSpectatorCheckTurn.SPECTATOR_TIME == null) {
                 vm.put(GetGameRoute.START_ATTR, GetGameRoute.START_ATTR_MSG);
             } else {
-                vm.put(GetGameRoute.START_ATTR, Message.info(PostSpectatorCheckTurn.SPECTATOR_TIME));
+                vm.put(GetGameRoute.START_ATTR,
+                        Message.info(PostSpectatorCheckTurn.SPECTATOR_TIME));
             }
             vm.put(GetGameRoute.RED_PLAYER_ATTR, redPlayer);
             vm.put(GetGameRoute.WHITE_PLAYER_ATTR, whitePlayer);
@@ -151,10 +159,12 @@ public class GetSpectatorRoute implements Route {
                     ? GetGameRoute.activeColor.RED : GetGameRoute.activeColor.WHITE;
             vm.put(GetGameRoute.COLOR_ATTR, color);
             vm.put(GetGameRoute.BOARD_ATTR, board);
+            // Adds spectator to the spectator list
             gameManager.addSpectator(game, player);
             // Returns new model and view
             return new ModelAndView(vm, VIEW_NAME);
         }
+        // Otherwise, redirect to home
         specEndGame = true;
         response.redirect(WebServer.HOME_URL);
         halt();

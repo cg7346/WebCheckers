@@ -14,7 +14,7 @@ import java.util.Objects;
 import static spark.Spark.halt;
 
 /**
- * The UI controller to POST the Spectator page
+ * The {@code GET /spectator/stopWatching} route handler
  *
  * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella<a/>
  * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo<a/>
@@ -26,7 +26,6 @@ public class GetSpectatorStopWatching implements Route {
     //
 
     private final GameManager gameManager;
-    private final TemplateEngine templateEngine;
 
     //
     // Constants
@@ -46,20 +45,19 @@ public class GetSpectatorStopWatching implements Route {
 
     /**
      * Create the UI controller to handle all {@code GET /spectator/stopWatching} HTTP requests.
-     * <p>
-     * //     * @param checkersGame holds all the information about players playing a game
      *
      * @param gameManager how to access a game
      */
-    public GetSpectatorStopWatching(final GameManager gameManager, final TemplateEngine templateEngine) {
-        this.gameManager = Objects.requireNonNull(gameManager, "Game Manager must not be null.");
-        // Sets and validates the templateEngine attribute to not be null
-        this.templateEngine = Objects.requireNonNull(templateEngine, "templateEngine must not be null");
+    public GetSpectatorStopWatching(final GameManager gameManager) {
+        // Sets and validates the gameManager attribute to not be null
+        this.gameManager = Objects.requireNonNull(gameManager,
+                "Game Manager must not be null.");
     }
 
 
     /**
-     * Render the WebCheckers Home page for a spectator
+     * {@inheritDoc}
+     * redirects back home
      *
      * @param request  the HTTP request
      * @param response the HTTP response
@@ -67,15 +65,15 @@ public class GetSpectatorStopWatching implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
+        // Sets visited to true
         visited = true;
+        // Gets the spectator
         Player spectator = request.session().attribute("Player");
-        Map<String, Object> vm = new HashMap<>();
-
+        // Removes the spectator from the spectator list
         gameManager.removeSpectator(gameManager.getGame(spectator), spectator);
-
+        // Redirects to home
         response.redirect(WebServer.HOME_URL);
         halt();
-
         return null;
     }
 }

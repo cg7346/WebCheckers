@@ -40,13 +40,16 @@ public class PostResignGame implements Route {
      *
      * @param gameManager is the game manager from the game manager class
      * @param gson is the JSON
-    //     * @throws NoSuchElementException when the {@code gameManager} or {@code gson} parameter is null
+    //     * @throws NoSuchElementException when the {@code gameManager} or
+    {@code gson} parameter is null
      */
     public PostResignGame(GameManager gameManager, Gson gson) {
         // Sets and validates the gameManager attribute to not be null
-        this.gameManager = Objects.requireNonNull(gameManager, "gameManager must not be null");
+        this.gameManager = Objects.requireNonNull(gameManager,
+                "gameManager must not be null");
         // Sets and validates the gson attribute to not be null
-        this.gson = Objects.requireNonNull(gson, "gson must not be null");
+        this.gson = Objects.requireNonNull(gson,
+                "gson must not be null");
     }
 
     //
@@ -79,25 +82,35 @@ public class PostResignGame implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
+        // Gets the session
         Session session = request.session();
+        // Gets the resigned player
         resignPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(resignPlayer);
+        // If the current player is not the active player, then tell them to
+        // wait for their turn
         if (!resignPlayer.getName().equals(game.getActivePlayer().getName())) {
             game.setResignedPlayer(null);
             game.setWinner(null);
             response.body(gson.toJson(Message.error("Please wait for you turn to resign.")));
             return gson.toJson(Message.error("Please wait for you turn to resign."));
+        // Otherwise, get the winning player
         } else {
             if (resignPlayer.getName().equals(game.getRedPlayer().getName())) {
                 winningPlayer = game.getWhitePlayer();
             } else {
                 winningPlayer = game.getRedPlayer();
             }
+            // Sets the resign player
             game.setResignedPlayer(resignPlayer);
+            // Sets the winner
             game.setWinner(winningPlayer);
+            // Set mode options to game over
             GetGameRoute.modeOptionsAsJSON.put("isGameOver", true);
-            GetGameRoute.modeOptionsAsJSON.put("gameOverMessage", resignPlayer.getName() + " has resigned.");
+            GetGameRoute.modeOptionsAsJSON.put("gameOverMessage",
+                    resignPlayer.getName() + " has resigned.");
             response.body(gson.toJson(resignMessage(resignPlayer)));
+            // Handle if the game is with an AI
             if (game.getWhitePlayer().getName().equals("AI")) {
                 gameManager.removeGame(game);
                 Message er = Message.error(String.format(RESIGN, resignPlayer.getName()));

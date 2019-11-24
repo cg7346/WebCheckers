@@ -53,7 +53,7 @@ public class PostSubmitTurnTest {
         when(AI.getName()).thenReturn("AI");
         gson = new Gson();
 
-        CuT = new PostSubmitTurn(lobby, gameManager, gson);
+        CuT = new PostSubmitTurn(gameManager, gson);
         String gameIdString = "3";
         when(request.queryParams("gameID")).thenReturn(gameIdString);
         when(gameManager.getGame(player)).thenReturn(mockGame);

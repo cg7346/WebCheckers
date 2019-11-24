@@ -72,6 +72,7 @@ public class GetHomeRoute implements Route {
     }
 
   /**
+   * {@inheritDoc}
    * Render the WebCheckers Home page.
    *
    * @param request
@@ -113,7 +114,7 @@ public class GetHomeRoute implements Route {
               ModelAndView mv = currentUser(vm, request);
               return templateEngine.render(mv);
           }
-          ModelAndView mv = playerActive(vm);
+          ModelAndView mv = playerActive(vm, playerLobby.getPlayers().size());
           return templateEngine.render(mv);
       }
 
@@ -127,13 +128,12 @@ public class GetHomeRoute implements Route {
     //
 
     /**
-     * active player of the model view
-     * @param vm
-     * @return
+     * Active players of the model view
+     * @param vm is view model
+     * @return model and view
      */
-    private ModelAndView playerActive(Map<String, Object> vm) {
+    public static ModelAndView playerActive(Map<String, Object> vm, int playerCount) {
         vm.put(PLAYERS_ON, PLAYERS_ONLINE);
-        Integer playerCount = playerLobby.getPlayers().size();
         if (playerCount == 0) {
             vm.put(PLAYERS_COUNT, NO_PLAYERS);
         } else if (playerCount == 1) {
@@ -193,9 +193,6 @@ public class GetHomeRoute implements Route {
      */
     private ModelAndView error(final Map<String, Object> vm, final Message message, final Player currentPlayer) {
         vm.put("title", GetHomeRoute.WELCOME_ATTR_MSG);
-        //vm.put(GetHomeRoute.CURRENT_USER, playerLobby.getPlayers().get(playerLobby.getPlayers().size()-1));
-        //final Session session = request.session();
-        //Player currentPlayer = session.attribute("Player");
         vm.put(CURRENT_USER, currentPlayer);
         vm.put(PostSignInRoute.CURRENT, currentPlayer.getName());
         vm.put(PLAYERS_ON, PLAYERS_ONLINE);

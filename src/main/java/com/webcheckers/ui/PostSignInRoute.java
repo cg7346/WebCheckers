@@ -25,7 +25,7 @@ public class PostSignInRoute implements Route {
     static final String USERNAME = "myUsername";
     static final String CURRENT = "current";
     static final String MESSAGE_ATTR = "message";
-    // Values ued in the view model map for rendering the sign in page
+    // Values used in the view model map for rendering the sign in page
     static final String INVALID_USR = "Must start with at least one alphanumeric character.";
     static final String TAKEN_USR = "Username has already been taken.";
     static final String VIEW_NAME = "signin.ftl";
@@ -82,8 +82,10 @@ public class PostSignInRoute implements Route {
     /**
      * {@inheritDoc}
      *      when an invalid username is returned
-     * @param request
      * @param response
+     *   the HTTP response
+     * @return
+     *   the rendered HTML for the Home page
      * @return templateEngine to render a view or null
      */
     @Override

@@ -200,13 +200,13 @@ public class WebServer {
     get(GAME_URL, new GetGameRoute(templateEngine, playerLobby, gameManager, gson));
 
     // Validates the move for current player
-    post(VALIDATEMOVE_URL, new PostValidateMove(playerLobby, gameManager, gson));
+    post(VALIDATEMOVE_URL, new PostValidateMove(gameManager, gson));
 
     // Backs up the move for current player
     post(BACKUPTURN_URL, new PostBackupRoute(gameManager, gson));
 
     // Submits the turn of the current player
-    post(SUBMITTURN_URL, new PostSubmitTurn(playerLobby, gameManager, gson));
+    post(SUBMITTURN_URL, new PostSubmitTurn(gameManager, gson));
 
     // Posts after the resign button is clicked
     post(RESIGN_URL, new PostResignGame(gameManager, gson));
@@ -218,11 +218,10 @@ public class WebServer {
     get(SPECTATOR_URL, new GetSpectatorRoute(templateEngine, playerLobby, gameManager));
 
     // Posts the turn of players for the spectator to see
-    post(SPECTATOR_CHECKTURN, new PostSpectatorCheckTurn(gameManager, templateEngine, gson));
+    post(SPECTATOR_CHECKTURN, new PostSpectatorCheckTurn(gson));
 
     // Shows the checkers game when there isn't a spectator in a game
-    get(END_SPECTATOR_URL, new GetSpectatorStopWatching(gameManager, templateEngine));
-
+    get(END_SPECTATOR_URL, new GetSpectatorStopWatching(gameManager));
     LOG.config("WebServer is initialized.");
   }
 
