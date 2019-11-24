@@ -1,6 +1,5 @@
 package com.webcheckers.model;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -32,7 +31,7 @@ public class CheckersGame {
     private Integer redCount = 12;
 
     //unique identifier for the game
-    private int gameID;
+    private String gameID;
 
     //Dimensions for the board
     public final static int ROWS = 8;
@@ -59,7 +58,7 @@ public class CheckersGame {
      *
      * @param gameID int, unique identifier for the game
      */
-    public CheckersGame(Player redPlayer, Player whitePlayer, int gameID){
+    public CheckersGame(Player redPlayer, Player whitePlayer, String gameID) {
         this.gameID = gameID;
         this.redPlayer = redPlayer;
         this.whitePlayer = whitePlayer;
@@ -257,7 +256,9 @@ public class CheckersGame {
      * Get the GameID
      * @return getGameID
      */
-    public int getGameID(){return gameID;}
+    public String getGameID() {
+        return gameID;
+    }
 
     /**
      * Returns who the activePlayer is (whose turn)

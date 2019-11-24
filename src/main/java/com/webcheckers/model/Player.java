@@ -10,6 +10,7 @@ public class Player {
     // name is the name of the Player
     private String name;
     private boolean inGame;
+    private boolean isSpectating;
 
 
     public Player(String name) {
@@ -40,6 +41,24 @@ public class Player {
      */
     public void setInGame(boolean inGame){
         this.inGame = inGame;
+    }
+
+    /**
+     * Getter for isSpectating
+     *
+     * @return true if the player is spectating, false otherwise
+     */
+    public boolean isSpectating() {
+        return isSpectating;
+    }
+
+    /**
+     * Setter for spectating
+     *
+     * @param bool boolean value to set isSpectating to
+     */
+    public void setSpectating(boolean bool) {
+        this.isSpectating = bool;
     }
 
 }

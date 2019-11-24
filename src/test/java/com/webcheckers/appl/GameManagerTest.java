@@ -93,9 +93,9 @@ public class GameManagerTest {
         CheckersGame g1 = gm.makeGame(p1, p2);
         CheckersGame g2 = gm.makeGame(p3, p4);
 
-        assertEquals(g1, gm.getGame(1));
-        assertEquals(g2, gm.getGame(2));
-        assertNull(gm.getGame(700));
+        assertEquals(g1, gm.getGame("1"));
+        assertEquals(g2, gm.getGame("2"));
+        assertNull(gm.getGame("700"));
 
     }
 
@@ -113,7 +113,7 @@ public class GameManagerTest {
         assertEquals(2, gm.totalGames);
         assertNull(gm.removeGame(g1));
         assertEquals(1, gm.totalGames);
-        assertNull(gm.getGame(1));
+        assertNull(gm.getGame("1"));
 
     }
 }

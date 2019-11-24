@@ -1,17 +1,17 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.appl.GameManager;
+import com.webcheckers.appl.PlayerLobby;
+import com.webcheckers.model.CheckersGame;
+import com.webcheckers.model.Player;
+import com.webcheckers.util.Message;
+import spark.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
-
-import com.webcheckers.appl.GameManager;
-import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.Player;
-import spark.*;
-
-import com.webcheckers.util.Message;
 
 import static spark.Spark.halt;
 
@@ -31,6 +31,7 @@ public class GetHomeRoute implements Route {
     static final Message WELCOME_MSG = Message.info("Welcome to the world of online Checkers.");
     static final String CURRENT_USER = "currentUser";
     static final String USERS_LIST = "userList";
+    static final String GAME_LIST = "gameList";
     static final String MESSAGE = "message";
     static final String PLAYERS_COUNT = "playerActive";
     static final String PLAYERS = "There are %d other players available to play at this time.";
@@ -38,6 +39,10 @@ public class GetHomeRoute implements Route {
     static final String NO_PLAYERS = "There are no other players available to play at this time";
     static final String PLAYERS_ON = "playersOnline";
     static final String PLAYERS_ONLINE = "Players Online";
+    static final String SPECTATOR = "spectator";
+    static ModelAndView mv;
+//    static final String GAMES_ON = "gamesOnline";
+//    static final String GAMES_ONLINE = "Spectator";
 
     // View name
     static final String VIEW_NAME = "home.ftl";
@@ -106,11 +111,15 @@ public class GetHomeRoute implements Route {
                   response.redirect(WebServer.GAME_URL);
                   halt();
                   return null;
+              } else if (currentPlayer.isSpectating()) {
+                  response.redirect((WebServer.SPECTATOR_URL));
+                  halt();
+                  return null;
               }
-              ModelAndView mv = currentUser(vm, request);
+              mv = currentUser(vm, request);
               return templateEngine.render(mv);
           }
-          ModelAndView mv = playerActive(vm);
+          mv = playerActive(vm);
           return templateEngine.render(mv);
       }
 
@@ -152,11 +161,32 @@ public class GetHomeRoute implements Route {
     public ModelAndView currentUser(Map<String, Object> vm, Request request) {
         final Session session = request.session();
         List<String> userList = playerLobby.getUsernames();
+        HashMap<CheckersGame, String> gameList = gameManager.activeGames();
         Player player = session.attribute("Player");
+        // Displays the welcome message
+
+        if (gameManager.spectators != null && GetSpectatorRoute.specEndGame != null) {
+            if (GetSpectatorStopWatching.visited) {
+                GetSpectatorStopWatching.visited = false;
+                vm.put(MESSAGE, Message.info(GetSpectatorStopWatching.SPECTATOR_END));
+            }
+            if (GetSpectatorRoute.specEndGame) {
+                GetSpectatorRoute.specEndGame = false;
+                vm.put(MESSAGE, Message.info("The game has ended."));
+            }
+        }
+
+        // Sets the current user to the current player
+        vm.put(GAME_LIST, gameManager.activeGames());
+
+        vm.put(GetHomeRoute.SPECTATOR, player.isSpectating());
+
+
         vm.put(CURRENT_USER, player);
         vm.put(PLAYERS_ON, PLAYERS_ONLINE);
         vm.put(PostSignInRoute.CURRENT, player.getName());
         vm.put(USERS_LIST, userList);
+        vm.put(GAME_LIST, gameList);
         return new ModelAndView(vm, VIEW_NAME);
     }
 
@@ -176,6 +206,5 @@ public class GetHomeRoute implements Route {
         vm.put(MESSAGE, message);
         return new ModelAndView(vm, VIEW_NAME);
     }
-
 
 }
