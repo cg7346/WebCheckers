@@ -47,7 +47,7 @@ public class PostValidateMoveTest {
         realGame = new CheckersGame(player, player2, "3");
         when(gameManager.getGame(player)).thenReturn(realGame);
 
-        CuT = new PostValidateMove(lobby, gameManager, gson);
+        CuT = new PostValidateMove(gameManager, gson);
     }
 
     @Test

@@ -27,8 +27,6 @@ public class PostValidateMove implements Route {
     // Attributes
     //
 
-    // TODO: check if this is needed
-    private final PlayerLobby playerLobby;
     private final GameManager gameManager;
     private final Gson gson;
 
@@ -39,14 +37,16 @@ public class PostValidateMove implements Route {
     /**
      * Create the UI controller to handle all {@code POST /validateMove} HTTP requests.
      *
-     * @param playerLobby   the list of players playing the WebCheckers game
      * @param gameManager   handles all the checker games
      * @param gson  is the JSON
      */
-    public PostValidateMove(PlayerLobby playerLobby, GameManager gameManager, Gson gson){
-        this.playerLobby = Objects.requireNonNull(playerLobby, "player lobby is required");
-        this.gameManager = Objects.requireNonNull(gameManager, "game manager is required");
-        this.gson = Objects.requireNonNull(gson, "gson is required");
+    public PostValidateMove(GameManager gameManager, Gson gson){
+        // Sets and validates the gameManager attribute to not be null
+        this.gameManager = Objects.requireNonNull(gameManager,
+                "game manager is required");
+        // Sets and validates the gson attribute to not be null
+        this.gson = Objects.requireNonNull(gson,
+                "gson is required");
     }
 
     /**
@@ -60,22 +60,29 @@ public class PostValidateMove implements Route {
      */
     @Override
     public Object handle(Request request, Response response) {
+        // Gets the move
         String moveString = request.queryParams("actionData");
-        String gameIdString = request.queryParams("gameID");
         Move move = gson.fromJson(moveString, Move.class);
+        // Gets the session
         Session session = request.session();
+        // Gets the player
         Player player = session.attribute("Player");
+        // Gets the game
         CheckersGame game = gameManager.getGame(player);
+        // Creates a move validator
         MoveValidator moveValidator = new MoveValidator(game);
         String moveResponse = moveValidator.isInMoves(move);
         Message responseMessage = null;
+        // If move is valid, complete the move
         if(moveResponse.equals(moveValidator.validMove)){
             responseMessage = Message.info(moveResponse);
             game.keepLastMove(move);
             game.completeMove();
+        // Otherwise, error
         }else {
             responseMessage = Message.error(moveResponse);
         }
+        // Display response message
         response.body(gson.toJson(responseMessage));
         return gson.toJson(responseMessage);
     }
