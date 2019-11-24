@@ -3,10 +3,7 @@ package com.webcheckers.ui;
 import com.google.gson.Gson;
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
-import com.webcheckers.model.CheckersGame;
-import com.webcheckers.model.Move;
-import com.webcheckers.model.MoveValidator;
-import com.webcheckers.model.Player;
+import com.webcheckers.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -162,13 +159,56 @@ public class PostSubmitTurnTest {
 
     @Test
     void test_moveNotMade() {
-        MoveValidator mv = mock(MoveValidator.class);
+        CheckersGame realGame = new CheckersGame(player, player2, "2");
         when(mockGame.getWhitePlayer()).thenReturn(player2);
         when(session.attribute("Player")).thenReturn(player);
-        when(gameManager.getGame(player)).thenReturn(mockGame);
-        when(mockGame.getLastMove()).thenReturn(null);
-        String expected = "{Make move first'}";
+        when(gameManager.getGame(player)).thenReturn(realGame);
+        String expected = "{\"text\":\"Make move first\",\"type\":\"ERROR\"}";
         System.out.println(CuT.handle(request, response).toString());
+        assertEquals(expected, CuT.handle(request, response).toString());
+    }
+
+    @Test
+    void test_MoveNoPiece() {
+        Move testMove = new Move(new Position(2, 1),
+                new Position(3, 0));
+        CheckersGame realGame = new CheckersGame(player, player2, "2");
+        realGame.makeMove(testMove);
+        realGame.keepLastMove(testMove);
+        when(session.attribute("Player")).thenReturn(player);
+        when(gameManager.getGame(player)).thenReturn(realGame);
+        String expected = "{\"text\":\"Valid Move!\",\"type\":\"INFO\"}";
+        assertEquals(expected, CuT.handle(request, response).toString());
+    }
+
+    @Test
+    void test_MoveJump() {
+        Move testMove = new Move(new Position(2, 1),
+                new Position(3, 0));
+        Move RedMove2 = new Move(new Position(5, 2),
+                new Position(4, 1));
+        Move invalidMove = new Move(new Position(3, 0),
+                new Position(5, 2));
+        CheckersGame realGame = new CheckersGame(player, player2, "2");
+        realGame.makeMove(testMove);
+        realGame.makeMove(RedMove2);
+        realGame.keepLastMove(invalidMove);
+        when(session.attribute("Player")).thenReturn(player);
+        when(gameManager.getGame(player)).thenReturn(realGame);
+        String expected = "{\"text\":\"Valid Move!\",\"type\":\"INFO\"}";
+        assertEquals(expected, CuT.handle(request, response).toString());
+    }
+
+    @Test
+    void testAISimple(){
+        Move testMove = new Move(new Position(2, 1),
+                new Position(3, 0));
+        CheckersGame realGame = new CheckersGame(player, new Player("AI"), "2");
+        realGame.makeMove(testMove);
+        realGame.keepLastMove(testMove);
+        when(session.attribute("Player")).thenReturn(player);
+        when(gameManager.getGame(player)).thenReturn(realGame);
+        String expected = "{\"text\":\"Valid Move!\",\"type\":\"INFO\"}";
         assertEquals(expected, CuT.handle(request, response).toString());
 
     }

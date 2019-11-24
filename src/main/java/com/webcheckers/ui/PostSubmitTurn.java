@@ -58,24 +58,6 @@ public class PostSubmitTurn implements Route {
                 "gson is required");
     }
 
-//    /**
-//     * Checks to see if all the pieces are blocked or captured
-//     *
-//     * @param count     the number of pieces left on the board for a player
-//     * @param winOrlose whether they have either won or lost
-//     * @return an end of game message
-//     */
-//    public String BlockedOrCaptured(Integer count, String winOrlose){
-//        String endGame = null;
-//        // If the count is greater than zero then end game is blocked
-//        if (count > 0) {
-//            endGame = " has blocked all pieces, " + winOrlose;
-//        // If the count is zero then end game is captured
-//        } else {
-//            endGame = " has captured all pieces, " + winOrlose;
-//        }
-//        return endGame;
-//    }
 
     /**
      * Ends a game when the AI is playing
@@ -178,7 +160,12 @@ public class PostSubmitTurn implements Route {
         Player player = session.attribute("Player");
         // Get the game
         CheckersGame game = gameManager.getGame(player);
-        // Create a move validator
+        //process the Turn
+        return processTurn(game, response, session);
+
+    }
+
+    public String processTurn(CheckersGame game, Response response, Session session){
         MoveValidator moveValidator = new MoveValidator(game);
         // If the white player of the game is AI, then set AI to true
         if (game.getWhitePlayer().getName().equals("AI")) {
@@ -195,8 +182,8 @@ public class PostSubmitTurn implements Route {
             // If the player didn't make a move, then tell them to make a move
             if (lastMove == null) {
                 responseMessage = Message.error("Make move first");
-            // Otherwise, vaildate their move for existing jump move
-            // and complete their turn
+                // Otherwise, vaildate their move for existing jump move
+                // and complete their turn
             } else {
                 if (lastMove.hasPiece()) {
                     moveValidator.clearArrays();
@@ -206,12 +193,12 @@ public class PostSubmitTurn implements Route {
                     // Checks for jump moves
                     if (moveValidator.areThereJumpMoves()) {
                         responseMessage = Message.error(moveValidator.jumpAvail);
-                    // Complete their turn
+                        // Complete their turn
                     } else {
                         game.completeTurn();
                         responseMessage = Message.info(moveValidator.validMove);
                     }
-                // Complete their turn
+                    // Complete their turn
                 } else {
                     game.completeTurn();
                     responseMessage = Message.info(moveValidator.validMove);

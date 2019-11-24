@@ -58,6 +58,8 @@ public class PostValidateMoveTest {
         testHash.add(actionData);
         when(request.queryParams()).thenReturn(testHash);
         when(request.queryParams("actionData")).thenReturn(actionData);
+        when(session.attribute("Player")).thenReturn(player);
+        when(gameManager.getGame(player)).thenReturn(realGame);
 
         String expected = "{\"text\":\"Valid Move!\",\"type\":\"INFO\"}";
         try{
