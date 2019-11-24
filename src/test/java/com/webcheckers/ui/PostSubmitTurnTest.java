@@ -168,7 +168,6 @@ public class PostSubmitTurnTest {
         when(gameManager.getGame(player)).thenReturn(mockGame);
         when(mockGame.getLastMove()).thenReturn(null);
         String expected = "{Make move first'}";
-        System.out.println(CuT.handle(request, response).toString());
         assertEquals(expected, CuT.handle(request, response).toString());
 
     }
