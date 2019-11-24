@@ -73,10 +73,10 @@ public class PostSubmitTurn implements Route {
     }
 
     /**
-     *
-     * @param game
-     * @param message
-     * @param session
+     * Ends a game when the AI is playing
+     * @param game the game being played
+     * @param message a message if there's an error
+     * @param session the current session
      */
     public void AIEndGame(CheckersGame game, String message, Session session){
         if (AI) {
@@ -91,9 +91,12 @@ public class PostSubmitTurn implements Route {
      *
      * @param moveValidator the moves possible array
      * @param game the game the players in
-     * @param session
-     * @param win
-     * @return
+     * @param session the current session
+     * @param win true is won, else wise false
+     * @return the response message for gson
+     *          The game has ended in a tie.
+     *          {player name} pieces have been captured
+     *          {player name} has no moves left.
      */
     public Message gameOver(MoveValidator moveValidator, CheckersGame game, Session session, Boolean win){
         Message responseMessage = null;

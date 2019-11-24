@@ -30,8 +30,6 @@ public class PostSpectatorCheckTurn implements Route {
 
     /**
      * Create the UI controller to handle all {@code GET /spectator/stopWatching} HTTP requests.
-     * <p>
-     * //     * @param checkersGame holds all the information about players playing a game
      *
      * @param gameManager how to access a game
      */
