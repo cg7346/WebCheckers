@@ -8,8 +8,18 @@ import java.util.Stack;
  *
  * Holds information about who the two players are
  * and only information for that individual game
+ *
+ * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella</>
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</>
+ * @author <a href='mailto:mmb2582@rit.edu'>Mallory Bridge</a>
+ * @author <a href='mailto:jil4009@rit.edu'>Jackie Leung</a>
+ * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
  */
 public class CheckersGame {
+
+    //
+    // Attributes
+    //
 
     //The players in the game
     //(the 1st player to click another player)
@@ -46,6 +56,9 @@ public class CheckersGame {
     //The current turn being made
     private Turn currentTurn;
 
+    //
+    // Constructor
+    //
 
     /**
      * One instance of a checkers board

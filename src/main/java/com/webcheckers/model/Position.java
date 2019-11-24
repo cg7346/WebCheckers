@@ -4,13 +4,22 @@ import java.util.Objects;
 
 /**
  * Position of the piece
- * @author jil4009
- * @author  mmb2582
+ *
+ * @author <a href='mailto:mmb2582@rit.edu'>Mallory Bridge</a>
+ * @author <a href='mailto:jil4009@rit.edu'>Jackie Leung</a>
  */
 public class Position {
 
+    //
+    // Attributes
+    //
+
     private int row;
     private  int cell;
+
+    //
+    // Constructor
+    //
 
     /**
      * constructor for position
@@ -66,15 +75,11 @@ public class Position {
     }
 
     /**
-     * this function overrised the toString method to return a wanted string
+     * this function overrides the toString method to return a wanted string
      * @return String
      */
     @Override
     public String toString(){
         return "(" + row + ", " + cell + ")";
     }
-
-
-
-
 }

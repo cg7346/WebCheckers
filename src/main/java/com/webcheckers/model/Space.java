@@ -1,6 +1,5 @@
 package com.webcheckers.model;
 
-
 /**
  * Represents a Space on the board
  * Contains its position in the row and the piece on it
@@ -9,10 +8,19 @@ package com.webcheckers.model;
  * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
  */
 public class Space {
+
+    //
+    // Attributes
+    //
+
     private int cellIdx;
     private Piece piece;
     private boolean isBlack;
 
+
+    //
+    // Constructor
+    //
 
     /**
      * Creates a space on the board without a piece

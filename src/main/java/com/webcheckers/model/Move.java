@@ -1,20 +1,29 @@
 package com.webcheckers.model;
 
-import javax.sql.RowSet;
-
 /**
- * class for move on the checkers board
- * @author jil4009
- * @author mmb2582
+ * Class for move on the checkers board
+ *
+ * @author <a href='mailto:mmb2582@rit.edu'>Mallory Bridge</a>
+ * @author <a href='mailto:jil4009@rit.edu'>Jackie Leung</a>
  */
 public class Move {
 
+    //
+    // Attributes
+
+    // stores where a players piece ends
     private final Position start;
+    // stores where a players piece starts
     private final Position end;
+    // stores the pieces that have been jumped
     private Piece jumpedPiece;
 
+    //
+    // Constructor
+    //
+
     /**
-     * contructor for move
+     * constructor for move
      * @param start Position that started
      * @param end Position that ended
      */
@@ -25,7 +34,7 @@ public class Move {
     }
 
     /**
-     * antoher constructor for move
+     * another constructor for move
      * @param start Position that started
      * @param end Position to end at
      * @param piece the Piece
@@ -106,5 +115,4 @@ public class Move {
         }
         return s;
     }
-
 }

@@ -1,6 +1,9 @@
 package com.webcheckers.ui;
 
-import com.webcheckers.model.*;
+import com.webcheckers.model.CheckersGame;
+import com.webcheckers.model.Player;
+import com.webcheckers.model.Row;
+import com.webcheckers.model.Space;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,13 +11,19 @@ import java.util.Iterator;
 
 /**
  * The board view for the UI
- * @author Jacquelyn Leung and Anthony Ferraioli
+ *
+ * @author <a href='mailto:jil4009@rit.edu'>Jackie Leung</a>
+ * @author <a href='mailto:amf7619@rit.edu'>Anthony Ferraioli</a>
+
  */
 public class BoardView {
-    //private enum color {RED, WHITE}
-    //private enum viewModel { PLAY, SPECTATOR, REPLAY }
+
+    // holds all the rows in the game
     private ArrayList<Row> rows;
-    //private color activeColor;
+
+    //
+    // Constructor
+    //
 
     /**
      * The constructor for the BoardView. Creates the information for each row based on the checkers game
@@ -34,9 +43,9 @@ public class BoardView {
         }
         ArrayList<Space> spaceList;
 
-        for(int i = 0; i < checkersGame.ROWS; i++){
+        for (int i = 0; i < CheckersGame.ROWS; i++) {
             spaceList = new ArrayList<>();
-            for(int j = 0; j < checkersGame.COLS; j++){
+            for (int j = 0; j < CheckersGame.COLS; j++) {
                 spaceList.add(board[i][j]);
             }
             rows.add(new Row(i, spaceList));

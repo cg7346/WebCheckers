@@ -9,12 +9,20 @@ import java.util.ArrayList;
  */
 public class Tree {
 
+    //
+    // Attributes
+    //
     private Node root;
+    private CheckersGame game;  // TODO: check if we need this
+
+    //
+    // Static Variables
+    //
+
     private static final int KING_WORTH = 5;
     private static final int WINNING_VALUE = 1000000;
     private static final int PIECE_WORTH = 1;
     private static final int TREE_DEPTH = 3;
-    private CheckersGame game;
 
     /**
      * Node contains a board, the move used to get there, and the list of moves coming after.
@@ -53,6 +61,10 @@ public class Tree {
 
     }
 
+    //
+    // Constructor
+    //
+
     /**
      * @param game
      *         the game to build the tree out of
@@ -73,8 +85,8 @@ public class Tree {
         if (game.isGameOver()) {
             score = WINNING_VALUE;
         } else {
-            for (int row = 0; row < game.ROWS; row++) {
-                for (int col = 0; col < game.COLS; col++) {
+            for (int row = 0; row < CheckersGame.ROWS; row++) {
+                for (int col = 0; col < CheckersGame.COLS; col++) {
                     if (game.doesSpaceHavePiece(row, col)) {
                         boolean isKing = game.isSpaceKingPiece(row, col);
                         boolean isRed = game.isSpaceRedPiece(row, col);
