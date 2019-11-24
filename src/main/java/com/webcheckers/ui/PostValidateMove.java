@@ -15,6 +15,12 @@ import spark.Session;
 
 import java.util.Objects;
 
+/**
+ * The (@code POST /validateMove) route handler.
+ *
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</a>
+ * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella</a>
+ */
 public class PostValidateMove implements Route {
 
     //
@@ -31,7 +37,8 @@ public class PostValidateMove implements Route {
     //
 
     /**
-     * the constructor for post validate move
+     * Create the UI controller to handle all {@code POST /validateMove} HTTP requests.
+     *
      * @param playerLobby   the list of players playing the WebCheckers game
      * @param gameManager   handles all the checker games
      * @param gson  is the JSON
@@ -43,13 +50,13 @@ public class PostValidateMove implements Route {
     }
 
     /**
-     * the handle for post validate move
+     * {@inheritDoc}
+     *
      * @param request
      *   the HTTP request
      * @param response
      *   the HTTP response
-     * @return
-     *   gson message for the move is valid
+     * @return updates gson with message if the move is valid or not
      */
     @Override
     public Object handle(Request request, Response response) {
