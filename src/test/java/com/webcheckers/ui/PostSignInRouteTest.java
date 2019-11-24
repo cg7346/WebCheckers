@@ -16,6 +16,7 @@ import java.util.Map;
 import static com.webcheckers.ui.PostSignInRoute.CURRENT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.*;
  * The unit test suite for the {@link PostSignInRoute} component.
  *
  * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella</a>
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</a>
  */
 @Tag("UI-tier")
 public class PostSignInRouteTest {
@@ -49,6 +51,7 @@ public class PostSignInRouteTest {
     private Player player2;
     private Player player3;
     private Player player4;
+    private Player AIplayer;
 
     // attributes holding mock objects
     private Request request;
@@ -75,6 +78,7 @@ public class PostSignInRouteTest {
         player2 = new Player(PLAYER2);
         player3 = new Player(PLAYER3);
         player4 = new Player(PLAYER4);
+        AIplayer = new Player(AI_PLAYER);
 
         // mock behavior
         when(request.session()).thenReturn(session);
@@ -125,6 +129,38 @@ public class PostSignInRouteTest {
         when(session.attribute("Player")).thenReturn(player4);
         when(request.queryParams("myUsername")).thenReturn((AI_PLAYER));
         when(!playerLobby.isNewPlayer(player4)).thenReturn(false);
+
+
+        final TemplateEngineTester testHelper = new TemplateEngineTester();
+        when(templateEngine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+
+        // Invoke the test
+        CuT.handle(request, response);
+
+        // Analyze the results:
+        //   * model is a non-null Map
+        testHelper.assertViewModelExists();
+        testHelper.assertViewModelIsaMap();
+        //   * model contains all necessary View-Model data
+        testHelper.assertViewModelAttribute(
+                GetSignInRoute.TITLE, GetSignInRoute.TITLE_MSG);
+//        testHelper.assertViewModelAttribute(
+//                PostSignInRoute.MESSAGE_ATTR, PostSignInRoute.makeTakenUsrMessage());
+        testHelper.assertViewModelAttributeIsAbsent(PostSignInRoute.TAKEN_USR);
+        //   * test view name
+        testHelper.assertViewName(PostSignInRoute.VIEW_NAME);
+    }
+
+    /**
+     * Test that the "sign-in" action this handled
+     */
+    @Test
+    public void sign_in_AI() {
+        playerLobby.addPlayer(AIplayer);
+
+        when(session.attribute("Player")).thenReturn(AI_PLAYER);
+        when(request.queryParams("myUsername")).thenReturn((AI_PLAYER));
+        assertFalse(playerLobby.isNewPlayer(AIplayer));
 
 
         final TemplateEngineTester testHelper = new TemplateEngineTester();
