@@ -220,6 +220,16 @@ public class PostSignInRouteTest {
         playerLobby = null;
         CuT = new PostSignInRoute(templateEngine, playerLobby);
         assertThrows(spark.HaltException.class, () -> CuT.handle(request, response));
-
     }
+
+    @Test
+    void currentUserAgain(){
+        when(request.queryParams("myUsername")).thenReturn(player1.getName());
+        when(playerLobby.isValidPlayer(any(Player.class))).thenReturn(true);
+        when(playerLobby.isNewPlayer(any(Player.class))).thenReturn(true);
+        CuT.handle(request, response);
+        verify(response).redirect(WebServer.HOME_URL);
+    }
+
+
 }

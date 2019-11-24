@@ -101,7 +101,6 @@ public class PostSignInRoute implements Route {
         // retrieve request parameter
         final String userStr = request.queryParams(USERNAME);
         Player player = new Player(userStr);
-
         /* A null playerServices indicates a timed out session or an illegal request on this URL.
          * In either case, we will redirect back to home.
          */
