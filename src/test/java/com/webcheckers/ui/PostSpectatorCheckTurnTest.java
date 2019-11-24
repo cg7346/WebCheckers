@@ -1,25 +1,39 @@
 package com.webcheckers.ui;
 
 import com.google.gson.Gson;
-import com.webcheckers.appl.GameManager;
-import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.CheckersGame;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.TimeWatch;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import spark.Request;
 import spark.Response;
 import spark.Session;
-import spark.TemplateEngine;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-//import static org.testng.Assert.*;
 
+
+/**
+ * The unit test suite for the {@link PostSpectatorCheckTurn} component.
+ *
+ * @author <a href='mailto:cg7346@rit.edu'>Celeste Gambardella</a>
+ * @author <a href='mailto:kdv6978@rit.edu'>Kelly Vo</>
+ */
 public class PostSpectatorCheckTurnTest
 {
-    //CuT
+
+    /**
+     * The component-under-test (CuT).
+     *
+     * <p>
+     * This is a stateless component so we only need one.
+     * The {@link PostSpectatorCheckTurn} component is thoroughly tested so
+     * we can use it safely as a "friendly" dependency.
+     */
     private PostSpectatorCheckTurn CuT;
 
     //Mock Object
@@ -27,12 +41,8 @@ public class PostSpectatorCheckTurnTest
     private Response response;
     private Session session;
     private Gson gson;
-    private GameManager gameManager;
-    private PlayerLobby lobby;
     private CheckersGame mockGame;
-    private Player p1;
-    private Player p2;
-    private TemplateEngine engine;
+
 
     @BeforeEach
     void construct() {
@@ -40,13 +50,9 @@ public class PostSpectatorCheckTurnTest
         session = mock(Session.class);
         when(request.session()).thenReturn(session);
         response = mock(Response.class);
-        lobby = mock(PlayerLobby.class);
-        gameManager = mock(GameManager.class);
         mockGame = mock(CheckersGame.class);
-        p1 = mock(Player.class);
-        p2 = mock(Player.class);
+
         gson = new Gson();
-        engine = mock(TemplateEngine.class);
 
         CuT = new PostSpectatorCheckTurn(gson);
         String gameIdString = "3";
@@ -55,12 +61,12 @@ public class PostSpectatorCheckTurnTest
 
     @Test
     void test_nullGame(){
-        String expected = "{\"text\":\"false\",\"type\":\"INFO\"}";
+        String expected = "{\"text\":\"Last turn was about 0 seconds ago.\",\"type\":\"INFO\"}";
         try {
             Object o = CuT.handle(request, response);
             assertEquals(expected, o.toString());
         }catch (Exception e){
-            //squahs
+            //squash
         }
     }
 
@@ -68,12 +74,26 @@ public class PostSpectatorCheckTurnTest
     void test_isNotActivePlayer(){
         when(mockGame.getActivePlayer()).thenReturn(mock(Player.class));
         when(session.attribute("Player")).thenReturn(mock(Player.class));
-        String expected = "{\"text\":\"false\",\"type\":\"INFO\"}";
+        String expected = "{\"text\":\"Last turn was about 0 seconds ago.\",\"type\":\"INFO\"}";
         try {
             Object o = CuT.handle(request, response);
             assertEquals(expected, o.toString());
         }catch (Exception e){
-            //squahs
+            //squash
+        }
+    }
+
+    @Test
+    void test_timer_messgae() {
+        PostCheckTurn.timer = TimeWatch.start();
+
+        assertEquals(0, PostCheckTurn.timer.time(TimeUnit.SECONDS));
+        String expected = "{\"text\":\"Last turn was about 0 seconds ago.\",\"type\":\"INFO\"}";
+        try {
+            Object o = CuT.handle(request, response);
+            assertEquals(expected, o.toString());
+        } catch (Exception e) {
+            //squash
         }
     }
 }

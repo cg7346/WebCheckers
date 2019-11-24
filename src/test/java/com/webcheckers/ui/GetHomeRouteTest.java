@@ -1,27 +1,19 @@
 package com.webcheckers.ui;
 
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-
 import com.webcheckers.appl.GameManager;
 import com.webcheckers.appl.PlayerLobby;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import spark.*;
 
-import spark.HaltException;
-import spark.ModelAndView;
-import spark.Request;
-import spark.Response;
-import spark.Session;
-import spark.TemplateEngine;
-
-import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 
 /**
