@@ -67,11 +67,32 @@ public class GetGameRoute implements Route {
         modeOptionsAsJSON = new HashMap<>(2);
         if (!request.queryParams().isEmpty()) {
             String opponentName = request.queryParams(OPP_USER);
-            Player chosenOpponent = playerLobby.findPlayer(opponentName);
+            if (opponentName == null) {
+                Player chosenOpponent = playerLobby.findPlayer(opponentName);
+                response.redirect(WebServer.HOME_URL);
+                halt();
+                return null;
+            }
+            Player chosenOpponent = opponentName.equals("AI") ?
+                    new Player("AI") : playerLobby.findPlayer(opponentName);
+            System.out.println(chosenOpponent);
+//            if (opponentName.equals("AI")) {
+//                game = gameManager.makeGame(currentPlayer, new Player("AI"));
+//            } else {
             if (chosenOpponent == null) {
                 response.redirect(WebServer.HOME_URL);
                 halt();
                 return null;
+            }
+            if (playerLobby.isInGame(chosenOpponent)) {
+                //we will send an error
+                Message er = Message.error(PLAYER_IN_GAME);
+                session.attribute(MESSAGE_ERR, er);
+                response.redirect(WebServer.HOME_URL);
+                halt();
+                return null;
+            } else {
+                game = gameManager.makeGame(currentPlayer, chosenOpponent);
             }
 
             if (gameManager.spectators != null && gameManager.spectators.containsValue(chosenOpponent)) {
