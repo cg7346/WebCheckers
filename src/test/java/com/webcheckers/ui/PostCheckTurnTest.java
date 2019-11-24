@@ -117,7 +117,7 @@ public class PostCheckTurnTest {
         String expected = "{\"text\":\"true\",\"type\":\"INFO\"}";
         try {
             Object o = CuT.handle(request, response);
-            assertNull(o);
+            assertEquals(expected, o.toString());
         }catch (Exception e){
             //squahs
         }

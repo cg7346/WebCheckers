@@ -59,8 +59,6 @@ public class PostValidateMove implements Route {
             responseMessage = Message.info(moveResponse);
             game.keepLastMove(move);
             game.completeMove();
-
-            //game.checkForDoubleJump(move);
         }else {
             responseMessage = Message.error(moveResponse);
         }

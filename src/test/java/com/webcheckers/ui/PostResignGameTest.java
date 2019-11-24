@@ -47,6 +47,7 @@ public class PostResignGameTest {
     // friendly objects
     private PlayerLobby playerLobby;
     private Player player;
+    private Player player2;
     private Player resignPlayer;
     private Player winner;
     private int ID = 2;
@@ -73,17 +74,18 @@ public class PostResignGameTest {
         playerLobby = mock(PlayerLobby.class);
         game = mock(CheckersGame.class);
         player = mock(Player.class);
+        when(player.getName()).thenReturn("P1");
+        player2 = mock(Player.class);
+        when(player2.getName()).thenReturn("P2");
         manager = mock(GameManager.class);
         gson = new Gson();
         gameRoute = mock(GetGameRoute.class);
 
         String gameIdString = "1";
-        player = new Player("p1");
 
         when(request.session()).thenReturn(session);
         when(request.queryParams("gameID")).thenReturn(gameIdString);
-        when(request.queryParams("Player")).thenReturn(player.getName());
-        when(manager.getGame(player)).thenReturn(game);
+
 
         CuT = new PostResignGame(manager, gson);
 
@@ -113,18 +115,6 @@ public class PostResignGameTest {
         assertEquals("{Msg INFO 'p1 has resigned.'}", PostResignGame.resignMessage(player1).toString());
     }
 
-    @Test
-    public void winning_player() {
-        Player player2 = new Player("p2");
-        GameManager gameManager1 = new GameManager();
-
-        game = gameManager1.makeGame(player, player2);
-        game.setWinner(player2);
-        winningPlayer = game.getWinner();
-//        when(resignPlayer.getName().equals(game.getRedPlayer().getName()));
-
-    }
-
     /**
      * Test that the "resignGame" action handle when players aren't null
      */
@@ -145,10 +135,61 @@ public class PostResignGameTest {
         winningPlayer = game.getWhitePlayer();
         game.setResignedPlayer(player);
         assertEquals(winningPlayer.getName(), "p2");
-        assertEquals(game.getResignedPlayer().getName(), "p1");
+        assertEquals(game.getResignedPlayer().getName(), "P1");
 
         assertTrue(modeOptionsAsJSON.isEmpty());
         modeOptionsAsJSON.put("isGameOver", true);
+    }
+
+    @Test
+    void testResignRedPlayer(){
+        when(session.attribute("Player")).thenReturn(player);
+        when(manager.getGame(player)).thenReturn(game);
+        when(game.getActivePlayer()).thenReturn(player);
+        when(game.getRedPlayer()).thenReturn(player);
+        when(game.getWhitePlayer()).thenReturn(player2);
+
+        String expected = "{\"text\":\"P1 has resigned.\",\"type\":\"INFO\"}";
+        assertEquals(expected, CuT.handle(request, response));
+
+    }
+
+    @Test
+    void testResignWhitePlayer(){
+        when(session.attribute("Player")).thenReturn(player2);
+        when(manager.getGame(player2)).thenReturn(game);
+        when(game.getActivePlayer()).thenReturn(player2);
+        when(game.getRedPlayer()).thenReturn(player);
+        when(game.getWhitePlayer()).thenReturn(player2);
+
+        String expected = "{\"text\":\"P2 has resigned.\",\"type\":\"INFO\"}";
+        assertEquals(expected, CuT.handle(request, response));
+    }
+
+    @Test
+    void testNotYourTurn(){
+        when(session.attribute("Player")).thenReturn(player);
+        when(manager.getGame(player)).thenReturn(game);
+        when(game.getActivePlayer()).thenReturn(player2);
+        when(game.getRedPlayer()).thenReturn(player);
+        when(game.getWhitePlayer()).thenReturn(player2);
+
+        String expected = "{\"text\":\"Please wait for you turn to resign.\",\"type\":\"ERROR\"}";
+        assertEquals(expected, CuT.handle(request, response));
+    }
+
+    @Test
+    void resignAI(){
+        Player AI = mock(Player.class);
+        when(AI.getName()).thenReturn("AI");
+        when(session.attribute("Player")).thenReturn(player);
+        when(manager.getGame(player)).thenReturn(game);
+        when(game.getActivePlayer()).thenReturn(player);
+        when(game.getRedPlayer()).thenReturn(player);
+        when(game.getWhitePlayer()).thenReturn(AI);
+
+        String expected = "{\"text\":\"P1 has resigned.\",\"type\":\"INFO\"}";
+        assertEquals(expected, CuT.handle(request, response));
     }
 }
 

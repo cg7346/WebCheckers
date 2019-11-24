@@ -73,11 +73,7 @@ public class GameManager {
     public CheckersGame removeGame(CheckersGame game) {
 
         synchronized (this) {
-            try {
-                games.remove(game);
-            } catch (IndexOutOfBoundsException err) {
-                System.err.println(err);
-            }
+            games.remove(game);
             game.getRedPlayer().setInGame(false);
             game.getWhitePlayer().setInGame(false);
             return null;

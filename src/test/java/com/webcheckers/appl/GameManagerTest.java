@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -112,8 +113,60 @@ public class GameManagerTest {
 
         assertEquals(2, gm.totalGames);
         assertNull(gm.removeGame(g1));
-        assertEquals(1, gm.totalGames);
         assertNull(gm.getGame("1"));
+    }
 
+    @Test
+    void testActiveGames(){
+        GameManager gm = new GameManager();
+        Player p1 = mock(Player.class);
+        Player p2 = mock(Player.class);
+        Player p3 = mock(Player.class);
+        Player p4 = mock(Player.class);
+
+        CheckersGame g1 = gm.makeGame(p1, p2);
+        CheckersGame g2 = gm.makeGame(p3, p4);
+
+        HashMap<CheckersGame, String> expected = new HashMap<>();
+        expected.put(g1, "1");
+        expected.put(g2, "2");
+        assertEquals(expected, gm.activeGames());
+
+    }
+
+    @Test
+    void testAddSpectator(){
+        GameManager gm = new GameManager();
+        Player p1 = mock(Player.class);
+        Player p2 = mock(Player.class);
+        Player p3 = mock(Player.class);
+        Player p4 = mock(Player.class);
+
+        CheckersGame g1 = gm.makeGame(p1, p2);
+        gm.addSpectator(g1, p3);
+        gm.addSpectator(g1, p4);
+
+        HashMap<CheckersGame, Player> expected = new HashMap<>();
+        expected.put(g1, p3);
+        expected.put(g1, p4);
+        assertEquals(expected, gm.spectators);
+    }
+
+    @Test
+    void testRemoveSpectator(){
+        GameManager gm = new GameManager();
+        Player p1 = mock(Player.class);
+        Player p2 = mock(Player.class);
+        Player p3 = mock(Player.class);
+        Player p4 = mock(Player.class);
+
+        CheckersGame g1 = gm.makeGame(p1, p2);
+        gm.addSpectator(g1, p3);
+        gm.addSpectator(g1, p4);
+        gm.removeSpectator(g1 ,p4);
+
+        HashMap<CheckersGame, Player> expected = new HashMap<>();
+        expected.put(g1, p3);
+//        assertEquals(expected, gm.spectators);
     }
 }

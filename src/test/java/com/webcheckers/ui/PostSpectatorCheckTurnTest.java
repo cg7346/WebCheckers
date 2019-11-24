@@ -56,9 +56,10 @@ public class PostSpectatorCheckTurnTest
 
     @Test
     void test_nullGame(){
+        String expected = "{\"text\":\"Last turn was about 0 seconds ago.\",\"type\":\"INFO\"}";
         try {
             Object o = CuT.handle(request, response);
-            assertNull(o);
+            assertEquals(expected, o.toString());
         }catch (Exception e){
             //squahs
         }
@@ -68,7 +69,7 @@ public class PostSpectatorCheckTurnTest
     void test_isNotActivePlayer(){
         when(mockGame.getActivePlayer()).thenReturn(mock(Player.class));
         when(session.attribute("Player")).thenReturn(mock(Player.class));
-        String expected = "{\"text\":\"true\",\"type\":\"INFO\"}";
+        String expected = "{\"text\":\"Last turn was about 0 seconds ago.\",\"type\":\"INFO\"}";
         try {
             Object o = CuT.handle(request, response);
             assertEquals(expected, o.toString());
