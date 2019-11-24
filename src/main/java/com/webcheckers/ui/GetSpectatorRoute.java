@@ -44,8 +44,6 @@ public class GetSpectatorRoute implements Route {
 
     /**
      * Create the UI controller to handle all {@code GET /spectator/game} HTTP requests.
-     * <p>
-     * //     * @param checkersGame holds all the information about players playing a game
      *
      * @param playerLobby holds all the information about players signed in
      * @param gameManager how to access a game
