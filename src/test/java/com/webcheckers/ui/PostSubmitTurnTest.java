@@ -45,7 +45,7 @@ public class PostSubmitTurnTest {
         player = mock(Player.class);
         gson = new Gson();
 
-        CuT = new PostSubmitTurn(lobby, gameManager, gson);
+        CuT = new PostSubmitTurn(gameManager, gson);
         String gameIdString = "3";
         when(request.queryParams("gameID")).thenReturn(gameIdString);
         when(gameManager.getGame(player)).thenReturn(mockGame);

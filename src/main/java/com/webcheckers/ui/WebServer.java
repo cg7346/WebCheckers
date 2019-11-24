@@ -206,7 +206,7 @@ public class WebServer {
     post(BACKUPTURN_URL, new PostBackupRoute(gameManager, gson));
 
     // Submits the turn of the current player
-    post(SUBMITTURN_URL, new PostSubmitTurn(playerLobby, gameManager, gson));
+    post(SUBMITTURN_URL, new PostSubmitTurn(gameManager, gson));
 
     // Posts after the resign button is clicked
     post(RESIGN_URL, new PostResignGame(gameManager, gson));
