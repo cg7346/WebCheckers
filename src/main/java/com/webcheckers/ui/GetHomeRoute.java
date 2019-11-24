@@ -40,7 +40,6 @@ public class GetHomeRoute implements Route {
     static final String PLAYERS_ON = "playersOnline";
     static final String PLAYERS_ONLINE = "Players Online";
     static final String SPECTATOR = "spectator";
-    static ModelAndView mv;
 
     // View name
     static final String VIEW_NAME = "home.ftl";
@@ -111,10 +110,10 @@ public class GetHomeRoute implements Route {
                   halt();
                   return null;
               }
-              mv = currentUser(vm, request);
+              ModelAndView mv = currentUser(vm, request);
               return templateEngine.render(mv);
           }
-          mv = playerActive(vm);
+          ModelAndView mv = playerActive(vm);
           return templateEngine.render(mv);
       }
 

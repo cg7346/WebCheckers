@@ -7,7 +7,6 @@ import spark.*;
 
 import java.util.*;
 
-
 /**
  * The {@code POST /signout} route handler
  *
@@ -48,8 +47,6 @@ public class PostSignOutRoute implements Route {
 
     /**
      * {@inheritDoc}
-     *
-     * @throws java.util.NoSuchElementException
      *      when an invalid username is returned
      * @param request the HTTP request
      * @param response the HTTP response
@@ -81,11 +78,10 @@ public class PostSignOutRoute implements Route {
             String count = String.format(GetHomeRoute.PLAYERS, playerCount);
             vm.put(GetHomeRoute.PLAYERS_COUNT, count);
         }
-        //gameManager.resignGame(currentPlayer);
+
         // Redirects to home, signed out
         response.redirect(WebServer.HOME_URL);
         // Renders home
         return templateEngine.render(new ModelAndView(vm, GetHomeRoute.VIEW_NAME));
     }
-
 }

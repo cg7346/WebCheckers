@@ -76,7 +76,6 @@ public class PostResignGame implements Route {
      * @param request the HTTP request
      * @param response the HTTP response
      * @return templateEngine to render a view or null
-     * @throws java.util.NoSuchElementException when an invalid username is returned
      */
     @Override
     public Object handle(Request request, Response response) {

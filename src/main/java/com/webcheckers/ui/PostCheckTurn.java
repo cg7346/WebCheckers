@@ -12,7 +12,6 @@ import spark.Response;
 import spark.Route;
 import spark.Session;
 
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
@@ -40,9 +39,8 @@ public class PostCheckTurn implements Route {
      *
      * @param gameManager
      * @param gson
-     * @throws NoSuchElementException when the {@code gameManager} or {@code gson} parameter is null
      */
-    public PostCheckTurn(GameManager gameManager,Gson gson){
+    public PostCheckTurn(GameManager gameManager, Gson gson) {
         this.gameManager = Objects.requireNonNull(gameManager, "game manager is required");
         this.gson = Objects.requireNonNull(gson, "gson is required");
     }
@@ -68,14 +66,15 @@ public class PostCheckTurn implements Route {
     }
 
     /**
-     *this function handles the post check turn
-     * @param request
-     * @param response
-     * @return Message
-     * @throws Exception
+     * {@inheritDoc}
+     *  this function handles the post check turn
+     *      when an invalid username is returned
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @return updates gson with if a message is needed or not true or false
      */
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(Request request, Response response) {
         Session session = request.session();
         Player currentPlayer = session.attribute("Player");
         CheckersGame game = gameManager.getGame(currentPlayer);
