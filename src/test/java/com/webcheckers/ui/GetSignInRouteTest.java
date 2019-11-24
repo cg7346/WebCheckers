@@ -48,7 +48,7 @@ public class GetSignInRouteTest {
     }
 
     @Test
-    public void sign_in_no_players(){
+    public void sign_in(){
         //create my testHelper
         final TemplateEngineTester testHelper = new TemplateEngineTester();
         when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
