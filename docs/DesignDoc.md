@@ -260,4 +260,41 @@ This section describes the web interface flow; this is how the user views and in
 >
 >
 ### Code Metric Analysis
+> Code metrics produces a numerical measurement of a characteristic. This allows decisions to be made within the code. 
+Our current code metrics is showcased below. Almost all metrics were in the preset range and there were hardly any measurements that
+did not meet the target. On the Complexity metrics, there were 7 functions that went over the target. The following were the functions that did not meet the target: 
+
+> * Model.MoveValidator.checkMove
+> > * The ev(G) and v(G) were out of bounds
+> *  Model.MoveValidator.isInMoves
+> >  * The ev(G) was out of bounds
+> * Model.Tree.makeTree
+> > * the v(G) was out of bounds
+> * UI.GetGameRoute.handleNewGame
+> > * The ev(G) was out of bounds
+> * UI.GetHomeRoute.handle
+> > * The ev(G) was out of bounds
+> * UI.PostCheckTurn.handle
+> > * The ev(G) was out of bounds
+> * UI.PostSubmitTurn.processTurn
+> > * The ev(G), iv(G), and v(G) were out of bounds
+
+> Looking into these metrics, these functions had high complexity due to their use within the code. To improve the complexity, we should use more helper functions and create different functions
+to help lesson the use of the functions that had high complexity. Some functions like handle in the UI cannot be improved due to their
+use being needed for the UI and unable to replicate or use other functions.  
+ 
+
+
+![The WebCheckers Code Metrics Analysis](Chidamber-Kemerer%20metrics.png)
 >
+>
+![The WebCheckers Code Metrics Analysis](Complexity-Metrics.png)
+>
+>
+![The WebCheckers Code Metrics Analysis](Javadoc-Coverage-Metrics.png)
+>
+>
+![The WebCheckers Code Metrics Analysis](Lines-of-Code-metrics.png)
+>
+>
+![The WebCheckers Code Metrics Analysis](Martin-Package-Metrics.png)
