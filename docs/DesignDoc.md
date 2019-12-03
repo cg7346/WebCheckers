@@ -71,52 +71,61 @@ This section describes the features of the application.
 >* A user is only able to resign a game when it is their turn.
 >* A user wins by capturing all opponents pieces or making their opponent no longer able to move
 >
->_In this section you do not need to be exhaustive and list every
-> story.  Focus on top-level features from the Vision document and
-> maybe Epics and critical Stories._
+>AI Enhancement
+ >* A user will be able to win, lose, or tie a game.
+ >* A USer will be able to resign a game be lose when resigned
+ >* A user is only able to resign a game when it is their turn.
+>
+>Spectator Enhancement
+>* A user will be able to win, lose, or tie a game.
+>* A USer will be able to resign a game be lose when resigned
+>* A user is only able to resign a game when it is their turn.
+
 
 ### Definition of MVP
 
 > Where developers provide the smallest amount of features to help satisfy new customers and
-> get feedback for new enhancements that can be implemented in future product development.
+get feedback for new enhancements that can be implemented in future product development.
 
 
 ### MVP Features
 
 >* Sign In
+>>* A player must be able to sign into WebCheckers.
 >* Start Game
+>>* A Player must be able to start a game with an opponent.
 >* Sign Out
+>>* A Player must be able to sign out of a game.
 >* Resignation
+>>* A player must be able to resign from a game when it is their turn.
 >* Game Play
->* Spectator Mode
->* AI
+>>* A player must be able to play a game with an opponent.
 
 
 ### Roadmap of Enhancements
 
->1. Sign In
->2. Start Game
->3. Sign Out
->4. Resignation
->5. Game Play
->6. Spectator Mode
->7. AI
+>* Spectator Mode
+>>* A player is able to spectate a live game.
+>>* A player is not able to be put in a game when spectating.
+>>* A player is not able to make any moves while spectating.
+>>* A player can see the time the last move was made.
+>* AI
+>>* A player is able to play a game with an AI.
+>>* Multiple players can play an AI game.
+>>* The AI is able to jump, move, and be kinged on the board.
 
 
 ## Application Domain
 
-This section describes the application domain.
 
 ![The WebCheckers Domain Model](domain-model.png)
 
-> Provides a common understanding between a customer and the developers
-> of the scope and major entities that exist in the system.
->
+> The domain model provides a common understanding between a customer and the developers
+of the scope and major entities that exist in the system.
+
 > We have created our domain model in hopes to help the customer understand
-> what we was trying to accomplish as we begin our development process. 
->
-> Within our domain model we have included the following elements:
->
+what we was trying to accomplish as we begin our development process. 
+Within our domain model we have included the following elements:
 >  ***Domain Model Overview***
 >   > * Spectator that watches the WebCheckers game
 >   > * WebCheckers game that is played on a Board
@@ -129,8 +138,6 @@ This section describes the application domain.
 
 
 ## Architecture and Design
-
-This section describes the application architecture.
 
 ### Summary
 
@@ -182,71 +189,96 @@ This section describes the web interface flow; this is how the user views and in
 
 ### UI Tier
 > This level of the application contains everything the user will interact with.
-> It will interact with the Application and Model tiers. The following UML diagram shows the 
-> classes used in the UI 
+It will interact with the Application and Model tiers. The following UML diagram shows the 
+classes used in the UI 
 
 ![The WebCheckers UI tier](ui-uml.png)
 
 
 > A Sequence diagram of the start a game and sign in was created to showcase 
-> a better understanding of the functionality of how start a game and sign in works.
+a better understanding of the functionality of how start a game and sign in works.
 
 ![The WebCheckers Sign_In SD](Sign-in-SD.png)
 >
 ![The WebCheckers Start_Game SD](Start-Game-SD.png)
 
-> These diagrams breaks down what each class handles or is expecting and how they connect to each other.
-> You are able to follow the arrows to see how GetGameRoute uses other aspects to get a game and show it to the user.
+>These diagrams breaks down what each class handles or is expecting and how they connect to each other.
+You are able to follow the arrows to see how GetGameRoute uses other aspects to get a game and show it to the user.
 
 
 ### Application Tier
 > The Application Tier provides support and functionality for the game. 
-> It is designed to handle the logic of game and act as the middle man between the Model Tier and the UI Tier.
-> The classes currently stored within the Application Tier in the UML diagram below. 
+It is designed to handle the logic of game and act as the middle man between the Model Tier and the UI Tier. The classes currently stored within the Application Tier in the UML diagram below. 
 ![The WebCheckers Application tier](appl-uml.png)
 
 ### Model Tier
 > The model tier is the basic structure for the game.
-> We use a Board View, Checkers Game, Move, Piece, Player, Position, Row, Space and Turn in our model tier.
-> The classes that are within the Model tier are shown in the UML Diagram below. 
+We use a Board View, Checkers Game, Move, Piece, Player, Position, Row, Space and Turn in our model tier.
+The classes that are within the Model tier are shown in the UML Diagram below. 
 ![The WebCheckers_Model tier](model-uml.png)
 
 ### Design Improvements
-> To improve our design we should adhere to Object-Oriented design principles more. 
-> To adhere to the controller principle we should ensure that we do not make multiple unnecessary controllers and try to combine controllers together. For example keeping Signing in and out in the same controller.
-> To adhere to the polymorphism principle we should use method overloading to have different arguments within the parameters. 
-> We currently do not adhere to the Liskov Principle and to do this we can add in pre and post conditions that will help improve our adherence as well as having subclasses properly extending super classes will allow our team to have more adherence to the principle.   
-> To improve our usage of the open/closed principle, we can create more classes as the base for other classes that share common properties. This would help limit the code in each class and lower cohesion.
-> We also currently do not follow pure fabrication. We can use pure fabrication in the future for our design to lower cohesion and clean up the overall readability with our code. Classes can be made to calculate or examine movement options, or just test the possibility of decisions made by a player in the game. They would have no physical representation on the UI, but they would be referenceable in multiple scenarios and aid future class codings. 
+> To improve our design we should adhere to Object-Oriented design principles more. To adhere to the controller principle we should ensure that we do not make multiple unnecessary controllers and try to combine controllers together. For example keeping Signing in and out in the same controller.
+To adhere to the polymorphism principle we should use method overloading to have different arguments within the parameters. 
+We currently do not adhere to the Liskov Principle and to do this we can add in pre and post conditions that will help improve our adherence as well as having subclasses properly extending super classes will allow our team to have more adherence to the principle.   
+To improve our usage of the open/closed principle, we can create more classes as the base for other classes that share common properties. This would help limit the code in each class and lower cohesion. We also currently do not follow pure fabrication. We can use pure fabrication in the future for our design to lower cohesion and clean up the overall readability with our code. Classes can be made to calculate or examine movement options, or just test the possibility of decisions made by a player in the game. They would have no physical representation on the UI, but they would be referenceable in multiple scenarios and aid future class codings. 
 
 ## Testing
 
 ### Acceptance Testing
-> We had acceptance criteria that we used to create acceptance tests in Spring 1 and 2. During Sprint 1, we were unable to finish the 
-> acceptance criteria that stated that a user would be able to be automatically directed to start a game. We were able to pass
-> all other acceptance criteria tests in Sprint 1. In Sprint 2, we were able to pass all acceptance criteria from Sprint 1 as well as new acceptance
-> criteria from other user stories added to the game. 
+> We had acceptance criteria that we used to create acceptance tests in Spring 1 and 2. During Sprint 1, we were unable to finish the acceptance criteria that stated that a user would be able to be automatically directed to start a game. We were able to pass
+all other acceptance criteria tests in Sprint 1. In Sprint 2, we were able to pass all acceptance criteria from Sprint 1 as well as new acceptance
+criteria from other user stories added to the game. 
 ![The WebCheckers Acceptance Testing](acceptance-test-plan-1.png)
->
->
+
 ![The WebCheckers Acceptance Testing](acceptance-test-plan-2.png)
 
 ### Unit Testing and Code Coverage
 > Each team member created unit tests to test various parts of the program.
-> Initially each member tested an item from the UI and something from the application or model tier. Afterwards, team members created more tests to try to gain high code coverage.
-> We aimed for above 90% code coverage in the application model for the lines and methods.
-> For the model tier we aimed for 95% code coverage and for the UI Tier we aimed for 85% code coverage.
-> The figures shown below are the Jacoco analysis from the tests. 
+Initially each member tested an item from the UI and something from the application or model tier. Afterwards, team members created more tests to try to gain high code coverage.
+We aimed for above 95% code coverage in the application model for the lines and methods.
+For the model tier we aimed for 95% code coverage and for the UI Tier we aimed for 90% code coverage.
+The figures shown below are the Jacoco analysis from the tests. 
 
 ![The WebCheckers Unit Testing](overall-code-coverage.png)
->
->
+
 ![The WebCheckers Unit Testing](code-coverage-appl.png)
->
->
+
 ![The WebCheckers Unit Testing](model-code-coverage.png)
->
->
+
 ![The WebCheckers Unit Testing](ui-code-coverage.png)
->
->
+
+### Code Metric Analysis
+> Code metrics produces a numerical measurement of a characteristic. This allows decisions to be made within the code. 
+Our current code metrics is showcased below. Almost all metrics were in the preset range and there were hardly any measurements that
+did not meet the target. On the Complexity metrics, there were 7 functions that went over the target. The following were the functions that did not meet the target: 
+
+> * Model.MoveValidator.checkMove
+> > * The ev(G) and v(G) were out of bounds
+> *  Model.MoveValidator.isInMoves
+> >  * The ev(G) was out of bounds
+> * Model.Tree.makeTree
+> > * the v(G) was out of bounds
+> * UI.GetGameRoute.handleNewGame
+> > * The ev(G) was out of bounds
+> * UI.GetHomeRoute.handle
+> > * The ev(G) was out of bounds
+> * UI.PostCheckTurn.handle
+> > * The ev(G) was out of bounds
+> * UI.PostSubmitTurn.processTurn
+> > * The ev(G), iv(G), and v(G) were out of bounds
+
+> Looking into these metrics, these functions had high complexity due to their use within the code. To improve the complexity, we should use more helper functions and create different functions
+to help lesson the use of the functions that had high complexity. Some functions like handle in the UI cannot be improved due to their
+use being needed for the UI and unable to replicate or use other functions.  
+ 
+
+![The WebCheckers Code Metrics Analysis](Chidamber-Kemerer%20metrics.png)
+
+![The WebCheckers Code Metrics Analysis](Complexity-Metrics.png)
+
+![The WebCheckers Code Metrics Analysis](Javadoc-Coverage-Metrics.png)
+
+![The WebCheckers Code Metrics Analysis](Lines-of-Code-metrics.png)
+
+![The WebCheckers Code Metrics Analysis](Martin-Package-Metrics.png)
