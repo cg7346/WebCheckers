@@ -71,9 +71,16 @@ This section describes the features of the application.
 >* A user is only able to resign a game when it is their turn.
 >* A user wins by capturing all opponents pieces or making their opponent no longer able to move
 >
->_In this section you do not need to be exhaustive and list every
-> story.  Focus on top-level features from the Vision document and
-> maybe Epics and critical Stories._
+>AI Enhancement
+ >* A user will be able to win, lose, or tie a game.
+ >* A USer will be able to resign a game be lose when resigned
+ >* A user is only able to resign a game when it is their turn.
+>
+>Spectator Enhancement
+>* A user will be able to win, lose, or tie a game.
+>* A USer will be able to resign a game be lose when resigned
+>* A user is only able to resign a game when it is their turn.
+
 
 ### Definition of MVP
 
@@ -84,28 +91,32 @@ This section describes the features of the application.
 ### MVP Features
 
 >* Sign In
+>>* A player must be able to sign into WebCheckers.
 >* Start Game
+>>* A Player must be able to start a game with an opponent.
 >* Sign Out
+>>* A Player must be able to sign out of a game.
 >* Resignation
+>>* A player must be able to resign from a game when it is their turn.
 >* Game Play
->* Spectator Mode
->* AI
+>>* A player must be able to play a game with an opponent.
 
 
 ### Roadmap of Enhancements
 
->1. Sign In
->2. Start Game
->3. Sign Out
->4. Resignation
->5. Game Play
->6. Spectator Mode
->7. AI
+>* Spectator Mode
+>>* A player is able to spectate a live game.
+>>* A player is not able to be put in a game when spectating.
+>>* A player is not able to make any moves while spectating.
+>>* A player can see the time the last move was made.
+>* AI
+>>* A player is able to play a game with an AI.
+>>* Multiple players can play an AI game.
+>>* The AI is able to jump, move, and be kinged on the board.
 
 
 ## Application Domain
 
-This section describes the application domain.
 
 ![The WebCheckers Domain Model](domain-model.png)
 
@@ -129,8 +140,6 @@ This section describes the application domain.
 
 
 ## Architecture and Design
-
-This section describes the application architecture.
 
 ### Summary
 
@@ -234,8 +243,8 @@ This section describes the web interface flow; this is how the user views and in
 ### Unit Testing and Code Coverage
 > Each team member created unit tests to test various parts of the program.
 > Initially each member tested an item from the UI and something from the application or model tier. Afterwards, team members created more tests to try to gain high code coverage.
-> We aimed for above 90% code coverage in the application model for the lines and methods.
-> For the model tier we aimed for 95% code coverage and for the UI Tier we aimed for 85% code coverage.
+> We aimed for above 95% code coverage in the application model for the lines and methods.
+> For the model tier we aimed for 95% code coverage and for the UI Tier we aimed for 90% code coverage.
 > The figures shown below are the Jacoco analysis from the tests. 
 
 ![The WebCheckers Unit Testing](overall-code-coverage.png)
@@ -249,4 +258,6 @@ This section describes the web interface flow; this is how the user views and in
 >
 ![The WebCheckers Unit Testing](ui-code-coverage.png)
 >
+>
+### Code Metric Analysis
 >
