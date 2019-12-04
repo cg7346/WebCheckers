@@ -90,26 +90,33 @@ get feedback for new enhancements that can be implemented in future product deve
 
 ### MVP Features
 
->* Sign In
+>Sign In
+>
 >>* A player must be able to sign into WebCheckers.
->* Start Game
+>Start Game
+>
 >>* A Player must be able to start a game with an opponent.
->* Sign Out
+>Sign Out
+>
 >>* A Player must be able to sign out of a game.
->* Resignation
+>Resignation
+>
 >>* A player must be able to resign from a game when it is their turn.
->* Game Play
+>Game Play
+>
 >>* A player must be able to play a game with an opponent.
 
 
 ### Roadmap of Enhancements
 
->* Spectator Mode
+>*Spectator Mode*
+>
 >>* A player is able to spectate a live game.
 >>* A player is not able to be put in a game when spectating.
 >>* A player is not able to make any moves while spectating.
 >>* A player can see the time the last move was made.
->* AI
+>*AI*
+>
 >>* A player is able to play a game with an AI.
 >>* Multiple players can play an AI game.
 >>* The AI is able to jump, move, and be kinged on the board.
@@ -271,7 +278,7 @@ did not meet the target. On the Complexity metrics, there were 7 functions that 
 > Looking into these metrics, these functions had high complexity due to their use within the code. To improve the complexity, we should use more helper functions and create different functions
 to help lesson the use of the functions that had high complexity. Some functions like handle in the UI cannot be improved due to their
 use being needed for the UI and unable to replicate or use other functions.  
- 
+
 
 ![The WebCheckers Code Metrics Analysis](Chidamber-Kemerer%20metrics.png)
 
